@@ -55,17 +55,24 @@ const BowlineIllustration: FC<StepIllustrationProps> = ({ stepNumber, className 
 
       {stepNumber === 1 && (
         <g className={stepNumber === 1 ? "step-active" : ""}>
-          <path className="rope-path" d="M100,120 Q140,80 180,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path d="M180,120 L180,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path d="M180,150 L100,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path d="M100,150 L100,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
+          {/* Draw the initial loop as a continuous path */}
+          <path 
+            className="rope-path" 
+            d="M100,120 C110,100 130,90 150,90 C170,90 190,100 200,120 C200,130 200,140 200,150 C180,150 160,150 140,150 C120,150 100,150 100,150 L100,120" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
           
           <circle cx="140" cy="100" r="6" fill="white" filter="url(#bowlineShadow)" />
           <path d="M150,60 L140,100" stroke="white" strokeWidth="2" strokeDasharray="5,5" />
           <text x="155" y="70" fill="white" fontSize="14" fontWeight="500">Standing part</text>
           
-          <text x="190" y="135" fill="white" fontSize="14" fontWeight="500">Loop</text>
-          <path d="M185,135 L160,120" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
+          <text x="210" y="135" fill="white" fontSize="14" fontWeight="500">Loop</text>
+          <path d="M205,135 L180,130" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
           
           <g transform="translate(50, 230)">
             <rect width="300" height="36" rx="6" fill="rgba(255,255,255,0.1)" />
@@ -76,16 +83,32 @@ const BowlineIllustration: FC<StepIllustrationProps> = ({ stepNumber, className 
       
       {stepNumber === 2 && (
         <g className={stepNumber === 2 ? "step-active" : ""}>
-          <path className="rope-path" d="M100,120 Q140,80 180,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M180,120 L180,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M180,150 L100,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M100,150 L100,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
+          {/* Base loop */}
+          <path 
+            className="rope-path" 
+            d="M100,120 C110,100 130,90 150,90 C170,90 190,100 200,120 C200,130 200,140 200,150 C180,150 160,150 140,150 C120,150 100,150 100,150 L100,120" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
           
-          <path className="rope-path" d="M80,170 C85,160 90,155 100,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M80,170 C85,140 110,110 140,110" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
+          {/* Working end going through the loop */}
+          <path 
+            className="rope-path" 
+            d="M80,180 C85,170 90,160 100,150 C100,140 100,130 120,120 C130,115 140,115 150,120" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
           
-          <text x="60" y="185" fill="white" fontSize="14" fontWeight="500">Working end</text>
-          <path d="M90,180 L82,168" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
+          <text x="60" y="195" fill="white" fontSize="14" fontWeight="500">Working end</text>
+          <path d="M90,190 L82,178" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
           
           <g transform="translate(50, 230)">
             <rect width="300" height="36" rx="6" fill="rgba(255,255,255,0.1)" />
@@ -96,17 +119,43 @@ const BowlineIllustration: FC<StepIllustrationProps> = ({ stepNumber, className 
       
       {stepNumber === 3 && (
         <g className={stepNumber === 3 ? "step-active" : ""}>
-          <path className="rope-path" d="M100,120 Q140,80 180,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M180,120 L180,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M180,150 L100,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M100,150 L100,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
+          {/* Base loop */}
+          <path 
+            className="rope-path" 
+            d="M100,120 C110,100 130,90 150,90 C170,90 190,100 200,120 C200,130 200,140 200,150 C180,150 160,150 140,150 C120,150 100,150 100,150 L100,120" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
           
-          <path className="rope-path" d="M80,170 C85,160 90,155 100,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M80,170 C85,140 110,110 140,110" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M140,110 C180,115 205,90 200,60" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
+          {/* Working end through loop and wrapping around standing part */}
+          <path 
+            className="rope-path" 
+            d="M80,180 C85,170 90,160 100,150 C100,140 100,130 120,120 C130,115 140,115 150,120" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
           
-          <text x="150" y="70" fill="white" fontSize="14" fontWeight="500">Behind standing part</text>
-          <path d="M175,75 L190,65" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
+          <path 
+            className="rope-path" 
+            d="M150,120 C170,125 185,115 190,90 C195,70 180,60 160,70" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
+          
+          <text x="150" y="60" fill="white" fontSize="14" fontWeight="500">Behind standing part</text>
+          <path d="M175,65 L185,75" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
           
           <g transform="translate(50, 230)">
             <rect width="300" height="36" rx="6" fill="rgba(255,255,255,0.1)" />
@@ -117,15 +166,52 @@ const BowlineIllustration: FC<StepIllustrationProps> = ({ stepNumber, className 
       
       {stepNumber === 4 && (
         <g className={stepNumber === 4 ? "step-active" : ""}>
-          <path className="rope-path" d="M100,120 Q140,80 180,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M180,120 L180,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M180,150 L100,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M100,150 L100,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
+          {/* Base loop */}
+          <path 
+            className="rope-path" 
+            d="M100,120 C110,100 130,90 150,90 C170,90 190,100 200,120 C200,130 200,140 200,150 C180,150 160,150 140,150 C120,150 100,150 100,150 L100,120" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
           
-          <path className="rope-path" d="M80,170 C85,160 90,155 100,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M80,170 C85,140 110,110 140,110" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M140,110 C180,115 205,90 200,60" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M200,60 C185,40 150,50 130,90" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
+          {/* Working end through loop and wrapping around standing part */}
+          <path 
+            className="rope-path" 
+            d="M80,180 C85,170 90,160 100,150 C100,140 100,130 120,120 C130,115 140,115 150,120" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
+          
+          <path 
+            className="rope-path" 
+            d="M150,120 C170,125 185,115 190,90 C195,70 180,60 160,70" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
+          
+          {/* Working end coming back through the loop */}
+          <path 
+            className="rope-path" 
+            d="M160,70 C140,80 130,100 130,120 C130,130 125,140 120,150" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
           
           <text x="110" y="80" fill="white" fontSize="14" fontWeight="500">Back through loop</text>
           <path d="M130,85 L140,95" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
@@ -139,16 +225,30 @@ const BowlineIllustration: FC<StepIllustrationProps> = ({ stepNumber, className 
       
       {stepNumber === 5 && (
         <g className={stepNumber === 5 ? "step-active" : ""}>
-          <path className="rope-path" d="M100,120 Q140,80 180,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M180,120 L180,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M100,150 L100,120" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
+          {/* The completed bowline - rendered as a continuous path */}
+          <path 
+            className="rope-path" 
+            d="M80,180 C85,170 90,160 100,150 C100,140 100,120 100,120 C110,100 130,90 150,90 C170,90 190,100 200,120 C200,130 200,140 200,150" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
           
-          <path className="rope-path" d="M80,170 C85,160 90,155 100,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M80,170 C85,140 110,110 140,110" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M140,110 C180,115 195,90 190,60" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M190,60 C175,40 140,50 120,90" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
-          <path className="rope-path" d="M120,90 L100,150" stroke="url(#ropeGradient)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#bowlineShadow)" />
+          <path 
+            className="rope-path" 
+            d="M120,150 C130,140 130,130 130,120 C130,100 140,80 160,70 C180,60 195,70 190,90 C185,115 170,125 150,120 C140,115 130,115 120,120 C100,130 100,140 100,150" 
+            stroke="url(#ropeGradient)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#bowlineShadow)" 
+          />
           
+          {/* Arrows and labels */}
           <path d="M230,120 L250,120" stroke="white" strokeWidth="3" strokeDasharray="5,5" />
           <path d="M250,120 L260,110" stroke="white" strokeWidth="3" fill="none" />
           <path d="M250,120 L260,130" stroke="white" strokeWidth="3" fill="none" />
@@ -189,12 +289,21 @@ const CloveHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
         </linearGradient>
       </defs>
 
+      {/* Pole stays constant across all steps */}
+      <rect x="185" y="40" width="20" height="200" rx="5" fill="url(#poleGradient)" filter="url(#cloveHitchShadow)" />
+
       {stepNumber === 1 && (
         <g className={stepNumber === 1 ? "step-active" : ""}>
-          <rect x="185" y="40" width="20" height="200" rx="5" fill="url(#poleGradient)" filter="url(#cloveHitchShadow)" />
-          
-          <path className="rope-path" d="M70,160 C90,160 120,90 195,90 C270,90 300,160 320,160" 
-                stroke="url(#ropeGradient2)" strokeWidth="12" fill="none" strokeLinecap="round" filter="url(#cloveHitchShadow)" />
+          <path 
+            className="rope-path" 
+            d="M70,160 C90,160 140,130 180,110 C220,90 270,90 300,110 C320,120 330,140 320,160" 
+            stroke="url(#ropeGradient2)" 
+            strokeWidth="12" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#cloveHitchShadow)" 
+          />
           
           <circle cx="195" cy="90" r="6" fill="white" />
           <text x="160" y="75" fill="white" fontSize="14" fontWeight="500">Around pole</text>
@@ -212,13 +321,29 @@ const CloveHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
       
       {stepNumber === 2 && (
         <g className={stepNumber === 2 ? "step-active" : ""}>
-          <rect x="185" y="40" width="20" height="200" rx="5" fill="url(#poleGradient)" filter="url(#cloveHitchShadow)" />
+          {/* First wrap around pole */}
+          <path 
+            className="rope-path" 
+            d="M70,160 C90,160 140,130 180,110 C220,90 270,90 300,110 C320,120 330,140 320,160" 
+            stroke="url(#ropeGradient2)" 
+            strokeWidth="12" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#cloveHitchShadow)" 
+          />
           
-          <path className="rope-path" d="M70,160 C90,160 120,90 195,90 C270,90 300,160 320,160" 
-                stroke="url(#ropeGradient2)" strokeWidth="12" fill="none" strokeLinecap="round" filter="url(#cloveHitchShadow)" />
-          
-          <path className="rope-path" d="M320,160 C300,160 270,130 195,130 C120,130 90,160 70,160" 
-                stroke="url(#ropeGradient2)" strokeWidth="12" fill="none" strokeLinecap="round" filter="url(#cloveHitchShadow)" />
+          {/* Second wrap around pole */}
+          <path 
+            className="rope-path" 
+            d="M320,160 C300,160 240,140 195,130 C150,120 100,120 70,160" 
+            stroke="url(#ropeGradient2)" 
+            strokeWidth="12" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#cloveHitchShadow)" 
+          />
           
           <circle cx="195" cy="130" r="6" fill="white" />
           <text x="145" y="150" fill="white" fontSize="14" fontWeight="500">Cross over</text>
@@ -233,16 +358,29 @@ const CloveHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
       
       {stepNumber === 3 && (
         <g className={stepNumber === 3 ? "step-active" : ""}>
-          <rect x="185" y="40" width="20" height="200" rx="5" fill="url(#poleGradient)" filter="url(#cloveHitchShadow)" />
+          {/* First wrap around pole */}
+          <path 
+            className="rope-path" 
+            d="M70,160 C90,160 140,130 180,110 C220,90 270,90 300,110 C320,120 330,140 320,160" 
+            stroke="url(#ropeGradient2)" 
+            strokeWidth="12" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#cloveHitchShadow)" 
+          />
           
-          <path className="rope-path" d="M70,160 C90,160 120,90 195,90 C270,90 300,160 320,160" 
-                stroke="url(#ropeGradient2)" strokeWidth="12" fill="none" strokeLinecap="round" filter="url(#cloveHitchShadow)" />
-          
-          <path className="rope-path" d="M320,160 C300,160 270,130 195,130 C140,130 115,145 100,160" 
-                stroke="url(#ropeGradient2)" strokeWidth="12" fill="none" strokeLinecap="round" filter="url(#cloveHitchShadow)" />
-          
-          <path className="rope-path" d="M100,160 C90,165 80,165 60,165" 
-                stroke="url(#ropeGradient2)" strokeWidth="12" fill="none" strokeLinecap="round" filter="url(#cloveHitchShadow)" />
+          {/* Second wrap around pole with end tucked under */}
+          <path 
+            className="rope-path" 
+            d="M320,160 C300,160 240,140 195,130 C150,120 110,130 95,145 C85,155 75,160 60,165" 
+            stroke="url(#ropeGradient2)" 
+            strokeWidth="12" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#cloveHitchShadow)" 
+          />
           
           <text x="100" y="180" fill="white" fontSize="14" fontWeight="500">Under itself</text>
           <path d="M110,175 L100,160" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
@@ -281,23 +419,22 @@ const FigureEightIllustration: FC<StepIllustrationProps> = ({ stepNumber, classN
 
       {stepNumber === 1 && (
         <g className={stepNumber === 1 ? "step-active" : ""}>
-          <path className="rope-path" d="M80,120 L200,120" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-          
-          <path className="rope-path" d="M200,120 C250,120 250,170 200,170" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-          
-          <path className="rope-path" d="M50,120 L80,120" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-                
-          <path className="rope-path" d="M200,170 L180,170" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
+          <path 
+            className="rope-path" 
+            d="M50,120 L80,120 L200,120 C230,120 250,140 250,170 C250,200 230,220 200,220 C170,220 160,200 170,170" 
+            stroke="url(#ropeGradient3)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#figure8Shadow)" 
+          />
           
           <text x="40" y="100" fill="white" fontSize="14" fontWeight="500">Working end</text>
           <path d="M60,105 L60,120" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
           
-          <text x="225" y="145" fill="white" fontSize="14" fontWeight="500">Loop</text>
-          <path d="M220,145 L200,145" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
+          <text x="225" y="185" fill="white" fontSize="14" fontWeight="500">Loop</text>
+          <path d="M220,185 L205,185" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
           
           <text x="140" y="100" fill="white" fontSize="14" fontWeight="500">Standing part</text>
           <path d="M150,105 L150,120" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
@@ -311,23 +448,19 @@ const FigureEightIllustration: FC<StepIllustrationProps> = ({ stepNumber, classN
       
       {stepNumber === 2 && (
         <g className={stepNumber === 2 ? "step-active" : ""}>
-          <path className="rope-path" d="M80,120 L200,120" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
+          <path 
+            className="rope-path" 
+            d="M50,120 L80,120 L200,120 C230,120 250,140 250,170 C250,200 230,220 200,220 C170,220 130,220 100,220 C70,220 50,200 40,170 C35,150 40,130 50,120" 
+            stroke="url(#ropeGradient3)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#figure8Shadow)" 
+          />
           
-          <path className="rope-path" d="M200,120 C250,120 250,170 200,170" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-          
-          <path className="rope-path" d="M50,120 L80,120" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-                
-          <path className="rope-path" d="M200,170 C150,170 100,170 80,170" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-                
-          <path className="rope-path" d="M80,170 C50,170 30,150 40,120" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-          
-          <text x="100" y="185" fill="white" fontSize="14" fontWeight="500">Wrap around</text>
-          <path d="M120,180 L100,170" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
+          <text x="100" y="240" fill="white" fontSize="14" fontWeight="500">Wrap around</text>
+          <path d="M120,235 L100,220" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
           
           <g transform="translate(50, 230)">
             <rect width="300" height="36" rx="6" fill="rgba(255,255,255,0.1)" />
@@ -338,26 +471,16 @@ const FigureEightIllustration: FC<StepIllustrationProps> = ({ stepNumber, classN
       
       {stepNumber === 3 && (
         <g className={stepNumber === 3 ? "step-active" : ""}>
-          <path className="rope-path" d="M80,120 L200,120" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-          
-          <path className="rope-path" d="M200,120 C250,120 250,170 200,170" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-          
-          <path className="rope-path" d="M50,120 L80,120" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-                
-          <path className="rope-path" d="M200,170 C150,170 100,170 80,170" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-                
-          <path className="rope-path" d="M80,170 C50,170 30,150 40,120" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-          
-          <path className="rope-path" d="M40,120 C45,100 65,85 90,85" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
-                
-          <path className="rope-path" d="M90,85 L140,85" 
-                stroke="url(#ropeGradient3)" strokeWidth="10" fill="none" strokeLinecap="round" filter="url(#figure8Shadow)" />
+          <path 
+            className="rope-path" 
+            d="M50,120 L80,120 L200,120 C230,120 250,140 250,170 C250,200 230,220 200,220 C170,220 130,220 100,220 C70,220 50,200 40,170 C35,150 40,130 60,100 C70,85 90,80 120,80 C150,80 160,90 150,120" 
+            stroke="url(#ropeGradient3)" 
+            strokeWidth="10" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#figure8Shadow)" 
+          />
           
           <text x="75" y="70" fill="white" fontSize="14" fontWeight="500">Through original loop</text>
           <path d="M100,75 L100,85" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
@@ -399,20 +522,22 @@ const SheetBendIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNam
 
       {stepNumber === 1 && (
         <g className={stepNumber === 1 ? "step-active" : ""}>
-          <path className="rope-path" d="M60,120 L200,120" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-          
-          <path className="rope-path" d="M200,120 C240,120 240,160 200,160" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-                
-          <path className="rope-path" d="M200,160 L120,160" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
+          <path 
+            className="rope-path" 
+            d="M60,120 L200,120 C230,120 250,140 250,160 C250,180 230,200 200,200 C160,200 120,200 120,160 C120,140 140,120 200,120" 
+            stroke="url(#thickRopeGradient)" 
+            strokeWidth="14" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#sheetBendShadow)" 
+          />
           
           <text x="150" y="100" fill="white" fontSize="14" fontWeight="500">Thicker rope</text>
           <path d="M170,105 L170,120" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
           
-          <text x="240" y="140" fill="white" fontSize="14" fontWeight="500">Bight</text>
-          <path d="M230,140 L210,140" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
+          <text x="240" y="160" fill="white" fontSize="14" fontWeight="500">Bight</text>
+          <path d="M230,160 L210,160" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
           
           <g transform="translate(50, 230)">
             <rect width="300" height="36" rx="6" fill="rgba(255,255,255,0.1)" />
@@ -423,17 +548,27 @@ const SheetBendIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNam
       
       {stepNumber === 2 && (
         <g className={stepNumber === 2 ? "step-active" : ""}>
-          <path className="rope-path" d="M60,120 L200,120" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
+          <path 
+            className="rope-path" 
+            d="M60,120 L200,120 C230,120 250,140 250,160 C250,180 230,200 200,200 C160,200 120,200 120,160 C120,140 140,120 200,120" 
+            stroke="url(#thickRopeGradient)" 
+            strokeWidth="14" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#sheetBendShadow)" 
+          />
           
-          <path className="rope-path" d="M200,120 C240,120 240,160 200,160" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-                
-          <path className="rope-path" d="M200,160 L120,160" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-          
-          <path className="rope-path" d="M70,190 C100,190 130,170 160,140" 
-                stroke="url(#thinRopeGradient)" strokeWidth="7" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
+          <path 
+            className="rope-path" 
+            d="M70,190 C100,190 130,170 160,140" 
+            stroke="url(#thinRopeGradient)" 
+            strokeWidth="7" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#sheetBendShadow)" 
+          />
           
           <text x="70" y="210" fill="white" fontSize="14" fontWeight="500">Thinner rope</text>
           <path d="M80,200 L80,190" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
@@ -450,20 +585,27 @@ const SheetBendIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNam
       
       {stepNumber === 3 && (
         <g className={stepNumber === 3 ? "step-active" : ""}>
-          <path className="rope-path" d="M60,120 L200,120" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
+          <path 
+            className="rope-path" 
+            d="M60,120 L200,120 C230,120 250,140 250,160 C250,180 230,200 200,200 C160,200 120,200 120,160 C120,140 140,120 200,120" 
+            stroke="url(#thickRopeGradient)" 
+            strokeWidth="14" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#sheetBendShadow)" 
+          />
           
-          <path className="rope-path" d="M200,120 C240,120 240,160 200,160" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-                
-          <path className="rope-path" d="M200,160 L120,160" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-          
-          <path className="rope-path" d="M70,190 C100,190 130,170 160,140" 
-                stroke="url(#thinRopeGradient)" strokeWidth="7" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-                
-          <path className="rope-path" d="M160,140 C200,100 250,110 260,150" 
-                stroke="url(#thinRopeGradient)" strokeWidth="7" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
+          <path 
+            className="rope-path" 
+            d="M70,190 C100,190 130,170 160,140 C200,100 250,100 270,140" 
+            stroke="url(#thinRopeGradient)" 
+            strokeWidth="7" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#sheetBendShadow)" 
+          />
           
           <text x="240" y="120" fill="white" fontSize="14" fontWeight="500">Behind bight</text>
           <path d="M230,125 L220,140" stroke="white" strokeWidth="2" strokeDasharray="3,3" />
@@ -477,23 +619,27 @@ const SheetBendIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNam
       
       {stepNumber === 4 && (
         <g className={stepNumber === 4 ? "step-active" : ""}>
-          <path className="rope-path" d="M60,120 L200,120" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
+          <path 
+            className="rope-path" 
+            d="M60,120 L200,120 C230,120 250,140 250,160 C250,180 230,200 200,200 C160,200 120,200 120,160 C120,140 140,120 200,120" 
+            stroke="url(#thickRopeGradient)" 
+            strokeWidth="14" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#sheetBendShadow)" 
+          />
           
-          <path className="rope-path" d="M200,120 C240,120 240,160 200,160" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-                
-          <path className="rope-path" d="M200,160 L120,160" 
-                stroke="url(#thickRopeGradient)" strokeWidth="14" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-          
-          <path className="rope-path" d="M70,190 C100,190 130,170 160,140" 
-                stroke="url(#thinRopeGradient)" strokeWidth="7" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-                
-          <path className="rope-path" d="M160,140 C200,100 250,110 260,150" 
-                stroke="url(#thinRopeGradient)" strokeWidth="7" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
-                
-          <path className="rope-path" d="M260,150 C260,180 210,190 170,170" 
-                stroke="url(#thinRopeGradient)" strokeWidth="7" fill="none" strokeLinecap="round" filter="url(#sheetBendShadow)" />
+          <path 
+            className="rope-path" 
+            d="M70,190 C100,190 130,170 160,140 C200,100 250,100 270,140 C280,160 260,180 230,180 C200,180 180,170 170,160" 
+            stroke="url(#thinRopeGradient)" 
+            strokeWidth="7" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            filter="url(#sheetBendShadow)" 
+          />
           
           <text x="200" y="180" fill="white" fontSize="14" fontWeight="500">Tuck under itself</text>
           <path d="M200,175 L210,165" stroke="white" strokeWidth="2" strokeDasharray="3,3" />

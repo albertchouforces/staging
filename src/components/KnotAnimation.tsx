@@ -33,7 +33,7 @@ export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
 
   return (
     <motion.div 
-      className="relative w-full h-64 md:h-96 lg:h-[28rem] bg-gradient-to-br from-blue-950 to-blue-600 rounded-lg overflow-hidden shadow-lg knot-animation-container"
+      className="relative w-full h-64 md:h-96 lg:h-[28rem] bg-gradient-to-br from-blue-950 to-blue-600 rounded-lg overflow-visible shadow-lg knot-animation-container"
       initial={{ opacity: 0.8 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}

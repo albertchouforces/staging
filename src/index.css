@@ -107,3 +107,14 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale(1.05);
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
 }
+
+.knot-svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.rope-path {
+  vector-effect: non-scaling-stroke;
+}
