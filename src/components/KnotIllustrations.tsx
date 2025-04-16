@@ -258,6 +258,7 @@ const CloveHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
         </g>
       )}
     </svg>
+    </IllustrationWrapper>
   );
 };
 
@@ -371,6 +372,7 @@ const FigureEightIllustration: FC<StepIllustrationProps> = ({ stepNumber, classN
         </g>
       )}
     </svg>
+    </IllustrationWrapper>
   );
 };
 
@@ -507,5 +509,6 @@ const SheetBendIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNam
         </g>
       )}
     </svg>
+    </IllustrationWrapper>
   );
 };
