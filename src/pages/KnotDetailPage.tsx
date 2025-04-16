@@ -52,8 +52,7 @@ export const KnotDetailPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-start">
             <div>
               <KnotAnimation 
-                currentStep={currentStep} 
-                imagePosition={knot.steps[currentStep - 1].imagePosition}
+                currentStep={currentStep}
                 knotId={knot.id}
                 key={`${knot.id}-animation-${currentStep}`}
               />

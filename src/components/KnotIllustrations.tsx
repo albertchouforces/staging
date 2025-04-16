@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { IllustrationWrapper } from './IllustrationWrapper';
-import { motion } from 'framer-motion';
 
 interface KnotIllustrationProps {
   knotId: string;

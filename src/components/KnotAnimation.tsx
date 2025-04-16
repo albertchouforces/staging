@@ -4,11 +4,10 @@ import { KnotIllustration } from './KnotIllustrations';
 
 interface KnotAnimationProps {
   currentStep: number;
-  imagePosition: string;
   knotId: string;
 }
 
-export const KnotAnimation = ({ currentStep, imagePosition, knotId }: KnotAnimationProps) => {
+export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
   const prevStep = useRef(currentStep);
