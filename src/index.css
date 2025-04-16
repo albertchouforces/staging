@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.font-display {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.knot-animation-container {
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.knot-step {
+  transition: all 0.3s ease-in-out;
+}
+
+.knot-step-active {
+  transform: translateY(-5px);
+}
+
+.svg-container {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.svg-content {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.knot-svg {
+  overflow: visible;
+}
+
+@keyframes highlight {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+.step-highlight {
+  animation: highlight 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.rope-path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.svg-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-container svg {
+  width: 100%;
+  height: 100%;
+  max-width: 95%;
+  max-height: 95%;
+  overflow: visible;
+}
+
+.rope-path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.2));
+  animation: rope-glow 2s ease-in-out infinite alternate;
+}
+
+.knot-animation-container {
+  perspective: 1000px;
+  overflow: visible;
+}
+
+.step-active {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
