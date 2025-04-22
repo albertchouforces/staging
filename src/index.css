@@ -68,10 +68,27 @@ h1, h2, h3, h4, h5, h6 {
   animation: highlight 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
-.rope-path {
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.2));
+.knot-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.text-label-bg {
+  fill: rgba(255, 255, 255, 0.25);
+  rx: 10;
+  ry: 10;
+}
+
+.text-label {
+  fill: white;
+  font-size: 14px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.5));
+
 }
 
 .svg-container {
@@ -91,11 +108,10 @@ h1, h2, h3, h4, h5, h6 {
   overflow: visible;
 }
 
-.rope-path {
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.2));
-  animation: rope-glow 2s ease-in-out infinite alternate;
+.knot-image-active {
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+  transform: scale(1.02);
+  transition: all 0.3s ease-in-out;
 }
 
 .knot-animation-container {
@@ -115,6 +131,32 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
-.rope-path {
-  vector-effect: non-scaling-stroke;
+.knot-wrapper {
+  border-radius: 0.5rem;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.knot-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #1e3a8a;
+  font-size: 0.875rem;
+  text-align: center;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.step-active {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
+  transition: all 0.3s ease-in-out;
 }

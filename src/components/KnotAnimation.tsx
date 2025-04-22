@@ -33,7 +33,7 @@ export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
 
   return (
     <motion.div 
-      className="relative w-full h-64 md:h-96 lg:h-[28rem] bg-gradient-to-br from-blue-950 to-blue-600 rounded-lg overflow-visible shadow-lg knot-animation-container"
+      className="relative w-full h-64 md:h-96 lg:h-[28rem] rounded-lg overflow-visible shadow-lg knot-animation-container bg-white"
       initial={{ opacity: 0.8 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -42,12 +42,12 @@ export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
         {isLoading ? (
           <motion.div 
             key="loading"
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute inset-0 flex items-center justify-center bg-white"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="w-16 h-16 border-4 border-blue-300 border-t-blue-600 rounded-full animate-spin"></div>
+            <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
           </motion.div>
         ) : (
           <motion.div 
@@ -65,7 +65,7 @@ export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
                 className="w-full h-full svg-container" 
               />
               <div 
-                className={`absolute top-4 right-4 bg-white bg-opacity-15 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium border border-white border-opacity-20 ${isAnimating ? 'animate-pulse' : ''}`}
+                className={`absolute top-4 right-4 bg-blue-600 bg-opacity-80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium border border-blue-400 border-opacity-30 shadow-md ${isAnimating ? 'animate-pulse' : ''}`}
               >
                 Step {currentStep}
               </div>

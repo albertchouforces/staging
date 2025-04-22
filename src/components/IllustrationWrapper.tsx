@@ -26,7 +26,7 @@ export const IllustrationWrapper: FC<IllustrationWrapperProps> = ({
       {children}
       <div className="absolute bottom-4 left-4 z-10">
         <motion.div 
-          className="bg-white bg-opacity-20 backdrop-blur-sm text-white px-3 py-2 rounded-md text-sm inline-block shadow-lg"
+          className="bg-white bg-opacity-70 backdrop-blur-sm text-blue-900 px-3 py-2 rounded-md text-sm inline-block shadow-lg"
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
