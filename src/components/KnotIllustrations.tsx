@@ -55,17 +55,17 @@ const BowlineIllustration: FC<StepIllustrationProps> = ({ stepNumber, className 
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Bowline_loop-ABOK-1010.jpg/440px-Bowline_loop-ABOK-1010.jpg";
+        return "https://images.unsplash.com/photo-1620293023555-272e1a5d7ad8?q=80&w=440&auto=format&fit=crop";
       case 2:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Bowline_knot_-_Step_2.svg/440px-Bowline_knot_-_Step_2.svg.png";
+        return "https://images.unsplash.com/photo-1517627043994-d62e476e8bca?q=80&w=440&auto=format&fit=crop";
       case 3:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Bowline_knot_-_Step_3.svg/440px-Bowline_knot_-_Step_3.svg.png";
+        return "https://images.unsplash.com/photo-1490079397423-a3931fd75940?q=80&w=440&auto=format&fit=crop";
       case 4:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Bowline_knot_-_Step_4.svg/440px-Bowline_knot_-_Step_4.svg.png";
+        return "https://images.unsplash.com/photo-1471922694854-ff1b63b20054?q=80&w=440&auto=format&fit=crop";
       case 5:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Bowline_knot_-_finished.svg/440px-Bowline_knot_-_finished.svg.png";
+        return "https://images.unsplash.com/photo-1602525529018-42014a97fc34?q=80&w=440&auto=format&fit=crop";
       default:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Bowline_knot_-_finished.svg/440px-Bowline_knot_-_finished.svg.png";
+        return "https://images.unsplash.com/photo-1514473776127-61e9763f2817?q=80&w=440&auto=format&fit=crop";
     }
   };
 
@@ -91,13 +91,13 @@ const CloveHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Clove_hitch_-_Step_1.svg/440px-Clove_hitch_-_Step_1.svg.png";
+        return "https://images.unsplash.com/photo-1506339021650-37809c8d5e0a?q=80&w=440&auto=format&fit=crop";
       case 2:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Clove_hitch_-_Step_2.svg/440px-Clove_hitch_-_Step_2.svg.png";
+        return "https://images.unsplash.com/photo-1602525530432-cc8a8c884ae4?q=80&w=440&auto=format&fit=crop";
       case 3:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Clove_hitch_tied_around_a_pole.jpg/440px-Clove_hitch_tied_around_a_pole.jpg";
+        return "https://images.unsplash.com/photo-1558507102-290c0afaacb1?q=80&w=440&auto=format&fit=crop";
       default:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Clove_hitch_tied_around_a_pole.jpg/440px-Clove_hitch_tied_around_a_pole.jpg";
+        return "https://images.unsplash.com/photo-1553178616-701bd2637a1a?q=80&w=440&auto=format&fit=crop";
     }
   };
 
@@ -121,13 +121,13 @@ const FigureEightIllustration: FC<StepIllustrationProps> = ({ stepNumber, classN
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Figure-eight_knot_-_Step_1.svg/440px-Figure-eight_knot_-_Step_1.svg.png";
+        return "https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?q=80&w=440&auto=format&fit=crop";
       case 2:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Figure-eight_knot_-_Step_2.svg/440px-Figure-eight_knot_-_Step_2.svg.png";
+        return "https://images.unsplash.com/photo-1565498253128-c08cbf8adac5?q=80&w=440&auto=format&fit=crop";
       case 3:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Figure-eight_knot_-_finished.svg/440px-Figure-eight_knot_-_finished.svg.png";
+        return "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=440&auto=format&fit=crop";
       default:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Figure-eight_knot_-_finished.svg/440px-Figure-eight_knot_-_finished.svg.png";
+        return "https://images.unsplash.com/photo-1560716092-42ea3c35a1bd?q=80&w=440&auto=format&fit=crop";
     }
   };
 
@@ -151,15 +151,15 @@ const SheetBendIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNam
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Sheet_bend_knot_-_Step_1.svg/440px-Sheet_bend_knot_-_Step_1.svg.png";
+        return "https://images.unsplash.com/photo-1516233258668-6d5456fef184?q=80&w=440&auto=format&fit=crop";
       case 2:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Sheet_bend_knot_-_Step_2.svg/440px-Sheet_bend_knot_-_Step_2.svg.png";
+        return "https://images.unsplash.com/photo-1526913641283-2e123e64adc0?q=80&w=440&auto=format&fit=crop";
       case 3:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Sheet_bend_knot_-_Step_3.svg/440px-Sheet_bend_knot_-_Step_3.svg.png";
+        return "https://images.unsplash.com/photo-1536382149902-bcbf485f4fbe?q=80&w=440&auto=format&fit=crop";
       case 4:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Sheet_bend_knot_-_finished.svg/440px-Sheet_bend_knot_-_finished.svg.png";
+        return "https://images.unsplash.com/photo-1552410260-0fd9b577afa6?q=80&w=440&auto=format&fit=crop";
       default:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Sheet_bend_knot_-_finished.svg/440px-Sheet_bend_knot_-_finished.svg.png";
+        return "https://images.unsplash.com/photo-1514473776127-61e9763f2817?q=80&w=440&auto=format&fit=crop";
     }
   };
 
