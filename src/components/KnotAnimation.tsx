@@ -22,7 +22,7 @@ export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
       const timeout = setTimeout(() => {
         setIsLoading(false);
         setTimeout(() => setIsAnimating(false), 600);
-      }, 300);
+      }, 500);
       
       prevStep.current = currentStep;
       return () => clearTimeout(timeout);
@@ -33,7 +33,7 @@ export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
 
   return (
     <motion.div 
-      className="relative w-full h-64 md:h-96 lg:h-[28rem] rounded-lg overflow-visible shadow-lg knot-animation-container bg-white"
+      className="relative w-full h-64 md:h-96 lg:h-[28rem] rounded-lg overflow-hidden shadow-lg knot-animation-container bg-gray-50"
       initial={{ opacity: 0.8 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -52,17 +52,17 @@ export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
         ) : (
           <motion.div 
             key={`content-${currentStep}`}
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute inset-0 flex items-center justify-center bg-white"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            <div className="w-full h-full relative flex items-center justify-center">
+            <div className="w-full h-full relative flex items-center justify-center p-2">
               <KnotIllustration 
                 knotId={knotId} 
                 stepNumber={currentStep} 
-                className="w-full h-full svg-container" 
+                className="w-full h-full" 
               />
               <div 
                 className={`absolute top-4 right-4 bg-blue-600 bg-opacity-80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium border border-blue-400 border-opacity-30 shadow-md ${isAnimating ? 'animate-pulse' : ''}`}

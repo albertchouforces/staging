@@ -55,24 +55,24 @@ const BowlineIllustration: FC<StepIllustrationProps> = ({ stepNumber, className 
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://www.animatedknots.com/photos/bowline/bowline1.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Bowline_loop-ABOK-1010.jpg/440px-Bowline_loop-ABOK-1010.jpg";
       case 2:
-        return "https://www.animatedknots.com/photos/bowline/bowline3.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Bowline_knot_-_Step_2.svg/440px-Bowline_knot_-_Step_2.svg.png";
       case 3:
-        return "https://www.animatedknots.com/photos/bowline/bowline5.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Bowline_knot_-_Step_3.svg/440px-Bowline_knot_-_Step_3.svg.png";
       case 4:
-        return "https://www.animatedknots.com/photos/bowline/bowline7.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Bowline_knot_-_Step_4.svg/440px-Bowline_knot_-_Step_4.svg.png";
       case 5:
-        return "https://www.animatedknots.com/photos/bowline/bowline9.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Bowline_knot_-_finished.svg/440px-Bowline_knot_-_finished.svg.png";
       default:
-        return "https://www.animatedknots.com/photos/bowline/bowlinefinish.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Bowline_knot_-_finished.svg/440px-Bowline_knot_-_finished.svg.png";
     }
   };
 
   const stepDescription = {
     1: "Form a small loop in the standing part",
     2: "Pass the working end up through the loop",
-    3: "Wrap the working end behind standing part",
+    3: "Wrap the working end around the standing part",
     4: "Bring working end back down through loop",
     5: "Pull tight to complete the bowline knot"
   }[stepNumber] || "Complete the bowline knot";
@@ -91,13 +91,13 @@ const CloveHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://www.animatedknots.com/photos/clovehitch/clovehitch1.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Clove_hitch_-_Step_1.svg/440px-Clove_hitch_-_Step_1.svg.png";
       case 2:
-        return "https://www.animatedknots.com/photos/clovehitch/clovehitch3.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Clove_hitch_-_Step_2.svg/440px-Clove_hitch_-_Step_2.svg.png";
       case 3:
-        return "https://www.animatedknots.com/photos/clovehitch/clovehitchfinish.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Clove_hitch_tied_around_a_pole.jpg/440px-Clove_hitch_tied_around_a_pole.jpg";
       default:
-        return "https://www.animatedknots.com/photos/clovehitch/clovehitchfinish.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Clove_hitch_tied_around_a_pole.jpg/440px-Clove_hitch_tied_around_a_pole.jpg";
     }
   };
 
@@ -121,13 +121,13 @@ const FigureEightIllustration: FC<StepIllustrationProps> = ({ stepNumber, classN
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://www.animatedknots.com/photos/fig8/fig81.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Figure-eight_knot_-_Step_1.svg/440px-Figure-eight_knot_-_Step_1.svg.png";
       case 2:
-        return "https://www.animatedknots.com/photos/fig8/fig83.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Figure-eight_knot_-_Step_2.svg/440px-Figure-eight_knot_-_Step_2.svg.png";
       case 3:
-        return "https://www.animatedknots.com/photos/fig8/fig8finish.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Figure-eight_knot_-_finished.svg/440px-Figure-eight_knot_-_finished.svg.png";
       default:
-        return "https://www.animatedknots.com/photos/fig8/fig8finish.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Figure-eight_knot_-_finished.svg/440px-Figure-eight_knot_-_finished.svg.png";
     }
   };
 
@@ -151,15 +151,15 @@ const SheetBendIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNam
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://www.animatedknots.com/photos/sheetbend/sheetbend1.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Sheet_bend_knot_-_Step_1.svg/440px-Sheet_bend_knot_-_Step_1.svg.png";
       case 2:
-        return "https://www.animatedknots.com/photos/sheetbend/sheetbend3.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Sheet_bend_knot_-_Step_2.svg/440px-Sheet_bend_knot_-_Step_2.svg.png";
       case 3:
-        return "https://www.animatedknots.com/photos/sheetbend/sheetbend5.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Sheet_bend_knot_-_Step_3.svg/440px-Sheet_bend_knot_-_Step_3.svg.png";
       case 4:
-        return "https://www.animatedknots.com/photos/sheetbend/sheetbendfinish.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Sheet_bend_knot_-_finished.svg/440px-Sheet_bend_knot_-_finished.svg.png";
       default:
-        return "https://www.animatedknots.com/photos/sheetbend/sheetbendfinish.jpg";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Sheet_bend_knot_-_finished.svg/440px-Sheet_bend_knot_-_finished.svg.png";
     }
   };
 

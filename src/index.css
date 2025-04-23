@@ -41,21 +41,18 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-5px);
 }
 
-.svg-container {
+.knot-image-container {
   width: 100%;
   height: 100%;
   display: block;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
-.svg-content {
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.knot-svg {
-  overflow: visible;
+.knot-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 @keyframes highlight {
@@ -91,21 +88,26 @@ h1, h2, h3, h4, h5, h6 {
 
 }
 
-.svg-container {
+.knot-image-container {
   position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
-.svg-container svg {
-  width: 100%;
-  height: 100%;
+.knot-image-container img {
+  width: auto;
+  height: auto;
   max-width: 95%;
   max-height: 95%;
-  overflow: visible;
+  object-fit: contain;
+  border-radius: 0.25rem;
 }
 
 .knot-image-active {
@@ -124,11 +126,12 @@ h1, h2, h3, h4, h5, h6 {
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
 }
 
-.knot-svg {
+.wikipedia-knot-image {
   max-width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
+  border-radius: 0.5rem;
 }
 
 .knot-wrapper {
