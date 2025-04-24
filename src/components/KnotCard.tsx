@@ -1,5 +1,5 @@
 import { Knot } from '../types';
-import { Anchor, ArrowRight, Bookmark } from 'lucide-react';
+import { Anchor, ArrowRight} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
