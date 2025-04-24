@@ -16,7 +16,7 @@ export const IllustrationWrapper: FC<IllustrationWrapperProps> = ({
 }) => {
   return (
     <motion.div 
-      className={`relative w-full h-full flex items-center justify-center ${className}`}
+      className={`relative w-full h-full flex items-center justify-center overflow-hidden ${className}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

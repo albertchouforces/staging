@@ -33,7 +33,7 @@ export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
 
   return (
     <motion.div 
-      className="relative w-full h-64 md:h-96 lg:h-[28rem] rounded-lg overflow-hidden shadow-lg knot-animation-container bg-gray-50"
+      className="relative w-full h-64 md:h-96 lg:h-[28rem] rounded-lg overflow-hidden shadow-lg knot-animation-container bg-gray-50 flex items-center justify-center"
       initial={{ opacity: 0.8 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -58,7 +58,7 @@ export const KnotAnimation = ({ currentStep, knotId }: KnotAnimationProps) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            <div className="w-full h-full relative flex items-center justify-center p-2">
+            <div className="w-full h-full relative flex items-center justify-center p-4">
               <KnotIllustration 
                 knotId={knotId} 
                 stepNumber={currentStep} 

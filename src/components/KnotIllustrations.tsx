@@ -16,10 +16,24 @@ export const KnotIllustration: FC<KnotIllustrationProps> = ({ knotId, stepNumber
       return <BowlineIllustration stepNumber={stepNumber} className={className} />;
     case 'clove-hitch':
       return <CloveHitchIllustration stepNumber={stepNumber} className={className} />;
+    case 'cleat-hitch':
+      return <CleatHitchIllustration stepNumber={stepNumber} className={className} />;
+    case 'reef-knot':
+      return <ReefKnotIllustration stepNumber={stepNumber} className={className} />;
     case 'figure-eight':
       return <FigureEightIllustration stepNumber={stepNumber} className={className} />;
     case 'sheet-bend':
       return <SheetBendIllustration stepNumber={stepNumber} className={className} />;
+    case 'anchor-hitch':
+      return <AnchorHitchIllustration stepNumber={stepNumber} className={className} />;
+    case 'round-turn-two-half-hitches':
+      return <RoundTurnTwoHalfHitchesIllustration stepNumber={stepNumber} className={className} />;
+    case 'half-hitch':
+      return <HalfHitchIllustration stepNumber={stepNumber} className={className} />;
+    case 'truckers-hitch':
+      return <TruckersHitchIllustration stepNumber={stepNumber} className={className} />;
+    case 'stopper-knot':
+      return <StopperKnotIllustration stepNumber={stepNumber} className={className} />;
     default:
       return (
         <div className={`flex items-center justify-center rounded-lg overflow-hidden ${className}`}>
@@ -39,13 +53,18 @@ interface StepIllustrationProps {
 
 const KnotImageWrapper: FC<{src: string; alt: string; className?: string}> = ({ src, alt, className = "" }) => {
   return (
-    <div className={`rounded-lg overflow-hidden ${className}`}>
+    <div className={`rounded-lg overflow-hidden knot-image-container ${className}`}>
       <LazyLoadImage
         src={src}
         alt={alt}
         effect="blur"
-        className="w-full h-full object-contain"
-        wrapperClassName="w-full h-full flex items-center justify-center"
+        className="w-auto h-auto max-w-full max-h-full object-contain knot-image"
+        wrapperClassName="w-full h-full flex items-center justify-center p-2"
+        placeholder={
+          <div className="animate-pulse flex items-center justify-center w-full h-full min-h-[200px] bg-gray-100 rounded">
+            <div className="w-12 h-12 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+          </div>
+        }
       />
     </div>
   );
@@ -55,17 +74,17 @@ const BowlineIllustration: FC<StepIllustrationProps> = ({ stepNumber, className 
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://images.unsplash.com/photo-1620293023555-272e1a5d7ad8?q=80&w=440&auto=format&fit=crop";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/Bowline1.png";
       case 2:
-        return "https://images.unsplash.com/photo-1517627043994-d62e476e8bca?q=80&w=440&auto=format&fit=crop";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/Bowline2.png";
       case 3:
-        return "https://images.unsplash.com/photo-1490079397423-a3931fd75940?q=80&w=440&auto=format&fit=crop";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/Bowline3.png";
       case 4:
-        return "https://images.unsplash.com/photo-1471922694854-ff1b63b20054?q=80&w=440&auto=format&fit=crop";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/Bowline4.png";
       case 5:
-        return "https://images.unsplash.com/photo-1602525529018-42014a97fc34?q=80&w=440&auto=format&fit=crop";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/Bowline5.png";
       default:
-        return "https://images.unsplash.com/photo-1514473776127-61e9763f2817?q=80&w=440&auto=format&fit=crop";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/Bowline5.png";
     }
   };
 
@@ -91,13 +110,13 @@ const CloveHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://images.unsplash.com/photo-1506339021650-37809c8d5e0a?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Clove_hitch_tying_1.jpg/640px-Clove_hitch_tying_1.jpg";
       case 2:
-        return "https://images.unsplash.com/photo-1602525530432-cc8a8c884ae4?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Clove_hitch_tying_2.jpg/640px-Clove_hitch_tying_2.jpg";
       case 3:
-        return "https://images.unsplash.com/photo-1558507102-290c0afaacb1?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Clove_hitch_knot.jpg/640px-Clove_hitch_knot.jpg";
       default:
-        return "https://images.unsplash.com/photo-1553178616-701bd2637a1a?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Clove_hitch_knot.jpg/640px-Clove_hitch_knot.jpg";
     }
   };
 
@@ -117,17 +136,83 @@ const CloveHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
   );
 };
 
+const CleatHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, className = "" }) => {
+  const getStepImageUrl = (step: number) => {
+    switch (step) {
+      case 1:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Cleat_hitch_step_1.jpg/640px-Cleat_hitch_step_1.jpg";
+      case 2:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Cleat_hitch_step_2.jpg/640px-Cleat_hitch_step_2.jpg";
+      case 3:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Cleat_hitch_step_3.jpg/640px-Cleat_hitch_step_3.jpg";
+      case 4:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Cleat_hitch_step_4.jpg/640px-Cleat_hitch_step_4.jpg";
+      default:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Cleat_hitch_step_4.jpg/640px-Cleat_hitch_step_4.jpg";
+    }
+  };
+
+  const stepDescription = {
+    1: "Wrap around the base of the cleat",
+    2: "Create a figure-8 pattern",
+    3: "Make another figure-8 wrap",
+    4: "Finish with a half hitch"
+  }[stepNumber] || "Complete the cleat hitch";
+
+  return (
+    <IllustrationWrapper title="Cleat Hitch" stepNumber={stepNumber} className={className}>
+      <KnotImageWrapper 
+        src={getStepImageUrl(stepNumber)} 
+        alt={`Cleat hitch step ${stepNumber}: ${stepDescription}`} 
+      />
+    </IllustrationWrapper>
+  );
+};
+
+const ReefKnotIllustration: FC<StepIllustrationProps> = ({ stepNumber, className = "" }) => {
+  const getStepImageUrl = (step: number) => {
+    switch (step) {
+      case 1:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Reef_knot_step_1.jpg/640px-Reef_knot_step_1.jpg";
+      case 2:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Reef_knot_step_2.jpg/640px-Reef_knot_step_2.jpg";
+      case 3:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Reef_knot_step_3.jpg/640px-Reef_knot_step_3.jpg";
+      case 4:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Reef_knot.jpg/640px-Reef_knot.jpg";
+      default:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Reef_knot.jpg/640px-Reef_knot.jpg";
+    }
+  };
+
+  const stepDescription = {
+    1: "Cross right end over left",
+    2: "Bring right end under left",
+    3: "Cross left end over right",
+    4: "Bring left end under right and tighten"
+  }[stepNumber] || "Complete the reef knot";
+
+  return (
+    <IllustrationWrapper title="Reef Knot" stepNumber={stepNumber} className={className}>
+      <KnotImageWrapper 
+        src={getStepImageUrl(stepNumber)} 
+        alt={`Reef knot step ${stepNumber}: ${stepDescription}`} 
+      />
+    </IllustrationWrapper>
+  );
+};
+
 const FigureEightIllustration: FC<StepIllustrationProps> = ({ stepNumber, className = "" }) => {
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Figure-eight_knot_tying_1.jpg/640px-Figure-eight_knot_tying_1.jpg";
       case 2:
-        return "https://images.unsplash.com/photo-1565498253128-c08cbf8adac5?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Figure-eight_knot_tying_2.jpg/640px-Figure-eight_knot_tying_2.jpg";
       case 3:
-        return "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Figure-eight_knot.jpg/640px-Figure-eight_knot.jpg";
       default:
-        return "https://images.unsplash.com/photo-1560716092-42ea3c35a1bd?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Figure-eight_knot.jpg/640px-Figure-eight_knot.jpg";
     }
   };
 
@@ -151,15 +236,15 @@ const SheetBendIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNam
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://images.unsplash.com/photo-1516233258668-6d5456fef184?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Sheet_bend_tying_1.jpg/640px-Sheet_bend_tying_1.jpg";
       case 2:
-        return "https://images.unsplash.com/photo-1526913641283-2e123e64adc0?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Sheet_bend_tying_2.jpg/640px-Sheet_bend_tying_2.jpg";
       case 3:
-        return "https://images.unsplash.com/photo-1536382149902-bcbf485f4fbe?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Sheet_bend_tying_3.jpg/640px-Sheet_bend_tying_3.jpg";
       case 4:
-        return "https://images.unsplash.com/photo-1552410260-0fd9b577afa6?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Sheet_bend.jpg/640px-Sheet_bend.jpg";
       default:
-        return "https://images.unsplash.com/photo-1514473776127-61e9763f2817?q=80&w=440&auto=format&fit=crop";
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Sheet_bend.jpg/640px-Sheet_bend.jpg";
     }
   };
 
@@ -175,6 +260,171 @@ const SheetBendIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNam
       <KnotImageWrapper 
         src={getStepImageUrl(stepNumber)} 
         alt={`Sheet bend step ${stepNumber}: ${stepDescription}`} 
+      />
+    </IllustrationWrapper>
+  );
+};
+
+const AnchorHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, className = "" }) => {
+  const getStepImageUrl = (step: number) => {
+    switch (step) {
+      case 1:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Anchor_hitch_step_1.jpg/640px-Anchor_hitch_step_1.jpg";
+      case 2:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Anchor_hitch_step_2.jpg/640px-Anchor_hitch_step_2.jpg";
+      case 3:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Anchor_hitch_step_3.jpg/640px-Anchor_hitch_step_3.jpg";
+      case 4:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Anchor_hitch.jpg/640px-Anchor_hitch.jpg";
+      default:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Anchor_hitch.jpg/640px-Anchor_hitch.jpg";
+    }
+  };
+
+  const stepDescription = {
+    1: "Pass the working end through the ring",
+    2: "Wrap around the standing part",
+    3: "Pass through the loop against the ring",
+    4: "Pass through the new loop and tighten"
+  }[stepNumber] || "Complete the anchor hitch";
+
+  return (
+    <IllustrationWrapper title="Anchor Hitch" stepNumber={stepNumber} className={className}>
+      <KnotImageWrapper 
+        src={getStepImageUrl(stepNumber)} 
+        alt={`Anchor hitch step ${stepNumber}: ${stepDescription}`} 
+      />
+    </IllustrationWrapper>
+  );
+};
+
+const RoundTurnTwoHalfHitchesIllustration: FC<StepIllustrationProps> = ({ stepNumber, className = "" }) => {
+  const getStepImageUrl = (step: number) => {
+    switch (step) {
+      case 1:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Round_turn_two_half_hitches_step_1.jpg/640px-Round_turn_two_half_hitches_step_1.jpg";
+      case 2:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Round_turn_two_half_hitches_step_2.jpg/640px-Round_turn_two_half_hitches_step_2.jpg";
+      case 3:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Round_turn_two_half_hitches_step_3.jpg/640px-Round_turn_two_half_hitches_step_3.jpg";
+      case 4:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Round_turn_two_half_hitches.jpg/640px-Round_turn_two_half_hitches.jpg";
+      default:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Round_turn_two_half_hitches.jpg/640px-Round_turn_two_half_hitches.jpg";
+    }
+  };
+
+  const stepDescription = {
+    1: "Make a round turn around the object",
+    2: "Make first half hitch",
+    3: "Make second half hitch",
+    4: "Tighten both half hitches"
+  }[stepNumber] || "Complete the round turn and two half hitches";
+
+  return (
+    <IllustrationWrapper title="Round Turn and Two Half Hitches" stepNumber={stepNumber} className={className}>
+      <KnotImageWrapper 
+        src={getStepImageUrl(stepNumber)} 
+        alt={`Round turn and two half hitches step ${stepNumber}: ${stepDescription}`} 
+      />
+    </IllustrationWrapper>
+  );
+};
+
+const HalfHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, className = "" }) => {
+  const getStepImageUrl = (step: number) => {
+    switch (step) {
+      case 1:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Half_hitch_step_1.jpg/640px-Half_hitch_step_1.jpg";
+      case 2:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Half_hitch_step_2.jpg/640px-Half_hitch_step_2.jpg";
+      case 3:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Half_hitch.jpg/640px-Half_hitch.jpg";
+      default:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Half_hitch.jpg/640px-Half_hitch.jpg";
+    }
+  };
+
+  const stepDescription = {
+    1: "Pass the working end around object",
+    2: "Cross over the standing part",
+    3: "Tuck under itself to complete half hitch"
+  }[stepNumber] || "Complete the half hitch";
+
+  return (
+    <IllustrationWrapper title="Half Hitch" stepNumber={stepNumber} className={className}>
+      <KnotImageWrapper 
+        src={getStepImageUrl(stepNumber)} 
+        alt={`Half hitch step ${stepNumber}: ${stepDescription}`} 
+      />
+    </IllustrationWrapper>
+  );
+};
+
+const TruckersHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, className = "" }) => {
+  const getStepImageUrl = (step: number) => {
+    switch (step) {
+      case 1:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Truckers_hitch_step_1.jpg/640px-Truckers_hitch_step_1.jpg";
+      case 2:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Truckers_hitch_step_2.jpg/640px-Truckers_hitch_step_2.jpg";
+      case 3:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Truckers_hitch_step_3.jpg/640px-Truckers_hitch_step_3.jpg";
+      case 4:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Truckers_hitch_step_4.jpg/640px-Truckers_hitch_step_4.jpg";
+      case 5:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Truckers_hitch.jpg/640px-Truckers_hitch.jpg";
+      default:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Truckers_hitch.jpg/640px-Truckers_hitch.jpg";
+    }
+  };
+
+  const stepDescription = {
+    1: "Create a slip loop in the rope",
+    2: "Pass working end around anchor point",
+    3: "Thread through slip loop for leverage",
+    4: "Pull to create tension",
+    5: "Secure with half hitches"
+  }[stepNumber] || "Complete the trucker's hitch";
+
+  return (
+    <IllustrationWrapper title="Trucker's Hitch" stepNumber={stepNumber} className={className}>
+      <KnotImageWrapper 
+        src={getStepImageUrl(stepNumber)} 
+        alt={`Trucker's hitch step ${stepNumber}: ${stepDescription}`} 
+      />
+    </IllustrationWrapper>
+  );
+};
+
+const StopperKnotIllustration: FC<StepIllustrationProps> = ({ stepNumber, className = "" }) => {
+  const getStepImageUrl = (step: number) => {
+    switch (step) {
+      case 1:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Stopper_knot_step_1.jpg/640px-Stopper_knot_step_1.jpg";
+      case 2:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Stopper_knot_step_2.jpg/640px-Stopper_knot_step_2.jpg";
+      case 3:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Stopper_knot_step_3.jpg/640px-Stopper_knot_step_3.jpg";
+      case 4:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Stopper_knot.jpg/640px-Stopper_knot.jpg";
+      default:
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Stopper_knot.jpg/640px-Stopper_knot.jpg";
+    }
+  };
+
+  const stepDescription = {
+    1: "Create a small loop near the end",
+    2: "Wrap working end around standing part",
+    3: "Pass end through the loop",
+    4: "Pull tight to form stopper knot"
+  }[stepNumber] || "Complete the stopper knot";
+
+  return (
+    <IllustrationWrapper title="Stopper Knot" stepNumber={stepNumber} className={className}>
+      <KnotImageWrapper 
+        src={getStepImageUrl(stepNumber)} 
+        alt={`Stopper knot step ${stepNumber}: ${stepDescription}`} 
       />
     </IllustrationWrapper>
   );
