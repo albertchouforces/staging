@@ -110,13 +110,13 @@ const CloveHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Clove_hitch_tying_1.jpg/640px-Clove_hitch_tying_1.jpg";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/clovehitch1.jpg";
       case 2:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Clove_hitch_tying_2.jpg/640px-Clove_hitch_tying_2.jpg";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/clovehitch2.jpg";
       case 3:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Clove_hitch_knot.jpg/640px-Clove_hitch_knot.jpg";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/clovehitch3.jpg";
       default:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Clove_hitch_knot.jpg/640px-Clove_hitch_knot.jpg";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/clovehitch3.jpg";
     }
   };
 
