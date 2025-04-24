@@ -140,15 +140,15 @@ const CleatHitchIllustration: FC<StepIllustrationProps> = ({ stepNumber, classNa
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Cleat_hitch_step_1.jpg/640px-Cleat_hitch_step_1.jpg";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/cleathitch1.jpg";
       case 2:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Cleat_hitch_step_2.jpg/640px-Cleat_hitch_step_2.jpg";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/cleathitch2.jpg";
       case 3:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Cleat_hitch_step_3.jpg/640px-Cleat_hitch_step_3.jpg";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/cleathitch3.jpg";
       case 4:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Cleat_hitch_step_4.jpg/640px-Cleat_hitch_step_4.jpg";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/cleathitch4.jpg";
       default:
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Cleat_hitch_step_4.jpg/640px-Cleat_hitch_step_4.jpg";
+        return "https://raw.githubusercontent.com/albertchouforces/staging/refs/heads/main/public/images/cleathitch4.jpg";
     }
   };
 
