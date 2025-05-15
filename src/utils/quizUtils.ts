@@ -1,4 +1,4 @@
-import { Quiz, QuizQuestion, QuizState } from '../types/quiz';
+import { Quiz, QuizState } from '../types/quiz';
 
 // Fisher-Yates shuffle algorithm
 export function shuffleArray<T>(array: T[]): T[] {

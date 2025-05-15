@@ -1,4 +1,3 @@
-import React from 'react';
 import { QuizQuestion } from '../types/quiz';
 import { CircleCheck, CircleX } from 'lucide-react';
 

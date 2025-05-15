@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HighScore } from '../types/quiz';
 import { getHighScores } from '../firebase/highScoreService';
 import { Calendar, Clock, Medal, Percent, Trophy } from 'lucide-react';

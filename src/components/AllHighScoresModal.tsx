@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChevronDown, X } from 'lucide-react';
 import { HighScoresList } from './HighScoresList';
 import { Quiz } from '../types/quiz';

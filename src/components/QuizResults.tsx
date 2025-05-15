@@ -1,4 +1,3 @@
-import React from 'react';
 import { Quiz } from '../types/quiz';
 import { ArrowLeft, Award, ClipboardList, Clock, RotateCcw } from 'lucide-react';
 
@@ -10,7 +9,6 @@ interface QuizResultsProps {
   onBackToQuizzes: () => void;
   onToggleHighScores: () => void;
   showHighScores: boolean;
-  scoreSaved: boolean;
 }
 
 export function QuizResults({ 
@@ -20,8 +18,7 @@ export function QuizResults({
   onRetakeQuiz, 
   onBackToQuizzes, 
   onToggleHighScores,
-  showHighScores,
-  scoreSaved
+  showHighScores
 }: QuizResultsProps) {
   // Format time string with milliseconds
   const formatTime = (seconds: number): string => {

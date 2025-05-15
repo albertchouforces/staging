@@ -1,4 +1,3 @@
-import React from 'react';
 import { Quiz } from '../types/quiz';
 import { ChevronRight } from 'lucide-react';
 
