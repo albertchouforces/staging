@@ -9,7 +9,6 @@ interface QuizResultsProps {
   onBackToQuizzes: () => void;
   onToggleHighScores: () => void;
   showHighScores: boolean;
-  scoreSaved: boolean;
 }
 
 export function QuizResults({ 
@@ -20,7 +19,6 @@ export function QuizResults({
   onBackToQuizzes, 
   onToggleHighScores,
   showHighScores,
-  scoreSaved
 }: QuizResultsProps) {
   // Format time string with milliseconds
   const formatTime = (seconds: number): string => {
