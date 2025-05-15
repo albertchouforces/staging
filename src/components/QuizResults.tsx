@@ -9,6 +9,7 @@ interface QuizResultsProps {
   onBackToQuizzes: () => void;
   onToggleHighScores: () => void;
   showHighScores: boolean;
+  scoreSaved: boolean;
 }
 
 export function QuizResults({ 
@@ -19,6 +20,7 @@ export function QuizResults({
   onBackToQuizzes, 
   onToggleHighScores,
   showHighScores,
+  scoreSaved
 }: QuizResultsProps) {
   // Format time string with milliseconds
   const formatTime = (seconds: number): string => {
@@ -32,6 +34,11 @@ export function QuizResults({
       <h2 className="text-2xl font-bold text-navy-700">Quiz Completed!</h2>
       
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center gap-4">
+        {scoreSaved && (
+          <div className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium mb-1">
+            Score saved successfully!
+          </div>
+        )}
         <Award className="w-16 h-16 text-navy-500" />
         <h3 className="text-xl font-medium text-navy-700">{quiz.title} Results</h3>
         
@@ -58,7 +65,13 @@ export function QuizResults({
         className="flex items-center justify-center gap-2 p-3 bg-navy-600 text-white rounded-lg hover:bg-navy-700 transition-colors"
       >
         <ClipboardList className="w-5 h-5" />
-        <span>{showHighScores ? 'Hide High Scores' : 'View High Scores'}</span>
+        <span>
+          {showHighScores 
+            ? 'Hide High Scores' 
+            : scoreSaved 
+              ? 'View Your Saved Score' 
+              : 'View High Scores'}
+        </span>
       </button>
       
       <div className="flex flex-col gap-3">
