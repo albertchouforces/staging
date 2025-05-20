@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Question } from '../types/quiz';
 import { Link } from 'react-router-dom';
 
 interface QuizResultsProps {
@@ -14,8 +13,6 @@ interface QuizResultsProps {
 export default function QuizResults({ 
   score, 
   totalQuestions, 
-  questions, 
-  selectedAnswers,
   quizTitle,
   onRetry,
   timeTaken = 0,
