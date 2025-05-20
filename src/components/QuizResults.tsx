@@ -1,95 +1,88 @@
-import { Quiz } from '../types/quiz';
-import { ArrowLeft, Award, ClipboardList, Clock, RotateCcw } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Question } from '../types/quiz';
+import { Link } from 'react-router-dom';
 
 interface QuizResultsProps {
-  quiz: Quiz;
   score: number;
-  timeInSeconds: number;
-  onRetakeQuiz: () => void;
-  onBackToQuizzes: () => void;
-  onToggleHighScores: () => void;
-  showHighScores: boolean;
-  scoreSaved: boolean;
+  totalQuestions: number;
+  questions: Question[];
+  selectedAnswers: Record<string, string>;
+  quizTitle: string;
+  onRetry: () => void;
+  timeTaken?: number;
+  onSubmitScore?: () => void;
 }
 
-export function QuizResults({ 
-  quiz, 
+export default function QuizResults({ 
   score, 
-  timeInSeconds, 
-  onRetakeQuiz, 
-  onBackToQuizzes, 
-  onToggleHighScores,
-  showHighScores,
-  scoreSaved
+  totalQuestions, 
+  questions, 
+  selectedAnswers,
+  quizTitle,
+  onRetry,
+  timeTaken = 0,
+  onSubmitScore
 }: QuizResultsProps) {
-  // Format time string with milliseconds
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    const ms = Math.floor((seconds % 1) * 1000);
-    return `${mins}m ${secs}s ${ms}ms`;
+  const [mounted, setMounted] = useState(false);
+  const percentage = Math.round((score / totalQuestions) * 100);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Determine feedback based on score percentage
+  const getFeedback = () => {
+    if (percentage >= 90) return "Excellent! You're a master!";
+    if (percentage >= 70) return "Great job! You know your stuff!";
+    if (percentage >= 50) return "Good effort! Room for improvement.";
+    return "Keep practicing! You'll get better.";
   };
+
   return (
-    <div className="flex flex-col gap-6 w-full max-w-md">
-      <h2 className="text-2xl font-bold text-navy-700">Quiz Completed!</h2>
-      
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center gap-4">
-        {scoreSaved && (
-          <div className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium mb-1">
-            Score saved successfully!
-          </div>
+    <div className={`transition-all duration-700 ease-out ${mounted ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-10'}`}>
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-bold mb-4">Quiz Results</h2>
+        <p className="text-gray-600 mb-6">{quizTitle}</p>
+        
+        <div className="inline-flex items-center justify-center bg-white shadow-md rounded-full px-8 py-4 mb-8">
+          <div className="text-4xl font-bold text-blue-900 mr-2">{score}</div>
+          <div className="text-lg text-gray-500">/ {totalQuestions}</div>
+        </div>
+        
+        <p className="text-xl font-medium mb-2">{getFeedback()}</p>
+        <p className="text-gray-600">You scored {percentage}%</p>
+        {timeTaken > 0 && (
+          <p className="text-gray-600 mt-1">
+            Time: {(timeTaken / 1000).toFixed(2)} seconds
+          </p>
         )}
-        <Award className="w-16 h-16 text-navy-500" />
-        <h3 className="text-xl font-medium text-navy-700">{quiz.title} Results</h3>
-        
-        <div className="flex items-center justify-center w-28 h-28 rounded-full bg-navy-50 border-4 border-navy-100">
-          <span className="text-3xl font-bold text-navy-700">{Math.round(score)}%</span>
-        </div>
-        
-        <div className="flex items-center gap-2 p-2 bg-navy-50 rounded-lg text-navy-700">
-          <Clock className="w-5 h-5" />
-          <span className="font-medium">Time: {formatTime(timeInSeconds)}</span>
-        </div>
-        
-        <p className="text-navy-600">
-          {score >= 80 
-            ? 'Excellent! You really know your stuff!' 
-            : score >= 60 
-            ? 'Good job! Keep learning to improve your score.'
-            : 'Keep practicing to improve your knowledge.'}
-        </p>
       </div>
       
-      <button
-        onClick={onToggleHighScores}
-        className="flex items-center justify-center gap-2 p-3 bg-navy-600 text-white rounded-lg hover:bg-navy-700 transition-colors"
-      >
-        <ClipboardList className="w-5 h-5" />
-        <span>
-          {showHighScores 
-            ? 'Hide High Scores' 
-            : scoreSaved 
-              ? 'View Your Saved Score' 
-              : 'View High Scores'}
-        </span>
-      </button>
-      
-      <div className="flex flex-col gap-3">
-        <button
-          onClick={onRetakeQuiz}
-          className="flex items-center justify-center gap-2 p-3 bg-navy-600 text-white rounded-lg hover:bg-navy-700 transition-colors"
-        >
-          <RotateCcw className="w-5 h-5" />
-          <span>Retake Quiz</span>
-        </button>
-        
-        <button
-          onClick={onBackToQuizzes}
-          className="flex items-center justify-center gap-2 p-3 bg-white text-navy-700 border border-gray-200 rounded-lg hover:border-navy-400 transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back to Quiz Selection</span>
-        </button>
+      <div className="mt-6 space-y-8">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Link 
+            to="/" 
+            className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-4 rounded-lg text-center transition-colors duration-300"
+          >
+            Back to Quizzes
+          </Link>
+          <div className="grid grid-cols-2 gap-2">
+            <button 
+              onClick={onRetry}
+              className="bg-blue-900 hover:bg-blue-800 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors duration-300"
+            >
+              Try Again
+            </button>
+            {onSubmitScore && (
+              <button 
+                onClick={onSubmitScore}
+                className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors duration-300"
+              >
+                Submit Score
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

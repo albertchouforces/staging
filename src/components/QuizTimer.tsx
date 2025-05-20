@@ -1,50 +1,73 @@
-import { useEffect, useState } from 'react';
-import { Clock } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Timer } from 'lucide-react';
 
 interface QuizTimerProps {
-  startTime: number;
-  elapsedTime: number;
-  isPaused: boolean;
-  onTimeUpdate: (elapsedSeconds: number) => void;
+  isRunning: boolean;
+  onTimerUpdate: (elapsedTime: number) => void;
 }
 
-export function QuizTimer({ 
-  startTime, 
-  elapsedTime, 
-  isPaused, 
-  onTimeUpdate 
-}: QuizTimerProps) {
-  const [displayTime, setDisplayTime] = useState('00:00.000');
+export default function QuizTimer({ isRunning, onTimerUpdate }: QuizTimerProps) {
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const startTimeRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const lastPauseTimeRef = useRef<number>(0);
   
-  // Update timer display
+  // Update the timer state
+  const updateTimer = (timestamp: number) => {
+    if (!startTimeRef.current) {
+      startTimeRef.current = timestamp;
+    }
+    
+    // Calculate elapsed time accounting for pauses
+    const currentElapsed = timestamp - startTimeRef.current - lastPauseTimeRef.current;
+    setElapsedTime(currentElapsed);
+    onTimerUpdate(currentElapsed);
+    
+    if (isRunning) {
+      animationFrameRef.current = requestAnimationFrame(updateTimer);
+    }
+  };
+  
+  // Format time in mm:ss.ms format
+  const formatTime = (milliseconds: number) => {
+    const minutes = Math.floor(milliseconds / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    const ms = Math.floor((milliseconds % 1000) / 10); // Show only tens of ms for better readability
+    
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
+  };
+  
+  // Start/stop timer based on isRunning prop
   useEffect(() => {
-    // Only run the timer if it's not paused
-    if (isPaused) return;
+    let pauseStartTime: number;
     
-    // Set up timer interval (50ms for smoother millisecond updates)
-    const intervalId = setInterval(() => {
-      const now = Date.now();
-      const totalElapsedTime = elapsedTime + (now - startTime) / 1000;
+    if (isRunning) {
+      // Resume timer
+      animationFrameRef.current = requestAnimationFrame(updateTimer);
+    } else if (animationFrameRef.current !== null) {
+      // Pause timer
+      pauseStartTime = performance.now();
+      cancelAnimationFrame(animationFrameRef.current);
       
-      // Format time to MM:SS.ms
-      const mins = Math.floor(totalElapsedTime / 60);
-      const secs = Math.floor(totalElapsedTime % 60);
-      const ms = Math.floor((totalElapsedTime % 1) * 1000);
-      
-      const formattedTime = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(3, '0')}`;
-      
-      setDisplayTime(formattedTime);
-      onTimeUpdate(totalElapsedTime);
-    }, 50); // Update every 50ms for smoother display
+      // Store the pause time to account for it in later calculations
+      if (startTimeRef.current) {
+        const pauseDuration = pauseStartTime - (startTimeRef.current + lastPauseTimeRef.current + elapsedTime);
+        lastPauseTimeRef.current += pauseDuration;
+      }
+    }
     
-    // Clean up interval
-    return () => clearInterval(intervalId);
-  }, [startTime, elapsedTime, isPaused, onTimeUpdate]);
+    // Cleanup
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [isRunning]);
   
   return (
-    <div className="flex items-center gap-2 p-2 bg-navy-50 rounded-lg text-navy-700">
-      <Clock className="w-4 h-4" />
-      <span className="font-mono text-sm">{displayTime}</span>
+    <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-lg text-sm">
+      <Timer size={16} className="text-blue-900" />
+      <span className="font-mono font-medium">{formatTime(elapsedTime)}</span>
     </div>
   );
 }

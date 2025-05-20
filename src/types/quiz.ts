@@ -1,36 +1,37 @@
-export interface QuizQuestion {
+export interface Question {
   id: string;
-  question: string;
+  text: string;
   correctAnswer: string;
   imageUrl?: string;
 }
 
-export interface Quiz {
+export interface QuizSet {
   id: string;
   title: string;
   description: string;
-  questions: QuizQuestion[];
+  questions: Question[];
+  color: string;
 }
 
 export interface QuizState {
   currentQuestionIndex: number;
-  answers: Record<string, string>;
-  shuffledQuestions: QuizQuestion[];
-  shuffledOptions: Record<string, string[]>;
+  selectedAnswers: Record<string, string>;
   isCompleted: boolean;
-  showFeedback?: boolean;
-  startTime: number;
-  currentQuestionStartTime: number;
-  elapsedTime: number;
-  isPaused: boolean;
 }
 
-export interface HighScore {
+export interface QuizAnswer {
   id: string;
+  text: string;
+  isCorrect: boolean;
+}
+
+export interface QuizScore {
+  id?: string;
   quizId: string;
   playerName: string;
   score: number;
-  accuracy: number;
-  timeInSeconds: number;
-  date: Date;
+  correctAnswers: number;
+  totalQuestions: number;
+  timeTaken: number;
+  timestamp: string;
 }
