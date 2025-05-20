@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getHighScores, getAllHighScores } from '../utils/firebase';
+import { getHighScores } from '../utils/firebase';
 import { QuizScore } from '../types/quiz';
 import { quizSets } from '../data/quizData';
 import { X } from 'lucide-react';

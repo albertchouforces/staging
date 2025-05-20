@@ -163,8 +163,6 @@ export default function QuizPage() {
             <QuizResults 
               score={score}
               totalQuestions={questions.length}
-              questions={questions}
-              selectedAnswers={selectedAnswers}
               quizTitle={quizSet.title}
               onRetry={handleRetry}
               timeTaken={totalTime}

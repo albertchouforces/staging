@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 interface QuizResultsProps {
   score: number;
   totalQuestions: number;
-  questions: Question[];
-  selectedAnswers: Record<string, string>;
   quizTitle: string;
   onRetry: () => void;
   timeTaken?: number;
