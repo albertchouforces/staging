@@ -1,150 +1,127 @@
-import { QuizSet } from "../types/quiz";
+export interface QuizQuestion {
+  question: string;
+  answer: string;
+  image?: string; // Optional URL for question image
+}
 
-export const quizSets: QuizSet[] = [
+export interface Quiz {
+  quizID: string;
+  quizName: string;
+  questions: QuizQuestion[];
+}
+
+export const quizData: Quiz[] = [
   {
-    id: "general-knowledge",
-    title: "General Knowledge",
-    description: "Test your knowledge of various general facts",
-    color: "#1e3a8a", // blue-900
+    quizID: "web-dev",
+    quizName: "Web Development Basics",
     questions: [
       {
-        id: "gk-1",
-        text: "What is the capital of France?",
-        correctAnswer: "Paris",
-        imageUrl: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        question: "What language is primarily used for styling web pages?",
+        answer: "CSS",
+        image: "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?q=80&w=1650&auto=format&fit=crop"
       },
       {
-        id: "gk-2",
-        text: "Which planet is known as the Red Planet?",
-        correctAnswer: "Mars"
+        question: "What does HTML stand for?",
+        answer: "HyperText Markup Language",
+        image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1470&auto=format&fit=crop"
       },
       {
-        id: "gk-3",
-        text: "What is the largest ocean on Earth?",
-        correctAnswer: "Pacific Ocean"
+        question: "Which of these is a JavaScript framework?",
+        answer: "React",
+        image: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?q=80&w=1470&auto=format&fit=crop"
       },
       {
-        id: "gk-4",
-        text: "Who wrote the play 'Romeo and Juliet'?",
-        correctAnswer: "William Shakespeare"
+        question: "What is the current HTML version?",
+        answer: "HTML5"
       },
       {
-        id: "gk-5",
-        text: "What is the chemical symbol for gold?",
-        correctAnswer: "Au"
-      },
-      {
-        id: "gk-6",
-        text: "Which country is home to the Great Barrier Reef?",
-        correctAnswer: "Australia"
-      },
-      {
-        id: "gk-7",
-        text: "What is the tallest mountain in the world?",
-        correctAnswer: "Mount Everest"
-      },
-      {
-        id: "gk-8",
-        text: "How many sides does a hexagon have?",
-        correctAnswer: "Six"
+        question: "Which of these is used for version control?",
+        answer: "Git"
       }
     ]
   },
   {
-    id: "science",
-    title: "Science Quiz",
-    description: "Challenge yourself with these science questions",
-    color: "#1e3a8a", // blue-900
+    quizID: "science",
+    quizName: "General Science",
     questions: [
       {
-        id: "sci-1",
-        text: "What is the chemical formula for water?",
-        correctAnswer: "H2O"
+        question: "What is the chemical symbol for gold?",
+        answer: "Au",
+        image: "https://images.unsplash.com/photo-1610375461369-d613b666be2b?q=80&w=1470&auto=format&fit=crop"
       },
       {
-        id: "sci-2",
-        text: "Which element has the symbol 'O'?",
-        correctAnswer: "Oxygen"
+        question: "Which planet is closest to the sun?",
+        answer: "Mercury",
+        image: "https://images.unsplash.com/photo-1614642264762-d0a3b8bf3700?q=80&w=1470&auto=format&fit=crop"
       },
       {
-        id: "sci-3",
-        text: "What is the process by which plants make their food called?",
-        correctAnswer: "Photosynthesis",
-        imageUrl: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        question: "What is the hardest natural substance on Earth?",
+        answer: "Diamond",
+        image: "https://images.unsplash.com/photo-1551732998-9573f695fdbb?q=80&w=1470&auto=format&fit=crop"
       },
       {
-        id: "sci-4",
-        text: "What force keeps objects in orbit around the Earth?",
-        correctAnswer: "Gravity"
+        question: "What is the largest organ in the human body?",
+        answer: "Skin"
       },
       {
-        id: "sci-5",
-        text: "What is the smallest unit of matter?",
-        correctAnswer: "Atom"
-      },
-      {
-        id: "sci-6",
-        text: "What is the study of fossils called?",
-        correctAnswer: "Paleontology"
-      },
-      {
-        id: "sci-7",
-        text: "What is the main component of natural gas?",
-        correctAnswer: "Methane"
-      },
-      {
-        id: "sci-8",
-        text: "Which planet has the most moons in our solar system?",
-        correctAnswer: "Saturn"
+        question: "What type of energy is stored in a battery?",
+        answer: "Chemical energy"
       }
     ]
   },
   {
-    id: "tech",
-    title: "Technology",
-    description: "Test your knowledge about modern technology",
-    color: "#1e3a8a", // blue-900
+    quizID: "buoys",
+    quizName: "Buoys and Channel Markers",
     questions: [
       {
-        id: "tech-1",
-        text: "Who founded Microsoft?",
-        correctAnswer: "Bill Gates"
+        question: "What does this indicate?",
+        answer: "Safe Water",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Safe%20Water.png"
       },
       {
-        id: "tech-2",
-        text: "What does 'HTTP' stand for?",
-        correctAnswer: "Hypertext Transfer Protocol"
+        question: "What does this indicate?",
+        answer: "Isolated Danger",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Isolated%20Danger.png"
       },
       {
-        id: "tech-3",
-        text: "What programming language is named after a type of coffee?",
-        correctAnswer: "Java"
+        question: "What does this indicate?",
+        answer: "New Danger",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/New%20Danger.png"
       },
       {
-        id: "tech-4",
-        text: "What year was the first iPhone released?",
-        correctAnswer: "2007"
+        question: "What does this indicate?",
+        answer: "Port",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Port.png"
       },
       {
-        id: "tech-5",
-        text: "What does 'CPU' stand for?",
-        correctAnswer: "Central Processing Unit"
+        question: "What does this indicate?",
+        answer: "Starboard",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Starboard.png"
       },
       {
-        id: "tech-6",
-        text: "Which company developed the Chrome browser?",
-        correctAnswer: "Google",
-        imageUrl: "https://images.unsplash.com/photo-1481487196290-c152efe083f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        question: "What does this indicate?",
+        answer: "North",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/North.png"
       },
       {
-        id: "tech-7",
-        text: "What is the main function of RAM in a computer?",
-        correctAnswer: "Temporary memory storage"
+        question: "What does this indicate?",
+        answer: "East",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/East.png"
       },
       {
-        id: "tech-8",
-        text: "Which social media platform was founded by Mark Zuckerberg?",
-        correctAnswer: "Facebook"
+        question: "What does this indicate?",
+        answer: "South",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/South.png"
+      },
+      {
+        question: "What does this indicate?",
+        answer: "West",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/West.png"
+      },
+      {
+        question: "What does this indicate?",
+        answer: "Do Not Pass",
+        image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Do%20Not%20Pass.png"
       }
     ]
   }

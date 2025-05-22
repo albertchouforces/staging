@@ -1,184 +1,184 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Question } from '../types/quiz';
-import { quizSets } from '../data/quizData';
-import { getRandomizedQuestions, generateAnswerOptions, calculateScore } from '../utils/quizUtils';
-import QuizQuestion from '../components/QuizQuestion';
-import QuizResults from '../components/QuizResults';
-import QuizTimer from '../components/QuizTimer';
-import NameInputModal from '../components/NameInputModal';
+import { useState, useEffect, useRef } from 'react';
+import { QuizQuestion } from '../components/QuizQuestion';
+import { QuizResult } from '../components/QuizResult';
+import { Timer } from '../components/Timer';
+import { quizData, type QuizQuestion as QuizQuestionType } from '../data/quizData';
+import { ArrowLeft, BarChart4 } from 'lucide-react';
 
-export default function QuizPage() {
-  const { quizId } = useParams<{ quizId: string }>();
-  const navigate = useNavigate();
+interface QuizPageProps {
+  quizID: string;
+  onHome: () => void;
+}
+
+export function QuizPage({ quizID, onHome }: QuizPageProps) {
+  const [currentQuizData, setCurrentQuizData] = useState(() => {
+    return quizData.find(quiz => quiz.quizID === quizID);
+  });
   
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<QuizQuestionType[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [options, setOptions] = useState<string[]>([]);
   const [score, setScore] = useState(0);
-  const [currentAnswers, setCurrentAnswers] = useState<any[]>([]);
-  const [fadeOut, setFadeOut] = useState(false);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [timerRunning, setTimerRunning] = useState(true);
+  const [quizComplete, setQuizComplete] = useState(false);
+  const [timerRunning, setTimerRunning] = useState(false);
   const [totalTime, setTotalTime] = useState(0);
-  const [showNameInput, setShowNameInput] = useState(false);
   
-  const quizSet = quizSets.find(q => q.id === quizId);
-  
-  useEffect(() => {
-    if (!quizSet) {
-      navigate('/');
-      return;
+  // Shuffle array function
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    
-    // Initialize with randomized questions
-    startQuiz();
-  }, [quizId]);
+    return shuffled;
+  };
   
+  // Initialize quiz
   useEffect(() => {
-    if (questions.length > 0) {
-      // Generate answer options for current question
-      setCurrentAnswers(
-        generateAnswerOptions(
-          questions[currentQuestionIndex], 
-          quizSet?.questions || []
-        )
-      );
-    }
-  }, [currentQuestionIndex, questions]);
-  
-  const startQuiz = () => {
-    if (!quizSet) return;
+    if (!currentQuizData) return;
     
-    // Reset quiz state
-    setSelectedAnswers({});
-    setIsCompleted(false);
+    // Shuffle questions
+    const shuffledQuestions = shuffleArray(currentQuizData.questions);
+    setQuestions(shuffledQuestions);
+    
+    // Reset state
     setCurrentQuestionIndex(0);
     setScore(0);
+    setQuizComplete(false);
+    setTotalTime(0);
     
-    // Randomize questions
-    const randomizedQuestions = getRandomizedQuestions(quizSet);
-    setQuestions(randomizedQuestions);
+    // Start the timer when quiz begins
+    setTimerRunning(true);
+  }, [currentQuizData, quizID]);
+  
+  // Generate options for current question
+  useEffect(() => {
+    if (!questions.length) return;
+    
+    const currentQuestion = questions[currentQuestionIndex];
+    const correctAnswer = currentQuestion.answer;
+    
+    // Get all other answers from quiz for incorrect options
+    const otherAnswers = quizData
+      .flatMap(quiz => quiz.questions.map(q => q.answer))
+      .filter(answer => answer !== correctAnswer);
+    
+    // Shuffle and take 3 random incorrect options
+    const incorrectOptions = shuffleArray(otherAnswers).slice(0, 3);
+    
+    // Combine correct and incorrect options, then shuffle
+    const allOptions = shuffleArray([correctAnswer, ...incorrectOptions]);
+    setOptions(allOptions);
+  }, [questions, currentQuestionIndex]);
+  
+  // Handle answer selection
+  const handleAnswer = (isCorrect: boolean) => {
+    if (isCorrect) {
+      setScore(prevScore => prevScore + 1);
+    }
+    // Pause timer when answer is selected
+    setTimerRunning(false);
   };
   
-  const handleAnswer = (questionId: string, answer: string) => {
-    setSelectedAnswers(prev => ({
-      ...prev,
-      [questionId]: answer
-    }));
-    setShowFeedback(true);
-    setTimerRunning(false); // Pause timer when answer selected
+  // Handle next question
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+      // Resume timer for next question
+      setTimerRunning(true);
+    } else {
+      setQuizComplete(true);
+      // Ensure timer is stopped
+      setTimerRunning(false);
+    }
   };
   
+  // Update total time from timer component
   const handleTimerUpdate = (elapsedTime: number) => {
     setTotalTime(elapsedTime);
   };
   
-  const handleNextQuestion = () => {
-    const currentQuestion = questions[currentQuestionIndex];
+  // Restart quiz
+  const handleRestart = () => {
+    if (!currentQuizData) return;
     
-    // Don't proceed if no answer selected
-    if (!selectedAnswers[currentQuestion.id]) return;
+    // Shuffle questions again
+    const shuffledQuestions = shuffleArray(currentQuizData.questions);
+    setQuestions(shuffledQuestions);
     
-    if (currentQuestionIndex < questions.length - 1) {
-      setFadeOut(true);
-      setTimeout(() => {
-        setCurrentQuestionIndex(prev => prev + 1);
-        setShowFeedback(false);
-        setFadeOut(false);
-        setTimerRunning(true); // Resume timer for next question
-      }, 300);
-    } else {
-      // Calculate final score
-      const finalScore = calculateScore(selectedAnswers, questions);
-      setScore(finalScore);
-      setIsCompleted(true);
-    }
+    // Reset state
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setQuizComplete(false);
   };
   
-  const handleRetry = () => {
-    startQuiz();
-  };
-  
-  if (!quizSet) return null;
+  if (!currentQuizData) {
+    return (
+      <div className="text-center p-8">
+        <p className="text-navy-800 mb-4">Quiz not found</p>
+        <button 
+          onClick={onHome}
+          className="py-2 px-4 bg-navy-600 text-white rounded-md hover:bg-navy-700 transition-colors"
+        >
+          Return to Home
+        </button>
+      </div>
+    );
+  }
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-      <div className="max-w-2xl w-full mx-auto bg-white rounded-xl shadow-md p-8">
-        {!isCompleted ? (
-          <div className={`transition-opacity duration-300 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h2 className="text-2xl font-bold mb-1">{quizSet.title}</h2>
-                <div className="h-1 w-16 bg-blue-900 rounded-full"></div>
-              </div>
-              <div className="flex items-center">
-                <QuizTimer 
-                  isRunning={timerRunning}
-                  onTimerUpdate={handleTimerUpdate}
-                />
-              </div>
-            </div>
+    <div className="max-w-2xl mx-auto p-6">
+      {!quizComplete ? (
+        <>
+          <div className="flex justify-between items-center mb-6">
+            <button 
+              onClick={onHome}
+              className="flex items-center text-navy-600 hover:text-navy-800 transition-colors"
+            >
+              <ArrowLeft className="mr-1 h-4 w-4" /> Return to Home
+            </button>
             
-            {questions.length > 0 && currentAnswers.length > 0 && (
-              <>
-                <QuizQuestion 
-                  question={questions[currentQuestionIndex]}
-                  answers={currentAnswers}
-                  onAnswer={handleAnswer}
-                  selectedAnswer={selectedAnswers[questions[currentQuestionIndex].id]}
-                  questionNumber={currentQuestionIndex + 1}
-                  totalQuestions={questions.length}
-                  showFeedback={showFeedback}
-                />
-                
-                <div className="mt-10 flex justify-between items-center">
-                  <button
-                    onClick={() => navigate('/')}
-                    className="text-gray-500 hover:text-gray-700 transition-colors"
-                  >
-                    Exit Quiz
-                  </button>
-                  
-                  <button
-                    onClick={handleNextQuestion}
-                    disabled={!selectedAnswers[questions[currentQuestionIndex].id]}
-                    className={`px-6 py-2 rounded-lg font-medium transition-all duration-300 ${
-                      selectedAnswers[questions[currentQuestionIndex].id]
-                        ? showFeedback 
-                          ? 'bg-blue-900 hover:bg-blue-800 text-white animate-pulse'
-                          : 'bg-blue-900 hover:bg-blue-800 text-white' 
-                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                    }`}
-                  >
-                    {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
-                  </button>
-                </div>
-              </>
-            )}
+            <div className="flex items-center gap-4 text-navy-700">
+              <div className="flex items-center">
+                <BarChart4 className="mr-1 h-4 w-4" />
+                <span>{currentQuestionIndex + 1} / {questions.length}</span>
+              </div>
+              <Timer isRunning={timerRunning} onTimerUpdate={handleTimerUpdate} />
+            </div>
           </div>
-        ) : (
-          <>
-            <QuizResults 
-              score={score}
-              totalQuestions={questions.length}
-              quizTitle={quizSet.title}
-              onRetry={handleRetry}
-              timeTaken={totalTime}
-              onSubmitScore={() => setShowNameInput(true)}
+          
+          <div className="mb-4">
+            <div className="w-full bg-navy-100 rounded-full h-2">
+              <div 
+                className="bg-navy-600 h-2 rounded-full transition-all duration-300" 
+                style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+          
+          {questions.length > 0 && options.length === 4 && (
+            <QuizQuestion 
+              key={currentQuestionIndex} // Add a key prop to force component remount
+              question={questions[currentQuestionIndex].question}
+              correctAnswer={questions[currentQuestionIndex].answer}
+              image={questions[currentQuestionIndex].image}
+              options={options}
+              onAnswer={handleAnswer}
+              onNext={handleNextQuestion}
             />
-            <NameInputModal
-              isOpen={showNameInput}
-              onClose={() => setShowNameInput(false)}
-              quizId={quizId || ''}
-              score={score}
-              totalQuestions={questions.length}
-              timeTaken={totalTime}
-            />
-          </>
-        )}
-      </div>
+          )}
+        </>
+      ) : (
+        <QuizResult 
+          score={score}
+          totalQuestions={questions.length}
+          quizName={currentQuizData.quizName}
+          quizID={currentQuizData.quizID}
+          timeTaken={totalTime}
+          onRestart={handleRestart}
+          onHome={onHome}
+        />
+      )}
     </div>
   );
 }
