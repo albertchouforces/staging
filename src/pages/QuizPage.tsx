@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { QuizQuestion } from '../components/QuizQuestion';
 import { QuizResult } from '../components/QuizResult';
 import { Timer } from '../components/Timer';
@@ -11,7 +11,7 @@ interface QuizPageProps {
 }
 
 export function QuizPage({ quizID, onHome }: QuizPageProps) {
-  const [currentQuizData, setCurrentQuizData] = useState(() => {
+  const [currentQuizData] = useState(() => {
     return quizData.find(quiz => quiz.quizID === quizID);
   });
   
