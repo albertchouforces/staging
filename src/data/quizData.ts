@@ -38,7 +38,7 @@ export const quizData: Quiz[] = [
       {
         question: "Which of these is used for version control?",
         answer: "Git",
-	image: "/cdr.png"
+	image: "/images/cdr.png"
       }
     ]
   },
