@@ -33,12 +33,12 @@ export const quizData: Quiz[] = [
       {
         question: "What is the current HTML version?",
         answer: "HTML5",
-	image: "capt.png"
+	image: "/capt.png"
       },
       {
         question: "Which of these is used for version control?",
         answer: "Git",
-	image: "images/cdr.png"
+	image: "/images/cdr.png"
       }
     ]
   },
