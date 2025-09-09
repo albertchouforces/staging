@@ -1,73 +1,139 @@
-export interface QuizQuestion {
-  question: string;
-  answer: string;
-  image?: string; // Optional URL for question image
-}
-
 export interface Quiz {
   quizID: string;
   quizName: string;
-  questions: QuizQuestion[];
+  questions: Question[];
 }
 
-export const quizData: Quiz[] = [
+export interface Question {
+  question: string;
+  answer: string;
+  image?: string;
+}
+
+export const quizzes: Quiz[] = [
   {
-    quizID: "web-dev",
-    quizName: "Web Development Basics",
+    quizID: "general-knowledge",
+    quizName: "General Knowledge",
     questions: [
       {
-        question: "What language is primarily used for styling web pages?",
-        answer: "CSS",
-        image: "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?q=80&w=1650&auto=format&fit=crop"
+        question: "What is the capital of France?",
+        answer: "Paris",
+        image: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=500&h=300&fit=crop"
       },
       {
-        question: "What does HTML stand for?",
-        answer: "HyperText Markup Language",
-        image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1470&auto=format&fit=crop"
+        question: "Which planet is known as the Red Planet?",
+        answer: "Mars",
+        image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=500&h=300&fit=crop"
       },
       {
-        question: "Which of these is a JavaScript framework?",
-        answer: "React",
-        image: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?q=80&w=1470&auto=format&fit=crop"
+        question: "What is the largest mammal in the world?",
+        answer: "Blue whale",
+        image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&h=300&fit=crop"
       },
       {
-        question: "What is the current HTML version?",
-        answer: "HTML5",
-	image: "/capt.png"
+        question: "Who painted the Mona Lisa?",
+        answer: "Leonardo da Vinci",
+        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&h=300&fit=crop"
       },
       {
-        question: "Which of these is used for version control?",
-        answer: "Git",
-	image: "/images/cdr.png"
+        question: "What is the smallest country in the world?",
+        answer: "Vatican City"
+      },
+      {
+        question: "In which year did World War II end?",
+        answer: "1945"
+      },
+      {
+        question: "What is the chemical symbol for gold?",
+        answer: "Au"
+      },
+      {
+        question: "Which ocean is the largest?",
+        answer: "Pacific Ocean"
       }
     ]
   },
   {
     quizID: "science",
-    quizName: "General Science",
+    quizName: "Science & Nature",
     questions: [
       {
-        question: "What is the chemical symbol for gold?",
-        answer: "Au",
-        image: "https://images.unsplash.com/photo-1610375461369-d613b666be2b?q=80&w=1470&auto=format&fit=crop"
+        question: "What is the speed of light in vacuum?",
+        answer: "299,792,458 m/s",
+        image: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=500&h=300&fit=crop"
       },
       {
-        question: "Which planet is closest to the sun?",
-        answer: "Mercury",
-        image: "https://images.unsplash.com/photo-1614642264762-d0a3b8bf3700?q=80&w=1470&auto=format&fit=crop"
+        question: "What gas do plants absorb from the atmosphere?",
+        answer: "Carbon dioxide",
+        image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=300&fit=crop"
+      },
+      {
+        question: "How many bones are in an adult human body?",
+        answer: "206",
+        image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=500&h=300&fit=crop"
       },
       {
         question: "What is the hardest natural substance on Earth?",
         answer: "Diamond",
-        image: "https://images.unsplash.com/photo-1551732998-9573f695fdbb?q=80&w=1470&auto=format&fit=crop"
+        image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&h=300&fit=crop"
+      },
+      {
+        question: "Which blood type is known as the universal donor?",
+        answer: "O negative"
       },
       {
         question: "What is the largest organ in the human body?",
         answer: "Skin"
       },
       {
-        question: "What type of energy is stored in a battery?",
-        answer: "Chemical energy"
+        question: "How many chambers does a human heart have?",
+        answer: "Four"
+      },
+      {
+        question: "What is the most abundant gas in Earth's atmosphere?",
+        answer: "Nitrogen"
+      }
+    ]
+  },
+  {
+    quizID: "technology",
+    quizName: "Technology",
+    questions: [
+      {
+        question: "Who founded Microsoft?",
+        answer: "Bill Gates and Paul Allen",
+        image: "https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=500&h=300&fit=crop"
+      },
+      {
+        question: "What does CPU stand for?",
+        answer: "Central Processing Unit",
+        image: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=500&h=300&fit=crop"
+      },
+      {
+        question: "In what year was the first iPhone released?",
+        answer: "2007",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500&h=300&fit=crop"
+      },
+      {
+        question: "What does HTML stand for?",
+        answer: "HyperText Markup Language",
+        image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=500&h=300&fit=crop"
+      },
+      {
+        question: "Which company developed the Android operating system?",
+        answer: "Google"
+      },
+      {
+        question: "What does RAM stand for?",
+        answer: "Random Access Memory"
+      },
+      {
+        question: "Who is the founder of Tesla?",
+        answer: "Elon Musk"
+      },
+      {
+        question: "What programming language is known for its use in web development?",
+        answer: "JavaScript"
       }
     ]
   },

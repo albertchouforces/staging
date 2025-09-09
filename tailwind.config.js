@@ -2,25 +2,25 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/react-app/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
         navy: {
-          50: '#f0f4fa',
-          100: '#d9e2f5',
-          200: '#b3c6eb',
-          300: '#8da9e0',
-          400: '#678dd6',
-          500: '#4171cb',
-          600: '#3056a3',
-          700: '#1E3A8A',
-          800: '#162a63',
-          900: '#0f1b42',
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#1e3a8a',
+          700: '#1e40af',
+          800: '#1e3a8a',
+          900: '#0f172a',
         },
       },
     },
   },
   plugins: [],
-}
+};
