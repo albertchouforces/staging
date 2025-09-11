@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFirestore, getDocs, collection, limit } from 'firebase/firestore';
+import { getFirestore, getDocs, collection } from 'firebase/firestore';
 import { AlertTriangle, Check, Loader } from 'lucide-react';
 import { FIREBASE_CONFIGURED } from '../config/features';
 
