@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import { 
   getFirestore, 
   collection, 
@@ -70,7 +71,7 @@ export async function getGlobalScores(quizName: string): Promise<GlobalScoreEntr
     
     // Convert the documents to our GlobalScoreEntry interface
     const scores: GlobalScoreEntry[] = [];
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
       const data = doc.data() as GlobalScoreEntry;
       scores.push(data);
     });

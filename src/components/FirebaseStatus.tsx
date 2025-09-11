@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { getFirestore, getDocs, collection } from 'firebase/firestore';
 import { AlertTriangle, Check, Loader } from 'lucide-react';
 import { FIREBASE_CONFIGURED } from '../config/features';
+import { initializeApp } from 'firebase/app';
+import firebaseConfig from '../config/firebase';
 
 export function FirebaseStatus() {
   const [status, setStatus] = useState<'checking' | 'connected' | 'error' | 'not-configured'>('checking');
@@ -15,6 +17,10 @@ export function FirebaseStatus() {
       }
 
       try {
+        // Initialize Firebase if configured
+        if (FIREBASE_CONFIGURED) {
+          initializeApp(firebaseConfig);
+        }
         const db = getFirestore();
         
         // Try to fetch a document to verify connection
