@@ -5,7 +5,7 @@ interface FooterProps {
 export function Footer({ className = "" }: FooterProps) {
   return (
     <footer className={`w-full py-4 text-center text-sm text-gray-500 ${className}`}>
-      (Version 1.2)<br></br>
+      (Version 1.0)<br></br>
       Product of the NTG HQ Learning Support Centre. For more information please contact the Learning Support Centre Product Development Lead (Pacific) at{' '}
       <a 
         href="mailto:joshua.hawthorne@ecn.forces.gc.ca"
@@ -13,8 +13,6 @@ export function Footer({ className = "" }: FooterProps) {
       >
         joshua.hawthorne@ecn.forces.gc.ca
       </a>
-      <br></br>
-      - .... .- -. -.- / -.-- --- ..- / -- .-. .-.-.- / -.. .- ...- .. -.. / ... .. -. . / ..-. --- .-. / -.-- --- ..- .-. / .... . .-.. .--. / .-- .. - .... / - .... .. ... / .--. .-. --- .--- . -.-. - .-.-.-
     </footer>
   );
 }

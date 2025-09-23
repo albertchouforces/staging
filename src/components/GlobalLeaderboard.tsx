@@ -2,43 +2,31 @@ import { useState, useEffect } from 'react';
 import { getGlobalScores, type GlobalScoreEntry } from '../lib/supabase';
 import { Medal } from './Medal';
 import { Loader, Trophy, X } from 'lucide-react';
-import { QUIZ_CONFIG, SECOND_QUIZ_CONFIG, COMBINED_QUIZ_CONFIG } from '../data/templateQuiz';
-import type { QuizConfig } from '../types';
+import type { QuizDefinition } from '../types';
 
 interface GlobalLeaderboardProps {
   onClose: () => void;
+  quizzes: QuizDefinition[];
 }
 
-export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
+export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) {
   const [scores, setScores] = useState<GlobalScoreEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedQuiz, setSelectedQuiz] = useState<'quiz1' | 'quiz2' | 'combined'>('quiz1');
-
-  const currentQuizConfig = 
-    selectedQuiz === 'quiz2' ? SECOND_QUIZ_CONFIG : 
-    selectedQuiz === 'combined' ? COMBINED_QUIZ_CONFIG : 
-    QUIZ_CONFIG;
+  const [selectedQuiz, setSelectedQuiz] = useState<string>(quizzes[0]?.config.service || '');
 
   useEffect(() => {
     const fetchScores = async () => {
+      if (!selectedQuiz) return;
+      
       setLoading(true);
       setError(null);
       try {
-        const quizName = 
-          selectedQuiz === 'quiz2' ? SECOND_QUIZ_CONFIG.quiz_name : 
-          selectedQuiz === 'combined' ? COMBINED_QUIZ_CONFIG.quiz_name :
-          QUIZ_CONFIG.quiz_name;
-          
-        try {
-          const data = await getGlobalScores(quizName);
-          setScores(data);
-        } catch (firebaseError) {
-          console.error('Firebase error:', firebaseError);
-          setError('Failed to connect to Firebase. Make sure Firebase is properly configured.');
-        }
+        const data = await getGlobalScores(selectedQuiz);
+        setScores(data);
       } catch (err) {
         setError('Failed to load global scores. Please try again later.');
+        console.error('Error fetching global scores:', err);
       } finally {
         setLoading(false);
       }
@@ -63,22 +51,12 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
     }
   };
 
-  const QuizSelector = ({ config, isSelected, onClick }: { 
-    config: QuizConfig; 
-    isSelected: boolean; 
-    onClick: () => void;
-  }) => (
-    <button
-      onClick={onClick}
-      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-        isSelected 
-          ? `bg-${config.themeColor}-600 text-white` 
-          : `text-${config.themeColor}-600 hover:bg-${config.themeColor}-50`
-      }`}
-    >
-      {config.title}
-    </button>
-  );
+  const getSelectedQuizConfig = () => {
+    return quizzes.find(quiz => quiz.config.service === selectedQuiz)?.config;
+  };
+
+  const selectedQuizConfig = getSelectedQuizConfig();
+  const accentColor = selectedQuizConfig?.themeColor || 'blue';
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
@@ -98,29 +76,28 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
             </button>
           </div>
 
-          <div className="flex gap-4">
-            <QuizSelector 
-              config={QUIZ_CONFIG} 
-              isSelected={selectedQuiz === 'quiz1'} 
-              onClick={() => setSelectedQuiz('quiz1')} 
-            />
-            <QuizSelector 
-              config={SECOND_QUIZ_CONFIG} 
-              isSelected={selectedQuiz === 'quiz2'} 
-              onClick={() => setSelectedQuiz('quiz2')} 
-            />
-            <QuizSelector 
-              config={COMBINED_QUIZ_CONFIG} 
-              isSelected={selectedQuiz === 'combined'} 
-              onClick={() => setSelectedQuiz('combined')} 
-            />
+          {/* Quiz Selection */}
+          <div className="flex gap-2 flex-wrap">
+            {quizzes.map((quiz) => (
+              <button
+                key={quiz.config.service}
+                onClick={() => setSelectedQuiz(quiz.config.service)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  selectedQuiz === quiz.config.service
+                    ? `bg-${quiz.config.themeColor}-600 text-white`
+                    : `text-${quiz.config.themeColor}-600 hover:bg-${quiz.config.themeColor}-50`
+                }`}
+              >
+                {quiz.config.title}
+              </button>
+            ))}
           </div>
         </div>
 
         <div className="flex-1 overflow-auto p-6">
           {loading ? (
             <div className="flex items-center justify-center h-full">
-              <Loader className={`animate-spin text-${currentQuizConfig.themeColor}-500`} size={32} />
+              <Loader className="animate-spin text-gray-500" size={32} />
             </div>
           ) : error ? (
             <div className="text-center text-red-600 p-4">
@@ -130,7 +107,7 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
             <table className="w-full">
               <thead>
                 <tr className="text-left text-sm text-gray-600">
-                  <th className="pb-2">Rank</th>
+                  <th className="pb-2 pl-2">Rank</th>
                   <th className="pb-2">Name</th>
                   <th className="pb-2">Score</th>
                   <th className="pb-2">Accuracy</th>
@@ -142,10 +119,10 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
                 {scores.map((score, index) => (
                   <tr 
                     key={`${score.user_name}-${index}`} 
-                    className={`border-t border-gray-100 hover:bg-${currentQuizConfig.themeColor}-50 transition-colors`}
+                    className={`border-t border-gray-100 transition-colors hover:bg-${accentColor}-50 cursor-default`}
                   >
-                    <td className="py-2">{getPositionDisplay(index)}</td>
-                    <td className="py-2 font-medium">{score.user_name}</td>
+                    <td className="py-2 pl-2">{getPositionDisplay(index)}</td>
+                    <td className={`py-2 font-medium hover:text-${accentColor}-700`}>{score.user_name}</td>
                     <td className="py-2">{score.score}</td>
                     <td className="py-2">{score.accuracy}%</td>
                     <td className="py-2 font-mono">{formatTime(score.time)}</td>
@@ -157,8 +134,19 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
               </tbody>
             </table>
           ) : (
-            <div className="text-center text-gray-500 p-4">
-              No scores recorded yet for this quiz
+            <div className="h-full flex flex-col items-center justify-center text-center p-8">
+              <div className={`w-16 h-16 rounded-full bg-${accentColor}-50 flex items-center justify-center mb-4`}>
+                <Trophy className={`text-${accentColor}-600`} size={32} />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                Be the First Champion!
+              </h3>
+              <p className="text-gray-600 max-w-md">
+                No scores have been recorded yet for this quiz. Complete the challenge and claim your spot at the top of the leaderboard!
+              </p>
+              <div className={`mt-6 text-${accentColor}-600 text-sm font-medium`}>
+                Your score could be the first one here
+              </div>
             </div>
           )}
         </div>

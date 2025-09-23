@@ -1,20 +1,9 @@
-import { initializeApp } from 'firebase/app';
-import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
-  getDocs 
-} from 'firebase/firestore';
-import firebaseConfig from '../config/firebase';
+import { createClient } from '@supabase/supabase-js';
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const supabaseUrl = 'https://lgtijobontcybeqobomh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxndGlqb2JvbnRjeWJlcW9ib21oIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNjQ1MDk4MiwiZXhwIjoyMDUyMDI2OTgyfQ.TIlDrifOlgutH-kt7Zsu5ab-0iCqS_E6LPZixxbTNLw';
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export interface GlobalScoreEntry {
   user_name: string;
@@ -22,63 +11,68 @@ export interface GlobalScoreEntry {
   accuracy: number;
   time: number;
   date: string;
-  quiz_name: string;  // Changed from service to quiz_name
+  service: string;
 }
 
-/**
- * Saves a score to the global leaderboard in Firebase
- */
 export async function saveGlobalScore(
-  scoreData: Omit<GlobalScoreEntry, 'quiz_name'>, 
+  scoreData: Omit<GlobalScoreEntry, 'service'>, 
   quizName: string
 ): Promise<boolean> {
   try {
-    // Create a reference to the global_scores collection
-    const scoresRef = collection(db, 'global_scores');
-    
-    // Add the document with the score data
-    await addDoc(scoresRef, {
-      ...scoreData,
-      quiz_name: quizName
-    });
-    
+    // Validate data before sending
+    if (!scoreData.user_name || 
+        typeof scoreData.score !== 'number' || 
+        typeof scoreData.accuracy !== 'number' || 
+        typeof scoreData.time !== 'number') {
+      console.error('Invalid score data:', scoreData);
+      return false;
+    }
+
+    const { error } = await supabase
+      .from('global_scores')
+      .insert([{
+        ...scoreData,
+        service: quizName
+      }]);
+
+    if (error) {
+      console.error('Error saving global score:', error);
+      return false;
+    }
     return true;
   } catch (err) {
-    console.error('Error saving global score to Firebase:', err);
+    console.error('Error in saveGlobalScore:', err);
     return false;
   }
 }
 
-/**
- * Gets global scores for a specific quiz from Firebase
- */
 export async function getGlobalScores(quizName: string): Promise<GlobalScoreEntry[]> {
   try {
-    // Create a reference to the global_scores collection
-    const scoresRef = collection(db, 'global_scores');
-    
-    // Create a query against the collection
-    const q = query(
-      scoresRef,
-      where('quiz_name', '==', quizName),
-      orderBy('score', 'desc'),
-      orderBy('time', 'asc'),
-      limit(100)
-    );
-    
-    // Get the documents
-    const querySnapshot = await getDocs(q);
-    
-    // Convert the documents to our GlobalScoreEntry interface
-    const scores: GlobalScoreEntry[] = [];
-    querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
-      const data = doc.data() as GlobalScoreEntry;
-      scores.push(data);
-    });
-    
-    return scores;
+    if (!quizName) {
+      console.error('Quiz name is required');
+      return [];
+    }
+
+    // Log the query parameters for debugging
+    console.log('Fetching global scores for quiz:', quizName);
+
+    const { data, error } = await supabase
+      .from('global_scores')
+      .select('*')
+      .eq('service', quizName)
+      .order('score', { ascending: false })
+      .order('time', { ascending: true })
+      .limit(100);
+
+    if (error) {
+      console.error('Error fetching global scores:', error);
+      return [];
+    }
+
+    console.log('Received global scores:', data?.length || 0, 'entries');
+    return data || [];
   } catch (err) {
-    console.error('Error fetching global scores from Firebase:', err);
+    console.error('Error in getGlobalScores:', err);
     return [];
   }
 }
