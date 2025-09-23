@@ -113,7 +113,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       themeColor: 'rose',
       service: "world_landmarks_quiz2",
       startScreenImage: "/images/landmarks/landmarks-start.jpg",
-      studyGuide: "public/signalflags.jpg",
+      studyGuide: "/public/signalflags.jpg",
       advancedChallenge: true,
       hidden: false
     },
