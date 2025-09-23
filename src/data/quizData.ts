@@ -53,7 +53,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       themeColor: 'emerald',
       service: "sample_nature_quiz",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
-      studyGuide: "https://github.com/albertchouforces/staging/raw/e8dc17661db4348c91e0bd5a4a7009b3c8bd41bc/public/Flags.pdf",
+      studyGuide: "public/Flags.pdf",
       hidden: false
     },
     questions: [
@@ -113,7 +113,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       themeColor: 'rose',
       service: "world_landmarks_quiz2",
       startScreenImage: "/images/landmarks/landmarks-start.jpg",
-      studyGuide: "https://navalknots.pages.dev/images/Bowline1.png",
+      studyGuide: "public/signalflags.jpg",
       advancedChallenge: true,
       hidden: false
     },
