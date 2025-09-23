@@ -20,7 +20,10 @@
 //      * themeColor: Choose from available theme colors
 //      * service: Unique identifier for storage (use snake_case) - represents the quiz_name
 //      * startScreenImage: Optional image for quiz card
-//      * studyGuide: Optional URL or path to study guide image
+//      * studyGuide: Optional URL or path to study guide/materials:
+//         - Local images: Will be shown in a popup modal
+//         - External URLs (http/https): Will be opened in a new browser tab
+//         - Document files (PDFs, etc.): Will prompt a download
 //      * advancedChallenge: Optional boolean to mark as advanced challenge
 //      * hidden: Optional boolean to hide the quiz from display
 //      * questions: Array of questions following the QuestionData format
@@ -80,8 +83,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       themeColor: 'blue',
       service: "world_landmarks_quiz",
       startScreenImage: "/images/landmarks/landmarks-start.jpg",
-      studyGuide: "https://navalknots.pages.dev/images/Bowline1.png",
-      hidden: false // Example of a hidden quiz
+      studyGuide: "",
+      hidden: true // Example of a hidden quiz
     },
     questions: [
       {
@@ -110,8 +113,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       themeColor: 'rose',
       service: "world_landmarks_quiz2",
       startScreenImage: "/images/landmarks/landmarks-start.jpg",
-      studyGuide: "https://github.com/albertchouforces/staging/blob/e8dc17661db4348c91e0bd5a4a7009b3c8bd41bc/public/Flags.pdf",
-      advancedChallenge: false,
+      studyGuide: "https://navalknots.pages.dev/images/Bowline1.png",
+      advancedChallenge: true,
       hidden: false
     },
     questions: [
@@ -141,7 +144,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       themeColor: 'violet',
       service: "world_landmarks_quiz3",
       startScreenImage: "/images/landmarks/landmarks-start.jpg",
-      studyGuide: "https://ntglsc.pages.dev/images/banner.png",
+      studyGuide: "https://navalknots.pages.dev/",
       advancedChallenge: true,
       hidden: false
     },
@@ -158,22 +161,6 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 2,
         question: "Name this ancient wonder",
         correctAnswer: "Petra",
-        description: "A historic and archaeological city in Jordan",
-        fact: "Petra was carved directly into rose-colored rock faces",
-        imageUrl: "/images/landmarks/petra.jpg"
-      },
-      {
-        id: 3,
-        question: "Name this ancient wonder 2",
-        correctAnswer: "C",
-        description: "A historic and archaeological city in Jordan",
-        fact: "Petra was carved directly into rose-colored rock faces",
-        imageUrl: "/images/landmarks/petra.jpg"
-      },
-      {
-        id: 4,
-        question: "Name this ancient wonder 3",
-        correctAnswer: "D",
         description: "A historic and archaeological city in Jordan",
         fact: "Petra was carved directly into rose-colored rock faces",
         imageUrl: "/images/landmarks/petra.jpg"

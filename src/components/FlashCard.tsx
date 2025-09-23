@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { QuestionData } from '../types';
 import { BookOpen, Check, ImageOff, X } from 'lucide-react';
 
@@ -46,21 +46,21 @@ export function FlashCard({
     setImageError(false);
   }, [question]);
 
-  const handleAnswer = (answer: string) => {
+  const handleAnswer = useCallback((answer: string) => {
     if (showResult) return;
     
     setSelectedAnswer(answer);
     setShowResult(true);
     const correct = answer === question.correctAnswer;
     onAnswer(correct);
-  };
+  }, [showResult, question.correctAnswer, onAnswer]);
 
-  const handleImageError = () => {
+  const handleImageError = useCallback(() => {
     setImageError(true);
     setImageLoaded(true);
-  };
+  }, []);
 
-  const getOptionStyles = (option: string) => {
+  const getOptionStyles = useCallback((option: string) => {
     if (!showResult) {
       return "bg-gray-100 hover:bg-gray-200";
     }
@@ -71,21 +71,20 @@ export function FlashCard({
       return "bg-red-100 border-2 border-red-500";
     }
     return "bg-gray-100";
-  };
+  }, [showResult, question.correctAnswer, selectedAnswer]);
 
   return (
     <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg">
       <div className="flex flex-col w-full">
-        {/* Question Section - Reduced padding and more compact header */}
-        <div className="p-4 border-b border-gray-100">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">{question.question}</h3>
-            <span className="text-xs text-gray-500 ml-2 whitespace-nowrap">Question {questionNumber} of {totalQuestions}</span>
+        {/* Question Section */}
+        <div className="p-6 border-b border-gray-100">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-semibold text-gray-800">{question.question}</h3>
+            <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
           </div>
-          
           {/* Image Container with improved sizing */}
-          <div className="flex flex-col items-center mb-3">
-            <div className="w-full aspect-[16/9] relative rounded-lg overflow-hidden bg-transparent mb-3 max-h-[36vh]">
+          <div className="flex flex-col items-center mb-4">
+            <div className="w-full aspect-[16/9] relative rounded-lg overflow-hidden bg-transparent mb-4">
               {!imageLoaded && !imageError && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
                   <div className="text-gray-400 text-center px-4">
@@ -108,19 +107,19 @@ export function FlashCard({
                 />
               )}
             </div>
-            <p className="text-sm text-gray-600 italic text-center max-w-xl">{question.description}</p>
+            <p className="text-lg text-gray-600 italic text-center max-w-xl">{question.description}</p>
           </div>
         </div>
 
-        {/* Options Section - Slightly more compact */}
-        <div className="w-full p-4 border-b border-gray-100">
-          <div className="grid grid-cols-1 gap-2 w-full max-w-xl mx-auto">
+        {/* Options Section */}
+        <div className="w-full p-6 border-b border-gray-100">
+          <div className="grid grid-cols-1 gap-3 w-full max-w-xl mx-auto">
             {options.map((option) => (
               <button
                 key={option}
                 onClick={() => handleAnswer(option)}
                 disabled={showResult}
-                className={`w-full min-h-[50px] p-3 text-left rounded-lg transition-colors flex items-center justify-between ${getOptionStyles(option)}`}
+                className={`w-full min-h-[60px] p-4 text-left rounded-lg transition-colors flex items-center justify-between ${getOptionStyles(option)}`}
               >
                 <span>{option}</span>
                 {showResult && (
@@ -138,13 +137,13 @@ export function FlashCard({
           </div>
         </div>
 
-        {/* Result Section - More compact with smaller padding */}
+        {/* Result Section */}
         {showResult && (
-          <div className="w-full p-4 flex flex-col gap-4">
+          <div className="w-full p-6 flex flex-col gap-6">
             <div className="flex justify-center w-full">
               <button
                 onClick={onNext}
-                className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 {questionNumber === totalQuestions ? 'Finish Quiz' : 'Next Question'}
               </button>
@@ -152,12 +151,12 @@ export function FlashCard({
 
             {/* Only show "Did you know" section if there's a fact */}
             {question.fact && (
-              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 max-w-xl mx-auto">
-                <div className="flex items-center gap-2 text-blue-800 mb-1">
-                  <BookOpen size={18} />
-                  <span className="font-semibold text-sm">Did you know?</span>
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 max-w-xl mx-auto">
+                <div className="flex items-center gap-2 text-blue-800 mb-2">
+                  <BookOpen size={20} />
+                  <span className="font-semibold">Did you know?</span>
                 </div>
-                <p className="text-sm text-blue-900">{question.fact}</p>
+                <p className="text-blue-900">{question.fact}</p>
               </div>
             )}
           </div>

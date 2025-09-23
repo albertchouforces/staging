@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { HighScoreEntry, QuizConfig } from '../types';
-import { saveGlobalScore, getGlobalScores } from '../lib/supabase';
-import { MedalIcon, Trophy, Loader } from 'lucide-react';
-import { Medal } from './Medal';
+import { saveGlobalScore, getGlobalScores } from '../lib/firebase';
+import { Trophy, Loader } from 'lucide-react';
+import { Medal as MedalComponent } from './Medal';
 import { ENABLE_GLOBAL_LEADERBOARD } from '../config/features';
 
 interface UserNameInputProps {
@@ -85,7 +85,7 @@ export function UserNameInput({
   const getLocalPositionDisplay = (position: number) => {
     if (position <= 3) {
       return (
-        <Medal 
+        <MedalComponent 
           position={position} 
           color={position === 1 ? 'gold' : position === 2 ? 'silver' : 'bronze'} 
         />
@@ -168,7 +168,7 @@ export function UserNameInput({
             
             {isTopHundredGlobal && (
               <div className="flex items-center gap-2 text-yellow-800">
-                <MedalIcon size={16} className="text-yellow-600" />
+                <Trophy size={16} className="text-yellow-600" />
                 <span>
                   You've ranked {getPositionText(globalRank)} globally!
                 </span>
