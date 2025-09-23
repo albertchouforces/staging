@@ -53,7 +53,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       themeColor: 'emerald',
       service: "sample_nature_quiz",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
-      studyGuide: "public/Flags.pdf",
+      studyGuide: "/Flags.pdf",
       hidden: false
     },
     questions: [
