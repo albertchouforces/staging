@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { BookOpen, Download, ExternalLink, FileText, ImageOff, Play } from 'lucide-react';
 import type { QuizConfig, QuizStats } from '../types';
 import { HighScoresList } from './HighScoresList';
