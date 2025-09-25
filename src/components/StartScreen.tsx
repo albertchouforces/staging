@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Globe } from 'lucide-react';
+import { Goal, Globe } from 'lucide-react';
 import type { QuizStats } from '../types';
 import { QuizCard } from './QuizCard';
 import { GlobalLeaderboard } from './GlobalLeaderboard';
@@ -63,13 +63,13 @@ export function StartScreen({
       {/* Header */}
       <div className="text-center mb-12">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <BookOpen className="text-blue-600" size={32} />
+          <Goal className="text-purple-800" size={32} />
           <h1 className="text-4xl font-bold text-gray-800">
-            Quiz Collection
+            Navy Signal Flags and Pennants
           </h1>
         </div>
         <h2 className="text-xl text-gray-600">
-          Choose a quiz to test your knowledge
+          Test your knowledge of signal flags and pennants
         </h2>
       </div>
 
