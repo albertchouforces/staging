@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Goal, Globe } from 'lucide-react';
+import { BookOpen, Globe } from 'lucide-react';
 import type { QuizStats } from '../types';
 import { QuizCard } from './QuizCard';
 import { GlobalLeaderboard } from './GlobalLeaderboard';
@@ -63,20 +63,20 @@ export function StartScreen({
       {/* Header */}
       <div className="text-center mb-12">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <Goal className="text-purple-800" size={32} />
+          <BookOpen className="text-blue-600" size={32} />
           <h1 className="text-4xl font-bold text-gray-800">
-            Navy Signal Flags and Pennants
+            Quiz Collection
           </h1>
         </div>
         <h2 className="text-xl text-gray-600">
-          Test your knowledge of signal flags and pennants
+          Choose a quiz to test your knowledge
         </h2>
       </div>
 
       {/* Regular Quizzes Grid */}
       {regularQuizzes.length > 0 && (
         <div className="flex justify-center mb-12">
-          <div className={`grid ${getGridColumns(regularQuizzes.length)} gap-8 w-full ${getGridWidth(regularQuizzes.length)} mx-auto`}>
+          <div className={`grid ${getGridColumns(regularQuizzes.length)} gap-8 w-full ${getGridWidth(regularQuizzes.length)} mx-auto grid-flow-row auto-rows-fr`}>
             {regularQuizzes.map((quiz) => (
               <QuizCard
                 key={quiz.config.id}
@@ -115,7 +115,7 @@ export function StartScreen({
           </div>
 
           <div className="flex justify-center mb-12">
-            <div className={`grid ${getGridColumns(advancedQuizzes.length)} gap-8 w-full ${getGridWidth(advancedQuizzes.length)} mx-auto`}>
+            <div className={`grid ${getGridColumns(advancedQuizzes.length)} gap-8 w-full ${getGridWidth(advancedQuizzes.length)} mx-auto grid-flow-row auto-rows-fr`}>
               {advancedQuizzes.map((quiz) => (
                 <QuizCard
                   key={quiz.config.id}

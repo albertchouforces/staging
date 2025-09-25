@@ -102,7 +102,7 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
         {/* Quiz Image with transparent background */}
         {config.startScreenImage && (
           <div className="w-full h-48 relative bg-transparent flex items-center justify-center">
@@ -132,45 +132,51 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
           </div>
         )}
 
-        {/* Quiz Content */}
-        <div className="p-6">
-          <h3 className={`text-xl font-bold text-${config.themeColor}-600 mb-2 text-center`}>
-            {config.title}
-          </h3>
-          <p className="text-gray-600 mb-4 text-center">
-            {config.description}
-          </p>
+        {/* Quiz Content - Using flex with flex-grow to push bottom content down */}
+        <div className="p-6 flex flex-col flex-grow">
+          {/* Top section that can grow/shrink */}
+          <div className="flex-grow">
+            <h3 className={`text-xl font-bold text-${config.themeColor}-600 mb-2 text-center`}>
+              {config.title}
+            </h3>
+            <p className="text-gray-600 mb-4 text-center">
+              {config.description}
+            </p>
 
-          {/* Study Guide Button */}
-          {config.studyGuide && (
-            <div className="mb-6 flex justify-center">
-              <button
-                onClick={handleStudyGuideClick}
-                className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-${config.themeColor}-600 hover:bg-${config.themeColor}-50 rounded-lg transition-colors`}
-              >
-                {studyGuideButton.icon}
-                {studyGuideButton.text}
-              </button>
-            </div>
-          )}
-
-          <div className="mb-6">
-            <HighScoresList
-              scores={stats.highScores}
-              onReset={handleReset}
-              title="Local Top Scores"
-              headerBackground={false}
-              quizConfig={config}
-            />
+            {/* Study Guide Button */}
+            {config.studyGuide && config.studyGuide.trim() !== "" && (
+              <div className="mb-6 flex justify-center">
+                <button
+                  onClick={handleStudyGuideClick}
+                  className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-${config.themeColor}-600 hover:bg-${config.themeColor}-50 rounded-lg transition-colors`}
+                >
+                  {studyGuideButton.icon}
+                  {studyGuideButton.text}
+                </button>
+              </div>
+            )}
           </div>
 
-          <button
-            onClick={onStart}
-            className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-${config.themeColor}-600 hover:bg-${config.themeColor}-700 text-white rounded-lg transition-colors font-semibold`}
-          >
-            <Play size={20} />
-            Start Quiz
-          </button>
+          {/* Bottom section that stays at the bottom */}
+          <div className="mt-auto">
+            <div className="mb-6">
+              <HighScoresList
+                scores={stats.highScores}
+                onReset={handleReset}
+                title="Local Top Scores"
+                headerBackground={false}
+                quizConfig={config}
+              />
+            </div>
+
+            <button
+              onClick={onStart}
+              className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-${config.themeColor}-600 hover:bg-${config.themeColor}-700 text-white rounded-lg transition-colors font-semibold`}
+            >
+              <Play size={20} />
+              Start Quiz
+            </button>
+          </div>
         </div>
       </div>
 
