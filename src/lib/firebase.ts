@@ -117,12 +117,12 @@ import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
 // Replace this configuration object with your own from Firebase Console
 // Project Settings -> Your Apps -> SDK setup and configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBTCjmVvGhVpUer02EwW08toKkmpww6SlU",
-  authDomain: "rankmaster-1a740.firebaseapp.com",
-  projectId: "rankmaster-1a740",
-  storageBucket: "rankmaster-1a740.firebasestorage.app",
-  messagingSenderId: "678820485112",
-  appId: "1:678820485112:web:982ded15636867af74280d"
+  apiKey: "AIzaSyCXoga6LoUHBT8vUG1eH9cawvpCBLt_jcI",
+  authDomain: "signalflags-and-pennants.firebaseapp.com",
+  projectId: "signalflags-and-pennants",
+  storageBucket: "signalflags-and-pennants.firebasestorage.app",
+  messagingSenderId: "37608106931",
+  appId: "1:37608106931:web:100c061cce512645a7b9c6",
 };
 
 // Initialize Firebase App instance
