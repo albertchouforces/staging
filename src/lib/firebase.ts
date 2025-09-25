@@ -41,20 +41,19 @@
 /*
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
-    match /global_scores/{score} {
-      allow read: if true;
-      allow write: if request.resource.data.user_name is string &&
-                     request.resource.data.user_name.size() <= 30 &&
-                     request.resource.data.score is number &&
-                     request.resource.data.accuracy is number &&
-                     request.resource.data.accuracy >= 0 &&
-                     request.resource.data.accuracy <= 100 &&
-                     request.resource.data.time is number &&
-                     request.resource.data.service is string
-    }
-  }
-}
+     match /databases/{database}/documents {
+       match /global_scores/{score} {
+         allow read: if true;
+         allow write: if request.resource.data.user_name is string &&
+                        request.resource.data.user_name.size() <= 30 &&
+                        request.resource.data.score is number &&
+                        request.resource.data.accuracy is number &&
+                        request.resource.data.accuracy >= 0 &&
+                        request.resource.data.accuracy <= 100 &&
+                        request.resource.data.time is number
+       }
+     }
+   }
 */
 //
 // 6. SET UP REQUIRED INDEXES
