@@ -2,9 +2,9 @@ export interface QuestionData {
   id: number;
   question: string;   // The question to display
   correctAnswer: string;   // The correct answer
-  description: string;    // Brief description or context
+  description: string;    // Brief context shown with the question
   fact: string;          // Interesting fact shown after answering
-  imageUrl: string;      // Path to the question image
+  imageUrl: string;      // Path to question image
 }
 
 export interface HighScoreEntry {
@@ -29,9 +29,34 @@ export interface QuizStats {
 }
 
 export interface QuizConfig {
+  id: string;          // Unique identifier for the quiz
   title: string;
   description: string;
-  themeColor: 'blue' | 'green' | 'sky' | 'red' | 'purple' | 'indigo' | 'amber' | 'emerald' | 'teal' | 'cyan';
-  quiz_name: string;
+  themeColor: 
+    | 'blue' 
+    | 'green' 
+    | 'sky' 
+    | 'red' 
+    | 'purple' 
+    | 'orange' 
+    | 'pink'
+    | 'indigo'
+    | 'teal'
+    | 'rose'
+    | 'amber'
+    | 'lime'
+    | 'cyan'
+    | 'violet'
+    | 'fuchsia'
+    | 'emerald';
+  service: string;     // Represents the quiz_name for storage and identification
   startScreenImage?: string;
+  studyGuide?: string; // Optional URL or path to study guide image
+  advancedChallenge?: boolean; // Indicates if this is an advanced challenge
+  hidden?: boolean;    // Optional flag to hide the quiz from display
+}
+
+export interface QuizDefinition {
+  config: QuizConfig;
+  questions: QuestionData[];
 }

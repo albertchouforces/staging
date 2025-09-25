@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { QuestionData } from '../types';
-import { Check, X, ImageOff, BookOpen } from 'lucide-react';
+import { BookOpen, Check, ImageOff, X } from 'lucide-react';
 
 interface FlashCardProps {
   question: QuestionData;
@@ -23,7 +23,6 @@ export function FlashCard({
   const [showResult, setShowResult] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [imageNaturalSize, setImageNaturalSize] = useState<{ width: number; height: number } | null>(null);
   const [options, setOptions] = useState<string[]>([]);
 
   // Set options only when question changes, ensuring uniqueness
@@ -45,63 +44,23 @@ export function FlashCard({
     setShowResult(false);
     setImageLoaded(false);
     setImageError(false);
-    setImageNaturalSize(null);
   }, [question]);
 
-  const handleAnswer = (answer: string) => {
+  const handleAnswer = useCallback((answer: string) => {
     if (showResult) return;
     
     setSelectedAnswer(answer);
     setShowResult(true);
     const correct = answer === question.correctAnswer;
     onAnswer(correct);
-  };
+  }, [showResult, question.correctAnswer, onAnswer]);
 
-  const handleImageError = () => {
+  const handleImageError = useCallback(() => {
     setImageError(true);
     setImageLoaded(true);
-  };
+  }, []);
 
-  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = event.target as HTMLImageElement;
-    setImageNaturalSize({
-      width: img.naturalWidth,
-      height: img.naturalHeight
-    });
-    setImageLoaded(true);
-  };
-
-  const getImageStyle = () => {
-    if (!imageNaturalSize) return {};
-    
-    const aspectRatio = imageNaturalSize.width / imageNaturalSize.height;
-    const maxWidth = 800; // Maximum width we want to allow
-    const maxHeight = 600; // Maximum height we want to allow
-
-    let finalWidth = imageNaturalSize.width;
-    let finalHeight = imageNaturalSize.height;
-
-    // If the image is larger than our maximums, scale it down proportionally
-    if (finalWidth > maxWidth) {
-      finalWidth = maxWidth;
-      finalHeight = finalWidth / aspectRatio;
-    }
-
-    if (finalHeight > maxHeight) {
-      finalHeight = maxHeight;
-      finalWidth = finalHeight * aspectRatio;
-    }
-
-    return {
-      width: `${finalWidth}px`,
-      height: `${finalHeight}px`,
-      objectFit: 'contain' as const,
-      mixBlendMode: 'multiply' as const, // Helps with transparency
-      margin: '0 auto' // Centers the image horizontally
-    };
-  };
-
-  const getOptionStyles = (option: string) => {
+  const getOptionStyles = useCallback((option: string) => {
     if (!showResult) {
       return "bg-gray-100 hover:bg-gray-200";
     }
@@ -112,7 +71,7 @@ export function FlashCard({
       return "bg-red-100 border-2 border-red-500";
     }
     return "bg-gray-100";
-  };
+  }, [showResult, question.correctAnswer, selectedAnswer]);
 
   return (
     <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg">
@@ -123,17 +82,18 @@ export function FlashCard({
             <h3 className="text-xl font-semibold text-gray-800">{question.question}</h3>
             <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
           </div>
+          {/* Image Container with improved sizing */}
           <div className="flex flex-col items-center mb-4">
-            <div className="w-full flex items-center justify-center mb-4 p-4 min-h-[200px]">
+            <div className="w-full aspect-[16/9] relative rounded-lg overflow-hidden bg-transparent mb-4">
               {!imageLoaded && !imageError && (
-                <div className="w-full h-48 flex flex-col items-center justify-center bg-transparent rounded-lg border-2 border-dashed border-gray-300">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
                   <div className="text-gray-400 text-center px-4">
                     <div className="text-sm font-medium mb-1">Loading Image</div>
                   </div>
                 </div>
               )}
               {imageError ? (
-                <div className="w-full h-48 flex flex-col items-center justify-center text-gray-400">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 text-gray-400">
                   <ImageOff size={32} />
                   <p className="text-sm mt-2">Image not available</p>
                 </div>
@@ -141,18 +101,13 @@ export function FlashCard({
                 <img
                   src={question.imageUrl}
                   alt="Question"
-                  className={`${imageLoaded ? 'block' : 'hidden'} bg-transparent rounded-lg transition-opacity duration-200`}
-                  style={getImageStyle()}
-                  onLoad={handleImageLoad}
+                  className={`w-full h-full object-contain ${imageLoaded ? 'block' : 'hidden'}`}
+                  onLoad={() => setImageLoaded(true)}
                   onError={handleImageError}
                 />
               )}
             </div>
-            {question.description && (
-              <p className="text-xl text-gray-600 italic text-center max-w-xl">
-                {question.description}
-              </p>
-            )}
+            <p className="text-lg text-gray-600 italic text-center max-w-xl">{question.description}</p>
           </div>
         </div>
 
