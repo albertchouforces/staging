@@ -1,9 +1,9 @@
-import '@/react-app/index.css'
+import './index.css'
 import { useState, useEffect, useRef } from 'react'
-import ImageViewer from '@/react-app/components/ImageViewer'
-import Sidebar from '@/react-app/components/Sidebar'
-import { Equipment, Marker, Scenario } from '@/react-app/types'
-import { predefinedScenarios } from '@/react-app/data/scenarios'
+import ImageViewer from './components/ImageViewer'
+import Sidebar from './components/Sidebar'
+import { Equipment, Marker, Scenario } from './types'
+import { predefinedScenarios } from './data/scenarios'
 
 // Constants for localStorage keys
 const STORAGE_KEYS = {
@@ -16,7 +16,7 @@ const STORAGE_KEYS = {
 
 // Default category and scenario constants (matching Sidebar.tsx)
 const DEFAULT_CATEGORY = 'Halifax-class'
-const DEFAULT_SCENARIO_TITLE = '01 Deck'
+const DEFAULT_SCENARIO_TITLE = '02 Deck'
 
 function App() {
   const [scenarios, setScenarios] = useState<Scenario[]>(predefinedScenarios)
