@@ -1,0 +1,6 @@
+[build]
+  command = "npm install && npm run build:pages"
+  publish = "dist/client"
+
+[build.environment]
+  NODE_VERSION = "18"
