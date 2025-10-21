@@ -1,5 +1,5 @@
 import { Minus } from 'lucide-react'
-import { Marker } from '@/react-app/types'
+import { Marker } from '../types'
 import * as Icons from 'lucide-react'
 import { CSSProperties } from 'react'
 

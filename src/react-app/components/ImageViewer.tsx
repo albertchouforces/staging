@@ -1,8 +1,8 @@
 import { Hand, Maximize2, Trash2, ZoomIn, ZoomOut } from 'lucide-react'
-import { Marker, AnswerLayer } from '@/react-app/types'
-import MarkerComponent from '@/react-app/components/MarkerComponent'
-import LayerControls from '@/react-app/components/LayerControls'
-import HelpTooltip from '@/react-app/components/HelpTooltip'
+import { Marker, AnswerLayer } from '../types'
+import MarkerComponent from './MarkerComponent'
+import LayerControls from './LayerControls'
+import HelpTooltip from './HelpTooltip'
 import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHandle, MouseEvent as ReactMouseEvent } from 'react'
 
 interface ImageDimensions {

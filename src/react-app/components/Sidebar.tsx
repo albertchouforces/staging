@@ -1,9 +1,9 @@
-import { Equipment, Scenario } from '@/react-app/types'
+import { Equipment, Scenario } from '../types'
 import { ChevronDown, ChevronUp, RotateCcw } from 'lucide-react'
 import * as Icons from 'lucide-react'
 import { useState, useMemo, useEffect, useCallback } from 'react'
-import { groupScenariosByCategory } from '@/react-app/data/scenarios'
-import { equipmentTypes } from '@/react-app/data/equipment'
+import { groupScenariosByCategory } from '../data/scenarios'
+import { equipmentTypes } from '../data/equipment'
 
 interface SidebarProps {
   scenarios: Scenario[]
@@ -303,7 +303,7 @@ const Sidebar = ({
       <div className="p-4 border-t bg-white">
         <div className="text-[11px] text-gray-500 space-y-1 text-center">
           <p className="leading-relaxed">
-            (Version 1.0) This is a professional development learning project. For more information please contact the Learning Support Centre Product Development Lead (Pacific) at{' '}
+            (Version 1.0) Product of the NTG HQ Learning Support Centre. For more information please contact the Learning Support Centre Product Development Lead (Pacific) at{' '}
             <a 
               href="mailto:joshua.hawthorne@ecn.forces.gc.ca"
               className="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
