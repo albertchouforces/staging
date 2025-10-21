@@ -5,28 +5,15 @@ import '@/react-app/index.css'
 
 // Function to handle service worker registration and updates
 const registerServiceWorker = async () => {
-  if ('serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator && 'caches' in window) {
     try {
-      // Clear existing caches before registration
-      if (window.caches) {
-        const cacheKeys = await window.caches.keys()
-        await Promise.all(
-          cacheKeys.map(key => window.caches.delete(key))
-        )
-      }
-
       // Register service worker with cache control
       const registration = await navigator.serviceWorker.register('/service-worker.js', {
         updateViaCache: 'none'
       })
 
-      // Immediately check for updates
+      // Check for updates immediately
       await registration.update()
-
-      // Set up periodic updates
-      setInterval(() => {
-        registration.update()
-      }, 1000 * 60 * 60) // Check for updates every hour
 
       // Handle updates
       registration.addEventListener('updatefound', () => {
@@ -34,22 +21,16 @@ const registerServiceWorker = async () => {
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // New content is available
-              if (confirm('New version available! Would you like to update?')) {
-                window.location.reload()
-              }
+              // New content is available, reload automatically
+              window.location.reload()
             }
           })
         }
       })
 
-      // Handle controller change
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        window.location.reload()
-      })
-
+      console.log('ServiceWorker registered successfully')
     } catch (error) {
-      console.error('ServiceWorker registration failed:', error)
+      console.log('ServiceWorker registration failed, continuing without offline support:', error)
     }
   }
 }

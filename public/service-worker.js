@@ -3,12 +3,10 @@ const APP_VERSION = '1.0.1'
 const CACHE_VERSION = `${APP_VERSION}-${Date.now()}`
 const CACHE_NAME = `shipspot-${CACHE_VERSION}`
 
-// Assets to cache - include version in the cache key
+// Assets to cache for offline functionality
 const ASSETS_TO_CACHE = [
   '/',
-  '/index.html',
-  '/src/main.tsx',
-  '/src/App.tsx'
+  '/index.html'
 ]
 
 // Function to clean up old caches
