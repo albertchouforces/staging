@@ -1,4 +1,4 @@
-import { Scenario } from '@/react-app/types'
+import { Scenario } from '../types'
 
 // Add version timestamp to force cache refresh
 const VERSION = Date.now()
@@ -26,17 +26,31 @@ const ensureCategory = (scenario: Partial<Scenario>): Scenario => ({
 // Predefined scenarios with consistent categorization
 export const predefinedScenarios: Scenario[] = [
   {
+    id: "02deck",
+    title: "02 Deck",
+    category: "Halifax-class",
+    questionImage: "images/Halifax/02Deck.png",
+    answerLayers: [
+      {
+        image: "images/Halifax/02DeckA-H.png",
+        equipmentId: "Halon"
+      }
+    ],
+    markers: [],
+    availableEquipment: ["Halon"]
+  },
+  {
     id: "01deck",
     title: "01 Deck",
     category: "Halifax-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/01Deck.png",
+    questionImage: "images/Halifax/01Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/01DeckA-M.png",
+        image: "images/Halifax/01DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/01DeckA-H.png",
+        image: "images/Halifax/01DeckA-H.png",
         equipmentId: "Halon"
       }
     ],
@@ -47,22 +61,22 @@ export const predefinedScenarios: Scenario[] = [
     id: "1deck",
     title: "1 Deck",
     category: "Halifax-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/1Deck.png",
+    questionImage: "images/Halifax/1Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/1DeckA-M.png",
+        image: "images/Halifax/1DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/1DeckA-H.png",
+        image: "images/Halifax/1DeckA-H.png",
         equipmentId: "Halon"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/1DeckA-A.png",
+        image: "images/Halifax/1DeckA-A.png",
         equipmentId: "AFFF-system"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/1DeckA-Q.png",
+        image: "images/Halifax/1DeckA-Q.png",
         equipmentId: "Quartzoid"
       }
     ],
@@ -73,40 +87,44 @@ export const predefinedScenarios: Scenario[] = [
     id: "2deck",
     title: "2 Deck",
     category: "Halifax-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/2Deck.png",
+    questionImage: "images/Halifax/2Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/2DeckA-M.png",
+        image: "images/Halifax/2DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/2DeckA-H.png",
+        image: "images/Halifax/2DeckA-H.png",
         equipmentId: "Halon"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/2DeckA-A.png",
+        image: "images/Halifax/2DeckA-A.png",
         equipmentId: "AFFF-system"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/2DeckA-Q.png",
+        image: "images/Halifax/2DeckA-AH.png",
+        equipmentId: "AFFF/Halon"
+      },
+      {
+        image: "images/Halifax/2DeckA-Q.png",
         equipmentId: "Quartzoid"
       }
     ],
     markers: [],
-    availableEquipment: ["Magazine-Flood-and-Spray", "Halon", "AFFF-system", "Quartzoid"]
+    availableEquipment: ["Magazine-Flood-and-Spray", "Halon", "AFFF-system", "AFFF/Halon", "Quartzoid"]
   },
   {
     id: "3deck",
     title: "3 Deck",
     category: "Halifax-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/3Deck.png",
+    questionImage: "images/Halifax/3Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/3DeckA-H.png",
+        image: "images/Halifax/3DeckA-H.png",
         equipmentId: "Halon"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/3DeckA-Q.png",
+        image: "images/Halifax/3DeckA-Q.png",
         equipmentId: "Quartzoid"
       }
     ],
@@ -117,26 +135,26 @@ export const predefinedScenarios: Scenario[] = [
     id: "4deck",
     title: "4 Deck",
     category: "Halifax-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/4Deck.png",
+    questionImage: "images/Halifax/4Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/4DeckA-M.png",
+        image: "images/Halifax/4DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/4DeckA-H.png",
+        image: "images/Halifax/4DeckA-H.png",
         equipmentId: "Halon"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/4DeckA-A.png",
+        image: "images/Halifax/4DeckA-A.png",
         equipmentId: "AFFF-system"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/4DeckA-AH.png",
+        image: "images/Halifax/4DeckA-AH.png",
         equipmentId: "AFFF/Halon"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/Halifax/4DeckA-Q.png",
+        image: "images/Halifax/4DeckA-Q.png",
         equipmentId: "Quartzoid"
       }
     ],
@@ -144,13 +162,27 @@ export const predefinedScenarios: Scenario[] = [
     availableEquipment: ["Magazine-Flood-and-Spray", "Halon", "AFFF-system", "AFFF/Halon", "Quartzoid"]
   },
   {
+    id: "5deck",
+    title: "5 Deck",
+    category: "Halifax-class",
+    questionImage: "images/Halifax/5Deck.png",
+    answerLayers: [
+      {
+        image: "images/Halifax/5DeckA-AH.png",
+        equipmentId: "AFFF/Halon"
+      }
+    ],
+    markers: [],
+    availableEquipment: ["AFFF/Halon"]
+  },
+  {
     id: "hwd05deck",
     title: "05 Deck",
     category: "Harry DeWolf-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/05Deck.png",
+    questionImage: "images/HDW/05Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/05DeckA-M.png",
+        image: "images/HDW/05DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       }
     ],
@@ -161,10 +193,10 @@ export const predefinedScenarios: Scenario[] = [
     id: "hwd04deck",
     title: "04 Deck",
     category: "Harry DeWolf-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/04Deck.png",
+    questionImage: "images/HDW/04Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/04DeckA-M.png",
+        image: "images/HDW/04DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       }
     ],
@@ -175,14 +207,14 @@ export const predefinedScenarios: Scenario[] = [
     id: "hwd03deck",
     title: "03 Deck",
     category: "Harry DeWolf-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/03Deck.png",
+    questionImage: "images/HDW/03Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/03DeckA-M.png",
+        image: "images/HDW/03DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/03DeckA-A.png",
+        image: "images/HDW/03DeckA-A.png",
         equipmentId: "AFFF-system"
       }
     ],
@@ -193,14 +225,14 @@ export const predefinedScenarios: Scenario[] = [
     id: "hwd02deck",
     title: "02 Deck",
     category: "Harry DeWolf-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/02Deck.png",
+    questionImage: "images/HDW/02Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/02DeckA-M.png",
+        image: "images/HDW/02DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/02DeckA-A.png",
+        image: "images/HDW/02DeckA-A.png",
         equipmentId: "AFFF-system"
       }
     ],
@@ -211,10 +243,10 @@ export const predefinedScenarios: Scenario[] = [
     id: "hwd01deck",
     title: "01 Deck",
     category: "Harry DeWolf-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/01Deck.png",
+    questionImage: "images/HDW/01Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/01DeckA-M.png",
+        image: "images/HDW/01DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       }
     ],
@@ -225,14 +257,14 @@ export const predefinedScenarios: Scenario[] = [
     id: "hwd1deck",
     title: "1 Deck",
     category: "Harry DeWolf-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/1Deck.png",
+    questionImage: "images/HDW/1Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/1DeckA-M.png",
+        image: "images/HDW/1DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/1DeckA-Q.png",
+        image: "images/HDW/1DeckA-Q.png",
         equipmentId: "Quartzoid"
       }
     ],
@@ -243,14 +275,14 @@ export const predefinedScenarios: Scenario[] = [
     id: "hwd2deck",
     title: "2 Deck",
     category: "Harry DeWolf-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/2Deck.png",
+    questionImage: "images/HDW/2Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/2DeckA-M.png",
+        image: "images/HDW/2DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/2DeckA-H.png",
+        image: "images/HDW/2DeckA-H.png",
         equipmentId: "Halon"
       }
     ],
@@ -261,14 +293,14 @@ export const predefinedScenarios: Scenario[] = [
     id: "hwd3deck",
     title: "3 Deck",
     category: "Harry DeWolf-class",
-    questionImage: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/3Deck.png",
+    questionImage: "images/HDW/3Deck.png",
     answerLayers: [
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/3DeckA-M.png",
+        image: "images/HDW/3DeckA-M.png",
         equipmentId: "Magazine-Flood-and-Spray"
       },
       {
-        image: "https://raw.githubusercontent.com/albertchouforces/shipspot/refs/heads/main/public/images/HDW/3DeckA-H.png",
+        image: "images/HDW/3DeckA-H.png",
         equipmentId: "Halon"
       }
     ],
