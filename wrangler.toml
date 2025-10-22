@@ -1,6 +1,6 @@
 name = "shipspot"
 compatibility_date = "2025-06-17"
-pages_build_output_dir = "dist"
+pages_build_output_dir = "."
 
 [[d1_databases]]
 binding = "DB"
