@@ -1,5 +1,5 @@
 import { Plus, Trash2 } from 'lucide-react'
-import { Scenario } from '../types'
+import { Scenario } from '@/react-app/types'
 
 interface ScenarioManagerProps {
   scenarios: Scenario[]

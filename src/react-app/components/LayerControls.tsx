@@ -1,6 +1,6 @@
 import * as Icons from 'lucide-react'
-import { equipmentTypes } from '../data/equipment'
-import { AnswerLayer } from '../types'
+import { equipmentTypes } from '@/react-app/data/equipment'
+import { AnswerLayer } from '@/react-app/types'
 import { memo, useCallback } from 'react'
 
 interface LayerControlsProps {

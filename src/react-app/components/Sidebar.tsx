@@ -1,9 +1,9 @@
-import { Equipment, Scenario } from '../types'
+import { Equipment, Scenario } from '@/react-app/types'
 import { ChevronDown, ChevronUp, RotateCcw } from 'lucide-react'
 import * as Icons from 'lucide-react'
 import { useState, useMemo, useEffect, useCallback } from 'react'
-import { groupScenariosByCategory } from '../data/scenarios'
-import { equipmentTypes } from '../data/equipment'
+import { groupScenariosByCategory } from '@/react-app/data/scenarios'
+import { equipmentTypes } from '@/react-app/data/equipment'
 
 interface SidebarProps {
   scenarios: Scenario[]
