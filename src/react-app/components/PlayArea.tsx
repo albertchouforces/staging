@@ -36,7 +36,7 @@ const PlayArea = () => {
     };
     
     // Set the image source
-    img.src = 'https://raw.githubusercontent.com/albertchouforces/signalcanvas/refs/heads/main/public/images/navcommmast.png';
+    img.src = 'images/navcommmast.png';
     
     // Clean up
     return () => {
@@ -233,7 +233,7 @@ const PlayArea = () => {
         <div 
           className="absolute top-0 left-0 w-full h-full pointer-events-none"
           style={{
-            backgroundImage: 'url(https://raw.githubusercontent.com/albertchouforces/signalcanvas/refs/heads/main/public/images/navcommmast.png)',
+            backgroundImage: 'url(images/navcommmast.png)',
             backgroundSize: 'contain',
             backgroundPosition: 'top center',
             backgroundRepeat: 'no-repeat',
