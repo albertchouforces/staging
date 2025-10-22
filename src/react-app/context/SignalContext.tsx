@@ -498,21 +498,6 @@ export const SignalProvider = ({ children }: SignalProviderProps) => {
       if (captureEl instanceof HTMLElement) {
         captureEl.style.overflow = 'hidden';
         
-        // Ensure the background image is visible in the clone
-        const backgroundDiv = captureEl.querySelector(':first-child') as HTMLElement;
-        if (backgroundDiv) {
-          backgroundDiv.style.backgroundImage = 'url(https://raw.githubusercontent.com/albertchouforces/signalcanvas/refs/heads/main/public/images/navcommmast.png)';
-          backgroundDiv.style.backgroundSize = 'contain';
-          backgroundDiv.style.backgroundPosition = 'top center';
-          backgroundDiv.style.backgroundRepeat = 'no-repeat';
-          backgroundDiv.style.width = '100%';
-          backgroundDiv.style.height = '100%';
-          backgroundDiv.style.position = 'absolute';
-          backgroundDiv.style.top = '0';
-          backgroundDiv.style.left = '0';
-          backgroundDiv.style.zIndex = '1';
-        }
-        
         // Find and remove the canvas control buttons from the clone
         const buttonContainer = captureEl.querySelector('.canvas-control-buttons');
         if (buttonContainer && buttonContainer instanceof HTMLElement) {
@@ -523,7 +508,7 @@ export const SignalProvider = ({ children }: SignalProviderProps) => {
       // Temporarily add to document for capture
       document.body.appendChild(captureEl);
       
-      // Use html2canvas with settings to capture background images
+      // Use html2canvas with settings optimized for capturing images
       const canvas = await html2canvas(captureEl, {
         allowTaint: true,
         useCORS: true,
@@ -531,18 +516,9 @@ export const SignalProvider = ({ children }: SignalProviderProps) => {
         logging: false,
         scale: 2, // Higher quality
         onclone: (doc) => {
-          // Further ensure background is visible in the cloned document
+          // Hide canvas control buttons in the cloned document
           const clonedEl = doc.body.lastChild as HTMLElement;
           if (clonedEl) {
-            const bgDiv = clonedEl.querySelector(':first-child') as HTMLElement;
-            if (bgDiv) {
-              bgDiv.style.backgroundImage = 'url(https://raw.githubusercontent.com/albertchouforces/signalcanvas/refs/heads/main/public/images/navcommmast.png)';
-              bgDiv.style.display = 'block';
-              bgDiv.style.opacity = '1';
-              bgDiv.style.visibility = 'visible';
-            }
-            
-            // Hide canvas control buttons in the cloned document
             const buttons = clonedEl.querySelector('.canvas-control-buttons');
             if (buttons instanceof HTMLElement) {
               buttons.style.display = 'none';

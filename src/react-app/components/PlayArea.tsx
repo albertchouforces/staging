@@ -229,16 +229,15 @@ const PlayArea = () => {
           overflow: 'hidden',
         }}
       >
-        {/* Background image that fills the container exactly */}
-        <div 
-          className="absolute top-0 left-0 w-full h-full pointer-events-none"
+        {/* Background image using actual img element for better html2canvas compatibility */}
+        <img
+          src="images/navcommmast.png"
+          alt="Naval communications mast background"
+          className="absolute top-0 left-0 w-full h-full object-contain object-top pointer-events-none"
           style={{
-            backgroundImage: 'url(images/navcommmast.png)',
-            backgroundSize: 'contain',
-            backgroundPosition: 'top center',
-            backgroundRepeat: 'no-repeat',
             zIndex: 1,
           }}
+          draggable={false}
         />
         
         {/* Scrollable content area */}
