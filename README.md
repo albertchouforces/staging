@@ -1,73 +1,94 @@
-# ShipSpot
+# SignalCanvas
 
-ShipSpot is an interactive web application designed for marking and identifying equipment locations on ship layouts. It provides a user-friendly interface for training and educational purposes in maritime safety and equipment identification.
+Design & decode messages with drag-and-drop signals on SignalCanvas—your interactive backdrop for creativity and communication.
+
+![SignalCanvas Screenshot](https://raw.githubusercontent.com/albertchouforces/signalcanvas/refs/heads/main/public/images/navcommmast.png)
+
+## About
+
+SignalCanvas is an interactive web application that allows users to arrange naval signal flags on a canvas to create messages. Perfect for maritime enthusiasts, naval history buffs, or anyone looking to learn about naval communication systems.
 
 ## Features
 
-- 🚢 Multiple training scenarios with different ship layouts
-- 🎯 Interactive equipment marking system
-- 🔍 Zoom and pan functionality for detailed image inspection
-- ✋ Hand tool for easy navigation
-- 👁️ Answer overlay for verification
-- 🎨 Multiple equipment types with distinct icons and colors
-- 💾 Automatic progress saving
+- **Interactive Canvas**: Drag and drop signal flags onto a naval communication mast background
+- **Extensive Flag Library**: Complete set of international maritime signal flags and pennants
+- **Custom Arrangements**: Position flags precisely where you want them
+- **Practice Mode**: Test your knowledge with signal flag challenges
+- **Export Capability**: Copy your flag arrangements to clipboard as images
+- **Responsive Design**: Works on desktop and tablet devices
 
-## Getting Started
+## How to Use
+
+### Flag Inventory
+- Browse through signal flags and pennants in the inventory panel
+- Use the search feature to find specific flags by name or keyword
+- Click the tabs to switch between flag types
+
+### Canvas Interaction
+- Drag flags from the inventory onto the canvas
+- Position flags by dragging them around the canvas
+- Remove flags by hovering over them and clicking the X button
+- Flags automatically flip horizontally when placed on the right side of the mast
+
+### Practice
+- Use the practice section to test your knowledge of naval signals
+- View hints and reveal answers to learn new signals
+- Navigate through randomized practice questions
+
+### Board Management
+- Copy your board to clipboard as an image with the "Copy Board" button
+- Clear all flags from the board with the "Clear Board" button
+
+## Installation and Development
 
 ### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
 
-- Node.js (version 16 or higher)
-- npm or yarn package manager
+### Setup
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/signalcanvas.git
+   cd signalcanvas
+   ```
 
-### Installation
+2. Install dependencies
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
 
-1. Clone the repository:
+3. Start the development server
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open your browser to `http://localhost:5173`
+
+### Building for Production
 ```bash
-git clone https://github.com/yourusername/shipspot.git
-cd shipspot
-```
-
-2. Install dependencies:
-```bash
-npm install
+npm run build
 # or
-yarn install
+yarn build
 ```
 
-3. Start the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Technologies Used
 
-4. Open your browser and navigate to `http://localhost:5173`
-
-## Usage
-
-1. Select a scenario from the sidebar
-2. Choose an equipment type to mark
-3. Click on the image to place markers
-4. Use the zoom controls or hand tool for detailed navigation
-5. Hold the "Show Answer" button to verify correct positions
-6. Clear all markers or remove individual ones as needed
-
-## Technology Stack
-
-- React 18
-- TypeScript
-- Vite
-- Tailwind CSS
-- Lucide Icons
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- **React**: UI component library
+- **TypeScript**: Static typing for better code quality
+- **Tailwind CSS**: Utility-first CSS framework
+- **Vite**: Next generation frontend tooling
+- **React DnD**: Drag and drop for React
+- **html2canvas**: Screenshots of the canvas
+- **Lucide**: Modern icon set
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT License
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
