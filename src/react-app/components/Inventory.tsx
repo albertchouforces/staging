@@ -13,7 +13,7 @@ const Inventory = () => {
   const touchStartYRef = useRef<number | null>(null);
   const touchStartTimestampRef = useRef<number | null>(null);
   const inventoryRef = useRef<HTMLDivElement | null>(null);
-  const scrollTimerRef = useRef<number | null>(null);
+  const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ignoreNextCollapseRef = useRef<boolean>(false);
   // Track if we're handling a global page scroll vs inventory scroll
   const isPageScrollRef = useRef<boolean>(false);
