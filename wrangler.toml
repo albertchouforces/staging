@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
 
 [build]
-command = "npm run build"
+command = "tsc -b && vite build --config vite.config.pages.ts"
 
 [[d1_databases]]
 binding = "DB"
