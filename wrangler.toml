@@ -1,0 +1,21 @@
+# Cloudflare Pages configuration
+name = "0199c640-299d-7a8d-8b7b-a1c993240c40"
+compatibility_date = "2025-06-17"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+[build]
+command = "npm run build"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "0199c640-299d-7a8d-8b7b-a1c993240c40"
+database_id = "0199c640-299d-7a8d-8b7b-a1c993240c40"
+
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "0199c640-299d-7a8d-8b7b-a1c993240c40"
+
+[vars]
+MOCHA_USERS_SERVICE_API_URL = "placeholder_url"
+MOCHA_USERS_SERVICE_API_KEY = "placeholder_key"
