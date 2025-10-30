@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { IllustrationWrapper } from '@/react-app/components/IllustrationWrapper';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
@@ -56,15 +56,65 @@ interface StepIllustrationProps {
 }
 
 const KnotImageWrapper: FC<{src: string; alt: string; className?: string}> = ({ src, alt, className = "" }) => {
+  const [imageError, setImageError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const maxRetries = 2;
+
+  // Generate cache-busting URL to prevent stale cache issues
+  const getCacheBustedUrl = (url: string, retry: number = 0) => {
+    if (retry === 0) return url;
+    return `${url}?v=${Date.now()}&retry=${retry}`;
+  };
+
+  const handleImageError = () => {
+    if (retryCount < maxRetries) {
+      setRetryCount(prev => prev + 1);
+      setImageError(false);
+    } else {
+      setImageError(true);
+    }
+  };
+
+  const handleImageLoad = () => {
+    setImageError(false);
+  };
+
+  // Reset states when src changes
+  useEffect(() => {
+    setImageError(false);
+    setRetryCount(0);
+  }, [src]);
+
+  if (imageError) {
+    return (
+      <div className={`rounded-lg overflow-hidden knot-image-container ${className}`}>
+        <div className="w-full h-full flex items-center justify-center bg-gray-50 min-h-[200px]">
+          <div className="text-center text-gray-500 p-4">
+            <div className="w-16 h-16 mx-auto mb-3 bg-gray-200 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div className="text-sm font-medium mb-1">Image temporarily unavailable</div>
+            <div className="text-xs opacity-70">Please refresh the page to try again</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`rounded-lg overflow-hidden knot-image-container ${className}`}>
       <div className="w-full h-full flex items-center justify-center">
         <LazyLoadImage
-          src={src}
+          key={`${src}-retry-${retryCount}`}
+          src={getCacheBustedUrl(src, retryCount)}
           alt={alt}
           effect="blur"
           className="knot-image"
           wrapperClassName="knot-image-wrapper"
+          onLoad={handleImageLoad}
+          onError={handleImageError}
           placeholderSrc="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E"
           placeholder={
             <div className="animate-pulse flex items-center justify-center w-full h-full min-h-[200px] bg-gray-100 rounded">
@@ -81,17 +131,17 @@ const BowlineIllustration: FC<StepIllustrationProps> = ({ stepNumber, className 
   const getStepImageUrl = (step: number) => {
     switch (step) {
       case 1:
-        return "/images/bowline1.png";
+        return "/images/Bowline1.png";
       case 2:
-        return "/images/bowline2.png";
+        return "/images/Bowline2.png";
       case 3:
-        return "/images/bowline2.png";
+        return "/images/Bowline2.png";
       case 4:
-        return "/images/bowline3.png";
+        return "/images/Bowline3.png";
       case 5:
-        return "/images/bowline4.png";
+        return "/images/Bowline4.png";
       default:
-        return "/images/bowline4.png";
+        return "/images/Bowline4.png";
     }
   };
 
