@@ -9,41 +9,44 @@ export const onRequest: PagesFunction = async (context) => {
     const body = await context.request.json();
     const validatedData = HighScoreSchema.parse(body);
 
-    // Get D1 database binding
-    const db = context.env.DB;
-    if (!db) {
-      return new Response(JSON.stringify({ error: "Database not configured" }), {
+    // Get Firebase project ID from environment
+    const projectId = context.env.FIREBASE_PROJECT_ID || "test-a29e7";
+
+    // Prepare Firestore document data with camelCase field names for Firebase
+    const firestoreDoc = {
+      fields: {
+        quizId: { stringValue: validatedData.quiz_id },
+        playerName: { stringValue: validatedData.player_name },
+        correctAnswers: { integerValue: validatedData.correct_answers.toString() },
+        totalQuestions: { integerValue: validatedData.total_questions.toString() },
+        accuracyPercentage: { doubleValue: validatedData.accuracy_percentage },
+        timeTakenMs: { integerValue: validatedData.time_taken_ms.toString() },
+        createdAt: { timestampValue: new Date().toISOString() }
+      }
+    };
+
+    // Use Firestore REST API to add document
+    const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/highScores`;
+    
+    const response = await fetch(firestoreUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(firestoreDoc),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Firestore API error:', errorText);
+      return new Response(JSON.stringify({ error: "Failed to save high score to Firebase" }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    // Insert into D1 database
-    const result = await db
-      .prepare(`
-        INSERT INTO high_scores 
-        (quiz_id, player_name, correct_answers, total_questions, accuracy_percentage, time_taken_ms, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-      `)
-      .bind(
-        validatedData.quiz_id,
-        validatedData.player_name,
-        validatedData.correct_answers,
-        validatedData.total_questions,
-        validatedData.accuracy_percentage,
-        validatedData.time_taken_ms
-      )
-      .run();
-
-    if (!result.success) {
-      console.error('Database error:', result.error);
-      return new Response(JSON.stringify({ error: "Failed to save high score" }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ success: true, id: result.meta.last_row_id }), {
+    const result = await response.json() as any;
+    return new Response(JSON.stringify({ success: true, id: result.name }), {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

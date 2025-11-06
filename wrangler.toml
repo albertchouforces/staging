@@ -3,10 +3,13 @@ compatibility_date = "2025-06-17"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
 
-[[d1_databases]]
-binding = "DB"
-database_name = "019a502a-8c46-77d9-9d58-3bf28320a309"
-database_id = "019a502a-8c46-77d9-9d58-3bf28320a309"
+[vars]
+FIREBASE_PROJECT_ID = "test-a29e7"
+FIREBASE_API_KEY = "AIzaSyBkzBFeo4FL62OsZ-AssG3OK5KMwz6_OMc"
+FIREBASE_AUTH_DOMAIN = "test-a29e7.firebaseapp.com"
+FIREBASE_STORAGE_BUCKET = "test-a29e7.firebasestorage.app"
+FIREBASE_MESSAGING_SENDER_ID = "579772147410"
+FIREBASE_APP_ID = "1:579772147410:web:a06c3f87f0a41572baaf0b"
 
 [[r2_buckets]]
 binding = "R2_BUCKET"
