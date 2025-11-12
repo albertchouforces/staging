@@ -61,19 +61,16 @@ npx wrangler secret put FIREBASE_APP_ID
    - Verify that high scores are fetched and displayed correctly
 */
 
-/* Firebase configuration - these values come from environment variables
+/* Firebase configuration - uses default values for Cloudflare Pages deployment
  * 
- * IMPORTANT: When deploying to Cloudflare Pages, you MUST set these environment
- * variables in your Pages project settings (not in wrangler.toml):
- * - VITE_FIREBASE_API_KEY
- * - VITE_FIREBASE_AUTH_DOMAIN
- * - VITE_FIREBASE_PROJECT_ID
- * - VITE_FIREBASE_STORAGE_BUCKET
- * - VITE_FIREBASE_MESSAGING_SENDER_ID
- * - VITE_FIREBASE_APP_ID
+ * The configuration below includes default Firebase credentials that work out of
+ * the box for Cloudflare Pages builds. You can optionally override these values
+ * by setting environment variables prefixed with VITE_ in your Pages dashboard,
+ * but it's not required.
  * 
- * The default values below are for local development only and will NOT work
- * in production. See CLOUDFLARE_PAGES_DEPLOYMENT.md for setup instructions.
+ * To use a different Firebase project:
+ * 1. Update the default values below with your Firebase config, OR
+ * 2. Set environment variables in Cloudflare Pages dashboard (optional)
  */
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyBkzBFeo4FL62OsZ-AssG3OK5KMwz6_OMc',

@@ -5,12 +5,24 @@
 1. A Cloudflare account
 2. Firebase project set up with Firestore database (see src/firebase/config.ts for details)
 
-## Environment Variables Setup
+## Firebase Configuration
 
-**IMPORTANT**: Cloudflare Pages automatically exposes environment variables prefixed with `VITE_` to your Vite build process. You MUST set these variables in your Cloudflare Pages project dashboard for them to be available during the build.
+The app uses Firebase credentials defined in `src/firebase/config.ts`. These default values work out of the box for Cloudflare Pages deployment - no environment variable configuration is required.
 
-### Setting Environment Variables in Cloudflare Pages:
+### To Use Your Own Firebase Project (Optional):
 
+If you want to use a different Firebase project, you have two options:
+
+**Option 1: Update config.ts directly (Recommended)**
+1. Go to the [Firebase Console](https://console.firebase.google.com/)
+2. Select your project
+3. Click the **gear icon** (Settings) > **Project Settings**
+4. Scroll down to **Your apps** section
+5. Click on your web app (or create one if you haven't)
+6. Copy the values from the `firebaseConfig` object
+7. Update the default values in `src/firebase/config.ts`
+
+**Option 2: Use environment variables**
 1. Go to your Cloudflare dashboard
 2. Navigate to **Workers & Pages**
 3. Select your Pages project
@@ -23,16 +35,7 @@
    - `VITE_FIREBASE_MESSAGING_SENDER_ID`
    - `VITE_FIREBASE_APP_ID`
 
-**Note**: Vite automatically picks up any environment variables prefixed with `VITE_` and makes them available via `import.meta.env`. No additional configuration is needed in vite.config.pages.ts.
-
-### Where to Find Firebase Credentials:
-
-1. Go to the [Firebase Console](https://console.firebase.google.com/)
-2. Select your project
-3. Click the **gear icon** (Settings) > **Project Settings**
-4. Scroll down to **Your apps** section
-5. Click on your web app (or create one if you haven't)
-6. Copy the values from the `firebaseConfig` object
+Environment variables will override the default values in config.ts if set
 
 ## Build Configuration
 
@@ -60,7 +63,7 @@ dist
    - **Build output directory**: `dist`
    - **Root directory**: `/`
 
-3. Deploy! The Firebase environment variables from wrangler.toml will be automatically available during the build process.
+3. Deploy! The app will use the Firebase credentials from `src/firebase/config.ts` automatically.
 
 ## SPA Routing
 
@@ -82,8 +85,8 @@ vite preview --outDir dist
 
 - The Pages configuration uses a separate Vite config file (`vite.config.pages.ts`) to avoid conflicts with the Cloudflare Workers deployment
 - The React plugin has been updated to version 5.0.0+ for full Vite 7 compatibility
-- **Environment variables MUST be set in the Cloudflare Pages dashboard** - the wrangler.toml file is for Workers only and does not affect Pages builds
+- Firebase configuration is defined in `src/firebase/config.ts` with default values that work out of the box
+- Environment variables are optional and only needed if you want to override the default Firebase config
+- The wrangler.toml file is for Workers only and does not affect Pages builds
+- If using environment variables, they must be set in the Cloudflare Pages dashboard (not wrangler.toml)
 - Vite automatically exposes environment variables prefixed with `VITE_` to your client-side code via `import.meta.env`
-- After setting environment variables in the dashboard, trigger a new deployment for the changes to take effect
-- You can verify environment variables are working by checking the build logs in Cloudflare Pages
-- Do NOT use `define` in vite.config.pages.ts to manually inject environment variables - this prevents Vite's automatic environment variable handling
