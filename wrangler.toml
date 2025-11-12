@@ -1,3 +1,11 @@
+# Cloudflare Workers configuration for QuizMaster
+
+name = "quizmaster"
+compatibility_date = "2024-01-01"
+
+# Cloudflare Pages configuration
+pages_build_output_dir = "dist"
+
 # Firebase Firestore Database Configuration
 # These environment variables are used to connect to Firebase Firestore
 # The values are defined in the [vars] section below and match the
