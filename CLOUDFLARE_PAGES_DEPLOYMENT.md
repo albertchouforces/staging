@@ -5,14 +5,25 @@
 1. A Cloudflare account
 2. Firebase project set up with Firestore database (see src/firebase/config.ts for details)
 
-## Environment Variables
+## Environment Variables Setup
 
-The Firebase environment variables are configured in `wrangler.toml` under `[env.production.vars]` and `[env.preview.vars]` sections. These will be automatically available during the Cloudflare Pages build process.
+**IMPORTANT**: Cloudflare Pages automatically exposes environment variables prefixed with `VITE_` to your Vite build process. You MUST set these variables in your Cloudflare Pages project dashboard for them to be available during the build.
 
-If you need to update the Firebase credentials:
+### Setting Environment Variables in Cloudflare Pages:
 
-1. Edit `wrangler.toml` and update the values in both the `[env.production.vars]` and `[env.preview.vars]` sections
-2. Commit and push your changes
+1. Go to your Cloudflare dashboard
+2. Navigate to **Workers & Pages**
+3. Select your Pages project
+4. Go to **Settings** > **Environment variables**
+5. Add the following variables for both **Production** and **Preview** environments:
+   - `VITE_FIREBASE_API_KEY`
+   - `VITE_FIREBASE_AUTH_DOMAIN`
+   - `VITE_FIREBASE_PROJECT_ID`
+   - `VITE_FIREBASE_STORAGE_BUCKET`
+   - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+   - `VITE_FIREBASE_APP_ID`
+
+**Note**: Vite automatically picks up any environment variables prefixed with `VITE_` and makes them available via `import.meta.env`. No additional configuration is needed in vite.config.pages.ts.
 
 ### Where to Find Firebase Credentials:
 
@@ -67,8 +78,12 @@ vite build --config vite.config.pages.ts
 vite preview --outDir dist
 ```
 
-## Notes
+## Important Notes
 
 - The Pages configuration uses a separate Vite config file (`vite.config.pages.ts`) to avoid conflicts with the Cloudflare Workers deployment
 - The React plugin has been updated to version 5.0.0+ for full Vite 7 compatibility
-- Firebase environment variables are defined in wrangler.toml and injected at build time through the Vite config
+- **Environment variables MUST be set in the Cloudflare Pages dashboard** - the wrangler.toml file is for Workers only and does not affect Pages builds
+- Vite automatically exposes environment variables prefixed with `VITE_` to your client-side code via `import.meta.env`
+- After setting environment variables in the dashboard, trigger a new deployment for the changes to take effect
+- You can verify environment variables are working by checking the build logs in Cloudflare Pages
+- Do NOT use `define` in vite.config.pages.ts to manually inject environment variables - this prevents Vite's automatic environment variable handling
