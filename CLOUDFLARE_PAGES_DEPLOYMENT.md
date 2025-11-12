@@ -27,7 +27,7 @@ vite build --config vite.config.pages.ts
 
 ### Build Output Directory
 ```
-dist-pages
+dist
 ```
 
 ### Root Directory
@@ -40,7 +40,7 @@ dist-pages
 1. Connect your GitHub/GitLab repository to Cloudflare Pages
 2. Configure the build settings:
    - **Build command**: `vite build --config vite.config.pages.ts`
-   - **Build output directory**: `dist-pages`
+   - **Build output directory**: `dist`
    - **Root directory**: `/`
 3. Add the Firebase environment variables in the Pages project settings
 4. Deploy!
@@ -58,7 +58,7 @@ To test the Pages build locally:
 vite build --config vite.config.pages.ts
 
 # Preview the build
-vite preview --outDir dist-pages
+vite preview --outDir dist
 ```
 
 ## Notes
