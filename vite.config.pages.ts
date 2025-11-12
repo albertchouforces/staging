@@ -1,27 +1,31 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
+import path from "path";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
+// Vite configuration for Cloudflare Pages deployment
+// This builds a static SPA that can be deployed to Cloudflare Pages
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+  server: {
+    allowedHosts: true,
   },
   build: {
-    outDir: 'dist',
+    chunkSizeWarningLimit: 5000,
+    outDir: "dist-pages",
     emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router'],
-        },
-      },
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    port: 5173,
+  define: {
+    // Expose Firebase environment variables to the client
+    "import.meta.env.VITE_FIREBASE_API_KEY": JSON.stringify(process.env.VITE_FIREBASE_API_KEY || ""),
+    "import.meta.env.VITE_FIREBASE_AUTH_DOMAIN": JSON.stringify(process.env.VITE_FIREBASE_AUTH_DOMAIN || ""),
+    "import.meta.env.VITE_FIREBASE_PROJECT_ID": JSON.stringify(process.env.VITE_FIREBASE_PROJECT_ID || ""),
+    "import.meta.env.VITE_FIREBASE_STORAGE_BUCKET": JSON.stringify(process.env.VITE_FIREBASE_STORAGE_BUCKET || ""),
+    "import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID": JSON.stringify(process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || ""),
+    "import.meta.env.VITE_FIREBASE_APP_ID": JSON.stringify(process.env.VITE_FIREBASE_APP_ID || ""),
   },
 });
