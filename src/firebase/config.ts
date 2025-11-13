@@ -1,16 +1,22 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, Firestore } from 'firebase/firestore';
 
 /*
-FIREBASE SETUP INSTRUCTIONS:
+CRITICAL: FIRESTORE DATABASE MUST BE ENABLED
 
-1. Create a Firebase project at https://console.firebase.google.com/
-2. Add a web app to your project
-3. Copy the Firebase config values below into the firebaseConfig object
-4. Enable Firestore Database in your Firebase console
+The 404 error you're seeing means Firestore Database is not enabled in your Firebase project.
+
+TO FIX THIS ERROR:
+1. Go to https://console.firebase.google.com/
+2. Select your project: test-a29e7
+3. In the left sidebar, click "Firestore Database"
+4. Click "Create database"
+5. Choose "Start in production mode" or "Start in test mode"
+6. Select a location for your database (choose one close to your users)
+7. Click "Enable"
 
 FIRESTORE DATABASE RULES:
-Go to Firestore Database > Rules and paste:
+After enabling Firestore, go to Firestore Database > Rules and paste:
 
 rules_version = '2';
 service cloud.firestore {
@@ -54,5 +60,21 @@ const firebaseConfig = {
   appId: "1:579772147410:web:a06c3f87f0a41572baaf0b"
 };
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+let app;
+let db: Firestore;
+
+try {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  
+  // Log initialization success
+  console.log('✅ Firebase initialized successfully');
+  console.log('📊 Firestore Database configured');
+  console.log('⚠️  If you see 404 errors, Firestore Database is NOT enabled in Firebase Console');
+  console.log('👉 Visit: https://console.firebase.google.com/project/test-a29e7/firestore');
+} catch (error) {
+  console.error('❌ Firebase initialization error:', error);
+  throw new Error('Failed to initialize Firebase. Check your configuration.');
+}
+
+export { db };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Trophy } from 'lucide-react';
+import { X, Trophy, AlertCircle } from 'lucide-react';
 import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 
@@ -22,6 +22,7 @@ export default function HighScoresModal({ isOpen, onClose, quizzes }: HighScores
   const [selectedQuizID, setSelectedQuizID] = useState(quizzes[0]?.quizID || '');
   const [highScores, setHighScores] = useState<HighScore[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen && selectedQuizID) {
@@ -31,6 +32,7 @@ export default function HighScoresModal({ isOpen, onClose, quizzes }: HighScores
 
   const loadHighScores = async (quizID: string) => {
     setLoading(true);
+    setError(null);
     try {
       const scoresRef = collection(db, 'highScores');
       const q = query(
@@ -48,8 +50,17 @@ export default function HighScoresModal({ isOpen, onClose, quizzes }: HighScores
       });
       
       setHighScores(scores);
-    } catch (error) {
-      console.error('Error loading high scores:', error);
+    } catch (err) {
+      console.error('Error loading high scores:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      
+      if (errorMessage.includes('unavailable') || errorMessage.includes('404')) {
+        setError('Firestore Database is not enabled. Please enable it in Firebase Console.');
+      } else if (errorMessage.includes('index')) {
+        setError('Database index required. Please create the composite index in Firebase Console.');
+      } else {
+        setError('Failed to load high scores. Please check your internet connection.');
+      }
     } finally {
       setLoading(false);
     }
@@ -110,15 +121,37 @@ export default function HighScoresModal({ isOpen, onClose, quizzes }: HighScores
             </select>
           </div>
 
+          {error && (
+            <div className="mb-6 bg-red-50 border-2 border-red-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-red-900 mb-1">Error Loading High Scores</h3>
+                  <p className="text-sm text-red-700">{error}</p>
+                  {error.includes('Firestore Database') && (
+                    <a
+                      href="https://console.firebase.google.com/project/test-a29e7/firestore"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block mt-2 text-sm text-red-600 hover:text-red-800 underline"
+                    >
+                      Open Firebase Console →
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="w-8 h-8 border-4 border-navy-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
-          ) : highScores.length === 0 ? (
+          ) : highScores.length === 0 && !error ? (
             <div className="text-center py-12 text-navy-500">
               No high scores yet. Be the first to set a record!
             </div>
-          ) : (
+          ) : !error ? (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -160,7 +193,7 @@ export default function HighScoresModal({ isOpen, onClose, quizzes }: HighScores
                 </tbody>
               </table>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
