@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { quizzes } from "@/data/quizData";
+import { quizzes } from "../src/data/quizData";
 
 const app = new Hono<{ Bindings: Env }>();
 
