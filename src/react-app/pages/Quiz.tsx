@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, Link } from "react-router";
 import { Home, CheckCircle2, XCircle, Clock } from "lucide-react";
 import { QuizQuestionWithOptions } from "@/shared/types";
 import { useTimer } from "@/react-app/hooks/useTimer";
 import HighScoreSubmission from "@/react-app/components/HighScoreSubmission";
+import { quizzes as quizData } from "@/data/quizData";
 
 interface QuizData {
   quizID: string;
@@ -13,38 +14,64 @@ interface QuizData {
 
 export default function Quiz() {
   const { quizID } = useParams<{ quizID: string }>();
-  const [quiz, setQuiz] = useState<QuizData | null>(null);
-  const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [showHighScoreSubmission, setShowHighScoreSubmission] = useState(false);
-  const { elapsedTime, start, pause } = useTimer();
+  const { elapsedTime, start } = useTimer();
+
+  const quiz = useMemo<QuizData | null>(() => {
+    const foundQuiz = quizData.find((q) => q.quizID === quizID);
+    if (!foundQuiz) return null;
+
+    // Randomize question order
+    const shuffledQuestions = [...foundQuiz.questions].sort(() => Math.random() - 0.5);
+
+    // Collect all answers from all questions for wrong options
+    const allAnswers = foundQuiz.questions.map((q) => q.answer);
+
+    // For each question, create 3 wrong options from other questions' answers
+    const questionsWithOptions = shuffledQuestions.map((question, index) => {
+      const wrongOptions = allAnswers
+        .filter((ans) => ans !== question.answer)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+
+      const options = [...wrongOptions, question.answer].sort(
+        () => Math.random() - 0.5
+      );
+
+      return {
+        question: question.question,
+        answer: question.answer,
+        image: question.image,
+        options,
+        questionIndex: index,
+      };
+    });
+
+    return {
+      quizID: foundQuiz.quizID,
+      quizName: foundQuiz.quizName,
+      questions: questionsWithOptions,
+    };
+  }, [quizID]);
 
   useEffect(() => {
-    fetch(`/api/quizzes/${quizID}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setQuiz(data);
-        setLoading(false);
-        // Start timer when quiz loads
-        start();
-      })
-      .catch((err) => {
-        console.error("Error fetching quiz:", err);
-        setLoading(false);
-      });
+    // Start timer when quiz loads
+    if (quiz) {
+      start();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quizID]);
+  }, [quiz]);
 
   const handleAnswerSelect = (answer: string) => {
     if (isAnswered) return;
 
     setSelectedAnswer(answer);
     setIsAnswered(true);
-    pause(); // Pause timer when answer is selected
 
     if (answer === quiz?.questions[currentQuestionIndex].answer) {
       setScore(score + 1);
@@ -56,7 +83,6 @@ export default function Quiz() {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
       setIsAnswered(false);
-      start(); // Resume timer when next question starts
     } else {
       setShowResults(true);
       setShowHighScoreSubmission(true);
@@ -67,14 +93,6 @@ export default function Quiz() {
     const seconds = ms / 1000;
     return seconds.toFixed(2);
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-navy-600 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
 
   if (!quiz) {
     return (

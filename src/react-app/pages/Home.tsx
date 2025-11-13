@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import { BookOpen, ChevronRight, Trophy } from "lucide-react";
 import HighScoresModal from "@/react-app/components/HighScoresModal";
+import { quizzes as quizData } from "@/data/quizData";
 
 interface QuizListItem {
   quizID: string;
@@ -10,30 +11,15 @@ interface QuizListItem {
 }
 
 export default function Home() {
-  const [quizzes, setQuizzes] = useState<QuizListItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showHighScores, setShowHighScores] = useState(false);
 
-  useEffect(() => {
-    fetch("/api/quizzes")
-      .then((res) => res.json())
-      .then((data) => {
-        setQuizzes(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching quizzes:", err);
-        setLoading(false);
-      });
+  const quizzes = useMemo<QuizListItem[]>(() => {
+    return quizData.map((quiz) => ({
+      quizID: quiz.quizID,
+      quizName: quiz.quizName,
+      questionCount: quiz.questions.length,
+    }));
   }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-navy-600 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white">
