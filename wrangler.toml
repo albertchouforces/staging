@@ -1,5 +1,5 @@
-name = "mocha-app"
-compatibility_date = "2024-11-13"
+name = "quiz-master"
+compatibility_date = "2024-01-01"
 pages_build_output_dir = "dist"
 
 [vars]
