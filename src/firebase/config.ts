@@ -78,7 +78,7 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'test-a29e7',
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'test-a29e7.firebasestorage.app',
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '579772147410',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:579772147410:web:a06c3f87f0a41572baaf0b',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:579772147410:web:a06c3f87f0a41572baaf0b'
 };
 
 /* Initialize Firebase */
