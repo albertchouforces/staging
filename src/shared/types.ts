@@ -12,37 +12,10 @@ export const QuizSchema = z.object({
   questions: z.array(QuizQuestionSchema),
 });
 
-export const HighScoreSchema = z.object({
-  id: z.string(),
-  quiz_id: z.string(),
-  player_name: z.string(),
-  score: z.number(),
-  total_questions: z.number(),
-  time_milliseconds: z.number(),
-  created_at: z.string(),
-});
+export type QuizType = z.infer<typeof QuizSchema>;
+export type QuizQuestionType = z.infer<typeof QuizQuestionSchema>;
 
-export const SubmitHighScoreSchema = z.object({
-  quiz_id: z.string(),
-  player_name: z.string(),
-  score: z.number(),
-  total_questions: z.number(),
-  time_milliseconds: z.number(),
-});
-
-export type QuizQuestion = z.infer<typeof QuizQuestionSchema>;
-export type Quiz = z.infer<typeof QuizSchema>;
-export type HighScore = z.infer<typeof HighScoreSchema>;
-export type SubmitHighScore = z.infer<typeof SubmitHighScoreSchema>;
-
-export interface QuizState {
-  currentQuestionIndex: number;
-  score: number;
-  selectedAnswers: string[];
-  shuffledQuestions: QuizQuestion[];
-  shuffledOptions: string[][];
-  isCompleted: boolean;
-  startTime: number;
-  totalPausedTime: number;
-  currentPauseStart: number | null;
+export interface QuizQuestionWithOptions extends QuizQuestionType {
+  options: string[];
+  questionIndex: number;
 }

@@ -1,155 +1,159 @@
-import { useState } from 'react';
-import { X, Trophy, Clock, Target } from 'lucide-react';
-import { quizData } from '@/data/quizData';
-import { useHighScores } from '@/react-app/hooks/useHighScores';
+import { useState, useEffect } from 'react';
+import { X, Trophy } from 'lucide-react';
+import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
+import { db } from '@/firebase/config';
+
+interface HighScore {
+  id: string;
+  name: string;
+  score: number;
+  totalQuestions: number;
+  timeInMs: number;
+  timestamp: number;
+}
 
 interface HighScoresModalProps {
   isOpen: boolean;
   onClose: () => void;
+  quizzes: Array<{ quizID: string; quizName: string }>;
 }
 
-export default function HighScoresModal({ isOpen, onClose }: HighScoresModalProps) {
-  const [selectedQuizId, setSelectedQuizId] = useState<string>(quizData[0]?.quizID || '');
-  const { highScores, loading, error } = useHighScores(selectedQuizId);
+export default function HighScoresModal({ isOpen, onClose, quizzes }: HighScoresModalProps) {
+  const [selectedQuizID, setSelectedQuizID] = useState(quizzes[0]?.quizID || '');
+  const [highScores, setHighScores] = useState<HighScore[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen && selectedQuizID) {
+      loadHighScores(selectedQuizID);
+    }
+  }, [isOpen, selectedQuizID]);
 
-  const selectedQuiz = quizData.find(q => q.quizID === selectedQuizId);
-
-  const formatTime = (milliseconds: number): string => {
-    const seconds = milliseconds / 1000;
-    return seconds.toFixed(2) + 's';
+  const loadHighScores = async (quizID: string) => {
+    setLoading(true);
+    try {
+      const scoresRef = collection(db, 'highScores');
+      const q = query(
+        scoresRef,
+        where('quizID', '==', quizID),
+        orderBy('score', 'desc'),
+        orderBy('timeInMs', 'asc'),
+        limit(10)
+      );
+      
+      const querySnapshot = await getDocs(q);
+      const scores: HighScore[] = [];
+      querySnapshot.forEach((doc) => {
+        scores.push({ id: doc.id, ...doc.data() } as HighScore);
+      });
+      
+      setHighScores(scores);
+    } catch (error) {
+      console.error('Error loading high scores:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
+  const formatTime = (ms: number) => {
+    const seconds = ms / 1000;
+    return seconds.toFixed(2);
+  };
+
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
     return date.toLocaleString('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
-      hour: '2-digit',
+      hour: 'numeric',
       minute: '2-digit',
+      hour12: true
     });
   };
 
-  const calculateAccuracy = (score: number, total: number): number => {
-    return Math.round((score / total) * 100);
-  };
+  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="p-6 border-b border-gray-200 flex justify-between items-center bg-gradient-to-r from-navy-600 to-navy-700">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+        <div className="flex items-center justify-between p-6 border-b border-navy-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-navy-600 rounded-lg flex items-center justify-center">
               <Trophy className="w-6 h-6 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-white">High Scores</h2>
+            <h2 className="text-2xl font-bold text-navy-900">High Scores</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition-colors"
+            className="text-navy-400 hover:text-navy-600 transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="p-6 border-b border-gray-200 bg-gray-50">
-          <div className="flex flex-wrap gap-2">
-            {quizData.map((quiz) => (
-              <button
-                key={quiz.quizID}
-                onClick={() => setSelectedQuizId(quiz.quizID)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  selectedQuizId === quiz.quizID
-                    ? 'bg-navy-600 text-white shadow-md'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-                }`}
-              >
-                {quiz.quizName}
-              </button>
-            ))}
+        <div className="p-6">
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-navy-700 mb-2">
+              Select Quiz
+            </label>
+            <select
+              value={selectedQuizID}
+              onChange={(e) => setSelectedQuizID(e.target.value)}
+              className="w-full px-4 py-2 border-2 border-navy-100 rounded-lg focus:outline-none focus:border-navy-600 transition-colors"
+            >
+              {quizzes.map((quiz) => (
+                <option key={quiz.quizID} value={quiz.quizID}>
+                  {quiz.quizName}
+                </option>
+              ))}
+            </select>
           </div>
-        </div>
 
-        <div className="flex-1 overflow-auto p-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin w-8 h-8 border-4 border-navy-600 border-t-transparent rounded-full"></div>
-            </div>
-          ) : error ? (
-            <div className="text-center py-12">
-              <p className="text-red-600 font-medium">{error}</p>
+              <div className="w-8 h-8 border-4 border-navy-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : highScores.length === 0 ? (
-            <div className="text-center py-12">
-              <Trophy className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg">No high scores yet for {selectedQuiz?.quizName}</p>
-              <p className="text-gray-500 mt-2">Be the first to set a record!</p>
+            <div className="text-center py-12 text-navy-500">
+              No high scores yet. Be the first to set a record!
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b-2 border-gray-200">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Rank</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      <div className="flex items-center gap-2">
-                        <Target className="w-4 h-4" />
-                        Score
-                      </div>
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
-                        Time
-                      </div>
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Date</th>
+                  <tr className="border-b-2 border-navy-200">
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-navy-700">Rank</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-navy-700">Name</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-navy-700">Score</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-navy-700">Time (s)</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-navy-700">Date</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {highScores.map((highScore, index) => {
-                    const accuracy = calculateAccuracy(highScore.score, highScore.total_questions);
-                    const isTopThree = index < 3;
-                    
+                  {highScores.map((score, index) => {
+                    const accuracy = Math.round((score.score / score.totalQuestions) * 100);
                     return (
                       <tr
-                        key={highScore.id}
-                        className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                          isTopThree ? 'bg-yellow-50' : ''
-                        }`}
+                        key={score.id}
+                        className="border-b border-navy-100 hover:bg-navy-50 transition-colors"
                       >
                         <td className="py-3 px-4">
-                          <div className={`font-bold ${
-                            index === 0 ? 'text-yellow-600 text-lg' :
-                            index === 1 ? 'text-gray-400 text-lg' :
-                            index === 2 ? 'text-orange-600 text-lg' :
-                            'text-gray-600'
+                          <span className={`font-semibold ${
+                            index === 0 ? 'text-yellow-600' :
+                            index === 1 ? 'text-gray-400' :
+                            index === 2 ? 'text-orange-600' :
+                            'text-navy-600'
                           }`}>
-                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}`}
-                          </div>
+                            {index + 1}
+                          </span>
                         </td>
-                        <td className="py-3 px-4 font-medium text-gray-800">
-                          {highScore.player_name}
+                        <td className="py-3 px-4 text-navy-900 font-medium">{score.name}</td>
+                        <td className="py-3 px-4 text-navy-700">
+                          {score.score}/{score.totalQuestions} ({accuracy}%)
                         </td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-baseline gap-2">
-                            <span className="font-semibold text-navy-700">
-                              {highScore.score}/{highScore.total_questions}
-                            </span>
-                            <span className="text-sm text-gray-600">
-                              ({accuracy}%)
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 font-mono text-navy-700 font-medium">
-                          {formatTime(highScore.time_milliseconds)}
-                        </td>
-                        <td className="py-3 px-4 text-gray-600 text-sm">
-                          {formatDate(highScore.created_at)}
-                        </td>
+                        <td className="py-3 px-4 text-navy-700">{formatTime(score.timeInMs)}</td>
+                        <td className="py-3 px-4 text-navy-600 text-sm">{formatDate(score.timestamp)}</td>
                       </tr>
                     );
                   })}
@@ -157,10 +161,6 @@ export default function HighScoresModal({ isOpen, onClose }: HighScoresModalProp
               </table>
             </div>
           )}
-        </div>
-
-        <div className="p-4 border-t border-gray-200 bg-gray-50 text-center text-sm text-gray-600">
-          Showing top {highScores.length} scores for {selectedQuiz?.quizName}
         </div>
       </div>
     </div>

@@ -1,63 +1,58 @@
 import { Hono } from "hono";
-import { HighScoreSchema, SubmitHighScoreSchema } from "@/shared/types";
+import { quizzes } from "@/data/quizData";
 
 const app = new Hono<{ Bindings: Env }>();
 
-// Get high scores for a specific quiz
-app.get("/api/high-scores/:quizId", async (c) => {
-  const quizId = c.req.param("quizId");
-  const db = c.env.DB;
-
-  try {
-    const result = await db
-      .prepare(
-        `SELECT * FROM high_scores 
-         WHERE quiz_id = ? 
-         ORDER BY time_milliseconds ASC, score DESC 
-         LIMIT 100`
-      )
-      .bind(quizId)
-      .all();
-
-    const highScores = result.results.map((row) => 
-      HighScoreSchema.parse(row)
-    );
-
-    return c.json({ highScores });
-  } catch (error) {
-    console.error("Error fetching high scores:", error);
-    return c.json({ error: "Failed to fetch high scores" }, 500);
-  }
+// Get all quizzes (without full question data)
+app.get("/api/quizzes", (c) => {
+  const quizList = quizzes.map((quiz) => ({
+    quizID: quiz.quizID,
+    quizName: quiz.quizName,
+    questionCount: quiz.questions.length,
+  }));
+  return c.json(quizList);
 });
 
-// Submit a new high score
-app.post("/api/high-scores", async (c) => {
-  const db = c.env.DB;
+// Get a specific quiz with randomized questions and answer options
+app.get("/api/quizzes/:quizID", (c) => {
+  const quizID = c.req.param("quizID");
+  const quiz = quizzes.find((q) => q.quizID === quizID);
 
-  try {
-    const body = await c.req.json();
-    const data = SubmitHighScoreSchema.parse(body);
-
-    await db
-      .prepare(
-        `INSERT INTO high_scores 
-         (quiz_id, player_name, score, total_questions, time_milliseconds) 
-         VALUES (?, ?, ?, ?, ?)`
-      )
-      .bind(
-        data.quiz_id,
-        data.player_name,
-        data.score,
-        data.total_questions,
-        data.time_milliseconds
-      )
-      .run();
-
-    return c.json({ success: true });
-  } catch (error) {
-    console.error("Error submitting high score:", error);
-    return c.json({ error: "Failed to submit high score" }, 500);
+  if (!quiz) {
+    return c.json({ error: "Quiz not found" }, 404);
   }
+
+  // Randomize question order
+  const shuffledQuestions = [...quiz.questions].sort(() => Math.random() - 0.5);
+
+  // Collect all answers from all questions for wrong options
+  const allAnswers = quiz.questions.map((q) => q.answer);
+
+  // For each question, create 3 wrong options from other questions' answers
+  const questionsWithOptions = shuffledQuestions.map((question, index) => {
+    const wrongOptions = allAnswers
+      .filter((ans) => ans !== question.answer)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+
+    const options = [...wrongOptions, question.answer].sort(
+      () => Math.random() - 0.5
+    );
+
+    return {
+      question: question.question,
+      answer: question.answer,
+      image: question.image,
+      options,
+      questionIndex: index,
+    };
+  });
+
+  return c.json({
+    quizID: quiz.quizID,
+    quizName: quiz.quizName,
+    questions: questionsWithOptions,
+  });
 });
 
 export default app;
