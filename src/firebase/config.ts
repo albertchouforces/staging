@@ -46,12 +46,12 @@ Then update the firebaseConfig below to use import.meta.env instead of hardcoded
 */
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBkzBFeo4FL62OsZ-AssG3OK5KMwz6_OMc",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "test-a29e7.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "test-a29e7",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "test-a29e7.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "579772147410",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:579772147410:web:a06c3f87f0a41572baaf0b"
+  apiKey: "AIzaSyBkzBFeo4FL62OsZ-AssG3OK5KMwz6_OMc",
+  authDomain: "test-a29e7.firebaseapp.com",
+  projectId: "test-a29e7",
+  storageBucket: "test-a29e7.firebasestorage.app",
+  messagingSenderId: "579772147410",
+  appId: "1:579772147410:web:a06c3f87f0a41572baaf0b"
 };
 
 const app = initializeApp(firebaseConfig);
