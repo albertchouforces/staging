@@ -2,7 +2,7 @@ import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Configuration for Cloudflare Pages static deployment
+// Static site configuration for Cloudflare Pages deployment
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -11,8 +11,6 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 5000,
     outDir: "dist",
-    emptyOutDir: true,
-    sourcemap: false,
   },
   resolve: {
     alias: {
