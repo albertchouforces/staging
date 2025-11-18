@@ -12,10 +12,15 @@ export const QuizSchema = z.object({
   questions: z.array(QuizQuestionSchema),
 });
 
-export type QuizType = z.infer<typeof QuizSchema>;
-export type QuizQuestionType = z.infer<typeof QuizQuestionSchema>;
+export type QuizQuestion = z.infer<typeof QuizQuestionSchema>;
+export type Quiz = z.infer<typeof QuizSchema>;
 
-export interface QuizQuestionWithOptions extends QuizQuestionType {
-  options: string[];
-  questionIndex: number;
-}
+export const QuizListResponseSchema = z.array(
+  z.object({
+    quizID: z.string(),
+    quizName: z.string(),
+    questionCount: z.number(),
+  })
+);
+
+export type QuizListResponse = z.infer<typeof QuizListResponseSchema>;

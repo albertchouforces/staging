@@ -1,45 +1,86 @@
-export interface Quiz {
-  quizID: string;
-  quizName: string;
-  questions: QuizQuestion[];
-}
-
 export interface QuizQuestion {
   question: string;
   answer: string;
   image?: string;
 }
 
-export const quizzes: Quiz[] = [
+export interface Quiz {
+  quizID: string;
+  quizName: string;
+  questions: QuizQuestion[];
+}
+
+export const quizData: Quiz[] = [
   {
-    quizID: "world-capitals",
-    quizName: "World Capitals",
+    quizID: "general-knowledge",
+    quizName: "General Knowledge",
     questions: [
-      { 
-        question: "What is the capital of France?", 
+      {
+        question: "What is the capital of France?",
         answer: "Paris",
-        image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&auto=format&fit=crop"
+        image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80"
       },
-      { question: "What is the capital of Japan?", answer: "Tokyo" },
-      { question: "What is the capital of Brazil?", answer: "Brasília" },
-      { question: "What is the capital of Australia?", answer: "Canberra" },
-      { question: "What is the capital of Egypt?", answer: "Cairo" },
-      { question: "What is the capital of Canada?", answer: "Ottawa" },
-      { question: "What is the capital of India?", answer: "New Delhi" },
-      { question: "What is the capital of Germany?", answer: "Berlin" },
-    ],
+      {
+        question: "What is the largest planet in our solar system?",
+        answer: "Jupiter",
+        image: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&q=80"
+      },
+      {
+        question: "Who painted the Mona Lisa?",
+        answer: "Leonardo da Vinci",
+        image: "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=800&q=80"
+      },
+      {
+        question: "What is the chemical symbol for gold?",
+        answer: "Au"
+      },
+      {
+        question: "In what year did World War II end?",
+        answer: "1945"
+      },
+      {
+        question: "What is the smallest country in the world?",
+        answer: "Vatican City"
+      },
+      {
+        question: "Who wrote 'Romeo and Juliet'?",
+        answer: "William Shakespeare"
+      },
+      {
+        question: "What is the speed of light?",
+        answer: "299,792,458 meters per second"
+      }
+    ]
   },
   {
-    quizID: "science-facts",
-    quizName: "Science Facts",
+    quizID: "science",
+    quizName: "Science Trivia",
     questions: [
-      { question: "What is the chemical symbol for gold?", answer: "Au" },
-      { question: "What planet is known as the Red Planet?", answer: "Mars" },
-      { question: "What is the speed of light in vacuum?", answer: "299,792,458 m/s" },
-      { question: "What is the largest organ in the human body?", answer: "Skin" },
-      { question: "What gas do plants absorb from the atmosphere?", answer: "Carbon dioxide" },
-      { question: "What is the powerhouse of the cell?", answer: "Mitochondria" },
-    ],
+      {
+        question: "What is H2O commonly known as?",
+        answer: "Water"
+      },
+      {
+        question: "What gas do plants absorb from the atmosphere?",
+        answer: "Carbon dioxide"
+      },
+      {
+        question: "What is the powerhouse of the cell?",
+        answer: "Mitochondria"
+      },
+      {
+        question: "How many bones are in the adult human body?",
+        answer: "206"
+      },
+      {
+        question: "What is the hardest natural substance on Earth?",
+        answer: "Diamond"
+      },
+      {
+        question: "What planet is known as the Red Planet?",
+        answer: "Mars"
+      }
+    ]
   },
   {
     quizID: "buoys",
@@ -94,7 +135,7 @@ export const quizzes: Quiz[] = [
         question: "What does this indicate?",
         answer: "Do Not Pass",
         image: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Do%20Not%20Pass.png"
-      },
-    ],
-  },
+      }
+    ]
+  }
 ];

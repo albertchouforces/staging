@@ -1,216 +1,348 @@
-import { useEffect, useState, useMemo } from "react";
-import { useParams, Link } from "react-router";
-import { Home, CheckCircle2, XCircle, Clock } from "lucide-react";
-import { QuizQuestionWithOptions } from "@/shared/types";
-import { useTimer } from "@/react-app/hooks/useTimer";
-import HighScoreSubmission from "@/react-app/components/HighScoreSubmission";
-import { quizzes as quizData } from "@/data/quizData";
+import { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router';
+import { Loader2, Home, CheckCircle, XCircle, Clock } from 'lucide-react';
+import SubmitScoreModal from '@/react-app/components/SubmitScoreModal';
 
-interface QuizData {
+interface QuizQuestion {
+  question: string;
+  answer: string;
+  image?: string;
+}
+
+interface Quiz {
   quizID: string;
   quizName: string;
-  questions: QuizQuestionWithOptions[];
+  questions: QuizQuestion[];
+}
+
+interface ShuffledQuestion {
+  question: string;
+  correctAnswer: string;
+  options: string[];
+  image?: string;
+}
+
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function prepareQuizQuestions(quiz: Quiz): ShuffledQuestion[] {
+  const allAnswers = quiz.questions.map((q) => q.answer);
+  
+  const questionsWithOptions = quiz.questions.map((question) => {
+    const wrongAnswers = allAnswers
+      .filter((answer) => answer !== question.answer)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+    
+    const options = shuffleArray([question.answer, ...wrongAnswers]);
+    
+    return {
+      question: question.question,
+      correctAnswer: question.answer,
+      options,
+      image: question.image,
+    };
+  });
+  
+  return shuffleArray(questionsWithOptions);
 }
 
 export default function Quiz() {
-  const { quizID } = useParams<{ quizID: string }>();
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [quiz, setQuiz] = useState<Quiz | null>(null);
+  const [shuffledQuestions, setShuffledQuestions] = useState<ShuffledQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [showResults, setShowResults] = useState(false);
-  const [showHighScoreSubmission, setShowHighScoreSubmission] = useState(false);
-  const { elapsedTime, start } = useTimer();
-
-  const quiz = useMemo<QuizData | null>(() => {
-    const foundQuiz = quizData.find((q) => q.quizID === quizID);
-    if (!foundQuiz) return null;
-
-    // Randomize question order
-    const shuffledQuestions = [...foundQuiz.questions].sort(() => Math.random() - 0.5);
-
-    // Collect all answers from all questions for wrong options
-    const allAnswers = foundQuiz.questions.map((q) => q.answer);
-
-    // For each question, create 3 wrong options from other questions' answers
-    const questionsWithOptions = shuffledQuestions.map((question, index) => {
-      const wrongOptions = allAnswers
-        .filter((ans) => ans !== question.answer)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 3);
-
-      const options = [...wrongOptions, question.answer].sort(
-        () => Math.random() - 0.5
-      );
-
-      return {
-        question: question.question,
-        answer: question.answer,
-        image: question.image,
-        options,
-        questionIndex: index,
-      };
-    });
-
-    return {
-      quizID: foundQuiz.quizID,
-      quizName: foundQuiz.quizName,
-      questions: questionsWithOptions,
-    };
-  }, [quizID]);
+  const [showSubmitScore, setShowSubmitScore] = useState(false);
+  
+  // Timer state
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const timerRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+  const accumulatedTimeRef = useRef(0);
 
   useEffect(() => {
-    // Start timer when quiz loads
-    if (quiz) {
-      start();
+    fetch(`/api/quizzes/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Quiz not found');
+        return res.json();
+      })
+      .then((data) => {
+        setQuiz(data);
+        setShuffledQuestions(prepareQuizQuestions(data));
+        setLoading(false);
+        // Start timer when quiz loads
+        startTimer();
+      })
+      .catch((error) => {
+        console.error('Error fetching quiz:', error);
+        setLoading(false);
+      });
+
+    return () => {
+      if (timerRef.current) {
+        cancelAnimationFrame(timerRef.current);
+      }
+    };
+  }, [id]);
+
+  const startTimer = () => {
+    if (!isTimerRunning) {
+      setIsTimerRunning(true);
+      startTimeRef.current = performance.now();
+      
+      const updateTimer = () => {
+        if (startTimeRef.current) {
+          const now = performance.now();
+          const delta = now - startTimeRef.current;
+          setElapsedTime(accumulatedTimeRef.current + delta);
+          timerRef.current = requestAnimationFrame(updateTimer);
+        }
+      };
+      
+      timerRef.current = requestAnimationFrame(updateTimer);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quiz]);
+  };
+
+  const pauseTimer = () => {
+    if (isTimerRunning && timerRef.current) {
+      setIsTimerRunning(false);
+      cancelAnimationFrame(timerRef.current);
+      
+      if (startTimeRef.current) {
+        const now = performance.now();
+        accumulatedTimeRef.current += now - startTimeRef.current;
+      }
+      
+      timerRef.current = null;
+      startTimeRef.current = null;
+    }
+  };
+
+  const formatTime = (ms: number): string => {
+    const seconds = ms / 1000;
+    return seconds.toFixed(2) + 's';
+  };
 
   const handleAnswerSelect = (answer: string) => {
     if (isAnswered) return;
-
+    
     setSelectedAnswer(answer);
     setIsAnswered(true);
-
-    if (answer === quiz?.questions[currentQuestionIndex].answer) {
+    pauseTimer();
+    
+    if (answer === shuffledQuestions[currentQuestionIndex].correctAnswer) {
       setScore(score + 1);
     }
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < (quiz?.questions.length || 0) - 1) {
+    if (currentQuestionIndex < shuffledQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
       setIsAnswered(false);
+      startTimer();
     } else {
       setShowResults(true);
-      setShowHighScoreSubmission(true);
     }
   };
 
-  const formatTime = (ms: number) => {
-    const seconds = ms / 1000;
-    return seconds.toFixed(2);
+  const handleReturnHome = () => {
+    navigate('/');
   };
 
-  if (!quiz) {
+  const handleRetakeQuiz = () => {
+    if (quiz) {
+      setShuffledQuestions(prepareQuizQuestions(quiz));
+      setCurrentQuestionIndex(0);
+      setSelectedAnswer(null);
+      setIsAnswered(false);
+      setScore(0);
+      setShowResults(false);
+      setShowSubmitScore(false);
+      setElapsedTime(0);
+      accumulatedTimeRef.current = 0;
+      startTimer();
+    }
+  };
+
+  const handleSubmitScoreClose = () => {
+    setShowSubmitScore(false);
+  };
+
+  if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-navy-900 mb-4">Quiz not found</h2>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-navy-600 hover:text-navy-800"
-          >
-            <Home className="w-4 h-4" />
-            Return to Home
-          </Link>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-white">
+        <div className="animate-spin text-navy-600">
+          <Loader2 className="w-10 h-10" />
         </div>
+      </div>
+    );
+  }
+
+  if (!quiz || shuffledQuestions.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-white">
+        <p className="text-xl text-navy-900 mb-6">Quiz not found</p>
+        <button
+          onClick={handleReturnHome}
+          className="px-6 py-3 bg-navy-600 text-white rounded-lg hover:bg-navy-700 transition-colors"
+        >
+          Return to Home
+        </button>
       </div>
     );
   }
 
   if (showResults) {
-    const percentage = Math.round((score / quiz.questions.length) * 100);
+    const percentage = Math.round((score / shuffledQuestions.length) * 100);
+    
     return (
       <div className="min-h-screen bg-white">
-        <div className="max-w-2xl mx-auto px-6 py-12">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-navy-600 hover:text-navy-800 mb-8 transition-colors"
-          >
-            <Home className="w-4 h-4" />
-            Return to Home
-          </Link>
-
-          <div className="bg-white border-2 border-navy-100 rounded-2xl p-8 text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-navy-600 rounded-full mb-6">
-              <CheckCircle2 className="w-10 h-10 text-white" />
+        <div className="max-w-2xl mx-auto px-6 py-16">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-navy-600 mb-6">
+              <CheckCircle className="w-12 h-12 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-navy-900 mb-2">Quiz Complete!</h2>
-            <p className="text-lg text-navy-600 mb-8">
-              You scored {score} out of {quiz.questions.length}
-            </p>
-            <div className="mb-8">
-              <div className="text-5xl font-bold text-navy-600 mb-2">{percentage}%</div>
-              <div className="w-full bg-navy-100 rounded-full h-3">
-                <div
-                  className="bg-navy-600 h-3 rounded-full transition-all duration-500"
-                  style={{ width: `${percentage}%` }}
-                ></div>
+            <h1 className="text-4xl font-bold text-navy-900 mb-3">Quiz Complete!</h1>
+            <p className="text-lg text-navy-600">{quiz.quizName}</p>
+          </div>
+
+          <div className="bg-navy-50 rounded-xl p-8 mb-8">
+            <div className="grid grid-cols-2 gap-6 text-center mb-6">
+              <div>
+                <div className="text-5xl font-bold text-navy-900 mb-2">
+                  {score}/{shuffledQuestions.length}
+                </div>
+                <p className="text-lg text-navy-600">
+                  Score ({percentage}%)
+                </p>
               </div>
-              <p className="text-navy-600 mt-4">
-                Time: {formatTime(elapsedTime)} seconds
-              </p>
+              <div>
+                <div className="text-5xl font-bold text-navy-900 mb-2 font-mono">
+                  {formatTime(elapsedTime)}
+                </div>
+                <p className="text-lg text-navy-600">
+                  Time Taken
+                </p>
+              </div>
             </div>
-            <Link
-              to="/"
-              className="inline-block bg-navy-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-navy-700 transition-colors"
-            >
-              Try Another Quiz
-            </Link>
-
-            {showHighScoreSubmission && quizID && (
-              <HighScoreSubmission
-                quizID={quizID}
-                score={score}
-                totalQuestions={quiz.questions.length}
-                timeInMs={elapsedTime}
-                onSubmit={() => setShowHighScoreSubmission(false)}
+            <div className="w-full bg-navy-200 rounded-full h-3">
+              <div
+                className="bg-navy-600 h-3 rounded-full transition-all duration-500"
+                style={{ width: `${percentage}%` }}
               />
-            )}
+            </div>
+          </div>
+
+          <div className="flex gap-4 mb-4">
+            <button
+              onClick={() => setShowSubmitScore(true)}
+              className="flex-1 px-6 py-4 bg-navy-600 text-white rounded-lg hover:bg-navy-700 transition-colors font-medium"
+            >
+              Submit Score
+            </button>
+          </div>
+
+          <div className="flex gap-4">
+            <button
+              onClick={handleRetakeQuiz}
+              className="flex-1 px-6 py-4 border-2 border-navy-600 text-navy-600 rounded-lg hover:bg-navy-50 transition-colors font-medium"
+            >
+              Retake Quiz
+            </button>
+            <button
+              onClick={handleReturnHome}
+              className="flex-1 px-6 py-4 border-2 border-navy-600 text-navy-600 rounded-lg hover:bg-navy-50 transition-colors font-medium flex items-center justify-center gap-2"
+            >
+              <Home className="w-5 h-5" />
+              Return Home
+            </button>
           </div>
         </div>
+
+        <SubmitScoreModal
+          isOpen={showSubmitScore}
+          onClose={handleSubmitScoreClose}
+          quizID={quiz.quizID}
+          score={score}
+          totalQuestions={shuffledQuestions.length}
+          timeMs={Math.round(elapsedTime)}
+        />
       </div>
     );
   }
 
-  const currentQuestion = quiz.questions[currentQuestionIndex];
-  const isCorrect = selectedAnswer === currentQuestion.answer;
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-2xl mx-auto px-6 py-12">
-        <div className="flex items-center justify-between mb-8">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-navy-600 hover:text-navy-800 transition-colors"
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        <div className="mb-8">
+          <button
+            onClick={handleReturnHome}
+            className="flex items-center gap-2 text-navy-600 hover:text-navy-800 transition-colors mb-6"
           >
-            <Home className="w-4 h-4" />
-            Return to Home
-          </Link>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-navy-600">
-              <Clock className="w-4 h-4" />
-              <span className="font-mono">{formatTime(elapsedTime)}s</span>
+            <Home className="w-5 h-5" />
+            <span>Return to Home</span>
+          </button>
+          
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-navy-900">{quiz.quizName}</h2>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 bg-navy-50 px-4 py-2 rounded-lg">
+                <Clock className="w-5 h-5 text-navy-600" />
+                <span className="text-navy-900 font-mono font-medium">
+                  {formatTime(elapsedTime)}
+                </span>
+              </div>
+              <span className="text-navy-600 font-medium">
+                {currentQuestionIndex + 1} / {shuffledQuestions.length}
+              </span>
             </div>
-            <div className="text-sm text-navy-600">
-              Question {currentQuestionIndex + 1} of {quiz.questions.length}
-            </div>
+          </div>
+          
+          <div className="w-full bg-navy-200 rounded-full h-2">
+            <div
+              className="bg-navy-600 h-2 rounded-full transition-all duration-300"
+              style={{
+                width: `${((currentQuestionIndex + 1) / shuffledQuestions.length) * 100}%`,
+              }}
+            />
           </div>
         </div>
 
-        <div className="bg-white border-2 border-navy-100 rounded-2xl p-8 mb-6">
-          <h2 className="text-2xl font-bold text-navy-900 mb-6">
-            {currentQuestion.question}
-          </h2>
-
+        <div className="bg-white border-2 border-navy-200 rounded-xl p-8 mb-8">
           {currentQuestion.image && (
-            <div className="mb-8 flex justify-center">
-              <img
-                src={currentQuestion.image}
+            <div className="mb-8 flex items-center justify-center">
+              <img 
+                src={currentQuestion.image} 
                 alt="Question illustration"
-                className="max-w-full max-h-80 object-contain rounded-lg"
+                className="max-h-80 w-auto object-contain rounded-lg"
               />
             </div>
           )}
+          <h3 className="text-2xl font-semibold text-navy-900 mb-8">
+            {currentQuestion.question}
+          </h3>
 
-          <div className="space-y-3">
+          <div className="grid gap-4">
             {currentQuestion.options.map((option, index) => {
               const isSelected = selectedAnswer === option;
-              const isCorrectOption = option === currentQuestion.answer;
-              const showCorrect = isAnswered && isCorrectOption;
+              const isCorrect = option === currentQuestion.correctAnswer;
+              const showCorrect = isAnswered && isCorrect;
               const showIncorrect = isAnswered && isSelected && !isCorrect;
 
               return (
@@ -218,22 +350,20 @@ export default function Quiz() {
                   key={index}
                   onClick={() => handleAnswerSelect(option)}
                   disabled={isAnswered}
-                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                    showCorrect
-                      ? "border-green-500 bg-green-50"
-                      : showIncorrect
-                      ? "border-red-500 bg-red-50"
-                      : isSelected
-                      ? "border-navy-600 bg-navy-50"
-                      : "border-navy-100 hover:border-navy-300 hover:bg-navy-50"
-                  } ${isAnswered ? "cursor-default" : "cursor-pointer"}`}
+                  className={`
+                    relative p-6 rounded-lg border-2 text-left transition-all
+                    ${!isAnswered && 'hover:border-navy-600 hover:bg-navy-50'}
+                    ${showCorrect && 'border-green-500 bg-green-50'}
+                    ${showIncorrect && 'border-red-500 bg-red-50'}
+                    ${!isAnswered && 'border-navy-200'}
+                    ${isAnswered && !isSelected && !isCorrect && 'border-navy-200 opacity-50'}
+                    ${isAnswered ? 'cursor-default' : 'cursor-pointer'}
+                  `}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-navy-900">{option}</span>
-                    {showCorrect && (
-                      <CheckCircle2 className="w-5 h-5 text-green-600" />
-                    )}
-                    {showIncorrect && <XCircle className="w-5 h-5 text-red-600" />}
+                    <span className="text-lg text-navy-900 pr-8">{option}</span>
+                    {showCorrect && <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />}
+                    {showIncorrect && <XCircle className="w-6 h-6 text-red-600 flex-shrink-0" />}
                   </div>
                 </button>
               );
@@ -242,16 +372,12 @@ export default function Quiz() {
         </div>
 
         {isAnswered && (
-          <div className="flex justify-end">
-            <button
-              onClick={handleNext}
-              className="bg-navy-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-navy-700 transition-colors"
-            >
-              {currentQuestionIndex < quiz.questions.length - 1
-                ? "Next Question"
-                : "View Results"}
-            </button>
-          </div>
+          <button
+            onClick={handleNext}
+            className="w-full px-6 py-4 bg-navy-600 text-white rounded-lg hover:bg-navy-700 transition-colors font-medium text-lg"
+          >
+            {currentQuestionIndex < shuffledQuestions.length - 1 ? 'Next Question' : 'View Results'}
+          </button>
         )}
       </div>
     </div>
