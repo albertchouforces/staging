@@ -81,12 +81,12 @@ FIREBASE SETUP INSTRUCTIONS:
 */
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCdWwnMnquWJEnObQxyU6f9Lr8UAsqFH9M",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "quizmaster-29504.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "quizmaster-29504",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "quizmaster-29504.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "80497768528",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:80497768528:web:163883837cc69d1cfa3955"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || ""
 };
 
 // Initialize Firebase

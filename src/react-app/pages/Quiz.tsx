@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Loader2, Home, CheckCircle, XCircle, Clock } from 'lucide-react';
 import SubmitScoreModal from '@/react-app/components/SubmitScoreModal';
+import { quizData } from '@/data/quizData';
 
 interface QuizQuestion {
   question: string;
@@ -74,22 +75,17 @@ export default function Quiz() {
   const accumulatedTimeRef = useRef(0);
 
   useEffect(() => {
-    fetch(`/api/quizzes/${id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Quiz not found');
-        return res.json();
-      })
-      .then((data) => {
-        setQuiz(data);
-        setShuffledQuestions(prepareQuizQuestions(data));
-        setLoading(false);
-        // Start timer when quiz loads
-        startTimer();
-      })
-      .catch((error) => {
-        console.error('Error fetching quiz:', error);
-        setLoading(false);
-      });
+    const foundQuiz = quizData.find((q) => q.quizID === id);
+    
+    if (foundQuiz) {
+      setQuiz(foundQuiz);
+      setShuffledQuestions(prepareQuizQuestions(foundQuiz));
+      setLoading(false);
+      // Start timer when quiz loads
+      startTimer();
+    } else {
+      setLoading(false);
+    }
 
     return () => {
       if (timerRef.current) {

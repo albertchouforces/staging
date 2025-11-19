@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Loader2, BookOpen, Trophy } from 'lucide-react';
+import { BookOpen, Trophy } from 'lucide-react';
 import HighScoresModal from '@/react-app/components/HighScoresModal';
+import { quizData } from '@/data/quizData';
 
 interface QuizListItem {
   quizID: string;
@@ -10,33 +11,14 @@ interface QuizListItem {
 }
 
 export default function Home() {
-  const [quizzes, setQuizzes] = useState<QuizListItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showHighScores, setShowHighScores] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('/api/quizzes')
-      .then((res) => res.json())
-      .then((data) => {
-        setQuizzes(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching quizzes:', error);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-        <div className="animate-spin text-navy-600">
-          <Loader2 className="w-10 h-10" />
-        </div>
-      </div>
-    );
-  }
+  const quizzes: QuizListItem[] = quizData.map((quiz) => ({
+    quizID: quiz.quizID,
+    quizName: quiz.quizName,
+    questionCount: quiz.questions.length,
+  }));
 
   return (
     <div className="min-h-screen bg-white">
