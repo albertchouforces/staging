@@ -1,0 +1,26 @@
+name = "019a9825-3393-724e-a9ec-6da53460868a"
+main = "./src/worker/index.ts"
+compatibility_date = "2025-06-17"
+compatibility_flags = ["nodejs_compat"]
+
+pages_build_output_dir = "dist"
+
+upload_source_maps = true
+
+[observability]
+enabled = true
+
+[assets]
+not_found_handling = "single-page-application"
+
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "019a9825-3393-724e-a9ec-6da53460868a"
+
+[vars]
+VITE_FIREBASE_API_KEY = "AIzaSyCdWwnMnquWJEnObQxyU6f9Lr8UAsqFH9M"
+VITE_FIREBASE_AUTH_DOMAIN = "quizmaster-29504.firebaseapp.com"
+VITE_FIREBASE_PROJECT_ID = "quizmaster-29504"
+VITE_FIREBASE_STORAGE_BUCKET = "quizmaster-29504.firebasestorage.app"
+VITE_FIREBASE_MESSAGING_SENDER_ID = "80497768528"
+VITE_FIREBASE_APP_ID = "1:80497768528:web:163883837cc69d1cfa3955"
