@@ -1,20 +1,18 @@
-import path from "path";
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
-// Static site configuration for Cloudflare Pages deployment
+// Vite configuration for Cloudflare Pages static deployment
 export default defineConfig({
   plugins: [react()],
-  server: {
-    allowedHosts: true,
-  },
-  build: {
-    chunkSizeWarningLimit: 5000,
-    outDir: "dist",
-  },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      '@': path.resolve(__dirname, './src'),
     },
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: false,
   },
 });

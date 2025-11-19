@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Loader2, Home, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Home, CheckCircle, XCircle, Clock } from 'lucide-react';
 import SubmitScoreModal from '@/react-app/components/SubmitScoreModal';
 import { quizData } from '@/data/quizData';
 
@@ -63,7 +63,6 @@ export default function Quiz() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [showResults, setShowResults] = useState(false);
   const [showSubmitScore, setShowSubmitScore] = useState(false);
   
@@ -80,11 +79,10 @@ export default function Quiz() {
     if (foundQuiz) {
       setQuiz(foundQuiz);
       setShuffledQuestions(prepareQuizQuestions(foundQuiz));
-      setLoading(false);
       // Start timer when quiz loads
       startTimer();
     } else {
-      setLoading(false);
+      setQuiz(null);
     }
 
     return () => {
@@ -177,16 +175,6 @@ export default function Quiz() {
   const handleSubmitScoreClose = () => {
     setShowSubmitScore(false);
   };
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-        <div className="animate-spin text-navy-600">
-          <Loader2 className="w-10 h-10" />
-        </div>
-      </div>
-    );
-  }
 
   if (!quiz || shuffledQuestions.length === 0) {
     return (
