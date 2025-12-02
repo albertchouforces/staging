@@ -113,9 +113,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
 
-// Shared Firebase configuration values
-// This is the single source of truth for Firebase credentials
-// It's exported so vite.config.pages.ts can inject these values at build time
+// Firebase configuration
 export const firebaseConfig = {
   apiKey: "AIzaSyBTCjmVvGhVpUer02EwW08toKkmpww6SlU",
   authDomain: "rankmaster-1a740.firebaseapp.com",
