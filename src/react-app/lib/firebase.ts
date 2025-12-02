@@ -123,19 +123,8 @@ export const firebaseConfig = {
   appId: "1:678820485112:web:982ded15636867af74280d"
 };
 
-// Use environment variables if available (injected at build time), otherwise use hardcoded values
-// This ensures compatibility with both development and Cloudflare Pages deployment
-const runtimeConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || firebaseConfig.apiKey,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfig.authDomain,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || firebaseConfig.projectId,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || firebaseConfig.storageBucket,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || firebaseConfig.messagingSenderId,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || firebaseConfig.appId
-};
-
-// Initialize Firebase App instance with runtime config
-const app = initializeApp(runtimeConfig);
+// Initialize Firebase App instance directly with the config
+const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore database
 const db = getFirestore(app);
