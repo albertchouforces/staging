@@ -113,15 +113,16 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
 
-// Firebase configuration using environment variables from wrangler.toml
-// These values are also available as fallbacks if environment variables are not set
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBTCjmVvGhVpUer02EwW08toKkmpww6SlU",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "rankmaster-1a740.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "rankmaster-1a740",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "rankmaster-1a740.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "678820485112",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:678820485112:web:982ded15636867af74280d"
+// Shared Firebase configuration values
+// This is the single source of truth for Firebase credentials
+// It's exported so vite.config.pages.ts can inject these values at build time
+export const firebaseConfig = {
+  apiKey: "AIzaSyBTCjmVvGhVpUer02EwW08toKkmpww6SlU",
+  authDomain: "rankmaster-1a740.firebaseapp.com",
+  projectId: "rankmaster-1a740",
+  storageBucket: "rankmaster-1a740.firebasestorage.app",
+  messagingSenderId: "678820485112",
+  appId: "1:678820485112:web:982ded15636867af74280d"
 };
 
 // Initialize Firebase App instance
