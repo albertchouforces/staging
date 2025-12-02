@@ -192,13 +192,22 @@ function App() {
     return randomizedQuestions[currentQuestionIndex];
   };
 
-  const options = useMemo(() => {
+  // Generate new shuffled options for each question
+  // Remove useMemo to ensure fresh randomization on every render when question changes
+  const getOptionsForCurrentQuestion = () => {
     if (!randomizedQuestions.length) return [];
     
     const currentQuestion = getCurrentQuestion();
     if (!currentQuestion) return [];
     
     return getRandomOptions(allPossibleAnswers, currentQuestion.correctAnswer, 4);
+  };
+
+  const [options, setOptions] = useState<string[]>([]);
+
+  // Update options whenever the question changes
+  useEffect(() => {
+    setOptions(getOptionsForCurrentQuestion());
   }, [currentQuestionIndex, randomizedQuestions, allPossibleAnswers]);
 
   const handleResetScores = (quizService: string) => {

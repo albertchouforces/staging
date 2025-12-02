@@ -115,12 +115,12 @@ import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
 
 // Firebase configuration
 export const firebaseConfig = {
-  apiKey: "AIzaSyBTCjmVvGhVpUer02EwW08toKkmpww6SlU",
-  authDomain: "rankmaster-1a740.firebaseapp.com",
-  projectId: "rankmaster-1a740",
-  storageBucket: "rankmaster-1a740.firebasestorage.app",
-  messagingSenderId: "678820485112",
-  appId: "1:678820485112:web:982ded15636867af74280d"
+  apiKey: "AIzaSyBkzBFeo4FL62OsZ-AssG3OK5KMwz6_OMc",
+  authDomain: "test-a29e7.firebaseapp.com",
+  projectId: "test-a29e7",
+  storageBucket: "test-a29e7.firebasestorage.app",
+  messagingSenderId: "579772147410",
+  appId: "1:579772147410:web:a06c3f87f0a41572baaf0b"
 };
 
 // Initialize Firebase App instance directly with the config
@@ -162,18 +162,27 @@ export async function saveGlobalScore(
       return false;
     }
 
+    console.log('Attempting to save global score to Firebase:', { quizName, scoreData });
+
     // Get reference to the global_scores collection
     const scoresRef = collection(db, 'global_scores');
 
     // Add new document with score data
-    await addDoc(scoresRef, {
+    const docRef = await addDoc(scoresRef, {
       ...scoreData,
       service: quizName
     });
 
+    console.log('Successfully saved global score with ID:', docRef.id);
     return true;
   } catch (err) {
     console.error('Error saving global score:', err);
+    // Log more detailed error information
+    if (err instanceof Error) {
+      console.error('Error name:', err.name);
+      console.error('Error message:', err.message);
+      console.error('Error stack:', err.stack);
+    }
     return false;
   }
 }
@@ -203,6 +212,8 @@ export async function getGlobalScores(quizName: string): Promise<GlobalScoreEntr
       limit(100)                           // Get top 100 scores
     );
 
+    console.log('Executing Firebase query...');
+    
     // Execute the query
     const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(q);
     const scores: GlobalScoreEntry[] = [];
@@ -212,19 +223,35 @@ export async function getGlobalScores(quizName: string): Promise<GlobalScoreEntr
       scores.push(doc.data() as GlobalScoreEntry);
     });
 
-    console.log('Received global scores:', scores.length, 'entries');
+    console.log('Successfully received global scores:', scores.length, 'entries');
     return scores;
   } catch (err) {
-    // NOTE ON SECURITY RULES: The rules above use the `typeof x == 'string'` syntax instead of `is string`
-    // as this is more compatible with current Firebase versions and will prevent publishing errors.
-    // If you continue to have issues, try the following troubleshooting steps:
-    // 1. Make sure you're copying the ENTIRE rules block including the opening and closing braces
-    // 2. Check for any extra whitespace or special characters that might have been copied
-    // 3. Try publishing the rules directly in the Firebase console instead of copying/pasting
-
-// If this error mentions "requires an index", make sure you've completed step 6
-    // of the setup instructions to create the necessary composite index
     console.error('Error in getGlobalScores:', err);
+    
+    // Log more detailed error information
+    if (err instanceof Error) {
+      console.error('Error name:', err.name);
+      console.error('Error message:', err.message);
+      console.error('Error stack:', err.stack);
+    }
+    
+    // Check for specific Firebase errors
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    
+    if (errorMessage.includes('index')) {
+      console.error('FIRESTORE INDEX ERROR: The query requires a composite index.');
+      console.error('Please create the required index in the Firebase Console:');
+      console.error('Collection: global_scores');
+      console.error('Fields: service (Ascending), score (Descending), time (Ascending)');
+      console.error('Or click the link in the error message above to create it automatically.');
+    } else if (errorMessage.includes('permission') || errorMessage.includes('PERMISSION_DENIED')) {
+      console.error('FIRESTORE PERMISSION ERROR: Check your Firestore security rules.');
+      console.error('Make sure read access is allowed for the global_scores collection.');
+    } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+      console.error('NETWORK ERROR: Unable to connect to Firebase.');
+      console.error('Check your internet connection and Firebase configuration.');
+    }
+    
     return [];
   }
 }

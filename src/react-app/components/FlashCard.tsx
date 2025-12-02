@@ -25,18 +25,11 @@ export function FlashCard({
   const [imageError, setImageError] = useState(false);
   const [options, setOptions] = useState<string[]>([]);
 
-  // Set options only when question changes, ensuring uniqueness
+  // Set options when they change from parent
   useEffect(() => {
-    const uniqueOptions = Array.from(new Set(initialOptions));
-    if (uniqueOptions.length < 4) {
-      console.warn('Duplicate options detected, filling with placeholders');
-      const placeholders = ['Option A', 'Option B', 'Option C', 'Option D']
-        .slice(0, 4 - uniqueOptions.length);
-      setOptions([...uniqueOptions, ...placeholders]);
-    } else {
-      setOptions(uniqueOptions);
-    }
-  }, [question.id, initialOptions]);
+    // Use the shuffled options directly from parent without modification
+    setOptions(initialOptions);
+  }, [initialOptions]);
 
   // Reset state when question changes
   useEffect(() => {
