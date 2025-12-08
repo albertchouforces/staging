@@ -1,6 +1,7 @@
 import { RotateCcw, Trophy, Clock } from 'lucide-react';
 import { Timer } from '@/react-app/components/Timer';
 import { BestRun, QuizConfig } from '@/react-app/types';
+import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
 
 interface ScoreDisplayProps {
   correct: number;
@@ -47,8 +48,8 @@ export function ScoreDisplay({
             {bestRun && ` (${bestRun.accuracy}%)`}
           </span>
         </div>
-        <Timer time={currentTime} accentColor={accentColor} />
-        {bestRun && (
+        {ENABLE_TIME_TRACKING && <Timer time={currentTime} accentColor={accentColor} />}
+        {ENABLE_TIME_TRACKING && bestRun && (
           <div className="bg-white px-4 py-2 rounded-lg shadow-sm flex items-center gap-2">
             <Clock size={16} className={`text-${accentColor}-600`} />
             <span className="text-gray-600">Best: </span>
@@ -73,7 +74,7 @@ export function ScoreDisplay({
           {correct > highScore && (
             <p className={`text-${accentColor}-600 font-semibold mb-4`}>New High Score!</p>
           )}
-          {bestRun && (
+          {ENABLE_TIME_TRACKING && bestRun && (
             correct >= bestRun.score && currentTime < bestRun.time ? (
               <p className={`text-${accentColor}-600 font-semibold mb-4`}>New Best Time!</p>
             ) : null

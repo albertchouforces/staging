@@ -104,7 +104,7 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
     <>
       <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
         {/* Quiz Image with transparent background */}
-        {config.startScreenImage && (
+        {config.startScreenImage && config.startScreenImage.trim() !== '' && (
           <div className="w-full h-48 relative bg-transparent flex items-center justify-center">
             {!imageLoaded && !imageError && (
               <div className="absolute inset-0 flex items-center justify-center">

@@ -3,6 +3,7 @@ import { getGlobalScores, type GlobalScoreEntry } from '@/react-app/lib/firebase
 import { Medal } from '@/react-app/components/Medal';
 import { Loader, Trophy, X } from 'lucide-react';
 import type { QuizDefinition } from '@/react-app/types';
+import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
 
 interface GlobalLeaderboardProps {
   onClose: () => void;
@@ -13,7 +14,7 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
   const [scores, setScores] = useState<GlobalScoreEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedQuiz, setSelectedQuiz] = useState<string>(quizzes[0]?.config.service || '');
+  const [selectedQuiz, setSelectedQuiz] = useState<string>(quizzes[0]?.config.quizKey || '');
 
   useEffect(() => {
     const fetchScores = async () => {
@@ -52,7 +53,7 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
   };
 
   const getSelectedQuizConfig = () => {
-    return quizzes.find(quiz => quiz.config.service === selectedQuiz)?.config;
+    return quizzes.find(quiz => quiz.config.quizKey === selectedQuiz)?.config;
   };
 
   const selectedQuizConfig = getSelectedQuizConfig();
@@ -80,10 +81,10 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
           <div className="flex gap-2 flex-wrap">
             {quizzes.map((quiz) => (
               <button
-                key={quiz.config.service}
-                onClick={() => setSelectedQuiz(quiz.config.service)}
+                key={quiz.config.quizKey}
+                onClick={() => setSelectedQuiz(quiz.config.quizKey)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  selectedQuiz === quiz.config.service
+                  selectedQuiz === quiz.config.quizKey
                     ? `bg-${quiz.config.themeColor}-600 text-white`
                     : `text-${quiz.config.themeColor}-600 hover:bg-${quiz.config.themeColor}-50`
                 }`}
@@ -111,7 +112,7 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
                   <th className="pb-2">Name</th>
                   <th className="pb-2">Score</th>
                   <th className="pb-2">Accuracy</th>
-                  <th className="pb-2">Time</th>
+                  {ENABLE_TIME_TRACKING && <th className="pb-2">Time</th>}
                   <th className="pb-2">Date</th>
                 </tr>
               </thead>
@@ -125,7 +126,9 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
                     <td className="py-2 font-medium">{score.user_name}</td>
                     <td className="py-2">{score.score}</td>
                     <td className="py-2">{score.accuracy}%</td>
-                    <td className="py-2 font-mono">{formatTime(score.time)}</td>
+                    {ENABLE_TIME_TRACKING && (
+                      <td className="py-2 font-mono">{formatTime(score.time)}</td>
+                    )}
                     <td className="py-2 text-gray-500">
                       {new Date(score.date).toLocaleDateString()}
                     </td>

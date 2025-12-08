@@ -1,6 +1,7 @@
 import { Trash2, Medal as MedalIcon } from 'lucide-react';
 import { Medal } from '@/react-app/components/Medal';
 import { HighScoreEntry, QuizConfig } from '@/react-app/types';
+import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
 
 interface HighScoresListProps {
   scores: HighScoreEntry[];
@@ -63,7 +64,9 @@ export function HighScoresList({
                 <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap"></th>
                 <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600">Name</th>
                 <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Score</th>
-                <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Time</th>
+                {ENABLE_TIME_TRACKING && (
+                  <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Time</th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -76,9 +79,11 @@ export function HighScoresList({
                   <td className="px-3 py-2 text-sm text-gray-600 whitespace-nowrap">
                     {score.score} ({score.accuracy}%)
                   </td>
-                  <td className="px-3 py-2 text-sm font-mono text-gray-600 whitespace-nowrap">
-                    {formatTime(score.time)}
-                  </td>
+                  {ENABLE_TIME_TRACKING && (
+                    <td className="px-3 py-2 text-sm font-mono text-gray-600 whitespace-nowrap">
+                      {formatTime(score.time)}
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

@@ -11,7 +11,30 @@ export const shuffleArray = <T,>(array: T[]): T[] => {
 };
 
 /**
+ * Get the correct answer from a question (handles both string and array formats)
+ */
+export const getCorrectAnswer = (correctAnswer: string | string[]): string => {
+  return Array.isArray(correctAnswer) ? correctAnswer[0] : correctAnswer;
+};
+
+/**
+ * Check if a question uses manual answer options (array format)
+ */
+export const hasManualOptions = (correctAnswer: string | string[]): boolean => {
+  return Array.isArray(correctAnswer);
+};
+
+/**
+ * Get options for a question with manual override (array format)
+ * Returns all items from the array in shuffled order
+ */
+export const getManualOptions = (correctAnswer: string[]): string[] => {
+  return shuffleArray([...correctAnswer]);
+};
+
+/**
  * Get random unique options for multiple choice questions
+ * Uses pooled answers from other questions as distractors
  */
 export const getRandomOptions = (
   allPossibleAnswers: string[], 

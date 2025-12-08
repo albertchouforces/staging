@@ -19,8 +19,8 @@ export function StartScreen({
 }: StartScreenProps) {
   const [showGlobalLeaderboard, setShowGlobalLeaderboard] = useState(false);
 
-  const handleResetScores = (quizName: string) => {
-    onResetScores(quizName);
+  const handleResetScores = (quizKey: string) => {
+    onResetScores(quizKey);
     // Add reload as fallback
     window.location.reload();
   };
@@ -81,9 +81,9 @@ export function StartScreen({
               <QuizCard
                 key={quiz.config.id}
                 config={quiz.config}
-                stats={getStatsForQuiz(quiz.config.service)}
+                stats={getStatsForQuiz(quiz.config.quizKey)}
                 onStart={() => onSelectQuiz(quiz.config.id)}
-                onResetScores={() => handleResetScores(quiz.config.service)}
+                onResetScores={() => handleResetScores(quiz.config.quizKey)}
               />
             ))}
           </div>
@@ -120,9 +120,9 @@ export function StartScreen({
                 <QuizCard
                   key={quiz.config.id}
                   config={quiz.config}
-                  stats={getStatsForQuiz(quiz.config.service)}
+                  stats={getStatsForQuiz(quiz.config.quizKey)}
                   onStart={() => onSelectQuiz(quiz.config.id)}
-                  onResetScores={() => handleResetScores(quiz.config.service)}
+                  onResetScores={() => handleResetScores(quiz.config.quizKey)}
                 />
               ))}
             </div>

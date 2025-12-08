@@ -56,18 +56,19 @@ service cloud.firestore {
    }
 */
 //
-// 6. SET UP REQUIRED INDEXES
-// -------------------------
-// The application uses compound queries that require custom indexes.
-// You need to set these up or the queries will fail.
+// 6. SET UP REQUIRED INDEX
+// -----------------------
+// The application uses a compound query that requires a custom index.
+// You need to set this up or the queries will fail.
 //
 // a. In Firebase Console, go to Firestore Database
 // b. Click "Indexes" tab
 // c. Click "Create Index"
 // d. Set up the following composite index:
+//
 //    Collection ID: global_scores
 //    Fields to index:
-//      - service    (Ascending)
+//      - quizKey    (Ascending)
 //      - score      (Descending)
 //      - time       (Ascending)
 //    Query scope: Collection
@@ -79,6 +80,9 @@ service cloud.firestore {
 //
 // Note: It may take a few minutes for indexes to finish building after creation.
 // You can monitor the progress in the Indexes tab.
+//
+// The app always sorts by score (highest first) then time (fastest first).
+// When ENABLE_TIME_TRACKING is false, the time column is simply hidden from display.
 //
 // 7. DATABASE STRUCTURE
 // -------------------
@@ -112,6 +116,7 @@ service cloud.firestore {
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
+import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
 
 // Firebase configuration
 export const firebaseConfig = {
@@ -136,17 +141,17 @@ export interface GlobalScoreEntry {
   accuracy: number;       // Accuracy percentage (0-100)
   time: number;          // Time taken in milliseconds
   date: string;          // ISO date string
-  service: string;       // Quiz identifier
+  quizKey: string;       // Quiz identifier
 }
 
 /**
  * Saves a new score to the global leaderboard
- * @param scoreData - The score data to save (without service field)
+ * @param scoreData - The score data to save (without quizKey field)
  * @param quizName - The identifier for the quiz
  * @returns Promise<boolean> - True if save was successful
  */
 export async function saveGlobalScore(
-  scoreData: Omit<GlobalScoreEntry, 'service'>,
+  scoreData: Omit<GlobalScoreEntry, 'quizKey'>,
   quizName: string
 ): Promise<boolean> {
   try {
@@ -170,7 +175,7 @@ export async function saveGlobalScore(
     // Add new document with score data
     const docRef = await addDoc(scoresRef, {
       ...scoreData,
-      service: quizName
+      quizKey: quizName
     });
 
     console.log('Successfully saved global score with ID:', docRef.id);
@@ -204,9 +209,12 @@ export async function getGlobalScores(quizName: string): Promise<GlobalScoreEntr
     // Create a query against the global_scores collection
     // Note: This query requires the composite index described in step 6 of the setup instructions
     const scoresRef = collection(db, 'global_scores');
+    
+    // Always sort by score (highest first) then time (fastest first)
+    // When ENABLE_TIME_TRACKING is false, the time column is simply hidden from display
     const q = query(
       scoresRef,
-      where('service', '==', quizName),    // Filter by quiz name
+      where('quizKey', '==', quizName),    // Filter by quiz name
       orderBy('score', 'desc'),            // Sort by score (highest first)
       orderBy('time', 'asc'),              // Then by time (fastest first)
       limit(100)                           // Get top 100 scores
@@ -242,7 +250,7 @@ export async function getGlobalScores(quizName: string): Promise<GlobalScoreEntr
       console.error('FIRESTORE INDEX ERROR: The query requires a composite index.');
       console.error('Please create the required index in the Firebase Console:');
       console.error('Collection: global_scores');
-      console.error('Fields: service (Ascending), score (Descending), time (Ascending)');
+      console.error('Fields: quizKey (Ascending), score (Descending), time (Ascending)');
       console.error('Or click the link in the error message above to create it automatically.');
     } else if (errorMessage.includes('permission') || errorMessage.includes('PERMISSION_DENIED')) {
       console.error('FIRESTORE PERMISSION ERROR: Check your Firestore security rules.');

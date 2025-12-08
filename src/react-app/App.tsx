@@ -6,7 +6,8 @@ import { UserNameInput } from '@/react-app/components/UserNameInput';
 import { Footer } from '@/react-app/components/Footer';
 import { QuizHeader } from '@/react-app/components/QuizHeader';
 import { QUIZ_COLLECTION } from '@/react-app/data/quizData';
-import { shuffleArray, getRandomOptions } from '@/react-app/lib/utils';
+import { shuffleArray, getRandomOptions, getCorrectAnswer, hasManualOptions, getManualOptions } from '@/react-app/lib/utils';
+import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
 import type { QuizStats, QuestionData, HighScoreEntry } from '@/react-app/types';
 
 type GameState = 'selection' | 'playing' | 'entering-name';
@@ -31,10 +32,16 @@ function App() {
   const [selectedQuiz, setSelectedQuiz] = useState<typeof QUIZ_COLLECTION[0] | null>(null);
 
   // Get all unique possible answers for the current quiz
-  const allPossibleAnswers = useMemo(() => 
-    selectedQuiz ? Array.from(new Set(selectedQuiz.questions.map(q => q.correctAnswer))) : [],
-    [selectedQuiz]
-  );
+  // Exclude questions with manual options (array format) from the answer pool
+  const allPossibleAnswers = useMemo(() => {
+    if (!selectedQuiz) return [];
+    
+    return Array.from(new Set(
+      selectedQuiz.questions
+        .filter(q => !Array.isArray(q.correctAnswer))
+        .map(q => q.correctAnswer as string)
+    ));
+  }, [selectedQuiz]);
 
   // Timer effect with pause functionality
   useEffect(() => {
@@ -52,9 +59,9 @@ function App() {
     };
   }, [gameState, startTime, isPaused, accumulatedTime]);
 
-  const getStatsForQuiz = (quizService: string): QuizStats => {
+  const getStatsForQuiz = (quizKey: string): QuizStats => {
     try {
-      const statsKey = `quiz_stats_${quizService}`;
+      const statsKey = `quiz_stats_${quizKey}`;
       const storedStats = localStorage.getItem(statsKey);
       if (storedStats) {
         const parsedStats = JSON.parse(storedStats);
@@ -92,8 +99,8 @@ function App() {
     if (!selectedQuiz) return;
 
     try {
-      const statsKey = `quiz_stats_${selectedQuiz.config.service}`;
-      const currentStats = getStatsForQuiz(selectedQuiz.config.service);
+      const statsKey = `quiz_stats_${selectedQuiz.config.quizKey}`;
+      const currentStats = getStatsForQuiz(selectedQuiz.config.quizKey);
       const accuracy = Math.round((correctAnswers / totalAnswers) * 100);
 
       const newHighScore = Math.max(currentStats.highScore, correctAnswers);
@@ -117,6 +124,8 @@ function App() {
       };
 
       // Ensure we only keep the top 5 scores
+      // Always sort by score (highest first) then time (fastest first)
+      // When ENABLE_TIME_TRACKING is false, the time column is simply hidden from display
       const newHighScores = [...currentStats.highScores, newScore]
         .sort((a, b) => {
           if (b.score !== a.score) return b.score - a.score;
@@ -193,14 +202,19 @@ function App() {
   };
 
   // Generate new shuffled options for each question
-  // Remove useMemo to ensure fresh randomization on every render when question changes
   const getOptionsForCurrentQuestion = () => {
     if (!randomizedQuestions.length) return [];
     
     const currentQuestion = getCurrentQuestion();
     if (!currentQuestion) return [];
     
-    return getRandomOptions(allPossibleAnswers, currentQuestion.correctAnswer, 4);
+    // Check if this question has manual options (array format)
+    if (hasManualOptions(currentQuestion.correctAnswer)) {
+      return getManualOptions(currentQuestion.correctAnswer as string[]);
+    }
+    
+    // Otherwise use the pooled random options (default 4 choices)
+    return getRandomOptions(allPossibleAnswers, currentQuestion.correctAnswer as string, 4);
   };
 
   const [options, setOptions] = useState<string[]>([]);
@@ -210,9 +224,9 @@ function App() {
     setOptions(getOptionsForCurrentQuestion());
   }, [currentQuestionIndex, randomizedQuestions, allPossibleAnswers]);
 
-  const handleResetScores = (quizService: string) => {
+  const handleResetScores = (quizKey: string) => {
     try {
-      const statsKey = `quiz_stats_${quizService}`;
+      const statsKey = `quiz_stats_${quizKey}`;
       localStorage.setItem(statsKey, JSON.stringify(INITIAL_QUIZ_STATS));
       // Force a re-render to update the display
       setGameState(prev => prev);
@@ -241,12 +255,12 @@ function App() {
                   <ScoreDisplay 
                     correct={correctAnswers} 
                     total={totalAnswers} 
-                    highScore={getStatsForQuiz(selectedQuiz.config.service).highScore}
+                    highScore={getStatsForQuiz(selectedQuiz.config.quizKey).highScore}
                     onRestart={handleRestart}
                     isFinished={false}
                     totalQuestions={randomizedQuestions.length}
                     currentTime={currentTime}
-                    bestRun={getStatsForQuiz(selectedQuiz.config.service).bestRun}
+                    bestRun={getStatsForQuiz(selectedQuiz.config.quizKey).bestRun}
                     quizConfig={selectedQuiz.config}
                   />
                   <FlashCard
@@ -263,19 +277,19 @@ function App() {
                   <ScoreDisplay 
                     correct={correctAnswers} 
                     total={totalAnswers} 
-                    highScore={getStatsForQuiz(selectedQuiz.config.service).highScore}
+                    highScore={getStatsForQuiz(selectedQuiz.config.quizKey).highScore}
                     onRestart={handleRestart}
                     isFinished={true}
                     totalQuestions={randomizedQuestions.length}
                     currentTime={currentTime}
-                    bestRun={getStatsForQuiz(selectedQuiz.config.service).bestRun}
+                    bestRun={getStatsForQuiz(selectedQuiz.config.quizKey).bestRun}
                     quizConfig={selectedQuiz.config}
                   />
                   <UserNameInput 
                     onSubmit={handleUserNameSubmit}
                     currentScore={correctAnswers}
                     currentTime={currentTime}
-                    highScores={getStatsForQuiz(selectedQuiz.config.service).highScores}
+                    highScores={getStatsForQuiz(selectedQuiz.config.quizKey).highScores}
                     quizConfig={selectedQuiz.config}
                     totalQuestions={randomizedQuestions.length}
                   />

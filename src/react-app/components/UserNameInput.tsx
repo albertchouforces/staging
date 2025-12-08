@@ -3,7 +3,7 @@ import { HighScoreEntry, QuizConfig } from '@/react-app/types';
 import { saveGlobalScore, getGlobalScores } from '@/react-app/lib/firebase';
 import { Trophy, Loader } from 'lucide-react';
 import { Medal as MedalComponent } from '@/react-app/components/Medal';
-import { ENABLE_GLOBAL_LEADERBOARD } from '@/react-app/config/features';
+import { ENABLE_GLOBAL_LEADERBOARD, ENABLE_TIME_TRACKING } from '@/react-app/config/features';
 
 interface UserNameInputProps {
   onSubmit: (userName: string) => void;
@@ -38,9 +38,10 @@ export function UserNameInput({
     const fetchGlobalRank = async () => {
       setIsLoadingGlobalRank(true);
       try {
-        const globalScores = await getGlobalScores(quizConfig.service);
+        const globalScores = await getGlobalScores(quizConfig.quizKey);
         const position = globalScores.findIndex(score => {
           if (currentScore > score.score) return true;
+          // Always use time for tiebreakers (faster time wins)
           if (currentScore === score.score && currentTime < score.time) return true;
           return false;
         });
@@ -55,11 +56,12 @@ export function UserNameInput({
     };
 
     fetchGlobalRank();
-  }, [currentScore, currentTime, quizConfig.service]);
+  }, [currentScore, currentTime, quizConfig.quizKey]);
 
   const calculateLocalRankPosition = (): number | null => {
     const position = highScores.findIndex(score => {
       if (currentScore > score.score) return true;
+      // Always use time for tiebreakers (faster time wins)
       if (currentScore === score.score && currentTime < score.time) return true;
       return false;
     });
@@ -127,7 +129,7 @@ export function UserNameInput({
           accuracy,
           time: currentTime,
           date: new Date().toISOString()
-        }, quizConfig.service);
+        }, quizConfig.quizKey);
 
         if (!success) {
           console.error('Failed to save global score');
