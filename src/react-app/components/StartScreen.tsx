@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Globe } from 'lucide-react';
+import { BookOpen, Globe, NotebookText } from 'lucide-react';
 import type { QuizStats } from '@/react-app/types';
 import { QuizCard } from '@/react-app/components/QuizCard';
 import { GlobalLeaderboard } from '@/react-app/components/GlobalLeaderboard';
@@ -63,9 +63,9 @@ export function StartScreen({
       {/* Header */}
       <div className="text-center mb-12">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <BookOpen className="text-blue-600" size={32} />
+          <NotebookText className="text-blue-600" size={32} />
           <h1 className="text-4xl font-bold text-gray-800">
-            Quiz Collection
+            NWO Quiz Collection
           </h1>
         </div>
         <h2 className="text-xl text-gray-600">
