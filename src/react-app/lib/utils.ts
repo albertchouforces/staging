@@ -11,25 +11,44 @@ export const shuffleArray = <T,>(array: T[]): T[] => {
 };
 
 /**
- * Get the correct answer from a question (handles both string and array formats)
+ * Get the correct answer(s) from a question as an array
  */
-export const getCorrectAnswer = (correctAnswer: string | string[]): string => {
-  return Array.isArray(correctAnswer) ? correctAnswer[0] : correctAnswer;
+export const getCorrectAnswers = (correctAnswer: string | string[]): string[] => {
+  return Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer];
 };
 
 /**
- * Check if a question uses manual answer options (array format)
+ * Check if a question is multi-select (requires multiple answers)
  */
-export const hasManualOptions = (correctAnswer: string | string[]): boolean => {
-  return Array.isArray(correctAnswer);
+export const isMultiSelect = (correctAnswer: string | string[]): boolean => {
+  return Array.isArray(correctAnswer) && correctAnswer.length > 1;
 };
 
 /**
- * Get options for a question with manual override (array format)
- * Returns all items from the array in shuffled order
+ * Check if a question has a custom answer pool
  */
-export const getManualOptions = (correctAnswer: string[]): string[] => {
-  return shuffleArray([...correctAnswer]);
+export const hasAnswerPool = (answerPool: string[] | undefined): boolean => {
+  return Array.isArray(answerPool) && answerPool.length > 0;
+};
+
+/**
+ * Get options for a question with custom answer pool
+ * Returns all items from the pool in shuffled order
+ * Automatically includes correct answers if they're missing from the pool
+ */
+export const getAnswerPoolOptions = (answerPool: string[], correctAnswers: string[]): string[] => {
+  // Create a set for case-insensitive duplicate detection
+  const poolSet = new Set(answerPool.map(ans => ans.toLowerCase()));
+  const finalPool = [...answerPool];
+  
+  // Add any correct answers that aren't already in the pool
+  correctAnswers.forEach(correctAns => {
+    if (!poolSet.has(correctAns.toLowerCase())) {
+      finalPool.push(correctAns);
+    }
+  });
+  
+  return shuffleArray(finalPool);
 };
 
 /**
@@ -38,18 +57,18 @@ export const getManualOptions = (correctAnswer: string[]): string[] => {
  */
 export const getRandomOptions = (
   allPossibleAnswers: string[], 
-  correctAnswer: string, 
+  correctAnswers: string[], 
   count: number
 ): string[] => {
-  // Remove the correct answer from the pool of possible answers
+  // Remove all correct answers from the pool
   const otherAnswers = allPossibleAnswers.filter(answer => 
-    answer.toLowerCase() !== correctAnswer.toLowerCase()
+    !correctAnswers.some(correct => correct.toLowerCase() === answer.toLowerCase())
   );
 
   // Shuffle the other answers and take the required number
   const randomWrongAnswers = shuffleArray(otherAnswers)
-    .slice(0, count - 1);
+    .slice(0, Math.max(0, count - correctAnswers.length));
 
-  // Combine with correct answer and shuffle again
-  return shuffleArray([...randomWrongAnswers, correctAnswer]);
+  // Combine with correct answers and shuffle again
+  return shuffleArray([...randomWrongAnswers, ...correctAnswers]);
 };

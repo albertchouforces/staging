@@ -6,7 +6,7 @@ import { UserNameInput } from '@/react-app/components/UserNameInput';
 import { Footer } from '@/react-app/components/Footer';
 import { QuizHeader } from '@/react-app/components/QuizHeader';
 import { QUIZ_COLLECTION } from '@/react-app/data/quizData';
-import { shuffleArray, getRandomOptions, getCorrectAnswer, hasManualOptions, getManualOptions } from '@/react-app/lib/utils';
+import { shuffleArray, getRandomOptions, getCorrectAnswers, isMultiSelect, hasAnswerPool, getAnswerPoolOptions } from '@/react-app/lib/utils';
 import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
 import type { QuizStats, QuestionData, HighScoreEntry } from '@/react-app/types';
 
@@ -32,13 +32,13 @@ function App() {
   const [selectedQuiz, setSelectedQuiz] = useState<typeof QUIZ_COLLECTION[0] | null>(null);
 
   // Get all unique possible answers for the current quiz
-  // Exclude questions with manual options (array format) from the answer pool
+  // Only include single-answer questions without custom answer pools
   const allPossibleAnswers = useMemo(() => {
     if (!selectedQuiz) return [];
     
     return Array.from(new Set(
       selectedQuiz.questions
-        .filter(q => !Array.isArray(q.correctAnswer))
+        .filter(q => !isMultiSelect(q.correctAnswer) && !hasAnswerPool(q.answerPool))
         .map(q => q.correctAnswer as string)
     ));
   }, [selectedQuiz]);
@@ -208,13 +208,16 @@ function App() {
     const currentQuestion = getCurrentQuestion();
     if (!currentQuestion) return [];
     
-    // Check if this question has manual options (array format)
-    if (hasManualOptions(currentQuestion.correctAnswer)) {
-      return getManualOptions(currentQuestion.correctAnswer as string[]);
+    // Check if this question has a custom answer pool
+    if (hasAnswerPool(currentQuestion.answerPool)) {
+      const correctAnswers = getCorrectAnswers(currentQuestion.correctAnswer);
+      return getAnswerPoolOptions(currentQuestion.answerPool!, correctAnswers);
     }
     
     // Otherwise use the pooled random options (default 4 choices)
-    return getRandomOptions(allPossibleAnswers, currentQuestion.correctAnswer as string, 4);
+    // Get all correct answers for this question
+    const correctAnswers = getCorrectAnswers(currentQuestion.correctAnswer);
+    return getRandomOptions(allPossibleAnswers, correctAnswers, 4);
   };
 
   const [options, setOptions] = useState<string[]>([]);
@@ -270,6 +273,7 @@ function App() {
                     onNext={handleNext}
                     questionNumber={currentQuestionIndex + 1}
                     totalQuestions={randomizedQuestions.length}
+                    quizConfig={selectedQuiz.config}
                   />
                 </div>
               ) : (

@@ -1,12 +1,15 @@
 export interface QuestionData {
   id: number;
   question: string;   // The question to display
-  correctAnswer: string | string[];   // The correct answer - if array, first item is correct and all items become the options
+  correctAnswer: string | string[];   // The correct answer(s) - if array, ALL items must be selected to be correct
+  answerPool?: string[];   // Optional custom answer options for this question (will be scrambled)
   description: string;    // Brief context shown with the question
   fact: string;          // Interesting fact shown after answering
   imageUrl: string;      // Path to question image
-  audioUrl?: string | string[];     // Optional path(s) to audio file(s) - can be a single file or array of files to play sequentially
+  audioUrl?: string | string[] | string[][];     // Optional audio - single file, array of files (play sequentially), or array of arrays (multiple playback options)
   audioLoopCount?: number; // Optional number of times to loop audio sequence (default: 1, plays once)
+  factAudioUrl?: string | string[] | string[][];  // Optional fact audio - single file, array of files (play sequentially), or array of arrays (multiple playback options)
+  factAudioLoopCount?: number; // Optional number of times to loop fact audio sequence (default: 1, plays once)
 }
 
 export interface HighScoreEntry {
@@ -56,6 +59,7 @@ export interface QuizConfig {
   studyGuide?: string; // Optional URL or path to study guide image
   advancedChallenge?: boolean; // Indicates if this is an advanced challenge
   hidden?: boolean;    // Optional flag to hide the quiz from display
+  factHeading?: string; // Optional custom heading for facts section (defaults to "Did you know?")
 }
 
 export interface QuizDefinition {

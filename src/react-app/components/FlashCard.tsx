@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import type { QuestionData } from '@/react-app/types';
-import { getCorrectAnswer } from '@/react-app/lib/utils';
-import { BookOpen, Check, ImageOff, X, Play, Pause, Volume2 } from 'lucide-react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import type { QuestionData, QuizConfig } from '@/react-app/types';
+import { getCorrectAnswers, isMultiSelect } from '@/react-app/lib/utils';
+import { BookOpen, Check, ImageOff, X } from 'lucide-react';
+import { AudioPlayer } from '@/react-app/components/AudioPlayer';
 
 interface FlashCardProps {
   question: QuestionData;
@@ -10,6 +11,7 @@ interface FlashCardProps {
   onNext: () => void;
   questionNumber: number;
   totalQuestions: number;
+  quizConfig: QuizConfig;
 }
 
 export function FlashCard({ 
@@ -18,26 +20,68 @@ export function FlashCard({
   onAnswer, 
   onNext,
   questionNumber,
-  totalQuestions
+  totalQuestions,
+  quizConfig
 }: FlashCardProps) {
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [selectedAnswers, setSelectedAnswers] = useState<Set<string>>(new Set());
   const [showResult, setShowResult] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [options, setOptions] = useState<string[]>([]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audioError, setAudioError] = useState(false);
-  const [currentLoop, setCurrentLoop] = useState(0);
-  const [currentFileIndex, setCurrentFileIndex] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isMultiSelectQuestion = isMultiSelect(question.correctAnswer);
 
-  // Get audio files as array
-  const getAudioFiles = useCallback((): string[] => {
+  // Helper to check if audio is nested array (multiple playback options)
+  const isNestedAudioArray = useCallback((url: string | string[] | string[][] | undefined): url is string[][] => {
+    return Array.isArray(url) && url.length > 0 && Array.isArray(url[0]);
+  }, []);
+
+  // Helper to check if a string is likely a URL/file path (vs a label)
+  const isLikelyUrl = useCallback((str: string): boolean => {
+    if (!str) return false;
+    // Check for common URL patterns or file extensions
+    return str.startsWith('http://') || 
+           str.startsWith('https://') || 
+           str.startsWith('/') || 
+           /\.(mp3|wav|ogg|m4a|aac)$/i.test(str);
+  }, []);
+
+  // Extract label and audio files from an array
+  const extractLabelAndFiles = useCallback((arr: string[]): { label: string; files: string[] } => {
+    if (arr.length === 0) return { label: 'Play audio', files: [] };
+    
+    // If first element is not a URL, treat it as a label
+    if (!isLikelyUrl(arr[0])) {
+      return {
+        label: arr[0],
+        files: arr.slice(1)
+      };
+    }
+    
+    return {
+      label: 'Play audio',
+      files: arr
+    };
+  }, [isLikelyUrl]);
+
+  // Get audio groups with labels - memoized to prevent re-creation on re-renders
+  const audioGroups = useMemo((): Array<{ label: string; files: string[] }> => {
     if (!question.audioUrl) return [];
-    return Array.isArray(question.audioUrl) ? question.audioUrl : [question.audioUrl];
-  }, [question.audioUrl]);
-
-  const audioFiles = getAudioFiles();
+    if (typeof question.audioUrl === 'string') return [{ label: 'Play audio', files: [question.audioUrl] }];
+    if (isNestedAudioArray(question.audioUrl)) {
+      return question.audioUrl.map(group => extractLabelAndFiles(group));
+    }
+    return [extractLabelAndFiles(question.audioUrl)];
+  }, [question.audioUrl, question.id, isNestedAudioArray, extractLabelAndFiles]);
+  
+  // Get fact audio groups with labels - memoized to prevent re-creation on re-renders
+  const factAudioGroups = useMemo((): Array<{ label: string; files: string[] }> => {
+    if (!question.factAudioUrl) return [];
+    if (typeof question.factAudioUrl === 'string') return [{ label: 'Play audio', files: [question.factAudioUrl] }];
+    if (isNestedAudioArray(question.factAudioUrl)) {
+      return question.factAudioUrl.map(group => extractLabelAndFiles(group));
+    }
+    return [extractLabelAndFiles(question.factAudioUrl)];
+  }, [question.factAudioUrl, question.id, isNestedAudioArray, extractLabelAndFiles]);
 
   // Set options when they change from parent
   useEffect(() => {
@@ -47,129 +91,141 @@ export function FlashCard({
 
   // Reset state when question changes
   useEffect(() => {
-    setSelectedAnswer(null);
+    setSelectedAnswers(new Set());
     setShowResult(false);
     setImageLoaded(false);
     setImageError(false);
-    setIsPlaying(false);
-    setAudioError(false);
-    setCurrentLoop(0);
-    setCurrentFileIndex(0);
-    
-    // Stop and reset audio when question changes
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
   }, [question]);
 
-  const handleAnswer = useCallback((answer: string) => {
+  const handleOptionClick = useCallback((answer: string) => {
     if (showResult) return;
     
-    setSelectedAnswer(answer);
+    if (isMultiSelectQuestion) {
+      // Toggle selection for multi-select
+      setSelectedAnswers(prev => {
+        const newSet = new Set(prev);
+        if (newSet.has(answer)) {
+          newSet.delete(answer);
+        } else {
+          newSet.add(answer);
+        }
+        return newSet;
+      });
+    } else {
+      // Single select - submit immediately
+      setSelectedAnswers(new Set([answer]));
+      setShowResult(true);
+      const correctAnswers = getCorrectAnswers(question.correctAnswer);
+      const correct = correctAnswers.includes(answer);
+      onAnswer(correct);
+    }
+  }, [showResult, isMultiSelectQuestion, question.correctAnswer, onAnswer]);
+
+  const handleSubmitMultiSelect = useCallback(() => {
+    if (showResult || selectedAnswers.size === 0) return;
+    
     setShowResult(true);
-    const correctAnswer = getCorrectAnswer(question.correctAnswer);
-    const correct = answer === correctAnswer;
+    const correctAnswers = getCorrectAnswers(question.correctAnswer);
+    
+    // Check if all correct answers are selected and no wrong answers are selected
+    const allCorrectSelected = correctAnswers.every(ans => selectedAnswers.has(ans));
+    const noWrongSelected = selectedAnswers.size === correctAnswers.length;
+    const correct = allCorrectSelected && noWrongSelected;
+    
     onAnswer(correct);
-  }, [showResult, question.correctAnswer, onAnswer]);
+  }, [showResult, selectedAnswers, question.correctAnswer, onAnswer]);
+
+  // Get feedback message for multi-select questions
+  const getMultiSelectFeedback = useCallback((): { message: string; type: 'success' | 'partial' | 'wrong' } | null => {
+    if (!showResult || !isMultiSelectQuestion) return null;
+    
+    const correctAnswers = getCorrectAnswers(question.correctAnswer);
+    const selectedArray = Array.from(selectedAnswers);
+    
+    const correctSelected = selectedArray.filter(ans => correctAnswers.includes(ans));
+    const wrongSelected = selectedArray.filter(ans => !correctAnswers.includes(ans));
+    const missedAnswers = correctAnswers.filter(ans => !selectedAnswers.has(ans));
+    
+    // All correct
+    if (correctSelected.length === correctAnswers.length && wrongSelected.length === 0) {
+      return {
+        message: `Correct! You selected all ${correctAnswers.length} required answers.`,
+        type: 'success'
+      };
+    }
+    
+    // Some correct but not all, no wrong ones
+    if (correctSelected.length > 0 && wrongSelected.length === 0 && missedAnswers.length > 0) {
+      return {
+        message: `Partially correct. You selected ${correctSelected.length} of ${correctAnswers.length} required answers. You missed: ${missedAnswers.join(', ')}`,
+        type: 'partial'
+      };
+    }
+    
+    // Some correct with some wrong
+    if (correctSelected.length > 0 && wrongSelected.length > 0) {
+      const parts = [`You selected ${correctSelected.length} correct answer${correctSelected.length > 1 ? 's' : ''} but also selected ${wrongSelected.length} incorrect answer${wrongSelected.length > 1 ? 's' : ''}.`];
+      if (missedAnswers.length > 0) {
+        parts.push(` You also missed: ${missedAnswers.join(', ')}`);
+      }
+      return {
+        message: parts.join(''),
+        type: 'wrong'
+      };
+    }
+    
+    // All wrong
+    return {
+      message: `Incorrect. None of your selections were correct. The correct answers are: ${correctAnswers.join(', ')}`,
+      type: 'wrong'
+    };
+  }, [showResult, isMultiSelectQuestion, question.correctAnswer, selectedAnswers]);
 
   const handleImageError = useCallback(() => {
     setImageError(true);
     setImageLoaded(true);
   }, []);
 
-  const playCurrentAudio = useCallback(() => {
-    if (!audioRef.current || audioFiles.length === 0) return;
-    
-    audioRef.current.src = audioFiles[currentFileIndex];
-    audioRef.current.currentTime = 0;
-    audioRef.current.play().catch(() => {
-      setAudioError(true);
-      setIsPlaying(false);
-    });
-  }, [audioFiles, currentFileIndex]);
-
-  const toggleAudioPlayback = useCallback(() => {
-    if (audioFiles.length === 0 || audioError) return;
-    
-    if (isPlaying) {
-      // Stop playback
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-      setIsPlaying(false);
-      setCurrentLoop(0);
-      setCurrentFileIndex(0);
-    } else {
-      // Start playback from the beginning
-      setCurrentLoop(0);
-      setCurrentFileIndex(0);
-      setIsPlaying(true);
-      // Audio will start playing via the effect below
-    }
-  }, [isPlaying, audioError, audioFiles.length]);
-
-  // Effect to play audio when isPlaying or currentFileIndex changes
-  useEffect(() => {
-    if (isPlaying && audioFiles.length > 0) {
-      playCurrentAudio();
-    }
-  }, [isPlaying, currentFileIndex, audioFiles.length, playCurrentAudio]);
-
-  const handleAudioEnded = useCallback(() => {
-    const loopCount = question.audioLoopCount ?? 1;
-    
-    // Check if there are more files in the current sequence
-    if (currentFileIndex < audioFiles.length - 1) {
-      // Move to next file in the sequence
-      setCurrentFileIndex(prev => prev + 1);
-    } else {
-      // Finished all files in the sequence, check if we need to loop
-      const nextLoop = currentLoop + 1;
-      
-      if (nextLoop < loopCount) {
-        // Start the sequence again
-        setCurrentLoop(nextLoop);
-        setCurrentFileIndex(0);
-      } else {
-        // Finished all loops
-        setIsPlaying(false);
-        setCurrentLoop(0);
-        setCurrentFileIndex(0);
-      }
-    }
-  }, [currentLoop, currentFileIndex, audioFiles.length, question.audioLoopCount]);
-
-  const handleAudioError = useCallback(() => {
-    setAudioError(true);
-    setIsPlaying(false);
-  }, []);
-
   const getOptionStyles = useCallback((option: string) => {
-    const correctAnswer = getCorrectAnswer(question.correctAnswer);
+    const correctAnswers = getCorrectAnswers(question.correctAnswer);
+    const isSelected = selectedAnswers.has(option);
+    const isCorrect = correctAnswers.includes(option);
+    
     if (!showResult) {
+      if (isMultiSelectQuestion) {
+        return isSelected 
+          ? "bg-blue-100 border-2 border-blue-500" 
+          : "bg-gray-100 hover:bg-gray-200";
+      }
       return "bg-gray-100 hover:bg-gray-200";
     }
-    if (option === correctAnswer) {
+    
+    if (isCorrect) {
       return "bg-green-100 border-2 border-green-500";
     }
-    if (selectedAnswer === option) {
+    if (isSelected) {
       return "bg-red-100 border-2 border-red-500";
     }
     return "bg-gray-100";
-  }, [showResult, question.correctAnswer, selectedAnswer]);
+  }, [showResult, question.correctAnswer, selectedAnswers, isMultiSelectQuestion]);
 
   return (
     <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg">
       <div className="flex flex-col w-full">
         {/* Question Section */}
         <div className="p-6 border-b border-gray-100">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold text-gray-800">{question.question}</h3>
-            <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
+          <div className="mb-4">
+            <div className="flex justify-end mb-3">
+              <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
+            </div>
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="text-xl font-semibold text-gray-800">{question.question}</h3>
+              {isMultiSelectQuestion && !showResult && (
+                <span className="text-sm text-blue-600 font-medium whitespace-nowrap">Select all that apply</span>
+              )}
+            </div>
           </div>
-          {/* Image Container with improved sizing */}
+          {/* Image Container */}
           <div className="flex flex-col items-center mb-4">
             {question.imageUrl && question.imageUrl.trim() !== '' && (
               <div className="w-full aspect-[16/9] relative rounded-lg overflow-hidden bg-transparent mb-4">
@@ -196,38 +252,29 @@ export function FlashCard({
                 )}
               </div>
             )}
+            
+            {/* Audio Players */}
+            {audioGroups.length > 0 && (
+              <div className="mb-4 flex flex-col items-center gap-3">
+                {audioGroups.map((audioGroup, index) => (
+                  <div key={`q${question.id}-audio-${index}`} className="flex flex-col items-center gap-3 w-full">
+                    <AudioPlayer 
+                      key={`q${question.id}-audio-player-${index}`}
+                      audioFiles={audioGroup.files} 
+                      loopCount={question.audioLoopCount}
+                      label={audioGroup.label}
+                      colorScheme="blue"
+                    />
+                    {index < audioGroups.length - 1 && (
+                      <div className="w-full max-w-xs border-t border-gray-300"></div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+            
             <p className="text-lg text-gray-600 italic text-center max-w-xl">{question.description}</p>
           </div>
-
-          {/* Audio Player */}
-          {audioFiles.length > 0 && (
-            <div className="mt-4 flex justify-center">
-              <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-lg border border-gray-200">
-                <Volume2 size={20} className="text-gray-600" />
-                <button
-                  onClick={toggleAudioPlayback}
-                  disabled={audioError}
-                  className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-                    audioError 
-                      ? 'bg-gray-300 cursor-not-allowed' 
-                      : 'bg-blue-600 hover:bg-blue-700 text-white'
-                  }`}
-                  aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
-                >
-                  {isPlaying ? <Pause size={18} /> : <Play size={18} className="ml-0.5" />}
-                </button>
-                <span className="text-sm text-gray-600">
-                  {audioError ? 'Audio unavailable' : isPlaying ? 'Playing...' : 'Play audio'}
-                </span>
-                <audio
-                  ref={audioRef}
-                  onEnded={handleAudioEnded}
-                  onError={handleAudioError}
-                  preload="metadata"
-                />
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Options Section */}
@@ -236,17 +283,17 @@ export function FlashCard({
             {options.map((option) => (
               <button
                 key={option}
-                onClick={() => handleAnswer(option)}
+                onClick={() => handleOptionClick(option)}
                 disabled={showResult}
                 className={`w-full min-h-[60px] p-4 text-left rounded-lg transition-colors flex items-center justify-between ${getOptionStyles(option)}`}
               >
                 <span>{option}</span>
                 {showResult && (
                   <span>
-                    {option === getCorrectAnswer(question.correctAnswer) && (
+                    {getCorrectAnswers(question.correctAnswer).includes(option) && (
                       <Check className="text-green-600" size={20} />
                     )}
-                    {selectedAnswer === option && option !== getCorrectAnswer(question.correctAnswer) && (
+                    {selectedAnswers.has(option) && !getCorrectAnswers(question.correctAnswer).includes(option) && (
                       <X className="text-red-600" size={20} />
                     )}
                   </span>
@@ -254,11 +301,54 @@ export function FlashCard({
               </button>
             ))}
           </div>
+          
+          {/* Submit button for multi-select */}
+          {isMultiSelectQuestion && !showResult && (
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={handleSubmitMultiSelect}
+                disabled={selectedAnswers.size === 0}
+                className={`px-6 py-2 rounded-lg transition-colors font-medium ${
+                  selectedAnswers.size === 0
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                Submit Answer
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Result Section */}
         {showResult && (
           <div className="w-full p-6 flex flex-col gap-6">
+            {/* Multi-select feedback */}
+            {isMultiSelectQuestion && (() => {
+              const feedback = getMultiSelectFeedback();
+              if (!feedback) return null;
+              
+              const bgColor = feedback.type === 'success' 
+                ? 'bg-green-50 border-green-200' 
+                : feedback.type === 'partial'
+                ? 'bg-yellow-50 border-yellow-200'
+                : 'bg-red-50 border-red-200';
+                
+              const textColor = feedback.type === 'success'
+                ? 'text-green-800'
+                : feedback.type === 'partial'
+                ? 'text-yellow-800'
+                : 'text-red-800';
+              
+              return (
+                <div className={`${bgColor} p-4 rounded-lg border max-w-xl mx-auto w-full`}>
+                  <p className={`${textColor} text-sm font-medium`}>
+                    {feedback.message}
+                  </p>
+                </div>
+              );
+            })()}
+            
             <div className="flex justify-center w-full">
               <button
                 onClick={onNext}
@@ -268,14 +358,36 @@ export function FlashCard({
               </button>
             </div>
 
-            {/* Only show "Did you know" section if there's a fact */}
-            {question.fact && (
+            {/* Show fact section if there's a fact text or fact audio */}
+            {(question.fact || factAudioGroups.length > 0) && (
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 max-w-xl mx-auto">
                 <div className="flex items-center gap-2 text-blue-800 mb-2">
                   <BookOpen size={20} />
-                  <span className="font-semibold">Did you know?</span>
+                  <span className="font-semibold">{quizConfig.factHeading || 'Did you know?'}</span>
                 </div>
-                <p className="text-blue-900">{question.fact}</p>
+                {question.fact && (
+                  <p className="text-blue-900">{question.fact}</p>
+                )}
+                
+                {/* Fact Audio Players */}
+                {factAudioGroups.length > 0 && (
+                  <div className={`${question.fact ? 'mt-4' : ''} flex flex-col items-center gap-3 w-full`}>
+                    {factAudioGroups.map((factAudioGroup, index) => (
+                      <div key={`q${question.id}-fact-${index}`} className="flex flex-col items-center gap-3 w-full">
+                        <AudioPlayer 
+                          key={`q${question.id}-fact-player-${index}`}
+                          audioFiles={factAudioGroup.files} 
+                          loopCount={question.factAudioLoopCount}
+                          label={factAudioGroup.label}
+                          colorScheme="blue"
+                        />
+                        {index < factAudioGroups.length - 1 && (
+                          <div className="w-full max-w-xs border-t border-blue-300"></div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>

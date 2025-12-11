@@ -37,6 +37,7 @@
 //         - Document files (PDFs, etc.): Will prompt a download
 //      * advancedChallenge: Optional boolean to mark as advanced challenge
 //      * hidden: Optional boolean to hide the quiz from display
+//      * factHeading: Optional custom heading for the fact section (defaults to "Did you know?")
 //      * questions: Array of questions following the QuestionData format
 //
 // 3. QUESTION FORMAT:
@@ -45,16 +46,23 @@
 //    REQUIRED FIELDS:
 //      * id: number - Unique identifier for the question (use sequential numbers)
 //      * question: string - The main question text displayed to the user
-//      * correctAnswer: string | string[] - The correct answer choice
-//         - String format: Uses pooled random answers from other questions as distractors (default 4 options)
-//         - Array format: Manual override - first item is correct, all items become the options for THIS question only
-//         - Array answers are NOT used as distractors for other questions
-//         - Array can contain more than 4 items if needed
+//      * correctAnswer: string | string[] - The correct answer(s)
+//         - String format: Single correct answer. Uses pooled answers from other single-answer questions as distractors (default 4 options total)
+//         - Array format: Multi-select question - ALL items in the array must be selected to be correct
+//         - Multi-select questions show "Select all that apply" and require the user to click Submit
 //      * description: string - Brief context or additional information shown with the question
 //      * fact: string - Interesting fact shown after the user answers (educational content)
 //      * imageUrl: string - Path to the question image (relative to public folder)
 //
-//    OPTIONAL FIELDS:
+//    OPTIONAL FIELDS (in addition to those listed below):
+//      * answerPool: string[] - Custom answer options for this question only (will be scrambled)
+//         - When provided, these are the ONLY options shown for this question
+//         - The correctAnswer(s) must be included in the answerPool
+//         - Overrides the default behavior of pooling answers from other questions
+//         - Can contain any number of options (not limited to 4)
+//         - Questions with answerPool are NOT used as distractors for other questions
+//
+//    OTHER OPTIONAL FIELDS:
 //      * audioUrl: string | string[] - Path(s) to audio file(s) for the question
 //         - Supported formats: MP3, WAV, OGG, M4A, AAC
 //         - Can be a single file path (string) or multiple file paths (array)
@@ -68,12 +76,24 @@
 //         - Example: 3 (plays the entire sequence three times in succession)
 //         - With multiple files, all files play in order, then the sequence repeats
 //         - Note: Pressing pause will stop playback and reset to the beginning
+//      * factAudioUrl: string | string[] - Path(s) to audio file(s) for the fact section
+//         - Works identically to audioUrl but plays in the fact section after answering
+//         - Supported formats: MP3, WAV, OGG, M4A, AAC
+//         - Can be a single file path (string) or multiple file paths (array)
+//         - When multiple files are provided, they play sequentially in order
+//         - A separate play/pause audio player will appear in the fact section
+//         - Single file example: "/audio/quiz-name/fact-sound.mp3"
+//         - Multiple files example: ["/audio/fact1.mp3", "/audio/fact2.mp3"]
+//      * factAudioLoopCount: number - Number of times to loop the fact audio sequence
+//         - Default: 1 (plays the sequence once if not specified)
+//         - Example: 2 (plays the entire fact audio sequence twice)
+//         - Works the same as audioLoopCount but for fact audio
 //
-//    Example question with single audio file and pooled answers:
+//    Example question with single answer and pooled options:
 //    {
 //      id: 1,
 //      question: "What is this animal?",
-//      correctAnswer: "Red Panda",  // String format - uses pooled answers from other questions
+//      correctAnswer: "Red Panda",  // String format - single answer, uses pooled answers from other questions as distractors
 //      description: "This animal is native to the eastern Himalayas",
 //      fact: "Red pandas are not closely related to giant pandas!",
 //      imageUrl: "/images/nature/red-panda.jpg",
@@ -81,16 +101,26 @@
 //      audioLoopCount: 3  // Optional - will play 3 times (default is 1)
 //    }
 //
-//    Example question with manual answer options:
+//    Example question with custom answer pool:
 //    {
-//      id: 3,
+//      id: 2,
 //      question: "Which flag is this?",
-//      correctAnswer: ["United States", "Canada", "Mexico", "Brazil", "Argentina"],  // Array format - manual override
-//      // First item is correct answer, all items become the options (5 options in this case)
-//      // These answers won't be used as distractors for other questions
+//      correctAnswer: "United States",  // Single correct answer
+//      answerPool: ["United States", "Canada", "Mexico", "Brazil", "Argentina"],  // Custom options (will be scrambled)
 //      description: "A North American country's flag",
 //      fact: "This flag has 50 stars representing the states!",
 //      imageUrl: "/images/flags/usa.jpg"
+//    }
+//
+//    Example multi-select question (requires ALL correct answers):
+//    {
+//      id: 3,
+//      question: "Which of these are primary colors?",
+//      correctAnswer: ["Red", "Blue", "Yellow"],  // Array format - ALL must be selected to be correct
+//      answerPool: ["Red", "Blue", "Yellow", "Green", "Orange", "Purple"],  // Custom pool with correct and incorrect answers
+//      description: "Select all primary colors",
+//      fact: "Primary colors cannot be created by mixing other colors!",
+//      imageUrl: "/images/colors/palette.jpg"
 //    }
 //
 //    Example question with multiple audio files:
@@ -107,6 +137,19 @@
 //        "/audio/signals/short-blast.mp3"
 //      ],
 //      audioLoopCount: 2  // Optional - plays the entire sequence twice
+//    }
+//
+//    Example question with fact audio:
+//    {
+//      id: 4,
+//      question: "What animal makes this sound?",
+//      correctAnswer: "Whale",
+//      description: "A marine mammal's vocalization",
+//      fact: "Whale songs can travel thousands of miles underwater!",
+//      imageUrl: "/images/nature/whale.jpg",
+//      audioUrl: "/audio/nature/whale-sound.mp3",
+//      factAudioUrl: "/audio/nature/whale-song.mp3",  // Optional - plays in the fact section
+//      factAudioLoopCount: 1  // Optional - plays once (default)
 //    }
 //
 // Available theme colors:
@@ -128,142 +171,509 @@ interface QuizDefinition {
 export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
-      id: "sample",
-      title: "Sample Nature Quiz",
-      description: "Test your knowledge of animals and nature",
+      id: "32to34sounds",
+      title: "Col Regs Rules 32-34 Sound Signals Challenge",
+      description: "Test your knowledge of Col Regs Rules 32 to 34",
       themeColor: 'emerald',
-      quizKey: "sample_nature_quiz",
+      quizKey: "32to34sounds",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
       studyGuide: "https://github.com/albertchouforces/staging/raw/e8dc17661db4348c91e0bd5a4a7009b3c8bd41bc/public/Flags.pdf",
+      factHeading: "Additional Information",
       hidden: false
     },
     questions: [
       {
         id: 1,
-        question: "What is this animal?",
-        correctAnswer: "Red Panda",
-        description: "This animal is native to the eastern Himalayas and southwestern China",
-        fact: "Red pandas are not closely related to giant pandas - they're actually in their own unique family!",
-        imageUrl: "/images/nature/red-panda.jpg",
-        audioUrl: ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3", "https://github.com/albertchouforces/sample/raw/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"],
-        audioLoopCount: 1,
+        question: "The term short blast means a blast of:",
+        correctAnswer: "1 second in duration",      
+        answerPool: [
+                      "1 second in duration", 
+                      "2 seconds in duration",
+                      "3 seconds in duration",
+                      "4 seconds in duration",
+                      "5 seconds in duration"
+                    ],
+        description: "",
+        fact: "Rule 32(b)",
+        factAudioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3",
       },
       {
         id: 2,
-        question: "What type of tree is this?",
-        correctAnswer: "Giant Sequoia",
-        description: "Found in California's Sierra Nevada mountains",
-        fact: "These trees can live for over 3,000 years!",
-        imageUrl: "/images/nature/sequoia.jpg"
+        question: "The term prolonged blast means a blast of:",
+        correctAnswer: "4 - 6 seconds in duration",      
+        answerPool: [
+                      "4 - 6 seconds in duration", 
+                      "2 - 4 seconds in duration",
+                      "3 - 4 seconds in duration",
+                      "5 - 7 seconds in duration"
+                    ],      
+        description: "",
+        fact: "Rule 32(c)",
+        factAudioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
       },
       {
         id: 3,
-        question: "The term short blast means a blast of?",
-        correctAnswer: [
-                        "1 second in duration", 
-                        "2 seconds in duration",
-                        "3 seconds in duration",
-                        "4 seconds in duration",
-                        "5 seconds in duration"
-                       ],
+        question: "A vessel 12 m or more in length:",
+        correctAnswer: "shall have a whistle",
+        answerPool: [
+                      "shall have a whistle",
+                      "shall have a bell",
+                      "shall have a gong",
+                      "shall have some other means of making an efficient sound signal if it does not have a whistle"    
+                    ],
         description: "",
-        fact: "",
-        imageUrl: ""
+        fact: "Rule 33(a)",
+        factAudioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3",
+      },
+      {
+        id: 4,
+        question: "A vessel 20 m or more in length:",
+        correctAnswer: [
+                        "shall have a whistle",
+                        "shall have a bell"
+                      ],
+        answerPool: [
+                      "shall have a whistle",
+                      "shall have a bell",
+                      "shall have a gong",
+                      "shall have some other means of making an efficient sound signal if it does not have a whistle"    
+                    ],
+        description: "",
+        fact: "Rule 33(a)",
+        factAudioUrl: [
+                        ["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], 
+                        ["Bell", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"]
+                      ],
+      },
+      {
+        id: 5,
+        question: "A vessel 100 m or more in length:",
+        correctAnswer: [
+                        "shall have a whistle",
+                        "shall have a bell",
+                        "shall have a gong"
+                      ],
+        answerPool: [
+                      "shall have a whistle",
+                      "shall have a bell",
+                      "shall have a gong",
+                      "shall have some other means of making an efficient sound signal if it does not have a whistle"    
+                    ],
+        description: "",
+        fact: "Rule 33(a)",
+        factAudioUrl: [
+                        ["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], 
+                        ["Bell", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"],
+                        ["Gong", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"]
+                      ],
+      },
+      {
+        id: 6,
+        question: "A vessel less than 12 m in length:",
+        correctAnswer: [
+                        "may have a whistle",
+                        "shall have some other means of making an efficient sound signal if it does not have a whistle"
+                      ],
+        answerPool: [
+                      "may have a whistle",
+                      "shall have some other means of making an efficient sound signal if it does not have a whistle",
+                      "shall have a bell",
+                      "shall have a gong"
+                    ],
+        description: "",
+        fact: "Rule 33(b)",
+        factAudioUrl: [
+                        ["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"],
+                        ["Air Horn", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]
+                      ]
+      },
+      {
+        id: 7,
+        question: "When vessels are in sight of one another, which vessels underway must signal their manoeuvre as required by the Rules?",
+        correctAnswer: "power-driven vessels",
+        answerPool: [
+                      "power-driven vessels",
+                      "sailing vessels",
+                      "vessels engaged in fishing",
+                      "vessel restricted in their ability to manoeuvre (RAM)"
+                    ],
+        description: "",
+        fact: "Rule 34(a)",
+        factAudioUrl: "",
+      },
+      {
+        id: 8,
+        question: "When vessels are in sight of one another this sound signal represents:",
+        correctAnswer: "an alteration of course to starboard",
+        answerPool: [
+                      "an alteration of course to port",
+                      "operating astern propulsion",
+                      "an alteration of course to starboard",
+                      "failure to understand the intentions/actions of the other vessel",
+                      "in doubt that sufficient action is being taken by the other vessel to avoid collision"
+                    ],
+        description: "",
+        fact: "Rule 34(a)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/1_AC_Crse_Stbd.mp3",
+      },
+      {
+        id: 9,
+        question: "When vessels are in sight of one another this sound signal represents:",
+        correctAnswer: "an alteration of course to port",
+        answerPool: [
+                      "an alteration of course to port",
+                      "operating astern propulsion",
+                      "an alteration of course to starboard",
+                      "failure to understand the intentions/actions of the other vessel",
+                      "in doubt that sufficient action is being taken by the other vessel to avoid collision"
+                    ],
+        description: "",
+        fact: "Rule 34(a)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_AC_Crse_Port.mp3",
+      },
+      {
+        id: 10,
+        question: "When vessels are in sight of one another this sound signal represents:",
+        correctAnswer: "operating astern propulsion",
+        answerPool: [
+                      "an alteration of course to port",
+                      "operating astern propulsion",
+                      "an alteration of course to starboard",
+                      "failure to understand the intentions/actions of the other vessel",
+                      "in doubt that sufficient action is being taken by the other vessel to avoid collision"
+                    ],
+        description: "",
+        fact: "Rule 34(a)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/3_Astern_Prop.mp3",
+      },
+      {
+        id: 11,
+        question: "When vessels are in sight of one another this sound signal represents:",
+        correctAnswer: "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
+        answerPool: [
+                      "the intention to overtake another vessel on its starboard side in any body of water",
+                      "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
+                      "the intention to overtake another vessel on its port side in any body of water",
+                      "the intention to overtake another vessel on its port side when in a narrow channel or fairway"
+                    ],
+        description: "",
+        fact: "Rule 34(c)(i)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/4_Overtake_Stbd.mp3",
+      },
+      {
+        id: 12,
+        question: "When vessels are in sight of one another this sound signal represents:",
+        correctAnswer: "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
+        answerPool: [
+                      "the intention to overtake another vessel on its starboard side in any body of water",
+                      "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
+                      "the intention to overtake another vessel on its port side in any body of water",
+                      "the intention to overtake another vessel on its port side when in a narrow channel or fairway"
+                    ],
+        description: "",
+        fact: "Rule 34(c)(i)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/5_Overtake_Port.mp3",
+      },
+      {
+        id: 13,
+        question: "When vessels are in sight of one another this sound signal represents:",
+        correctAnswer: "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
+        answerPool: [
+                      "the agreement response from a vessel about to be overtaken in any body of water",
+                      "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
+                      "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
+                      "the intention to overtake another vessel on its starboard side in any body of water"
+                    ],
+        description: "",
+        fact: "Rule 34(c)(ii)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/OvertakingAgreement.mp3",
+      },
+      {
+        id: 14,
+        question: "When vessels are in sight of one another this sound signal represents:",
+        correctAnswer: [
+                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
+                        "failure to understand the intentions/actions of the other vessel "
+                      ],
+        answerPool: [
+                      "an alteration of course to port",
+                      "operating astern propulsion",
+                      "an alteration of course to starboard",
+                      "in doubt that sufficient action is being taken by the other vessel to avoid collision",
+                      "failure to understand the intentions/actions of the other vessel "
+                    ],
+        description: "",
+        fact: "Rule 34(d)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3",
+      },
+      {
+        id: 15,
+        question: "When vessels are in sight of one another this sound signal represents:",
+        correctAnswer: [
+                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
+                        "failure to understand the intentions/actions of the other vessel "
+                      ],
+        answerPool: [
+                      "an alteration of course to port",
+                      "operating astern propulsion",
+                      "an alteration of course to starboard",
+                      "in doubt that sufficient action is being taken by the other vessel to avoid collision",
+                      "failure to understand the intentions/actions of the other vessel "
+                    ],
+        description: "",
+        fact: "Rule 34(d)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3",
+      },
+      {
+        id: 16,
+        question: "When vessels are in sight of one another this sound signal represents:",
+        correctAnswer: "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
+        answerPool: [
+                      "a power-driven vessel underway and making way",
+                      "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
+                      "an alteration of course to starboard",
+                      "I intend to leave you on your port side"
+                    ],
+        description: "",
+        fact: "Rule 34(e)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
       },
     ]
   },
   {
     config: {
-      id: "landmarks",
-      title: "World Landmarks",
-      description: "Explore famous landmarks around the globe",
+      id: "32to34auditory",
+      title: "Col Regs Rules 32-34 Auditory Recognition Challenge",
+      description: "Test your knowledge of Col Regs Rules 32 to 34",
       themeColor: 'blue',
-      quizKey: "world_landmarks_quiz",
-      startScreenImage: "/images/landmarks/landmarks-start.jpg",
+      quizKey: "32to34auditory",
+      startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
       studyGuide: "",
-      hidden: true // Example of a hidden quiz
-    },
-    questions: [
-      {
-        id: 1,
-        question: "What is this famous landmark?",
-        correctAnswer: "Eiffel Tower",
-        description: "An iconic iron lattice tower in Paris",
-        fact: "The Eiffel Tower was originally intended to be a temporary structure!",
-        imageUrl: "/images/landmarks/eiffel-tower.jpg"
-      },
-      {
-        id: 2,
-        question: "Name this ancient wonder",
-        correctAnswer: "Petra",
-        description: "A historic and archaeological city in Jordan",
-        fact: "Petra was carved directly into rose-colored rock faces",
-        imageUrl: "/images/landmarks/petra.jpg"
-      }
-    ]
-  },
-  {
-    config: {
-      id: "landmarks2",
-      title: "World Landmarks 2",
-      description: "Advanced challenge with complex landmarks",
-      themeColor: 'rose',
-      quizKey: "world_landmarks_quiz2",
-      startScreenImage: "/images/landmarks/landmarks-start.jpg",
-      studyGuide: "https://navalknots.pages.dev/images/bowline1.png",
-      advancedChallenge: true,
       hidden: false
     },
     questions: [
       {
         id: 1,
-        question: "What is this famous landmark?",
-        correctAnswer: "Eiffel Tower",
-        description: "An iconic iron lattice tower in Paris",
-        fact: "The Eiffel Tower was originally intended to be a temporary structure!",
-        imageUrl: "/images/landmarks/eiffel-tower.jpg"
+        question: "What is the definition of this sound signal?",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3",
+        correctAnswer: "short blast",
+        description: "Rule 32(b)",
+        fact: ""
       },
       {
         id: 2,
-        question: "Name this ancient wonder",
-        correctAnswer: "Petra",
-        description: "A historic and archaeological city in Jordan",
-        fact: "Petra was carved directly into rose-colored rock faces",
-        imageUrl: "/images/landmarks/petra.jpg"
-      }
+        question: "What is the definition of this sound signal?",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
+        correctAnswer: "prolonged blast",
+        description: "Rule 32(c)",
+        fact: ""
+      },
+      {
+        id: 3,
+        question: "What does this sound signal for the vessel length?",
+        audioUrl: "",
+        correctAnswer: [ 
+                        "less than 12 m",
+                        "12 m or more",
+                        "20 m or more",
+                        "100 m or more"
+                       ],
+        description: "Rule 33(b)",
+        fact: ""
+      },
+      {
+        id: 4,
+        question: "What does this sound signal for the vessel length?",
+        audioUrl: "",
+        correctAnswer: [
+                        "12 m or more",
+                        "less than 12 m",
+                        "20 m or more",
+                        "100 m or more"
+                       ],
+        description: "Rule 33(a)",
+        fact: ""
+      },
+      {
+        id: 5,
+        question: "What does this sound signal for the vessel length?",
+        audioUrl: "",
+        correctAnswer: [
+                        "20 m or more", 
+                        "less than 12 m",
+                        "12 m or more",
+                        "100 m or more"
+                       ],
+        description: "Rule 33(a)",
+        fact: ""
+      },
+      {
+        id: 6,
+        question: "What does this sound signal for the vessel length?",
+        audioUrl: "",
+        correctAnswer: [
+                        "100 m or more",
+                        "20 m or more", 
+                        "less than 12 m",
+                        "12 m or more"
+                       ],
+        description: "Rule 33(a)",
+        fact: ""
+      },
+      {
+        id: 7,
+        question: "What is the action/explanation for this sound signal?",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/1_AC_Crse_Stbd.mp3",
+        correctAnswer: [
+                        "an alteration of course to starboard",
+                        "an alteration of course to port", 
+                        "operating astern propulsion",
+                        "failure to understand the intentions/actions of the other vessel",
+                        "in doubt that sufficient action is being taken by the other vessel to avoid collision"
+                       ],
+        description: "Rule 34(a)",
+        fact: ""
+      },
+      {
+        id: 8,
+        question: "What is the action/explanation for this sound signal?",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_AC_Crse_Port.mp3",
+        correctAnswer: [
+                        "an alteration of course to port", 
+                        "operating astern propulsion",
+                        "failure to understand the intentions/actions of the other vessel",
+                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
+                        "an alteration of course to starboard"
+                       ],
+        description: "Rule 34(a)",
+        fact: ""
+      },
+      {
+        id: 9,
+        question: "What is the action/explanation for this sound signal?",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/3_Astern_Prop.mp3",
+        correctAnswer: [
+                        "operating astern propulsion",
+                        "failure to understand the intentions/actions of the other vessel",
+                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
+                        "an alteration of course to starboard",
+                        "an alteration of course to port"
+                       ],
+        description: "Rule 34(a)",
+        fact: ""
+      },
+      {
+        id: 10,
+        question: "What is the action/explanation for this sound signal?",
+        audioUrl: ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3"],
+        correctAnswer: [
+                        "failure to understand the intentions/actions of the other vessel",
+                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
+                        "an alteration of course to starboard",
+                        "an alteration of course to port",
+                        "operating astern propulsion"
+                       ],
+        description: "Rule 34(d)",
+        fact: ""
+      },
+      {
+        id: 11,
+        question: "What is the action/explanation for this sound signal?",
+        audioUrl: ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"],
+        correctAnswer: [
+                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
+                        "an alteration of course to starboard",
+                        "an alteration of course to port",
+                        "operating astern propulsion",
+                        "failure to understand the intentions/actions of the other vessel"
+                       ],
+        description: "Rule 34(d)",
+        fact: ""
+      },
+      {
+        id: 12,
+        question: "What is the action/explanation for this sound signal?",
+        audioUrl: "",
+        correctAnswer: [
+                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
+                        "an alteration of course to starboard",
+                        "an alteration of course to port",
+                        "operating astern propulsion",
+                        "failure to understand the intentions/actions of the other vessel"
+                       ],
+        description: "Rule 34(d)",
+        fact: ""
+      },
+      {
+        id: 13,
+        question: "What is the action/response for this sound signal?",
+        audioUrl: "",
+        correctAnswer: [
+                        "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
+                        "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
+                        "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
+                        "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"
+                       ],
+        description: "Rule 34(c)(i)",
+        fact: ""
+      },
+      {
+        id: 14,
+        question: "What is the action/response for this sound signal?",
+        audioUrl: "",
+        correctAnswer: [
+                        "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
+                        "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
+                        "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway",
+                        "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"
+                       ],
+        description: "Rule 34(c)(i)",
+        fact: ""
+      },
+      {
+        id: 15,
+        question: "What is the action/response for this sound signal?",
+        audioUrl: "",
+        correctAnswer: [
+                        "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
+                        "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway",
+                        "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
+                        "the intention to overtake another vessel on its port side when in a narrow channel or fairway"
+                       ],
+        description: "Rule 34(c)(ii)",
+        fact: ""
+      },
+      {
+        id: 16,
+        question: "What is the action/response for this sound signal?",
+        audioUrl: "",
+        correctAnswer: [
+                        "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway",
+                        "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
+                        "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
+                        "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"
+                       ],
+        description: "Rule 34(d)",
+        fact: ""
+      },
+      {
+        id: 17,
+        question: "What is the correct use for this sound signal?",
+        audioUrl: "",
+        correctAnswer: "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
+        description: "Rule 34(e)",
+        fact: ""
+      },
+      {
+        id: 18,
+        question: "What is the correct use for this sound signal?",
+        audioUrl: "",
+        correctAnswer: "the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction",
+        description: "Rule 34(e)",
+        fact: ""
+      },
     ]
   },
-  {
-    config: {
-      id: "landmarks3",
-      title: "World Landmarks 3",
-      description: "Expert-level landmark identification challenge",
-      themeColor: 'violet',
-      quizKey: "world_landmarks_quiz3",
-      startScreenImage: "/images/landmarks/landmarks-start.jpg",
-      studyGuide: "https://navalknots.pages.dev/",
-      advancedChallenge: true,
-      hidden: false
-    },
-    questions: [
-      {
-        id: 1,
-        question: "What is this famous landmark?",
-        correctAnswer: "Eiffel Tower",
-        description: "An iconic iron lattice tower in Paris",
-        fact: "The Eiffel Tower was originally intended to be a temporary structure!",
-        imageUrl: "/images/landmarks/eiffel-tower.jpg"
-      },
-      {
-        id: 2,
-        question: "Name this ancient wonder",
-        correctAnswer: "Petra",
-        description: "A historic and archaeological city in Jordan",
-        fact: "Petra was carved directly into rose-colored rock faces",
-        imageUrl: "/images/landmarks/petra.jpg"
-      }
-    ]
-  }
 ];
 
 // =================================================================
@@ -281,7 +691,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     startScreenImage: "/images/music/music-start.jpg",
     studyGuide: "/images/music/study-guide.jpg",  // Optional study guide image
     advancedChallenge: false,  // Optional advanced challenge flag
-    hidden: false  // Optional hidden flag
+    hidden: false,  // Optional hidden flag
+    factHeading: "Fun Fact"  // Optional custom heading (defaults to "Did you know?")
   },
   questions: [
     {
