@@ -449,7 +449,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       quizKey: "32to34auditory",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
       studyGuide: "",
-      hidden: false
+      hidden: true
     },
     questions: [
       {
