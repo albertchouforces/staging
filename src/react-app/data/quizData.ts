@@ -177,7 +177,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       themeColor: 'emerald',
       quizKey: "32to34sounds",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
-      studyGuide: "https://vimeo.com/nptg",
+      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
       factHeading: "Additional Information",
       hidden: false
     },
