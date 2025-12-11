@@ -210,7 +210,7 @@ export function FlashCard({
   }, [showResult, question.correctAnswer, selectedAnswers, isMultiSelectQuestion]);
 
   return (
-    <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg">
+    <div className={`w-full max-w-3xl bg-white rounded-xl shadow-lg ${isMultiSelectQuestion && !showResult ? 'border-2 border-blue-600' : ''}`}>
       <div className="flex flex-col w-full">
         {/* Question Section */}
         <div className="p-6 border-b border-gray-100">
@@ -218,12 +218,7 @@ export function FlashCard({
             <div className="flex justify-end mb-3">
               <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
             </div>
-            <div className="flex items-start justify-between gap-4">
-              <h3 className="text-xl font-semibold text-gray-800">{question.question}</h3>
-              {isMultiSelectQuestion && !showResult && (
-                <span className="text-sm text-blue-600 font-medium whitespace-nowrap">Select all that apply</span>
-              )}
-            </div>
+            <h3 className="text-xl font-semibold text-gray-800">{question.question}</h3>
           </div>
           {/* Image Container */}
           <div className="flex flex-col items-center mb-4">
@@ -273,12 +268,19 @@ export function FlashCard({
               </div>
             )}
             
-            <p className="text-lg text-gray-600 italic text-center max-w-xl">{question.description}</p>
+            {question.description && question.description.trim() !== '' && (
+              <p className="text-lg text-gray-600 italic text-center max-w-xl">{question.description}</p>
+            )}
           </div>
         </div>
 
         {/* Options Section */}
         <div className="w-full p-6 border-b border-gray-100">
+          {isMultiSelectQuestion && !showResult && (
+            <div className="text-center mb-4">
+              <span className="text-sm text-blue-600 font-medium">Select all that apply</span>
+            </div>
+          )}
           <div className="grid grid-cols-1 gap-3 w-full max-w-xl mx-auto">
             {options.map((option) => (
               <button
