@@ -177,7 +177,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       themeColor: 'emerald',
       quizKey: "32to34sounds",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
-      studyGuide: "https://github.com/albertchouforces/staging/raw/e8dc17661db4348c91e0bd5a4a7009b3c8bd41bc/public/Flags.pdf",
+      studyGuide: "https://vimeo.com/nptg",
       factHeading: "Additional Information",
       hidden: false
     },
