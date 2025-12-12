@@ -184,14 +184,14 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     questions: [
       {
         id: 1,
-        question: "The term short blast means a blast of:",
-        correctAnswer: "1 second in duration",      
+        question: "The term <strong>short blast</strong> means a blast of:",
+        correctAnswer: "about 1 second in duration",      
         answerPool: [
-                      "1 second in duration", 
-                      "2 seconds in duration",
-                      "3 seconds in duration",
-                      "4 seconds in duration",
-                      "5 seconds in duration"
+                      "about 1 second in duration", 
+                      "about 2 seconds in duration",
+                      "about 3 seconds in duration",
+                      "about 4 seconds in duration",
+                      "about 5 seconds in duration"
                     ],
         description: "",
         fact: "Rule 32(b)",
@@ -199,13 +199,13 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 2,
-        question: "The term prolonged blast means a blast of:",
-        correctAnswer: "4 - 6 seconds in duration",      
+        question: "The term <strong>prolonged blast</strong> means a blast of:",
+        correctAnswer: "4 – 6 seconds in duration",      
         answerPool: [
-                      "4 - 6 seconds in duration", 
-                      "2 - 4 seconds in duration",
-                      "3 - 4 seconds in duration",
-                      "5 - 7 seconds in duration"
+                      "2 – 4 seconds in duration", 
+                      "3 – 4 seconds in duration",
+                      "4 – 6 seconds in duration",
+                      "5 – 7 seconds in duration"
                     ],      
         description: "",
         fact: "Rule 32(c)",
@@ -213,7 +213,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 3,
-        question: "A vessel 12 m or more in length:",
+        question: "A vessel <strong>12 m or more</strong> in length:",
         correctAnswer: "shall have a whistle",
         answerPool: [
                       "shall have a whistle",
@@ -227,7 +227,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 4,
-        question: "A vessel 20 m or more in length:",
+        question: "A vessel <strong>20 m or more</strong> in length:",
         correctAnswer: [
                         "shall have a whistle",
                         "shall have a bell"
@@ -247,7 +247,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 5,
-        question: "A vessel 100 m or more in length:",
+        question: "A vessel <strong>100 m or more</strong> in length:",
         correctAnswer: [
                         "shall have a whistle",
                         "shall have a bell",
@@ -269,7 +269,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 6,
-        question: "A vessel less than 12 m in length:",
+        question: "A vessel <strong>less than 12 m</strong> in length:",
         correctAnswer: [
                         "may have a whistle",
                         "shall have some other means of making an efficient sound signal if it does not have a whistle"
@@ -303,7 +303,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 8,
-        question: "When vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
         correctAnswer: "an alteration of course to starboard",
         answerPool: [
                       "an alteration of course to port",
@@ -318,7 +318,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 9,
-        question: "When vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another this sound signal represents:",
         correctAnswer: "an alteration of course to port",
         answerPool: [
                       "an alteration of course to port",
@@ -333,7 +333,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 10,
-        question: "When vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
         correctAnswer: "operating astern propulsion",
         answerPool: [
                       "an alteration of course to port",
@@ -348,7 +348,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 11,
-        question: "When vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
         correctAnswer: "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
         answerPool: [
                       "the intention to overtake another vessel on its starboard side in any body of water",
@@ -362,7 +362,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 12,
-        question: "When vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
         correctAnswer: "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
         answerPool: [
                       "the intention to overtake another vessel on its starboard side in any body of water",
@@ -376,7 +376,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 13,
-        question: "When vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
         correctAnswer: "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
         answerPool: [
                       "the agreement response from a vessel about to be overtaken in any body of water",
@@ -390,7 +390,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 14,
-        question: "When vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
         correctAnswer: [
                         "in doubt that sufficient action is being taken by the other vessel to avoid collision",
                         "failure to understand the intentions/actions of the other vessel "
@@ -408,7 +408,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 15,
-        question: "When vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
         correctAnswer: [
                         "in doubt that sufficient action is being taken by the other vessel to avoid collision",
                         "failure to understand the intentions/actions of the other vessel "
@@ -426,7 +426,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 16,
-        question: "When vessels are in sight of one another this sound signal represents:",
+        question: "When in <strong>clear visibility</strong> this sound signal represents:  ",
         correctAnswer: "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
         answerPool: [
                       "a power-driven vessel underway and making way",

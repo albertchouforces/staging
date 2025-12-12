@@ -218,7 +218,10 @@ export function FlashCard({
             <div className="flex justify-end mb-3">
               <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
             </div>
-            <h3 className="text-xl font-semibold text-gray-800">{question.question}</h3>
+            <h3 
+              className="text-xl font-semibold text-gray-800"
+              dangerouslySetInnerHTML={{ __html: question.question }}
+            />
           </div>
           {/* Image Container */}
           <div className="flex flex-col items-center mb-4">
