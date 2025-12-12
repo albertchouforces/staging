@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { QuestionData, QuizConfig } from '@/react-app/types';
-import { getCorrectAnswers, isMultiSelect } from '@/react-app/lib/utils';
+import { getCorrectAnswers, isMultiSelect, isMatchingQuestion } from '@/react-app/lib/utils';
 import { BookOpen, Check, ImageOff, X } from 'lucide-react';
 import { AudioPlayer } from '@/react-app/components/AudioPlayer';
+import { MatchingCard } from '@/react-app/components/MatchingCard';
 
 interface FlashCardProps {
   question: QuestionData;
@@ -29,6 +30,7 @@ export function FlashCard({
   const [imageError, setImageError] = useState(false);
   const [options, setOptions] = useState<string[]>([]);
   const isMultiSelectQuestion = isMultiSelect(question.correctAnswer);
+  const isMatchQuestion = isMatchingQuestion(question.correctAnswer);
 
   // Helper to check if audio is nested array (multiple playback options)
   const isNestedAudioArray = useCallback((url: string | string[] | string[][] | undefined): url is string[][] => {
@@ -227,6 +229,99 @@ export function FlashCard({
     }
     return "bg-gray-100";
   }, [showResult, question.correctAnswer, selectedAnswers, isMultiSelectQuestion]);
+
+  // Handle matching questions separately
+  if (isMatchQuestion) {
+    return (
+      <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg">
+        <div className="flex flex-col w-full">
+          {/* Question Section */}
+          <div className="p-6 border-b border-gray-100">
+            <div className="mb-4">
+              <div className="flex justify-end mb-3">
+                <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
+              </div>
+              <h3 
+                className="text-xl font-semibold text-gray-800 text-center"
+                dangerouslySetInnerHTML={{ __html: question.question }}
+              />
+            </div>
+            {question.description && question.description.trim() !== '' && (
+              <p className="text-lg text-gray-600 italic text-center max-w-xl mx-auto">{question.description}</p>
+            )}
+          </div>
+
+          {/* Matching Section */}
+          <div className="w-full p-6 border-b border-gray-100">
+            <div className="text-center mb-4">
+              <span className="text-sm text-blue-600 font-medium">Match the pairs by selecting one item from each column</span>
+            </div>
+            <MatchingCard 
+              key={question.id}
+              pairs={question.correctAnswer as any}
+              onComplete={(correct) => {
+                setShowResult(true);
+                onAnswer(correct);
+              }}
+            />
+          </div>
+
+          {/* Result Section for Matching */}
+          {showResult && (
+            <div className="w-full p-6 flex flex-col gap-6">
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200 max-w-xl mx-auto w-full">
+                <p className="text-green-800 text-sm font-medium">
+                  Great job! All pairs matched correctly.
+                </p>
+              </div>
+              
+              <div className="flex justify-center w-full">
+                <button
+                  onClick={onNext}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  {questionNumber === totalQuestions ? 'Finish Quiz' : 'Next Question'}
+                </button>
+              </div>
+
+              {/* Show fact section if there's a fact text or fact audio */}
+              {(question.fact || factAudioGroups.length > 0) && (
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 max-w-xl mx-auto">
+                  <div className="flex items-center gap-2 text-blue-800 mb-2">
+                    <BookOpen size={20} />
+                    <span className="font-semibold">{quizConfig.factHeading || 'Did you know?'}</span>
+                  </div>
+                  {question.fact && (
+                    <p className="text-blue-900">{question.fact}</p>
+                  )}
+                  
+                  {/* Fact Audio Players */}
+                  {factAudioGroups.length > 0 && (
+                    <div className={`${question.fact ? 'mt-4' : ''} flex flex-col items-center gap-3 w-full`}>
+                      {factAudioGroups.map((factAudioGroup, index) => (
+                        <div key={`q${question.id}-fact-${index}`} className="flex flex-col items-center gap-3 w-full">
+                          <AudioPlayer 
+                            key={`q${question.id}-fact-player-${index}`}
+                            audioFiles={factAudioGroup.files} 
+                            loopCount={question.factAudioLoopCount}
+                            label={factAudioGroup.label}
+                            colorScheme="blue"
+                          />
+                          {index < factAudioGroups.length - 1 && (
+                            <div className="w-full max-w-xs border-t border-blue-300"></div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`w-full max-w-3xl bg-white rounded-xl shadow-lg ${isMultiSelectQuestion && !showResult ? 'border-2 border-blue-600' : ''}`}>

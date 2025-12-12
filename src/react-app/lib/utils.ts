@@ -11,9 +11,23 @@ export const shuffleArray = <T,>(array: T[]): T[] => {
 };
 
 /**
+ * Check if a question is a matching question (array of pairs)
+ */
+export const isMatchingQuestion = (correctAnswer: string | string[] | any[]): boolean => {
+  return Array.isArray(correctAnswer) && 
+         correctAnswer.length > 0 && 
+         Array.isArray(correctAnswer[0]) &&
+         correctAnswer[0].length === 2;
+};
+
+/**
  * Get the correct answer(s) from a question as an array
+ * Does not apply to matching questions
  */
 export const getCorrectAnswers = (correctAnswer: string | string[]): string[] => {
+  if (isMatchingQuestion(correctAnswer)) {
+    return [];
+  }
   return Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer];
 };
 
@@ -21,6 +35,7 @@ export const getCorrectAnswers = (correctAnswer: string | string[]): string[] =>
  * Check if a question is multi-select (requires multiple answers)
  */
 export const isMultiSelect = (correctAnswer: string | string[]): boolean => {
+  if (isMatchingQuestion(correctAnswer)) return false;
   return Array.isArray(correctAnswer) && correctAnswer.length > 1;
 };
 
@@ -60,10 +75,12 @@ export const getRandomOptions = (
   correctAnswers: string[], 
   count: number
 ): string[] => {
-  // Remove all correct answers from the pool
-  const otherAnswers = allPossibleAnswers.filter(answer => 
-    !correctAnswers.some(correct => correct.toLowerCase() === answer.toLowerCase())
-  );
+  // Filter out non-string values and remove all correct answers from the pool
+  const otherAnswers = allPossibleAnswers
+    .filter(answer => typeof answer === 'string')
+    .filter(answer => 
+      !correctAnswers.some(correct => correct.toLowerCase() === answer.toLowerCase())
+    );
 
   // Shuffle the other answers and take the required number
   const randomWrongAnswers = shuffleArray(otherAnswers)

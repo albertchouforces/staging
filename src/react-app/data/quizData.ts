@@ -454,7 +454,44 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     questions: [
       {
         id: 1,
-        question: "What is the definition of this sound signal?",
+        question: "Match the sound signal with the correct definition.",
+        correctAnswer: [
+                        ["Short Blast", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"],
+                        ["Prolonged Blast", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3"]
+                        ],
+        description: "",
+        fact: ""
+      },
+      {
+        id: 2,
+        question: "Match the length of the vessel with the correct sound signaling device(s).",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
+        correctAnswer: [
+                        ["less than 12 m ", [["Whistleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]]],
+                        ["12 m or more", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"],
+                        ["20 m or more", ["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"]],
+                        ["100 m or more", ["https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"]]
+                        ],
+        description: "",
+        fact: ""
+      }
+    ]
+  },
+  {
+    config: {
+      id: "32to34auditorytest",
+      title: "Col Regs Rules 32-34 Auditory Recognition Challenge",
+      description: "Test your knowledge of Col Regs Rules 32 to 34",
+      themeColor: 'blue',
+      quizKey: "32to34auditorytest",
+      startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
+      studyGuide: "",
+      hidden: true
+    },
+    questions: [
+      {
+        id: 1,
+        question: "Match the sound signal with the correct definition.",
         audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3",
         correctAnswer: "short blast",
         description: "Rule 32(b)",

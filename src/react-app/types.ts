@@ -1,7 +1,10 @@
+// Type for match pair items - can be text, image URL, audio URL, or array of audio URLs
+export type MatchItem = string | string[] | { type: 'text' | 'image' | 'audio'; value: string | string[] };
+
 export interface QuestionData {
   id: number;
   question: string;   // The question to display
-  correctAnswer: string | string[];   // The correct answer(s) - if array, ALL items must be selected to be correct
+  correctAnswer: string | string[] | [MatchItem, MatchItem][] | [MatchItem, MatchItem, MatchItem][];   // String (single answer), string[] (multi-select), array of pairs (matching), or array of triplets (matching with OR)
   answerPool?: string[];   // Optional custom answer options for this question (will be scrambled)
   description: string;    // Brief context shown with the question
   fact: string;          // Interesting fact shown after answering

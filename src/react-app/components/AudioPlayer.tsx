@@ -192,22 +192,27 @@ export function AudioPlayer({
   }, []);
 
   return (
-    <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-lg border border-gray-200">
-      <Volume2 size={20} className="text-gray-600" />
+    <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200 min-w-0">
+      <Volume2 size={18} className="text-gray-600 flex-shrink-0" />
       <button
-        onClick={toggleAudioPlayback}
-        className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors text-white ${
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleAudioPlayback();
+        }}
+        className={`flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-full transition-colors text-white ${
           audioError 
             ? `${colorClass.errorBg} ${colorClass.errorHover}` 
             : `${colorClass.bg} ${colorClass.hover}`
         }`}
         aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
       >
-        {isPlaying ? <Pause size={18} /> : <Play size={18} className="ml-0.5" />}
+        {isPlaying ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
       </button>
-      <span className="text-sm text-gray-600">
-        {audioError ? 'Audio unavailable (tap to retry)' : (isPlaying ? 'Playing...' : label)}
-      </span>
+      {label && (
+        <span className="text-xs text-gray-600 truncate min-w-0">
+          {audioError ? 'Audio unavailable' : label}
+        </span>
+      )}
       <audio
         ref={audioRef}
         onEnded={handleAudioEnded}

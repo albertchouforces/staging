@@ -166,6 +166,7 @@ function App() {
   };
 
   const handleAnswer = (correct: boolean) => {
+    console.log('[App] handleAnswer called, correct:', correct, 'current totalAnswers:', totalAnswers);
     if (correct) setCorrectAnswers(prev => prev + 1);
     setTotalAnswers(prev => prev + 1);
     pauseTimer();
