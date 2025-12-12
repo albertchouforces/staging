@@ -200,6 +200,25 @@ export function FlashCard({
       return "bg-gray-100 hover:bg-gray-200";
     }
     
+    // For multi-select, distinguish between different feedback states
+    if (isMultiSelectQuestion) {
+      if (isCorrect && isSelected) {
+        // Correctly selected
+        return "bg-green-100 border-2 border-green-500";
+      }
+      if (isCorrect && !isSelected) {
+        // Missed correct answer
+        return "bg-yellow-100 border-2 border-yellow-500";
+      }
+      if (!isCorrect && isSelected) {
+        // Incorrectly selected
+        return "bg-red-100 border-2 border-red-500";
+      }
+      // Not selected and not correct
+      return "bg-gray-100";
+    }
+    
+    // For single-select questions
     if (isCorrect) {
       return "bg-green-100 border-2 border-green-500";
     }
@@ -293,16 +312,41 @@ export function FlashCard({
                 className={`w-full min-h-[60px] p-4 text-left rounded-lg transition-colors flex items-center justify-between ${getOptionStyles(option)}`}
               >
                 <span>{option}</span>
-                {showResult && (
-                  <span>
-                    {getCorrectAnswers(question.correctAnswer).includes(option) && (
-                      <Check className="text-green-600" size={20} />
-                    )}
-                    {selectedAnswers.has(option) && !getCorrectAnswers(question.correctAnswer).includes(option) && (
-                      <X className="text-red-600" size={20} />
-                    )}
-                  </span>
-                )}
+                {showResult && (() => {
+                  const correctAnswers = getCorrectAnswers(question.correctAnswer);
+                  const isCorrect = correctAnswers.includes(option);
+                  const isSelected = selectedAnswers.has(option);
+                  
+                  if (isMultiSelectQuestion) {
+                    if (isCorrect && isSelected) {
+                      // Correctly selected
+                      return <Check className="text-green-600" size={24} />;
+                    }
+                    if (isCorrect && !isSelected) {
+                      // Missed this correct answer
+                      return (
+                        <div className="flex items-center gap-1">
+                          <Check className="text-yellow-600" size={24} />
+                          <span className="text-xs text-yellow-700 font-medium">Missed</span>
+                        </div>
+                      );
+                    }
+                    if (!isCorrect && isSelected) {
+                      // Incorrectly selected
+                      return <X className="text-red-600" size={24} />;
+                    }
+                    return null;
+                  }
+                  
+                  // Single-select feedback
+                  if (isCorrect) {
+                    return <Check className="text-green-600" size={20} />;
+                  }
+                  if (isSelected) {
+                    return <X className="text-red-600" size={20} />;
+                  }
+                  return null;
+                })()}
               </button>
             ))}
           </div>
