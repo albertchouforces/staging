@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef, Fragment } from 'react';
 import { Check } from 'lucide-react';
 import { shuffleArray } from '@/react-app/lib/utils';
 import type { MatchItem } from '@/react-app/types';
@@ -130,6 +130,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
   const [selectedRight, setSelectedRight] = useState<string | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<Set<string>>(new Set());
   const [incorrectPair, setIncorrectPair] = useState<{ left: string; right: string } | null>(null);
+  const [justMatchedPair, setJustMatchedPair] = useState<{ left: string; right: string } | null>(null);
   const hasCompletedRef = useRef(false);
 
   // Reset state when pairs change (new question)
@@ -138,6 +139,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
     setSelectedLeft(null);
     setSelectedRight(null);
     setIncorrectPair(null);
+    setJustMatchedPair(null);
     hasCompletedRef.current = false;
   }, [pairs]);
 
@@ -158,14 +160,23 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
       
       if (isCorrectMatch) {
         console.log('[MatchingCard] Correct match found, adding to matchedPairs');
+        // Show green border effect
+        setJustMatchedPair({ left: selectedLeft, right: selectedRight });
+        
         // Add both to matched set
         setMatchedPairs(prev => {
           const newSet = new Set([...prev, selectedLeft, selectedRight]);
           console.log('[MatchingCard] matchedPairs size after match:', newSet.size);
           return newSet;
         });
-        setSelectedLeft(null);
-        setSelectedRight(null);
+        
+        // Remove green border effect and selections after brief moment
+        setTimeout(() => {
+          setJustMatchedPair(null);
+          setSelectedLeft(null);
+          setSelectedRight(null);
+        }, 600);
+        
         setIncorrectPair(null);
       } else {
         // Show incorrect feedback
@@ -205,10 +216,13 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
     const isMatched = matchedPairs.has(item.id);
     const isSelected = isLeft ? selectedLeft === item.id : selectedRight === item.id;
     const isIncorrect = incorrectPair && (incorrectPair.left === item.id || incorrectPair.right === item.id);
+    const isJustMatched = justMatchedPair && (justMatchedPair.left === item.id || justMatchedPair.right === item.id);
     
-    const baseClasses = "w-full h-[100px] p-4 rounded-lg transition-all flex items-center justify-center";
-    const stateClasses = isMatched 
-      ? "bg-gray-200 text-gray-400 cursor-not-allowed opacity-60" 
+    const baseClasses = "w-full h-full p-4 rounded-lg transition-all flex items-center justify-center";
+    const stateClasses = isJustMatched
+      ? "bg-green-100 border-2 border-green-500 cursor-not-allowed"
+      : isMatched 
+      ? "bg-gray-200 text-gray-400 cursor-not-allowed opacity-60 border-2 border-transparent" 
       : isIncorrect
       ? "bg-red-100 border-2 border-red-500 cursor-pointer animate-shake"
       : isSelected
@@ -280,39 +294,37 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
     }
 
     if (item.type === 'audio-or' && item.orValues) {
-      const label1 = item.orLabels?.[0] || "Play audio";
-      const label2 = item.orLabels?.[1] || "Play audio";
+      const audioCount = item.orValues.length;
       
       return (
         <div
           key={item.id}
           onClick={onClick}
-          className={`${baseClasses} ${stateClasses} flex-col gap-2 relative justify-center overflow-hidden`}
+          className={`${baseClasses} ${stateClasses} flex-col gap-1.5 relative justify-center overflow-hidden p-2`}
         >
-          <div className="flex flex-col gap-1.5 w-full min-w-0 px-1">
-            <div className="flex items-center justify-center gap-1.5 min-w-0">
-              <div className="flex-1 min-w-0">
-                <AudioPlayer
-                  audioFiles={item.orValues[0]}
-                  loopCount={1}
-                  label={label1}
-                  colorScheme="blue"
-                />
-              </div>
-              <span className="text-gray-600 font-semibold text-xs px-0.5 flex-shrink-0">OR</span>
-              <div className="flex-1 min-w-0">
-                <AudioPlayer
-                  audioFiles={item.orValues[1]}
-                  loopCount={1}
-                  label={label2}
-                  colorScheme="blue"
-                />
-              </div>
-            </div>
+          <div className="flex flex-wrap items-center justify-center gap-1 w-full">
+            {item.orValues.map((audioFiles, index) => {
+              const label = item.orLabels?.[index] || "Play audio";
+              return (
+                <div key={index} className="flex items-center gap-1 min-w-[60px]">
+                  {index > 0 && (
+                    <span className="text-gray-600 font-semibold text-[10px] px-0.5 flex-shrink-0">OR</span>
+                  )}
+                  <div className="flex-1 min-w-[60px]">
+                    <AudioPlayer
+                      audioFiles={audioFiles}
+                      loopCount={1}
+                      label={label}
+                      colorScheme="blue"
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
           {isMatched && (
             <div className="absolute top-2 right-2">
-              <Check className="text-green-600 bg-white rounded-full p-1" size={24} />
+              <Check className="text-green-600 bg-white rounded-full p-1" size={20} />
             </div>
           )}
         </div>
@@ -320,20 +332,25 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
     }
 
     return null;
-  }, [matchedPairs, selectedLeft, selectedRight, incorrectPair, handleLeftClick, handleRightClick]);
+  }, [matchedPairs, selectedLeft, selectedRight, incorrectPair, justMatchedPair, handleLeftClick, handleRightClick]);
 
   return (
     <div className="w-full max-w-4xl">
-      <div className="grid grid-cols-2 gap-8">
-        {/* Left Column */}
-        <div className="flex flex-col gap-3">
-          {leftItems.map(item => renderItem(item, true))}
-        </div>
-
-        {/* Right Column */}
-        <div className="flex flex-col gap-3">
-          {rightItems.map(item => renderItem(item, false))}
-        </div>
+      <div className="grid grid-cols-2 gap-x-8 gap-y-3" style={{ gridAutoRows: 'minmax(100px, auto)' }}>
+        {/* Interleave left and right items in grid rows */}
+        {leftItems.map((leftItem, index) => {
+          const rightItem = rightItems[index];
+          return (
+            <Fragment key={index}>
+              <div>
+                {renderItem(leftItem, true)}
+              </div>
+              <div>
+                {renderItem(rightItem, false)}
+              </div>
+            </Fragment>
+          );
+        })}
       </div>
     </div>
   );

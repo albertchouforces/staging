@@ -192,14 +192,14 @@ export function AudioPlayer({
   }, []);
 
   return (
-    <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200 min-w-0">
-      <Volume2 size={18} className="text-gray-600 flex-shrink-0" />
+    <div className="flex flex-col items-center gap-1 bg-gray-50 px-2 py-2 rounded-lg border border-gray-200 min-w-0 relative">
+      <Volume2 size={12} className="text-gray-400 absolute top-1 right-1" />
       <button
         onClick={(e) => {
           e.stopPropagation();
           toggleAudioPlayback();
         }}
-        className={`flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-full transition-colors text-white ${
+        className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full transition-colors text-white ${
           audioError 
             ? `${colorClass.errorBg} ${colorClass.errorHover}` 
             : `${colorClass.bg} ${colorClass.hover}`
@@ -209,7 +209,7 @@ export function AudioPlayer({
         {isPlaying ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
       </button>
       {label && (
-        <span className="text-xs text-gray-600 truncate min-w-0">
+        <span className="text-[9px] text-gray-600 text-center leading-tight max-w-full truncate px-0.5 w-full">
           {audioError ? 'Audio unavailable' : label}
         </span>
       )}

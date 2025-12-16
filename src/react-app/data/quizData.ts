@@ -449,7 +449,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       quizKey: "32to34auditory",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
       studyGuide: "",
-      hidden: true
+      hidden: false
     },
     questions: [
       {
@@ -465,16 +465,41 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 2,
         question: "Match the length of the vessel with the correct sound signaling device(s).",
-        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
         correctAnswer: [
-                        ["less than 12 m ", [["Whistleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]]],
-                        ["12 m or more", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"],
-                        ["20 m or more", ["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"]],
-                        ["100 m or more", ["https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"]]
+                        ["less than 12 m ", [["Whistle","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], ["Air Horn","https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]]],
+                        ["12 m or more", ["Whistle","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"]],
+                        ["20 m or more", [["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], ["Bell","https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"]]],
+                        ["100 m or more", [["Whistle","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], ["Bell","https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"], ["Gong","https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"]]]
                         ],
         description: "",
         fact: ""
-      }
+      },
+      {
+        id: 3,
+        question: "Test Question.",
+        correctAnswer: [
+                        ["1", "One"],
+                        ["12 m or more", ["Whistle","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"]],
+                        ["2", "Two"],
+                        ["3", "Three"]
+                        ],
+        description: "",
+        fact: ""
+      },
+      {
+        id: 4,
+        question: "When in <strong>clear visibility</strong> this sound signal represents:  ",
+        correctAnswer: "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
+        answerPool: [
+                      "a power-driven vessel underway and making way",
+                      "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
+                      "an alteration of course to starboard",
+                      "I intend to leave you on your port side"
+                    ],
+        description: "",
+        fact: "Rule 34(e)",
+        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
+      },
     ]
   },
   {

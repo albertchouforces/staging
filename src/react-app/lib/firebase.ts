@@ -120,12 +120,12 @@ import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
 
 // Firebase configuration
 export const firebaseConfig = {
-  apiKey: "AIzaSyBkzBFeo4FL62OsZ-AssG3OK5KMwz6_OMc",
-  authDomain: "test-a29e7.firebaseapp.com",
-  projectId: "test-a29e7",
-  storageBucket: "test-a29e7.firebasestorage.app",
-  messagingSenderId: "579772147410",
-  appId: "1:579772147410:web:a06c3f87f0a41572baaf0b"
+  apiKey: "AIzaSyBWXWSKOTLs7tgiEHvUVub_H2irlSBhjHA",
+  authDomain: "rcnnwo.firebaseapp.com",
+  projectId: "rcnnwo",
+  storageBucket: "rcnnwo.firebasestorage.app",
+  messagingSenderId: "489230373326",
+  appId: "1:489230373326:web:c6e9339513f33453279b9f"
 };
 
 // Initialize Firebase App instance directly with the config
