@@ -3,7 +3,7 @@ import { HighScoreEntry, QuizConfig } from '@/react-app/types';
 import { saveGlobalScore, getGlobalScores } from '@/react-app/lib/firebase';
 import { Trophy, Loader } from 'lucide-react';
 import { Medal as MedalComponent } from '@/react-app/components/Medal';
-import { ENABLE_GLOBAL_LEADERBOARD, ENABLE_TIME_TRACKING } from '@/react-app/config/features';
+import { ENABLE_GLOBAL_LEADERBOARD } from '@/react-app/config/features';
 
 interface UserNameInputProps {
   onSubmit: (userName: string) => void;

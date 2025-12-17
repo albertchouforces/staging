@@ -116,7 +116,6 @@ service cloud.firestore {
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
-import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
 
 // Firebase configuration
 export const firebaseConfig = {

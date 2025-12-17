@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Globe, NotebookText } from 'lucide-react';
+import { Globe, NotebookText } from 'lucide-react';
 import type { QuizStats } from '@/react-app/types';
 import { QuizCard } from '@/react-app/components/QuizCard';
 import { GlobalLeaderboard } from '@/react-app/components/GlobalLeaderboard';

@@ -195,7 +195,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                     ],
         description: "",
         fact: "Rule 32(b)",
-        factAudioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3",
+        factAudioUrl: "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3",
       },
       {
         id: 2,
@@ -209,7 +209,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                     ],      
         description: "",
         fact: "Rule 32(c)",
-        factAudioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
+        factAudioUrl: "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3",
       },
       {
         id: 3,
@@ -223,7 +223,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                     ],
         description: "",
         fact: "Rule 33(a)",
-        factAudioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3",
+        factAudioUrl: "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3",
       },
       {
         id: 4,
@@ -241,7 +241,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         description: "",
         fact: "Rule 33(a)",
         factAudioUrl: [
-                        ["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], 
+                        ["Whistle", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], 
                         ["Bell", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"]
                       ],
       },
@@ -262,7 +262,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         description: "",
         fact: "Rule 33(a)",
         factAudioUrl: [
-                        ["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], 
+                        ["Whistle", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], 
                         ["Bell", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"],
                         ["Gong", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"]
                       ],
@@ -283,7 +283,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         description: "",
         fact: "Rule 33(b)",
         factAudioUrl: [
-                        ["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"],
+                        ["Whistle", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"],
                         ["Air Horn", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]
                       ]
       },
@@ -426,7 +426,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 16,
-        question: "When in <strong>clear visibility</strong> this sound signal represents:  ",
+        question: "When in <strong>clear visibility</strong> this sound signal represents:",
         correctAnswer: "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
         answerPool: [
                       "a power-driven vessel underway and making way",
@@ -456,8 +456,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 1,
         question: "Match the sound signal with the correct definition.",
         correctAnswer: [
-                        ["Short Blast", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"],
-                        ["Prolonged Blast", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3"]
+                        ["Short Blast", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"],
+                        ["Prolonged Blast", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3"]
                         ],
         description: "",
         fact: ""
@@ -466,276 +466,51 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 2,
         question: "Match the length of the vessel with the correct sound signaling device(s).",
         correctAnswer: [
-                        ["less than 12 m ", [["Whistle","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], ["Air Horn","https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]]],
-                        ["12 m or more", ["Whistle","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"]],
-                        ["20 m or more", [["Whistle", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], ["Bell","https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"]]],
-                        ["100 m or more", [["Whistle","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"], ["Bell","https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"], ["Gong","https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"]]]
+                        ["less than 12 m ", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]]],
+                        ["12 m or more", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]],
+                        ["20 m or more", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"]]],
+                        ["100 m or more", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"]]]
                         ],
         description: "",
         fact: ""
       },
       {
         id: 3,
-        question: "Test Question.",
+        question: "Match the sound signal with the correct action/explanation.",
         correctAnswer: [
-                        ["1", "One"],
-                        ["12 m or more", ["Whistle","https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"]],
-                        ["2", "Two"],
-                        ["3", "Three"]
+                        ["an alteration of course to starboard", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_AC_Crse_Stbd.mp3"],
+                        ["an alteration of course to port", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_AC_Crse_Port.mp3"],
+                        ["operating astern propulsion", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_Astern_Prop.mp3"],
+                        ["failure to understand the intentions/actions of the other vessel", ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3"]],
+                        ["in doubt that sufficient action is being taken by the other vessel to avoid collision", ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]
                         ],
         description: "",
         fact: ""
       },
       {
         id: 4,
-        question: "When in <strong>clear visibility</strong> this sound signal represents:  ",
-        correctAnswer: "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
-        answerPool: [
-                      "a power-driven vessel underway and making way",
-                      "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
-                      "an alteration of course to starboard",
-                      "I intend to leave you on your port side"
-                    ],
-        description: "",
-        fact: "Rule 34(e)",
-        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
-      },
-    ]
-  },
-  {
-    config: {
-      id: "32to34auditorytest",
-      title: "Col Regs Rules 32-34 Auditory Recognition Challenge",
-      description: "Test your knowledge of Col Regs Rules 32 to 34",
-      themeColor: 'blue',
-      quizKey: "32to34auditorytest",
-      startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
-      studyGuide: "",
-      hidden: true
-    },
-    questions: [
-      {
-        id: 1,
-        question: "Match the sound signal with the correct definition.",
-        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3",
-        correctAnswer: "short blast",
-        description: "Rule 32(b)",
-        fact: ""
-      },
-      {
-        id: 2,
-        question: "What is the definition of this sound signal?",
-        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
-        correctAnswer: "prolonged blast",
-        description: "Rule 32(c)",
-        fact: ""
-      },
-      {
-        id: 3,
-        question: "What does this sound signal for the vessel length?",
-        audioUrl: "",
-        correctAnswer: [ 
-                        "less than 12 m",
-                        "12 m or more",
-                        "20 m or more",
-                        "100 m or more"
-                       ],
-        description: "Rule 33(b)",
-        fact: ""
-      },
-      {
-        id: 4,
-        question: "What does this sound signal for the vessel length?",
-        audioUrl: "",
+        question: "Match the sound signal with the correct action/response.",
         correctAnswer: [
-                        "12 m or more",
-                        "less than 12 m",
-                        "20 m or more",
-                        "100 m or more"
-                       ],
-        description: "Rule 33(a)",
-        fact: ""
+                        ["the intention to overtake another vessel on its starboard side when in a narrow channel or fairway","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_Overtake_Stbd.mp3"],
+                        ["the intention to overtake another vessel on its port side when in a narrow channel or fairway","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/5_Overtake_Port.mp3"],
+                        ["the agreement response from a vessel about to be overtaken in a narrow channel or fairway","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/OvertakingAgreement.mp3"],
+                        ["the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway",["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]
+                      ],
+        description: "",
       },
       {
         id: 5,
-        question: "What does this sound signal for the vessel length?",
-        audioUrl: "",
+        question: "Match the sound signal with its correct use.",
         correctAnswer: [
-                        "20 m or more", 
-                        "less than 12 m",
-                        "12 m or more",
-                        "100 m or more"
-                       ],
-        description: "Rule 33(a)",
-        fact: ""
-      },
-      {
-        id: 6,
-        question: "What does this sound signal for the vessel length?",
-        audioUrl: "",
-        correctAnswer: [
-                        "100 m or more",
-                        "20 m or more", 
-                        "less than 12 m",
-                        "12 m or more"
-                       ],
-        description: "Rule 33(a)",
-        fact: ""
-      },
-      {
-        id: 7,
-        question: "What is the action/explanation for this sound signal?",
-        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/1_AC_Crse_Stbd.mp3",
-        correctAnswer: [
-                        "an alteration of course to starboard",
-                        "an alteration of course to port", 
-                        "operating astern propulsion",
-                        "failure to understand the intentions/actions of the other vessel",
-                        "in doubt that sufficient action is being taken by the other vessel to avoid collision"
-                       ],
-        description: "Rule 34(a)",
-        fact: ""
-      },
-      {
-        id: 8,
-        question: "What is the action/explanation for this sound signal?",
-        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_AC_Crse_Port.mp3",
-        correctAnswer: [
-                        "an alteration of course to port", 
-                        "operating astern propulsion",
-                        "failure to understand the intentions/actions of the other vessel",
-                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-                        "an alteration of course to starboard"
-                       ],
-        description: "Rule 34(a)",
-        fact: ""
-      },
-      {
-        id: 9,
-        question: "What is the action/explanation for this sound signal?",
-        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/3_Astern_Prop.mp3",
-        correctAnswer: [
-                        "operating astern propulsion",
-                        "failure to understand the intentions/actions of the other vessel",
-                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-                        "an alteration of course to starboard",
-                        "an alteration of course to port"
-                       ],
-        description: "Rule 34(a)",
-        fact: ""
-      },
-      {
-        id: 10,
-        question: "What is the action/explanation for this sound signal?",
-        audioUrl: ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3"],
-        correctAnswer: [
-                        "failure to understand the intentions/actions of the other vessel",
-                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-                        "an alteration of course to starboard",
-                        "an alteration of course to port",
-                        "operating astern propulsion"
-                       ],
-        description: "Rule 34(d)",
-        fact: ""
-      },
-      {
-        id: 11,
-        question: "What is the action/explanation for this sound signal?",
-        audioUrl: ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/d812ee16fd0a96a7643b821e8bc97fae05a4beb9/sounds/1_Short_Blast.mp3"],
-        correctAnswer: [
-                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-                        "an alteration of course to starboard",
-                        "an alteration of course to port",
-                        "operating astern propulsion",
-                        "failure to understand the intentions/actions of the other vessel"
-                       ],
-        description: "Rule 34(d)",
-        fact: ""
-      },
-      {
-        id: 12,
-        question: "What is the action/explanation for this sound signal?",
-        audioUrl: "",
-        correctAnswer: [
-                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-                        "an alteration of course to starboard",
-                        "an alteration of course to port",
-                        "operating astern propulsion",
-                        "failure to understand the intentions/actions of the other vessel"
-                       ],
-        description: "Rule 34(d)",
-        fact: ""
-      },
-      {
-        id: 13,
-        question: "What is the action/response for this sound signal?",
-        audioUrl: "",
-        correctAnswer: [
-                        "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
-                        "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
-                        "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
-                        "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"
-                       ],
-        description: "Rule 34(c)(i)",
-        fact: ""
-      },
-      {
-        id: 14,
-        question: "What is the action/response for this sound signal?",
-        audioUrl: "",
-        correctAnswer: [
-                        "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
-                        "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
-                        "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway",
-                        "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"
-                       ],
-        description: "Rule 34(c)(i)",
-        fact: ""
-      },
-      {
-        id: 15,
-        question: "What is the action/response for this sound signal?",
-        audioUrl: "",
-        correctAnswer: [
-                        "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
-                        "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway",
-                        "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
-                        "the intention to overtake another vessel on its port side when in a narrow channel or fairway"
-                       ],
-        description: "Rule 34(c)(ii)",
-        fact: ""
-      },
-      {
-        id: 16,
-        question: "What is the action/response for this sound signal?",
-        audioUrl: "",
-        correctAnswer: [
-                        "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway",
-                        "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
-                        "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
-                        "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"
-                       ],
-        description: "Rule 34(d)",
-        fact: ""
-      },
-      {
-        id: 17,
-        question: "What is the correct use for this sound signal?",
-        audioUrl: "",
-        correctAnswer: "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
-        description: "Rule 34(e)",
-        fact: ""
-      },
-      {
-        id: 18,
-        question: "What is the correct use for this sound signal?",
-        audioUrl: "",
-        correctAnswer: "the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction",
-        description: "Rule 34(e)",
-        fact: ""
+                        ["a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3"],
+                        ["the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3"],
+                        ["Distractor #1","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],
+                        ["Distractor #2","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/OvertakingAgreement.mp3"]
+                      ],
+        description: "",
       },
     ]
-  },
+  }
 ];
 
 // =================================================================

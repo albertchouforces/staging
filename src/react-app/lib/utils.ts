@@ -17,14 +17,14 @@ export const isMatchingQuestion = (correctAnswer: string | string[] | any[]): bo
   return Array.isArray(correctAnswer) && 
          correctAnswer.length > 0 && 
          Array.isArray(correctAnswer[0]) &&
-         correctAnswer[0].length === 2;
+         (correctAnswer[0].length === 2 || correctAnswer[0].length === 3);
 };
 
 /**
  * Get the correct answer(s) from a question as an array
  * Does not apply to matching questions
  */
-export const getCorrectAnswers = (correctAnswer: string | string[]): string[] => {
+export const getCorrectAnswers = (correctAnswer: string | string[] | any[]): string[] => {
   if (isMatchingQuestion(correctAnswer)) {
     return [];
   }
@@ -34,7 +34,7 @@ export const getCorrectAnswers = (correctAnswer: string | string[]): string[] =>
 /**
  * Check if a question is multi-select (requires multiple answers)
  */
-export const isMultiSelect = (correctAnswer: string | string[]): boolean => {
+export const isMultiSelect = (correctAnswer: string | string[] | any[]): boolean => {
   if (isMatchingQuestion(correctAnswer)) return false;
   return Array.isArray(correctAnswer) && correctAnswer.length > 1;
 };

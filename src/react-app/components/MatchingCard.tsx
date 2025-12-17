@@ -13,7 +13,7 @@ interface ParsedItem {
   id: string;
   display: MatchItem;
   type: 'text' | 'image' | 'audio' | 'audio-or';
-  value: string | string[];
+  value: string | string[] | string[][];
   orValues?: string[][]; // For audio-or type: array of audio file arrays
   orLabels?: string[]; // For audio-or type: labels for each OR option
   label?: string; // Optional label for audio items
@@ -102,13 +102,13 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
     
     // Handle each pair individually
     // Check if second element is an array of arrays (OR format)
-    const right = shuffleArray(shuffleArray(pairs.map((pair, i) => {
-      const secondElement = pair[1];
+    const right = shuffleArray(shuffleArray(pairs.map((p, i) => {
+      const secondElement = p[1];
       
       // Check if it's an array of arrays (nested structure for OR)
       if (Array.isArray(secondElement) && secondElement.length > 0 && Array.isArray(secondElement[0])) {
-        // This is OR format: pair[1] is [[audio1], [audio2]]
-        return parseOrItem(secondElement, 'right', i);
+        // This is OR format: p[1] is [[audio1], [audio2]]
+        return parseOrItem(secondElement as any[][], 'right', i);
       } else {
         // Regular pair
         return parseItem(secondElement, 'right', i);
@@ -117,7 +117,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
     
     // Create mapping of correct matches (left ID -> right ID)
     const matches: Record<string, string> = {};
-    pairs.forEach((pair, i) => {
+    pairs.forEach((_, i) => {
       const leftId = `left-${i}`;
       const rightId = `right-${i}`;
       matches[leftId] = rightId;
@@ -144,14 +144,14 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
   }, [pairs]);
 
   const handleLeftClick = useCallback((id: string) => {
-    if (matchedPairs.has(id)) return;
+    if (matchedPairs.has(id) || incorrectPair) return;
     setSelectedLeft(prev => prev === id ? null : id);
-  }, [matchedPairs]);
+  }, [matchedPairs, incorrectPair]);
 
   const handleRightClick = useCallback((id: string) => {
-    if (matchedPairs.has(id)) return;
+    if (matchedPairs.has(id) || incorrectPair) return;
     setSelectedRight(prev => prev === id ? null : id);
-  }, [matchedPairs]);
+  }, [matchedPairs, incorrectPair]);
 
   // Check for match when both are selected
   useEffect(() => {
@@ -254,7 +254,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
           className={`${baseClasses} ${stateClasses} relative overflow-hidden`}
         >
           <img 
-            src={item.value} 
+            src={item.value as string} 
             alt="Match item" 
             className="max-w-full max-h-[60px] object-contain"
           />
@@ -268,7 +268,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
     }
 
     if (item.type === 'audio') {
-      const audioFiles = Array.isArray(item.value) ? item.value : [item.value];
+      const audioFiles = Array.isArray(item.value) ? item.value as string[] : [item.value as string];
       const label = item.label || "Play audio";
       return (
         <div
@@ -294,8 +294,6 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
     }
 
     if (item.type === 'audio-or' && item.orValues) {
-      const audioCount = item.orValues.length;
-      
       return (
         <div
           key={item.id}

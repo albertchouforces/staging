@@ -7,7 +7,7 @@ import { Footer } from '@/react-app/components/Footer';
 import { QuizHeader } from '@/react-app/components/QuizHeader';
 import { QUIZ_COLLECTION } from '@/react-app/data/quizData';
 import { shuffleArray, getRandomOptions, getCorrectAnswers, isMultiSelect, hasAnswerPool, getAnswerPoolOptions } from '@/react-app/lib/utils';
-import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
+
 import type { QuizStats, QuestionData, HighScoreEntry } from '@/react-app/types';
 
 type GameState = 'selection' | 'playing' | 'entering-name';

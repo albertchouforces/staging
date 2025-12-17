@@ -1,5 +1,5 @@
-// Type for match pair items - can be text, image URL, audio URL, or array of audio URLs
-export type MatchItem = string | string[] | { type: 'text' | 'image' | 'audio'; value: string | string[] };
+// Type for match pair items - can be text, image URL, audio URL, array of audio URLs, or nested array for OR audio
+export type MatchItem = string | string[] | string[][] | { type: 'text' | 'image' | 'audio'; value: string | string[] };
 
 export interface QuestionData {
   id: number;
@@ -8,7 +8,7 @@ export interface QuestionData {
   answerPool?: string[];   // Optional custom answer options for this question (will be scrambled)
   description: string;    // Brief context shown with the question
   fact: string;          // Interesting fact shown after answering
-  imageUrl: string;      // Path to question image
+  imageUrl?: string;      // Optional path to question image
   audioUrl?: string | string[] | string[][];     // Optional audio - single file, array of files (play sequentially), or array of arrays (multiple playback options)
   audioLoopCount?: number; // Optional number of times to loop audio sequence (default: 1, plays once)
   factAudioUrl?: string | string[] | string[][];  // Optional fact audio - single file, array of files (play sequentially), or array of arrays (multiple playback options)

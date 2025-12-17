@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Play, Pause, Volume2 } from 'lucide-react';
+import { audioManager } from '@/react-app/lib/audioManager';
 
 interface AudioPlayerProps {
   audioFiles: string[];
@@ -20,6 +21,7 @@ export function AudioPlayer({
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isPlayingRef = useRef(false);
+  const playerIdRef = useRef<string>(Math.random().toString(36).substring(7));
 
   const colors = {
     blue: {
@@ -95,7 +97,10 @@ export function AudioPlayer({
       setCurrentLoop(0);
       setCurrentFileIndex(0);
       isPlayingRef.current = false;
+      audioManager.stop(playerIdRef.current);
     } else {
+      // Notify the audio manager that this player is starting
+      audioManager.play(playerIdRef.current);
       setAudioError(false);
       setCurrentLoop(0);
       setCurrentFileIndex(0);
@@ -124,6 +129,7 @@ export function AudioPlayer({
         setCurrentLoop(0);
         setCurrentFileIndex(0);
         isPlayingRef.current = false;
+        audioManager.stop(playerIdRef.current);
       }
     }
   }, [currentLoop, currentFileIndex, audioFiles.length, loopCount]);
@@ -141,6 +147,7 @@ export function AudioPlayer({
     setAudioError(true);
     setIsPlaying(false);
     isPlayingRef.current = false;
+    audioManager.stop(playerIdRef.current);
   }, []);
 
   // Handle when audio actually starts playing
@@ -170,6 +177,26 @@ export function AudioPlayer({
   // Create a stable string representation of audioFiles for comparison
   const audioFilesKey = useMemo(() => audioFiles.join('|'), [audioFiles]);
 
+  // Listen for other audio players starting
+  useEffect(() => {
+    const unsubscribe = audioManager.subscribe((currentPlayingId) => {
+      // If another audio player started, stop this one
+      if (currentPlayingId !== null && currentPlayingId !== playerIdRef.current && isPlayingRef.current) {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }
+        setIsPlaying(false);
+        setAudioError(false);
+        setCurrentLoop(0);
+        setCurrentFileIndex(0);
+        isPlayingRef.current = false;
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   // Reset state when audioFiles actually change (not just array reference)
   useEffect(() => {
     setAudioError(false);
@@ -177,6 +204,7 @@ export function AudioPlayer({
     setCurrentLoop(0);
     setCurrentFileIndex(0);
     isPlayingRef.current = false;
+    audioManager.stop(playerIdRef.current);
   }, [audioFilesKey]);
 
   // Cleanup on unmount
@@ -188,26 +216,38 @@ export function AudioPlayer({
         audioRef.current.removeAttribute('src');
         audioRef.current.load();
       }
+      audioManager.stop(playerIdRef.current);
     };
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-1 bg-gray-50 px-2 py-2 rounded-lg border border-gray-200 min-w-0 relative">
+    <div className="flex flex-col items-center gap-1.5 bg-gray-50 px-2 py-2 rounded-lg border border-gray-200 min-w-0 relative">
       <Volume2 size={12} className="text-gray-400 absolute top-1 right-1" />
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleAudioPlayback();
-        }}
-        className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full transition-colors text-white ${
-          audioError 
-            ? `${colorClass.errorBg} ${colorClass.errorHover}` 
-            : `${colorClass.bg} ${colorClass.hover}`
-        }`}
-        aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
-      >
-        {isPlaying ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
-      </button>
+      <div className="relative mb-1">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleAudioPlayback();
+          }}
+          className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full transition-colors text-white ${
+            audioError 
+              ? `${colorClass.errorBg} ${colorClass.errorHover}` 
+              : `${colorClass.bg} ${colorClass.hover}`
+          }`}
+          aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+        >
+          {isPlaying ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
+        </button>
+        {isPlaying && !audioError && (
+          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex items-end gap-0.5 h-3">
+            <div className={`w-1 ${colorClass.bg} rounded-full animate-wave-1`} style={{ height: '4px' }}></div>
+            <div className={`w-1 ${colorClass.bg} rounded-full animate-wave-2`} style={{ height: '6px' }}></div>
+            <div className={`w-1 ${colorClass.bg} rounded-full animate-wave-3`} style={{ height: '8px' }}></div>
+            <div className={`w-1 ${colorClass.bg} rounded-full animate-wave-2`} style={{ height: '6px' }}></div>
+            <div className={`w-1 ${colorClass.bg} rounded-full animate-wave-1`} style={{ height: '4px' }}></div>
+          </div>
+        )}
+      </div>
       {label && (
         <span className="text-[9px] text-gray-600 text-center leading-tight max-w-full truncate px-0.5 w-full">
           {audioError ? 'Audio unavailable' : label}
