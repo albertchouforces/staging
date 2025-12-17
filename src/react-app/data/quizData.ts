@@ -497,6 +497,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway",["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]
                       ],
         description: "",
+        fact: ""
       },
       {
         id: 5,
@@ -508,6 +509,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["Distractor #2","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/OvertakingAgreement.mp3"]
                       ],
         description: "",
+        fact: ""
       },
     ]
   }

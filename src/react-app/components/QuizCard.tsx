@@ -105,7 +105,7 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
       <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
         {/* Quiz Image with transparent background */}
         {config.startScreenImage && config.startScreenImage.trim() !== '' && (
-          <div className="w-full h-48 relative bg-transparent flex items-center justify-center">
+          <div className="w-full h-32 relative bg-transparent flex items-center justify-center">
             {!imageLoaded && !imageError && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-gray-400 text-center">
@@ -133,7 +133,7 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
         )}
 
         {/* Quiz Content - Using flex with flex-grow to push bottom content down */}
-        <div className="p-6 flex flex-col flex-grow">
+        <div className="px-6 pb-6 pt-2 flex flex-col flex-grow">
           {/* Top section that can grow/shrink */}
           <div className="flex-grow">
             <h3 className={`text-xl font-bold text-${config.themeColor}-600 mb-2 text-center`}>
