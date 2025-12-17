@@ -119,12 +119,12 @@ import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
 
 // Firebase configuration
 export const firebaseConfig = {
-  apiKey: "AIzaSyBWXWSKOTLs7tgiEHvUVub_H2irlSBhjHA",
-  authDomain: "rcnnwo.firebaseapp.com",
-  projectId: "rcnnwo",
-  storageBucket: "rcnnwo.firebasestorage.app",
-  messagingSenderId: "489230373326",
-  appId: "1:489230373326:web:c6e9339513f33453279b9f"
+  apiKey: "AIzaSyBjUImvDqGyxS7inhQWJg2NZj6TH8GkvP0",
+  authDomain: "rcnnwo-423b4.firebaseapp.com",
+  projectId: "rcnnwo-423b4",
+  storageBucket: "rcnnwo-423b4.firebasestorage.app",
+  messagingSenderId: "154233020444",
+  appId: "1:154233020444:web:5e2dda49242c94b2c3ffd9",
 };
 
 // Initialize Firebase App instance directly with the config
