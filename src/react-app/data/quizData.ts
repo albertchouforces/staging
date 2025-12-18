@@ -499,6 +499,11 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         description: "",
         fact: ""
       },
+    ]
+  }
+];
+
+/*
       {
         id: 5,
         question: "Match the sound signal with its correct use.",
@@ -511,9 +516,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         description: "",
         fact: ""
       },
-    ]
-  }
-];
+*/
 
 // =================================================================
 // EXAMPLE OF ADDING A NEW QUIZ

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { QuestionData, QuizConfig } from '@/react-app/types';
 import { getCorrectAnswers, isMultiSelect, isMatchingQuestion } from '@/react-app/lib/utils';
 import { BookOpen, Check, ImageOff, X } from 'lucide-react';
@@ -31,6 +31,7 @@ export function FlashCard({
   const [options, setOptions] = useState<string[]>([]);
   const isMultiSelectQuestion = isMultiSelect(question.correctAnswer);
   const isMatchQuestion = isMatchingQuestion(question.correctAnswer);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   // Helper to check if audio is nested array (multiple playback options)
   const isNestedAudioArray = useCallback((url: string | string[] | string[][] | undefined): url is string[][] => {
@@ -98,6 +99,13 @@ export function FlashCard({
     setImageLoaded(false);
     setImageError(false);
   }, [question]);
+
+  // Scroll card into view when question changes
+  useEffect(() => {
+    if (cardRef.current) {
+      cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [question.id]);
 
   const handleOptionClick = useCallback((answer: string) => {
     if (showResult) return;
@@ -233,7 +241,7 @@ export function FlashCard({
   // Handle matching questions separately
   if (isMatchQuestion) {
     return (
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg">
+      <div ref={cardRef} className="w-full max-w-4xl bg-white rounded-xl shadow-lg">
         <div className="flex flex-col w-full">
           {/* Question Section */}
           <div className="p-6 border-b border-gray-100">
@@ -324,7 +332,7 @@ export function FlashCard({
   }
 
   return (
-    <div className={`w-full max-w-3xl bg-white rounded-xl shadow-lg ${isMultiSelectQuestion && !showResult ? 'border-2 border-blue-600' : ''}`}>
+    <div ref={cardRef} className={`w-full max-w-3xl bg-white rounded-xl shadow-lg ${isMultiSelectQuestion && !showResult ? 'border-2 border-blue-600' : ''}`}>
       <div className="flex flex-col w-full">
         {/* Question Section */}
         <div className="p-6 border-b border-gray-100">
