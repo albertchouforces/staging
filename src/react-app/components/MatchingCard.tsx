@@ -227,7 +227,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
       ? "bg-red-100 border-2 border-red-500 cursor-pointer animate-shake"
       : isSelected
       ? "bg-blue-100 border-2 border-blue-500 cursor-pointer"
-      : "bg-white hover:bg-blue-50 cursor-pointer border-2 border-blue-300 shadow-sm hover:shadow-md hover:border-blue-400";
+      : "bg-white hover:bg-blue-50 cursor-pointer border-2 border-gray-800 shadow-sm hover:shadow-md hover:border-black";
 
     const onClick = isLeft ? () => handleLeftClick(item.id) : () => handleRightClick(item.id);
 
