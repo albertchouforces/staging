@@ -318,7 +318,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 9,
-        question: "When <strong>vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
         correctAnswer: "an alteration of course to port",
         answerPool: [
                       "an alteration of course to port",
