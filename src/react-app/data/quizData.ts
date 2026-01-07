@@ -318,7 +318,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 9,
-        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another this sound signal represents:",
         correctAnswer: "an alteration of course to port",
         answerPool: [
                       "an alteration of course to port",
@@ -464,7 +464,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 2,
-        question: "Match the length of the vessel with the correct sound signaling device(s).",
+        question: "Match the length of the vessel with the correct sound-signalling device(s).",
         correctAnswer: [
                         ["less than 12 m ", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]]],
                         ["12 m or more", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]],
@@ -481,9 +481,9 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["an alteration of course to starboard", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_AC_Crse_Stbd.mp3"],
                         ["an alteration of course to port", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_AC_Crse_Port.mp3"],
                         ["operating astern propulsion", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_Astern_Prop.mp3"],
-                        ["failure to understand the intentions/actions of the other vessel", ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3"]],
-                        ["in doubt that sufficient action is being taken by the other vessel to avoid collision", ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]
-                        ],
+                        ["failure to understand the intentions/actions of the other vessel", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3"]]],
+                        ["in doubt that sufficient action is being taken by the other vessel to avoid collision", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]]
+        ],
         description: "",
         fact: ""
       },
