@@ -386,7 +386,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                     ],
         description: "",
         fact: "Rule 34(c)(ii)",
-        audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a",
+        audioUrl: "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a",
       },
       {
         id: 14,
@@ -456,8 +456,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 1,
         question: "Match the sound signal with the correct definition.",
         correctAnswer: [
-                        ["Short Blast", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"],
-                        ["Prolonged Blast", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3"]
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3", "Short Blast"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3", "Prolonged Blast"]
                         ],
         description: "",
         fact: ""
@@ -466,10 +466,10 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 2,
         question: "Match the length of the vessel with the correct sound-signalling device(s).",
         correctAnswer: [
-                        ["less than 12 m ", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]]],
-                        ["12 m or more", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]],
-                        ["20 m or more", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"]]],
-                        ["100 m or more", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"]]]
+                        [[["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"]], "less than 12 m "],
+                        [[["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]], "12 m or more"],
+                        [[["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"]], "20 m or more"],
+                        [[["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"], ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"]], "100 m or more"]
                         ],
         description: "",
         fact: ""
@@ -478,11 +478,11 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 3,
         question: "Match the sound signal with the correct action/explanation.",
         correctAnswer: [
-                        ["an alteration of course to starboard", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_AC_Crse_Stbd.mp3"],
-                        ["an alteration of course to port", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_AC_Crse_Port.mp3"],
-                        ["operating astern propulsion", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_Astern_Prop.mp3"],
-                        ["failure to understand the intentions/actions of the other vessel", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3"]]],
-                        ["in doubt that sufficient action is being taken by the other vessel to avoid collision", [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]]
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_AC_Crse_Stbd.mp3", "an alteration of course to starboard"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_AC_Crse_Port.mp3", "an alteration of course to port"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_Astern_Prop.mp3", "operating astern propulsion"],
+                        [[["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3"]], "failure to understand the intentions/actions of the other vessel"],
+                        [[["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]], "in doubt that sufficient action is being taken by the other vessel to avoid collision"]
         ],
         description: "",
         fact: ""
@@ -491,10 +491,10 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 4,
         question: "Match the sound signal with the correct action/response.",
         correctAnswer: [
-                        ["the intention to overtake another vessel on its starboard side when in a narrow channel or fairway","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_Overtake_Stbd.mp3"],
-                        ["the intention to overtake another vessel on its port side when in a narrow channel or fairway","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/5_Overtake_Port.mp3"],
-                        ["the agreement response from a vessel about to be overtaken in a narrow channel or fairway","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a"],
-                        ["the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway",["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]]
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_Overtake_Stbd.mp3", "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/5_Overtake_Port.mp3", "the intention to overtake another vessel on its port side when in a narrow channel or fairway"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"],
+                        [[["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"]], "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"]
                       ],
         description: "",
         fact: ""
@@ -511,7 +511,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3"],
                         ["the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3"],
                         ["Distractor #1","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],
-                        ["Distractor #2","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a"]
+                        ["Distractor #2","https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a"]
                       ],
         description: "",
         fact: ""

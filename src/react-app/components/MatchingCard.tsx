@@ -98,10 +98,21 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
       };
     };
 
-    const left = shuffleArray(pairs.map((pair, i) => parseItem(pair[0], 'left', i)));
+    // Handle left column - check for OR format
+    const left = shuffleArray(pairs.map((pair, i) => {
+      const firstElement = pair[0];
+      
+      // Check if it's an array of arrays (nested structure for OR)
+      if (Array.isArray(firstElement) && firstElement.length > 0 && Array.isArray(firstElement[0])) {
+        // This is OR format: pair[0] is [[audio1], [audio2]]
+        return parseOrItem(firstElement as any[][], 'left', i);
+      } else {
+        // Regular item
+        return parseItem(firstElement, 'left', i);
+      }
+    }));
     
-    // Handle each pair individually
-    // Check if second element is an array of arrays (OR format)
+    // Handle right column - check for OR format
     const right = shuffleArray(shuffleArray(pairs.map((p, i) => {
       const secondElement = p[1];
       
@@ -276,7 +287,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
           onClick={onClick}
           className={`${baseClasses} ${stateClasses} flex-col gap-2 relative overflow-hidden`}
         >
-          <div className="w-full min-w-0">
+          <div className="min-w-0">
             <AudioPlayer
               audioFiles={audioFiles}
               loopCount={1}
