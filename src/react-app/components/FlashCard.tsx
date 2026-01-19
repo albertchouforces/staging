@@ -255,7 +255,7 @@ export function FlashCard({
               />
             </div>
             {question.description && question.description.trim() !== '' && (
-              <p className="text-lg text-gray-600 italic text-center max-w-xl mx-auto">{question.description}</p>
+              <p className="text-lg text-gray-600 italic text-center max-w-xl mx-auto" dangerouslySetInnerHTML={{ __html: question.description }} />
             )}
           </div>
 
@@ -300,7 +300,7 @@ export function FlashCard({
                     <span className="font-semibold">{quizConfig.factHeading || 'Did you know?'}</span>
                   </div>
                   {question.fact && (
-                    <p className="text-blue-900">{question.fact}</p>
+                    <p className="text-blue-900" dangerouslySetInnerHTML={{ __html: question.fact }} />
                   )}
                   
                   {/* Fact Audio Players */}
@@ -394,7 +394,7 @@ export function FlashCard({
             )}
             
             {question.description && question.description.trim() !== '' && (
-              <p className="text-lg text-gray-600 italic text-center max-w-xl">{question.description}</p>
+              <p className="text-lg text-gray-600 italic text-center max-w-xl" dangerouslySetInnerHTML={{ __html: question.description }} />
             )}
           </div>
         </div>
@@ -414,7 +414,7 @@ export function FlashCard({
                 disabled={showResult}
                 className={`w-full min-h-[60px] p-4 text-left rounded-lg transition-colors flex items-center justify-between ${getOptionStyles(option)}`}
               >
-                <span>{option}</span>
+                <span dangerouslySetInnerHTML={{ __html: option }} />
                 {showResult && (() => {
                   const correctAnswers = getCorrectAnswers(question.correctAnswer);
                   const isCorrect = correctAnswers.includes(option);
@@ -518,7 +518,7 @@ export function FlashCard({
                   <span className="font-semibold">{quizConfig.factHeading || 'Did you know?'}</span>
                 </div>
                 {question.fact && (
-                  <p className="text-blue-900">{question.fact}</p>
+                  <p className="text-blue-900" dangerouslySetInnerHTML={{ __html: question.fact }} />
                 )}
                 
                 {/* Fact Audio Players */}

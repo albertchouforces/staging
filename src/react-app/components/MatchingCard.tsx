@@ -250,7 +250,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
           disabled={isMatched}
           className={`${baseClasses} ${stateClasses}`}
         >
-          <span className="font-medium">{item.value}</span>
+          <span className="font-medium" dangerouslySetInnerHTML={{ __html: item.value as string }} />
           {isMatched && <Check className="ml-2 text-green-600" size={20} />}
         </button>
       );

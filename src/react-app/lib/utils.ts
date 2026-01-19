@@ -1,8 +1,13 @@
+import { ENABLE_RANDOMIZATION } from '@/react-app/config/features';
+
 /**
  * Fisher-Yates shuffle algorithm for arrays
+ * When ENABLE_RANDOMIZATION is false, returns a copy without shuffling
  */
 export const shuffleArray = <T,>(array: T[]): T[] => {
   const shuffled = [...array];
+  if (!ENABLE_RANDOMIZATION) return shuffled;
+  
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];

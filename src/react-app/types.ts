@@ -61,6 +61,7 @@ export interface QuizConfig {
   startScreenImage?: string;
   studyGuide?: string; // Optional URL or path to study guide image
   advancedChallenge?: boolean; // Indicates if this is an advanced challenge
+  category?: string;   // Optional category for grouping quizzes (e.g., "Advanced Challenges", "Beginner Level")
   hidden?: boolean;    // Optional flag to hide the quiz from display
   factHeading?: string; // Optional custom heading for facts section (defaults to "Did you know?")
 }

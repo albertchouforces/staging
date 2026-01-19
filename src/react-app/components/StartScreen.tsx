@@ -4,7 +4,7 @@ import type { QuizStats } from '@/react-app/types';
 import { QuizCard } from '@/react-app/components/QuizCard';
 import { GlobalLeaderboard } from '@/react-app/components/GlobalLeaderboard';
 import { ENABLE_GLOBAL_LEADERBOARD } from '@/react-app/config/features';
-import { QUIZ_COLLECTION } from '@/react-app/data/quizData';
+import { QUIZ_COLLECTION, CATEGORY_ORDER } from '@/react-app/data/quizData';
 
 interface StartScreenProps {
   onSelectQuiz: (quizId: string) => void;
@@ -25,10 +25,43 @@ export function StartScreen({
     window.location.reload();
   };
 
-  // Filter out hidden quizzes and then separate regular quizzes from advanced challenges
+  // Filter out hidden quizzes
   const visibleQuizzes = QUIZ_COLLECTION.filter(quiz => !quiz.config.hidden);
-  const regularQuizzes = visibleQuizzes.filter(quiz => !quiz.config.advancedChallenge);
-  const advancedQuizzes = visibleQuizzes.filter(quiz => quiz.config.advancedChallenge);
+  
+  // Group quizzes by category
+  const groupedQuizzes = new Map<string | null, typeof visibleQuizzes>();
+  
+  visibleQuizzes.forEach(quiz => {
+    // Use category field, or fall back to advancedChallenge for backward compatibility
+    const category = quiz.config.category || (quiz.config.advancedChallenge ? 'Advanced Challenges' : null);
+    
+    if (!groupedQuizzes.has(category)) {
+      groupedQuizzes.set(category, []);
+    }
+    groupedQuizzes.get(category)!.push(quiz);
+  });
+  
+  // Determine category display order
+  const allCategories = Array.from(groupedQuizzes.keys()).filter(cat => cat !== null) as string[];
+  const orderedCategories: (string | null)[] = [];
+  
+  // First add uncategorized quizzes (null category)
+  if (groupedQuizzes.has(null)) {
+    orderedCategories.push(null);
+  }
+  
+  // Then add categories in the specified order
+  CATEGORY_ORDER.forEach(cat => {
+    if (allCategories.includes(cat)) {
+      orderedCategories.push(cat);
+    }
+  });
+  
+  // Finally add any remaining categories alphabetically
+  const remainingCategories = allCategories
+    .filter(cat => !CATEGORY_ORDER.includes(cat))
+    .sort();
+  orderedCategories.push(...remainingCategories);
 
   // Get grid columns based on number of items
   const getGridColumns = (count: number): string => {
@@ -73,25 +106,57 @@ export function StartScreen({
         </h2>
       </div>
 
-      {/* Regular Quizzes Grid */}
-      {regularQuizzes.length > 0 && (
-        <div className="flex justify-center mb-12">
-          <div className={`grid ${getGridColumns(regularQuizzes.length)} gap-8 w-full ${getGridWidth(regularQuizzes.length)} mx-auto grid-flow-row auto-rows-fr`}>
-            {regularQuizzes.map((quiz) => (
-              <QuizCard
-                key={quiz.config.id}
-                config={quiz.config}
-                stats={getStatsForQuiz(quiz.config.quizKey)}
-                onStart={() => onSelectQuiz(quiz.config.id)}
-                onResetScores={() => handleResetScores(quiz.config.quizKey)}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Quiz Sections by Category */}
+      {orderedCategories.map((category, index) => {
+        const categoryQuizzes = groupedQuizzes.get(category) || [];
+        if (categoryQuizzes.length === 0) return null;
+        
+        return (
+          <div key={category || 'uncategorized'}>
+            {/* Category Header - only show for categorized sections */}
+            {category && (
+              <div className="flex items-center gap-4 mb-8">
+                <div className="flex-1 h-px bg-gray-200" />
+                <div className="flex items-center gap-2 text-gray-600 font-semibold">
+                  {category}
+                </div>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+            )}
 
-      {/* Global Leaderboard Button */}
-      {ENABLE_GLOBAL_LEADERBOARD && visibleQuizzes.length > 0 && (
+            {/* Quiz Grid */}
+            <div className="flex justify-center mb-12">
+              <div className={`grid ${getGridColumns(categoryQuizzes.length)} gap-8 w-full ${getGridWidth(categoryQuizzes.length)} mx-auto grid-flow-row auto-rows-fr`}>
+                {categoryQuizzes.map((quiz) => (
+                  <QuizCard
+                    key={quiz.config.id}
+                    config={quiz.config}
+                    stats={getStatsForQuiz(quiz.config.quizKey)}
+                    onStart={() => onSelectQuiz(quiz.config.id)}
+                    onResetScores={() => handleResetScores(quiz.config.quizKey)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Global Leaderboard Button - show after uncategorized section */}
+            {ENABLE_GLOBAL_LEADERBOARD && category === null && index === 0 && (
+              <div className="flex justify-center mb-12">
+                <button
+                  onClick={() => setShowGlobalLeaderboard(true)}
+                  className="flex items-center justify-center gap-2 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors font-semibold shadow-md"
+                >
+                  <Globe size={20} />
+                  View Global Leaderboard
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      })}
+      
+      {/* Global Leaderboard Button - fallback if no uncategorized section */}
+      {ENABLE_GLOBAL_LEADERBOARD && !groupedQuizzes.has(null) && visibleQuizzes.length > 0 && (
         <div className="flex justify-center mb-12">
           <button
             onClick={() => setShowGlobalLeaderboard(true)}
@@ -101,33 +166,6 @@ export function StartScreen({
             View Global Leaderboard
           </button>
         </div>
-      )}
-
-      {/* Advanced Challenges Section */}
-      {advancedQuizzes.length > 0 && (
-        <>
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-gray-200" />
-            <div className="flex items-center gap-2 text-gray-600 font-semibold">
-              Advanced Challenges
-            </div>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-
-          <div className="flex justify-center mb-12">
-            <div className={`grid ${getGridColumns(advancedQuizzes.length)} gap-8 w-full ${getGridWidth(advancedQuizzes.length)} mx-auto grid-flow-row auto-rows-fr`}>
-              {advancedQuizzes.map((quiz) => (
-                <QuizCard
-                  key={quiz.config.id}
-                  config={quiz.config}
-                  stats={getStatsForQuiz(quiz.config.quizKey)}
-                  onStart={() => onSelectQuiz(quiz.config.id)}
-                  onResetScores={() => handleResetScores(quiz.config.quizKey)}
-                />
-              ))}
-            </div>
-          </div>
-        </>
       )}
 
       {/* Global Leaderboard Modal */}
