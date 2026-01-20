@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getGlobalScores, type GlobalScoreEntry } from '@/react-app/lib/firebase';
 import { Medal } from '@/react-app/components/Medal';
-import { Loader, Trophy, X } from 'lucide-react';
+import { Loader, Trophy, X, ChevronDown } from 'lucide-react';
 import type { QuizDefinition } from '@/react-app/types';
-import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
+import { ENABLE_TIME_TRACKING, USE_DROPDOWN_QUIZ_SELECTOR } from '@/react-app/config/features';
 
 interface GlobalLeaderboardProps {
   onClose: () => void;
@@ -15,6 +15,42 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedQuiz, setSelectedQuiz] = useState<string>(quizzes[0]?.config.quizKey || '');
+
+  // Helper to check if a quiz title is duplicated
+  const hasDuplicateTitle = (title: string) => {
+    return quizzes.filter(q => q.config.title === title).length > 1;
+  };
+
+  // Get display name for a quiz (title + description if title is duplicated)
+  const getQuizDisplayName = (quiz: QuizDefinition) => {
+    if (hasDuplicateTitle(quiz.config.title)) {
+      return `${quiz.config.title} - ${quiz.config.description}`;
+    }
+    return quiz.config.title;
+  };
+
+  // Map theme color names to actual RGB values for inline styles
+  const getColorValue = (themeColor: string): string => {
+    const colorMap: Record<string, string> = {
+      blue: 'rgb(37, 99, 235)',
+      green: 'rgb(22, 163, 74)',
+      red: 'rgb(220, 38, 38)',
+      purple: 'rgb(147, 51, 234)',
+      orange: 'rgb(234, 88, 12)',
+      pink: 'rgb(219, 39, 119)',
+      sky: 'rgb(14, 165, 233)',
+      cyan: 'rgb(6, 182, 212)',
+      teal: 'rgb(20, 184, 166)',
+      indigo: 'rgb(99, 102, 241)',
+      violet: 'rgb(139, 92, 246)',
+      rose: 'rgb(225, 29, 72)',
+      amber: 'rgb(245, 158, 11)',
+      fuchsia: 'rgb(217, 70, 239)',
+      lime: 'rgb(132, 204, 22)',
+      emerald: 'rgb(16, 185, 129)'
+    };
+    return colorMap[themeColor] || 'rgb(37, 99, 235)'; // default to blue
+  };
 
   useEffect(() => {
     const fetchScores = async () => {
@@ -78,21 +114,50 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
           </div>
 
           {/* Quiz Selection */}
-          <div className="flex gap-2 flex-wrap">
-            {quizzes.map((quiz) => (
-              <button
-                key={quiz.config.quizKey}
-                onClick={() => setSelectedQuiz(quiz.config.quizKey)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  selectedQuiz === quiz.config.quizKey
-                    ? `bg-${quiz.config.themeColor}-600 text-white`
-                    : `text-${quiz.config.themeColor}-600 hover:bg-${quiz.config.themeColor}-50`
-                }`}
+          {USE_DROPDOWN_QUIZ_SELECTOR ? (
+            <div className="relative inline-block">
+              <select
+                value={selectedQuiz}
+                onChange={(e) => setSelectedQuiz(e.target.value)}
+                className="w-full md:w-auto pl-4 pr-9 py-2 rounded-lg border-2 border-gray-200 text-sm font-medium appearance-none cursor-pointer hover:border-gray-300 focus:outline-none focus:border-gray-400 transition-colors"
+                style={{
+                  color: selectedQuizConfig?.themeColor ? getColorValue(selectedQuizConfig.themeColor) : '#374151'
+                }}
               >
-                {quiz.config.title}
-              </button>
-            ))}
-          </div>
+                {quizzes.map((quiz) => (
+                  <option
+                    key={quiz.config.quizKey}
+                    value={quiz.config.quizKey}
+                    style={{
+                      color: getColorValue(quiz.config.themeColor)
+                    }}
+                  >
+                    {getQuizDisplayName(quiz)}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown 
+                className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" 
+                size={18} 
+              />
+            </div>
+          ) : (
+            <div className="flex gap-2 flex-wrap">
+              {quizzes.map((quiz) => (
+                <button
+                  key={quiz.config.quizKey}
+                  onClick={() => setSelectedQuiz(quiz.config.quizKey)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedQuiz === quiz.config.quizKey
+                      ? `bg-${quiz.config.themeColor}-600 text-white`
+                      : `text-${quiz.config.themeColor}-600 hover:bg-${quiz.config.themeColor}-50`
+                  }`}
+                >
+                  {getQuizDisplayName(quiz)}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex-1 overflow-auto p-6">
