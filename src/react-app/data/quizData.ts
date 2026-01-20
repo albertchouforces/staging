@@ -471,7 +471,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
       factHeading: "",
       category: "Col Regs Rules 23-31",
-      hidden: true
+      hidden: false
     },
     questions: [
     {
@@ -773,7 +773,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
       factHeading: "",
       category: "Col Regs Rules 23-31",
-      hidden: true
+      hidden: false
     },
     questions: [
     {
@@ -1053,7 +1053,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
       factHeading: "",
       category: "Col Regs Rules 23-31",
-      hidden: true
+      hidden: false
     },
     questions: [
     {
@@ -1333,7 +1333,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
       factHeading: "",
       category: "Col Regs Rules 23-31",
-      hidden: true
+      hidden: false
     },
     questions: [
     {
@@ -1752,7 +1752,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 9,
-        question: "When <strong>vessels are in sight of one another this sound signal represents:",
+        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
         correctAnswer: "an alteration of course to port",
         answerPool: [
                       "an alteration of course to port",
@@ -1909,7 +1909,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"], "100 m or more"]
                         ],
         description: "",
-        fact: "33(a); 33(b))"
+        fact: "33(a); 33(b)"
       },
       {
         id: 3,
@@ -1918,7 +1918,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_AC_Crse_Stbd.mp3", "an alteration of course to starboard"],
                         ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_AC_Crse_Port.mp3", "an alteration of course to port"],
                         ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_Astern_Prop.mp3", "operating astern propulsion"],
-                        [[["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3"]], "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"]
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"], "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"]
         ],
         description: "",
         fact: "34(a); 34(d)"
@@ -1930,7 +1930,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_Overtake_Stbd.mp3", "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"],
                         ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/5_Overtake_Port.mp3", "the intention to overtake another vessel on its port side when in a narrow channel or fairway"],
                         ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"],
-                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Warning%20Signal_7%20Short%20Blasts.m4a"], "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"]
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Warning%20Signal_7%20Short%20Blasts.m4a", "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"]
                       ],
         description: "",
         fact: "34(c)(i); 34(c)(ii); 34(d)"
