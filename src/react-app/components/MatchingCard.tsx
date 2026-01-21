@@ -155,14 +155,14 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
   }, [pairs]);
 
   const handleLeftClick = useCallback((id: string) => {
-    if (matchedPairs.has(id) || incorrectPair) return;
+    if (matchedPairs.has(id) || incorrectPair || justMatchedPair) return;
     setSelectedLeft(prev => prev === id ? null : id);
-  }, [matchedPairs, incorrectPair]);
+  }, [matchedPairs, incorrectPair, justMatchedPair]);
 
   const handleRightClick = useCallback((id: string) => {
-    if (matchedPairs.has(id) || incorrectPair) return;
+    if (matchedPairs.has(id) || incorrectPair || justMatchedPair) return;
     setSelectedRight(prev => prev === id ? null : id);
-  }, [matchedPairs, incorrectPair]);
+  }, [matchedPairs, incorrectPair, justMatchedPair]);
 
   // Check for match when both are selected
   useEffect(() => {
@@ -186,7 +186,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
           setJustMatchedPair(null);
           setSelectedLeft(null);
           setSelectedRight(null);
-        }, 600);
+        }, 400);
         
         setIncorrectPair(null);
       } else {
@@ -250,7 +250,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
           disabled={isMatched}
           className={`${baseClasses} ${stateClasses}`}
         >
-          <span className="font-medium" dangerouslySetInnerHTML={{ __html: item.value as string }} />
+          <div className="font-medium [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: item.value as string }} />
           {isMatched && <Check className="ml-2 text-green-600" size={20} />}
         </button>
       );

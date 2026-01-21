@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Globe, NotebookText } from 'lucide-react';
+import { Globe, NotebookText, ChevronDown } from 'lucide-react';
 import type { QuizStats } from '@/react-app/types';
 import { QuizCard } from '@/react-app/components/QuizCard';
 import { GlobalLeaderboard } from '@/react-app/components/GlobalLeaderboard';
-import { ENABLE_GLOBAL_LEADERBOARD } from '@/react-app/config/features';
+import { ENABLE_GLOBAL_LEADERBOARD, COLLAPSIBLE_CATEGORIES } from '@/react-app/config/features';
 import { QUIZ_COLLECTION, CATEGORY_ORDER } from '@/react-app/data/quizData';
 
 interface StartScreenProps {
@@ -18,6 +18,19 @@ export function StartScreen({
   onResetScores
 }: StartScreenProps) {
   const [showGlobalLeaderboard, setShowGlobalLeaderboard] = useState(false);
+  const [collapsedCategories, setCollapsedCategories] = useState<Set<string>>(new Set());
+
+  const toggleCategory = (category: string) => {
+    setCollapsedCategories(prev => {
+      const next = new Set(prev);
+      if (next.has(category)) {
+        next.delete(category);
+      } else {
+        next.add(category);
+      }
+      return next;
+    });
+  };
 
   const handleResetScores = (quizKey: string) => {
     onResetScores(quizKey);
@@ -111,33 +124,51 @@ export function StartScreen({
         const categoryQuizzes = groupedQuizzes.get(category) || [];
         if (categoryQuizzes.length === 0) return null;
         
+        const categoryKey = category || 'uncategorized';
+        const isCollapsed = COLLAPSIBLE_CATEGORIES && category && collapsedCategories.has(categoryKey);
+        
         return (
-          <div key={category || 'uncategorized'}>
+          <div key={categoryKey}>
             {/* Category Header - only show for categorized sections */}
             {category && (
               <div className="flex items-center gap-4 mb-8">
                 <div className="flex-1 h-px bg-gray-200" />
-                <div className="flex items-center gap-2 text-gray-600 font-semibold">
-                  {category}
-                </div>
+                {COLLAPSIBLE_CATEGORIES ? (
+                  <button
+                    onClick={() => toggleCategory(categoryKey)}
+                    className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-blue-50 hover:to-blue-100 border border-gray-300 hover:border-blue-400 rounded-lg text-gray-700 hover:text-blue-700 font-semibold transition-all shadow-sm hover:shadow-md"
+                  >
+                    <span>{category}</span>
+                    <ChevronDown 
+                      size={22} 
+                      className={`transition-transform duration-200 ${isCollapsed ? '-rotate-90' : ''}`}
+                    />
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2 text-gray-600 font-semibold">
+                    {category}
+                  </div>
+                )}
                 <div className="flex-1 h-px bg-gray-200" />
               </div>
             )}
 
             {/* Quiz Grid */}
-            <div className="flex justify-center mb-12">
-              <div className={`grid ${getGridColumns(categoryQuizzes.length)} gap-8 w-full ${getGridWidth(categoryQuizzes.length)} mx-auto grid-flow-row auto-rows-fr`}>
-                {categoryQuizzes.map((quiz) => (
-                  <QuizCard
-                    key={quiz.config.id}
-                    config={quiz.config}
-                    stats={getStatsForQuiz(quiz.config.quizKey)}
-                    onStart={() => onSelectQuiz(quiz.config.id)}
-                    onResetScores={() => handleResetScores(quiz.config.quizKey)}
-                  />
-                ))}
+            {!isCollapsed && (
+              <div className="flex justify-center mb-12">
+                <div className={`grid ${getGridColumns(categoryQuizzes.length)} gap-8 w-full ${getGridWidth(categoryQuizzes.length)} mx-auto grid-flow-row auto-rows-fr`}>
+                  {categoryQuizzes.map((quiz) => (
+                    <QuizCard
+                      key={quiz.config.id}
+                      config={quiz.config}
+                      stats={getStatsForQuiz(quiz.config.quizKey)}
+                      onStart={() => onSelectQuiz(quiz.config.id)}
+                      onResetScores={() => handleResetScores(quiz.config.quizKey)}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Global Leaderboard Button - show after uncategorized section */}
             {ENABLE_GLOBAL_LEADERBOARD && category === null && index === 0 && (

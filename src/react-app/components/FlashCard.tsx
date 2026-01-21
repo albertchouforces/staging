@@ -250,12 +250,12 @@ export function FlashCard({
                 <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
               </div>
               <h3 
-                className="text-xl font-semibold text-gray-800 text-center"
+                className="text-xl font-semibold text-gray-800 text-center [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1"
                 dangerouslySetInnerHTML={{ __html: question.question }}
               />
             </div>
             {question.description && question.description.trim() !== '' && (
-              <p className="text-lg text-gray-600 italic text-center max-w-xl mx-auto" dangerouslySetInnerHTML={{ __html: question.description }} />
+              <div className="text-lg text-gray-600 italic text-center max-w-xl mx-auto [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.description }} />
             )}
           </div>
 
@@ -300,7 +300,7 @@ export function FlashCard({
                     <span className="font-semibold">{quizConfig.factHeading || 'Did you know?'}</span>
                   </div>
                   {question.fact && (
-                    <p className="text-blue-900" dangerouslySetInnerHTML={{ __html: question.fact }} />
+                    <div className="text-blue-900 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.fact }} />
                   )}
                   
                   {/* Fact Audio Players */}
@@ -341,7 +341,7 @@ export function FlashCard({
               <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
             </div>
             <h3 
-              className="text-xl font-semibold text-gray-800"
+              className="text-xl font-semibold text-gray-800 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1"
               dangerouslySetInnerHTML={{ __html: question.question }}
             />
           </div>
@@ -394,7 +394,7 @@ export function FlashCard({
             )}
             
             {question.description && question.description.trim() !== '' && (
-              <p className="text-lg text-gray-600 italic text-center max-w-xl" dangerouslySetInnerHTML={{ __html: question.description }} />
+              <div className="text-lg text-gray-600 italic text-center max-w-xl [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.description }} />
             )}
           </div>
         </div>
@@ -414,7 +414,7 @@ export function FlashCard({
                 disabled={showResult}
                 className={`w-full min-h-[60px] p-4 text-left rounded-lg transition-colors flex items-center justify-between ${getOptionStyles(option)}`}
               >
-                <span dangerouslySetInnerHTML={{ __html: option }} />
+                <div className="[&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: option }} />
                 {showResult && (() => {
                   const correctAnswers = getCorrectAnswers(question.correctAnswer);
                   const isCorrect = correctAnswers.includes(option);
@@ -518,7 +518,10 @@ export function FlashCard({
                   <span className="font-semibold">{quizConfig.factHeading || 'Did you know?'}</span>
                 </div>
                 {question.fact && (
-                  <p className="text-blue-900" dangerouslySetInnerHTML={{ __html: question.fact }} />
+                  <div 
+                    className="text-blue-900 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" 
+                    dangerouslySetInnerHTML={{ __html: question.fact }} 
+                  />
                 )}
                 
                 {/* Fact Audio Players */}

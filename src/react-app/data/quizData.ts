@@ -561,7 +561,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Starboard",
       "Stern",
       "Unknown"],
-    description: "Starboard",
+    description: "26(a), (b)",
     fact: "",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
     },
@@ -574,7 +574,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Starboard",
       "Stern",
       "Unknown"],
-    description: "Unknown",
+    description: "21(a), (b)",
     fact: "",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
     },
@@ -1025,7 +1025,12 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Greater than 100 m",
       "Unknown"],
     description: "26(b)",
-    fact: "Fishing vessels engaged in trawling have a unique lighting rule: <ul><li>If you see one masthead light, the vessel may be 50 m or longer.</li> <li>If you see none, it’s under 50 m.</li></ul> Rule 26(b)(ii)",
+    fact: `Fishing vessels engaged in trawling have a unique lighting rule:
+    <ul>
+    <li>If you see <strong>one masthead light</strong>, the vessel <strong>may be 50 m or longer</strong>.</li>
+    <li>If you see <strong>none</strong>, it’s <strong>under 50 m</strong>.</li>
+    </ul>
+    Rule 26(b)(ii)`,
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
     },
     {
@@ -1083,12 +1088,12 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
     id: 3,
     question: "This vessel is:",
-    correctAnswer: ["Underway but not making way"],
+    correctAnswer: ["Underway but not making way", "At anchor"],
     answerPool: ["Underway",
       "Underway but not making way",
       "Underway and making way",
       "At anchor"],
-    description: "Underway but not making way",
+    description: "26(a); 26(b)(iii)",
     fact: "Fishing vessels don’t follow the usual anchor light rule! Even when anchored, they keep the <strong>special lights and shapes for fishing</strong> (Rule 26), not the standard anchor lights and ball (Rule 30). This helps other vessels know they’re still engaged in fishing.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
     },
@@ -1136,7 +1141,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway but not making way",
       "Underway and making way",
       "At anchor"],
-    description: "Underway but not making way",
+    description: "26(a), (b)(iii)",
     fact: "When vessels engaged in trawling are not making way through the water they will let us know by turning off their sidelights and sternlight. Rule 26(b)(iii)",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
     },
@@ -1170,7 +1175,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     correctAnswer: ["Aground"],
     answerPool: ["Aground",
       "Underway but not making way",
-      "Underway and making way",
+      "Underway",
       "At anchor"],
     description: "30(d)",
     fact: "",
@@ -1207,7 +1212,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     answerPool: ["Underway",
       "Underway but not making way",
       "Underway and making way",
-      "At anchor"],
+      "Aground"],
     description: "24(a), (d); 23(a); Title of Rule 23",
     fact: "",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
@@ -1215,7 +1220,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
     id: 14,
     question: "This vessel is:",
-    correctAnswer: ["Underway", "At anchor"],
+    correctAnswer: ["Underway but not making way", "At anchor"],
     answerPool: ["Underway",
       "Underway but not making way",
       "Underway and making way",
@@ -1267,7 +1272,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     answerPool: ["Underway",
       "Underway but not making way",
       "Underway and making way",
-      "At anchor"],
+      "Aground"],
     description: "24(c), (d); 23(a); Title of Rule 23",
     fact: "",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
@@ -1291,7 +1296,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     answerPool: ["Underway",
       "Underway but not making way",
       "Underway and making way",
-      "At anchor"],
+      "Aground"],
     description: "24(a), (d); 23(a); Title of Rule 23",
     fact: "",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/

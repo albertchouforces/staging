@@ -13,3 +13,7 @@ export const ENABLE_RANDOMIZATION = false;
 // When false, displays individual buttons for each quiz
 // Dropdown is recommended for apps with many quizzes for better scalability
 export const USE_DROPDOWN_QUIZ_SELECTOR = true;
+
+// When true, allows categories to be collapsed/expanded on the start screen
+// When false, all categories are always visible
+export const COLLAPSIBLE_CATEGORIES = true;
