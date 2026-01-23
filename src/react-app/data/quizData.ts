@@ -2817,68 +2817,129 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
       factHeading: "Rule reference(s)",
       category: "Col Regs Rule 35",
-      hidden: true
+      hidden: false
     },
     questions: [
       {
         id: 1,
-        question: "Match the sound signal with the correct definition.",
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3", "Short Blast"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3", "Prolonged Blast"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Incorrect%20duration%20for%20short%20or%20prolonged%20blast.m4a", "This sound signal does not meet the criteria to be considered a short or prolonged blast"]
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3", "power-driven vessel making way through the water; interval of NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "vessel not under command; interval NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Manned_Tow.mp3", "vessel being towed that has a crew onboard (&quot;manned&quot;)"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Anchor_Less_Than_100m.mp3", "vessel less than 100 m in length at anchor; interval NMT 1 min"]
                         ],
         description: "",
-        fact: "32(b); 32(c); 32(b), (c)"
+        fact: "35(a); 35(c); 35(e); 35(g)"
       },
       {
         id: 2,
-        question: "Match the length of the vessel with the correct sound-signalling device(s).",
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
-                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Airhorn.mp3"], "less than 12 m "],
-                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3"], "12 m or more"],
-                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3"], "20 m or more"],
-                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_Short_Blast.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Bell.mp3", "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/Gong.mp3"], "100 m or more"]
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/PDV%20Underway%20Not%20Making%20Way_High%20Pitch.m4a", "power-driven vessel underway but stopped and making no way through the water; interval of NMT 2 min"],
+                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Manned_Tow.mp3"], "vessel towing another vessel; the vessel being towed or if more than one vessel is being towed the last vessel of the tow has a crew onboard (&quot;manned&quot;); interval NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel restricted in its ability to manoeuvre; interval NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Anchor_100m_Or_More.mp3", "vessel 100 m or more in length at anchor; interval NMT 1 min"]
                         ],
         description: "",
-        fact: "33(a); 33(b)"
+        fact: "35(b); 35(c); 35(c), (e); 35(g)"
       },
       {
         id: 3,
-        question: "You are <strong>in sight</strong> of another vessel. Match the sound signal with the correct action/explanation.",
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/1_AC_Crse_Stbd.mp3", "an alteration of course to starboard"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_AC_Crse_Port.mp3", "an alteration of course to port"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_Astern_Prop.mp3", "operating astern propulsion"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Warning_Wake-Up_Signal_5_short.mp3", "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"]
-        ],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel constrained by its draught; interval NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/12_Pilotage_Duties_Additional.mp3", "the identity signal of a pilot vessel engaged in pilotage duties"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/10_Aground_Less_Than_100m.mp3", "vessel less than 100 m in length aground; interval NMT 1 min"]
+                        ],
         description: "",
-        fact: "34(a); 34(d)"
+        fact: "35(c); 35(g); 35(h), (g); 35(k)"
       },
       {
         id: 4,
-        question: "You are <strong>in sight</strong> of another vessel. Match the sound signal with the correct action/response.",
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_Overtake_Stbd.mp3", "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/5_Overtake_Port.mp3", "the intention to overtake another vessel on its port side when in a narrow channel or fairway"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Warning%20Signal_7%20Short%20Blasts.m4a", "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"]
-                      ],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "sailing vessel; interval NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/11_Aground_100m_Or_More.mp3", "vessel 100 m or more in length aground; interval NMT 1 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Pilot%20Vsl_Making%20Way.m4a", "pilot vessel engaged in pilotage duties making way through the water; interval NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Prolonged%20Blast_Low%20Pitch.m4a", "power-driven vessel making way through the water; interval of NMT 2 min"]
+                        ],
         description: "",
-        fact: "34(c)(i); 34(c)(ii); 34(d)"
+        fact: "35(a); 35(c); 35(h), (g); 35(k), (a)"
       },
       {
         id: 5,
-        question: "You are <strong>in sight</strong> of another vessel <strong>and/or in clear visibility</strong>. Match the sound signal with the correct action/response.",
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_Prolonged_Blast%20.mp3", "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction <strong>OR</strong> the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction"],
-                        ["https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/8_Warning_Wake-Up_Signal_+5.mp3", "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_Overtake_Stbd.mp3", "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/5_Overtake_Port.mp3", "the intention to overtake another vessel on its port side when in a narrow channel or fairway"],
-                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"]
-                      ],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel engaged in fishing; interval of NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Pilot%20Vsl_Underway%20but%20stopped_FV2.m4a", "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water; interval NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Anchor_Less_Than_100m.mp3", "vessel less than 100 m in length at anchor; interval NMT 1 min"]
+                        ],
         description: "",
-        fact: "34(c)(i); 34(c)(ii); 34(d); 34(e);"
+        fact: "35(c); 35(g); 35(k), (b)"
+      },
+      {
+        id: 6,
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
+        correctAnswer: [
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "vessel engaged in towing or pushing another vessel; interval NMT 2 min "],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Manned_Tow.mp3", "vessel being towed that has a crew onboard (&quot;manned&quot;)"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/2_PDV_Underway_Not_Making_Way.mp3", "power-driven vessel underway but stopped and making no way through the water; interval of NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Anchor_100m_Or_More.mp3", "vessel 100 m or more in length at anchor; interval NMT 1 min"]
+                        ],
+        description: "",
+        fact: "35(b); 35(c); 35(e); 35(g)"
+      },
+      {
+        id: 7,
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
+        correctAnswer: [
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel engaged in fishing at anchor; interval NMT 2 min"],
+                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Anchor_Less_Than_100m.mp3", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/12_Pilotage_Duties_Additional.mp3"], "pilot vessel less than 100 m in length at anchor engaged in pilotage duties; interval NMT 1 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/11_Aground_100m_Or_More.mp3", "vessel 100 m or more in length aground; interval NMT 1 min"],
+                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Manned_Tow.mp3"], "vessel towing another vessel; the vessel being towed or if more than one vessel is being towed the last vessel of the tow has a crew onboard (&quot;manned&quot;); interval NMT 2 min"]
+                        ],
+        description: "",
+        fact: "35(c), (e); 35(d), (c); 35(h), (g); 35(k), (g)"
+      },
+      {
+        id: 8,
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
+        correctAnswer: [
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "vessel restricted in its ability to manoeuvre at anchor; interval NMT 2 min"],
+                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Anchor_100m_Or_More.mp3", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Pilot%20Vsl_Identity%20Signal_Low%20Pitch.m4a"], "pilot vessel 100 m or more in length at anchor engaged in pilotage duties; interval NMT 1 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/10_Aground_Less_Than_100m.mp3", "vessel less than 100 m in length aground; interval NMT 1 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"]
+                        ],
+        description: "",
+        fact: "35(d), (c); 35(g); 35(h), (g); 35(k), (g)"
+      },
+      {
+        id: 9,
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
+        correctAnswer: [
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Anchor_Less_Than_100m.mp3", "vessel less than 100 m in length at anchor; interval NMT 1 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Anchor_100m_Or_More.mp3", "vessel 100 m or more in length at anchor; interval NMT 1 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/10_Aground_Less_Than_100m.mp3", "vessel less than 100 m in length aground; interval NMT 1 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/11_Aground_100m_Or_More.mp3", "vessel 100 m or more in length aground; interval NMT 1 min"]
+                        ],
+        description: "",
+        fact: "35(g); 35(h), (g)"
+      },
+      {
+        id: 10,
+        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
+        correctAnswer: [
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Pilot%20Vsl_Making%20Way.m4a", "pilot vessel engaged in pilotage duties making way through the water; interval NMT 2 min"],
+                        ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Pilot%20Vsl_Underway%20but%20stopped_FV2.m4a", "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water; interval NMT 2 min"],
+                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/7_Anchor_Less_Than_100m.mp3", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/12_Pilotage_Duties_Additional.mp3"], "pilot vessel less than 100 m in length at anchor engaged in pilotage duties; interval NMT 1 min"],
+                        [["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/8_Anchor_100m_Or_More.mp3", "https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Pilot%20Vsl_Identity%20Signal_Low%20Pitch.m4a"], "pilot vessel 100 m or more in length at anchor engaged in pilotage duties; interval NMT 1 min"]
+                        ],
+        description: "",
+        fact: "35(k), (a); 35(k), (b); 35(k), (g)"
       },
     ]
   },

@@ -7,7 +7,7 @@ export interface QuestionData {
   correctAnswer: string | string[] | [MatchItem, MatchItem][] | [MatchItem, MatchItem, MatchItem][];   // String (single answer), string[] (multi-select), array of pairs (matching), or array of triplets (matching with OR)
   answerPool?: string[];   // Optional custom answer options for this question (will be scrambled)
   description: string;    // Brief context shown with the question
-  fact: string;          // Interesting fact shown after answering
+  fact?: string;          // Optional interesting fact shown after answering
   imageUrl?: string;      // Optional path to question image
   audioUrl?: string | string[] | string[][];     // Optional audio - single file, array of files (play sequentially), or array of arrays (multiple playback options)
   audioLoopCount?: number; // Optional number of times to loop audio sequence (default: 1, plays once)

@@ -262,7 +262,9 @@ export function FlashCard({
           {/* Matching Section */}
           <div className="w-full p-6 border-b border-gray-100">
             <div className="text-center mb-4">
-              <span className="text-sm text-blue-600 font-medium">Match the pairs by selecting one item from each column</span>
+              <span className="inline-block px-4 py-2 text-sm text-blue-700 font-bold bg-blue-50 border-2 border-blue-400 rounded-full shadow-md">
+                MATCH THE PAIRS BY SELECTING ONE ITEM FROM EACH COLUMN
+              </span>
             </div>
             <MatchingCard 
               key={question.id}
@@ -403,7 +405,9 @@ export function FlashCard({
         <div className="w-full p-6 border-b border-gray-100">
           {isMultiSelectQuestion && !showResult && (
             <div className="text-center mb-4">
-              <span className="text-sm text-blue-600 font-medium">Select all that apply</span>
+              <span className="inline-block px-4 py-2 text-sm text-blue-700 font-bold bg-blue-50 border-2 border-blue-400 rounded-full shadow-md">
+                SELECT ALL THAT APPLY
+              </span>
             </div>
           )}
           <div className="grid grid-cols-1 gap-3 w-full max-w-xl mx-auto">
