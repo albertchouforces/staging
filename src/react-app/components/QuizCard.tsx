@@ -16,6 +16,105 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
   const [showStudyGuide, setShowStudyGuide] = useState(false);
   const [studyGuideType, setStudyGuideType] = useState<'image' | 'pdf' | 'web' | 'other'>('image');
 
+  // Map theme colors to actual Tailwind classes
+  const getColorClasses = useCallback((color: string) => {
+    const colorMap: Record<string, { 
+      title: string;
+      button: string;
+      buttonHover: string;
+      studyGuideText: string;
+      studyGuideHover: string;
+      modalHeader: string;
+      modalTitle: string;
+    }> = {
+      blue: {
+        title: 'text-blue-600',
+        button: 'bg-blue-600',
+        buttonHover: 'hover:bg-blue-700',
+        studyGuideText: 'text-blue-600',
+        studyGuideHover: 'hover:bg-blue-50',
+        modalHeader: 'bg-blue-50',
+        modalTitle: 'text-blue-600'
+      },
+      green: {
+        title: 'text-green-600',
+        button: 'bg-green-600',
+        buttonHover: 'hover:bg-green-700',
+        studyGuideText: 'text-green-600',
+        studyGuideHover: 'hover:bg-green-50',
+        modalHeader: 'bg-green-50',
+        modalTitle: 'text-green-600'
+      },
+      purple: {
+        title: 'text-purple-600',
+        button: 'bg-purple-600',
+        buttonHover: 'hover:bg-purple-700',
+        studyGuideText: 'text-purple-600',
+        studyGuideHover: 'hover:bg-purple-50',
+        modalHeader: 'bg-purple-50',
+        modalTitle: 'text-purple-600'
+      },
+      red: {
+        title: 'text-red-600',
+        button: 'bg-red-600',
+        buttonHover: 'hover:bg-red-700',
+        studyGuideText: 'text-red-600',
+        studyGuideHover: 'hover:bg-red-50',
+        modalHeader: 'bg-red-50',
+        modalTitle: 'text-red-600'
+      },
+      orange: {
+        title: 'text-orange-600',
+        button: 'bg-orange-600',
+        buttonHover: 'hover:bg-orange-700',
+        studyGuideText: 'text-orange-600',
+        studyGuideHover: 'hover:bg-orange-50',
+        modalHeader: 'bg-orange-50',
+        modalTitle: 'text-orange-600'
+      },
+      yellow: {
+        title: 'text-yellow-600',
+        button: 'bg-yellow-500',
+        buttonHover: 'hover:bg-yellow-600',
+        studyGuideText: 'text-yellow-600',
+        studyGuideHover: 'hover:bg-yellow-50',
+        modalHeader: 'bg-yellow-50',
+        modalTitle: 'text-yellow-600'
+      },
+      pink: {
+        title: 'text-pink-600',
+        button: 'bg-pink-600',
+        buttonHover: 'hover:bg-pink-700',
+        studyGuideText: 'text-pink-600',
+        studyGuideHover: 'hover:bg-pink-50',
+        modalHeader: 'bg-pink-50',
+        modalTitle: 'text-pink-600'
+      },
+      indigo: {
+        title: 'text-indigo-600',
+        button: 'bg-indigo-600',
+        buttonHover: 'hover:bg-indigo-700',
+        studyGuideText: 'text-indigo-600',
+        studyGuideHover: 'hover:bg-indigo-50',
+        modalHeader: 'bg-indigo-50',
+        modalTitle: 'text-indigo-600'
+      },
+      teal: {
+        title: 'text-teal-600',
+        button: 'bg-teal-600',
+        buttonHover: 'hover:bg-teal-700',
+        studyGuideText: 'text-teal-600',
+        studyGuideHover: 'hover:bg-teal-50',
+        modalHeader: 'bg-teal-50',
+        modalTitle: 'text-teal-600'
+      }
+    };
+
+    return colorMap[color] || colorMap.blue;
+  }, []);
+
+  const colors = getColorClasses(config.themeColor);
+
   const handleReset = () => {
     onResetScores();
     // Add reload as fallback
@@ -136,7 +235,7 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
         <div className="px-6 pb-6 pt-2 flex flex-col flex-grow">
           {/* Top section that can grow/shrink */}
           <div className="flex-grow">
-            <h3 className={`text-xl font-bold text-${config.themeColor}-600 mb-2 text-center`}>
+            <h3 className={`text-xl font-bold ${colors.title} mb-2 text-center`}>
               {config.title}
             </h3>
             <p className="text-gray-600 mb-4 text-center">
@@ -148,7 +247,7 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
               <div className="mb-6 flex justify-center">
                 <button
                   onClick={handleStudyGuideClick}
-                  className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-${config.themeColor}-600 hover:bg-${config.themeColor}-50 rounded-lg transition-colors`}
+                  className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium ${colors.studyGuideText} ${colors.studyGuideHover} rounded-lg transition-colors`}
                 >
                   {studyGuideButton.icon}
                   {studyGuideButton.text}
@@ -171,7 +270,7 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
 
             <button
               onClick={onStart}
-              className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-${config.themeColor}-600 hover:bg-${config.themeColor}-700 text-white rounded-lg transition-colors font-semibold`}
+              className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 ${colors.button} ${colors.buttonHover} text-white rounded-lg transition-colors font-semibold`}
             >
               <Play size={20} />
               Start Quiz
@@ -184,8 +283,8 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
       {showStudyGuide && studyGuideType === 'image' && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-            <div className={`p-4 border-b border-gray-200 flex justify-between items-center bg-${config.themeColor}-50`}>
-              <h3 className={`text-lg font-semibold text-${config.themeColor}-600`}>Study Guide</h3>
+            <div className={`p-4 border-b border-gray-200 flex justify-between items-center ${colors.modalHeader}`}>
+              <h3 className={`text-lg font-semibold ${colors.modalTitle}`}>Study Guide</h3>
               <button
                 onClick={() => setShowStudyGuide(false)}
                 className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"

@@ -47,6 +47,7 @@ export interface QuizConfig {
     | 'red' 
     | 'purple' 
     | 'orange' 
+    | 'yellow'
     | 'pink'
     | 'indigo'
     | 'teal'

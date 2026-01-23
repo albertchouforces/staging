@@ -175,9 +175,9 @@ export function StartScreen({
               <div className="flex justify-center mb-12">
                 <button
                   onClick={() => setShowGlobalLeaderboard(true)}
-                  className="flex items-center justify-center gap-2 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors font-semibold shadow-md"
+                  className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-600 hover:from-yellow-700 hover:via-amber-600 hover:to-yellow-700 text-white rounded-lg transition-all font-bold shadow-lg hover:shadow-xl hover:scale-105 border border-yellow-700"
                 >
-                  <Globe size={20} />
+                  <Globe size={20} className="drop-shadow" />
                   View Global Leaderboard
                 </button>
               </div>
@@ -191,9 +191,9 @@ export function StartScreen({
         <div className="flex justify-center mb-12">
           <button
             onClick={() => setShowGlobalLeaderboard(true)}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors font-semibold shadow-md"
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-600 hover:from-yellow-700 hover:via-amber-600 hover:to-yellow-700 text-white rounded-lg transition-all font-bold shadow-lg hover:shadow-xl hover:scale-105 border border-yellow-700"
           >
-            <Globe size={20} />
+            <Globe size={20} className="drop-shadow" />
             View Global Leaderboard
           </button>
         </div>
