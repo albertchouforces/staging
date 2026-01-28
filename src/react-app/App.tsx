@@ -1,12 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import { FlashCard } from '@/react-app/components/FlashCard';
+import { FillInTheBlankCard } from '@/react-app/components/FillInTheBlankCard';
 import { ScoreDisplay } from '@/react-app/components/ScoreDisplay';
 import { StartScreen } from '@/react-app/components/StartScreen';
 import { UserNameInput } from '@/react-app/components/UserNameInput';
 import { Footer } from '@/react-app/components/Footer';
 import { QuizHeader } from '@/react-app/components/QuizHeader';
 import { QUIZ_COLLECTION } from '@/react-app/data/quizData';
-import { shuffleArray, getRandomOptions, getCorrectAnswers, isMultiSelect, hasAnswerPool, getAnswerPoolOptions } from '@/react-app/lib/utils';
+import { shuffleArray, getRandomOptions, getCorrectAnswers, isMultiSelect, hasAnswerPool, getAnswerPoolOptions, isFillInTheBlank } from '@/react-app/lib/utils';
 
 import type { QuizStats, QuestionData, HighScoreEntry } from '@/react-app/types';
 
@@ -30,6 +31,7 @@ function App() {
   const [lastPauseTime, setLastPauseTime] = useState<number | null>(null);
   const [accumulatedTime, setAccumulatedTime] = useState(0);
   const [selectedQuiz, setSelectedQuiz] = useState<typeof QUIZ_COLLECTION[0] | null>(null);
+  const [quizSessionKey, setQuizSessionKey] = useState(0);
 
   // Get all unique possible answers for the current quiz
   // Only include single-answer questions without custom answer pools
@@ -165,10 +167,22 @@ function App() {
     setRandomizedQuestions(shuffleArray(quiz.questions));
   };
 
-  const handleAnswer = (correct: boolean) => {
+  const handleAnswer = (correct: boolean | number) => {
     console.log('[App] handleAnswer called, correct:', correct, 'current totalAnswers:', totalAnswers);
-    if (correct) setCorrectAnswers(prev => prev + 1);
-    setTotalAnswers(prev => prev + 1);
+    // Handle fill-in-the-blank (number = count of correct blanks)
+    if (typeof correct === 'number') {
+      setCorrectAnswers(prev => prev + correct);
+      // For fill-in-the-blank, count each blank as a separate answer
+      const currentQuestion = getCurrentQuestion();
+      if (currentQuestion && selectedQuiz?.config.fillInTheBlank && isFillInTheBlank(currentQuestion.question, selectedQuiz.config.fillInTheBlank)) {
+        const blankCount = currentQuestion.question.split('(blank)').length - 1;
+        setTotalAnswers(prev => prev + blankCount);
+      }
+    } else {
+      // Handle regular boolean answer
+      if (correct) setCorrectAnswers(prev => prev + 1);
+      setTotalAnswers(prev => prev + 1);
+    }
     pauseTimer();
   };
 
@@ -184,6 +198,28 @@ function App() {
   const handleRestart = () => {
     setGameState('selection');
     setSelectedQuiz(null);
+  };
+
+  const handleRestartQuiz = () => {
+    if (!selectedQuiz) return;
+    
+    // Reset to playing state
+    setGameState('playing');
+    setCurrentQuestionIndex(0);
+    setCorrectAnswers(0);
+    setTotalAnswers(0);
+    setCurrentTime(0);
+    setStartTime(Date.now());
+    setIsPaused(false);
+    setLastPauseTime(null);
+    setAccumulatedTime(0);
+    
+    // Increment session key to force component remount
+    setQuizSessionKey(prev => prev + 1);
+    
+    // Re-randomize questions to create a fresh quiz
+    const shuffled = shuffleArray(selectedQuiz.questions);
+    setRandomizedQuestions(shuffled);
   };
 
   const handleUserNameSubmit = (userName: string) => {
@@ -261,21 +297,34 @@ function App() {
                     total={totalAnswers} 
                     highScore={getStatsForQuiz(selectedQuiz.config.quizKey).highScore}
                     onRestart={handleRestart}
+                    onRestartQuiz={handleRestartQuiz}
                     isFinished={false}
-                    totalQuestions={randomizedQuestions.length}
                     currentTime={currentTime}
                     bestRun={getStatsForQuiz(selectedQuiz.config.quizKey).bestRun}
                     quizConfig={selectedQuiz.config}
                   />
-                  <FlashCard
-                    question={getCurrentQuestion()}
-                    options={options}
-                    onAnswer={handleAnswer}
-                    onNext={handleNext}
-                    questionNumber={currentQuestionIndex + 1}
-                    totalQuestions={randomizedQuestions.length}
-                    quizConfig={selectedQuiz.config}
-                  />
+                  {selectedQuiz.config.fillInTheBlank && isFillInTheBlank(getCurrentQuestion().question, selectedQuiz.config.fillInTheBlank) ? (
+                    <FillInTheBlankCard
+                      key={`session-${quizSessionKey}-q-${currentQuestionIndex}`}
+                      question={getCurrentQuestion()}
+                      onAnswer={handleAnswer}
+                      onNext={handleNext}
+                      questionNumber={currentQuestionIndex + 1}
+                      totalQuestions={randomizedQuestions.length}
+                      quizConfig={selectedQuiz.config}
+                    />
+                  ) : (
+                    <FlashCard
+                      key={`session-${quizSessionKey}-q-${currentQuestionIndex}`}
+                      question={getCurrentQuestion()}
+                      options={options}
+                      onAnswer={handleAnswer}
+                      onNext={handleNext}
+                      questionNumber={currentQuestionIndex + 1}
+                      totalQuestions={randomizedQuestions.length}
+                      quizConfig={selectedQuiz.config}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-6">
@@ -284,8 +333,8 @@ function App() {
                     total={totalAnswers} 
                     highScore={getStatsForQuiz(selectedQuiz.config.quizKey).highScore}
                     onRestart={handleRestart}
+                    onRestartQuiz={handleRestartQuiz}
                     isFinished={true}
-                    totalQuestions={randomizedQuestions.length}
                     currentTime={currentTime}
                     bestRun={getStatsForQuiz(selectedQuiz.config.quizKey).bestRun}
                     quizConfig={selectedQuiz.config}

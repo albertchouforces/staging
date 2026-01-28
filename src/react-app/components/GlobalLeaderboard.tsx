@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getGlobalScores, type GlobalScoreEntry } from '@/react-app/lib/firebase';
 import { Medal } from '@/react-app/components/Medal';
 import { Loader, Trophy, X, ChevronDown } from 'lucide-react';
 import type { QuizDefinition } from '@/react-app/types';
-import { ENABLE_TIME_TRACKING, USE_DROPDOWN_QUIZ_SELECTOR } from '@/react-app/config/features';
+import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
+import { CATEGORY_ORDER } from '@/react-app/data/quizData';
 
 interface GlobalLeaderboardProps {
   onClose: () => void;
@@ -14,7 +15,84 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
   const [scores, setScores] = useState<GlobalScoreEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedQuiz, setSelectedQuiz] = useState<string>(quizzes[0]?.config.quizKey || '');
+
+  // Group quizzes by category and sort according to CATEGORY_ORDER
+  // Quizzes without a category are treated as individual selections
+  const categorizedQuizzes = useMemo(() => {
+    const grouped = new Map<string, QuizDefinition[]>();
+    const uncategorizedQuizzes: QuizDefinition[] = [];
+    
+    quizzes.forEach(quiz => {
+      if (!quiz.config.category) {
+        // Each uncategorized quiz becomes its own "category"
+        uncategorizedQuizzes.push(quiz);
+      } else {
+        const category = quiz.config.category;
+        if (!grouped.has(category)) {
+          grouped.set(category, []);
+        }
+        grouped.get(category)!.push(quiz);
+      }
+    });
+
+    // Sort categories according to CATEGORY_ORDER
+    const sortedCategories = Array.from(grouped.keys()).sort((a, b) => {
+      const indexA = CATEGORY_ORDER.indexOf(a);
+      const indexB = CATEGORY_ORDER.indexOf(b);
+      
+      const orderA = indexA === -1 ? 999 : indexA;
+      const orderB = indexB === -1 ? 999 : indexB;
+      
+      return orderA - orderB;
+    });
+
+    // Build the result array with categorized quizzes first, then uncategorized
+    const result = sortedCategories.map(category => ({
+      category,
+      quizzes: grouped.get(category)!
+    }));
+
+    // Add each uncategorized quiz as its own entry
+    uncategorizedQuizzes.forEach(quiz => {
+      result.push({
+        category: `__single__${quiz.config.quizKey}`, // Use a special marker to identify single quizzes
+        quizzes: [quiz]
+      });
+    });
+
+    return result;
+  }, [quizzes]);
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    categorizedQuizzes[0]?.category || ''
+  );
+  const [selectedQuiz, setSelectedQuiz] = useState<string>('');
+
+  // Initialize selectedQuiz when component mounts or category changes
+  useEffect(() => {
+    const categoryData = categorizedQuizzes.find(c => c.category === selectedCategory);
+    if (categoryData && categoryData.quizzes.length > 0) {
+      setSelectedQuiz(categoryData.quizzes[0].config.quizKey);
+    }
+  }, [selectedCategory, categorizedQuizzes]);
+
+  // Get quizzes for the selected category
+  const quizzesInCategory = useMemo(() => {
+    const categoryData = categorizedQuizzes.find(c => c.category === selectedCategory);
+    return categoryData?.quizzes || [];
+  }, [selectedCategory, categorizedQuizzes]);
+
+  // Check if selected category is a single quiz (uncategorized)
+  const isSingleQuizCategory = selectedCategory.startsWith('__single__');
+
+  // Get display name for category button
+  const getCategoryDisplayName = (category: string, quizzes: QuizDefinition[]) => {
+    if (category.startsWith('__single__')) {
+      // For single quiz categories, show the quiz name
+      return getQuizDisplayName(quizzes[0]);
+    }
+    return category;
+  };
 
   // Helper to check if a quiz title is duplicated
   const hasDuplicateTitle = (title: string) => {
@@ -47,7 +125,9 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
       amber: 'rgb(245, 158, 11)',
       fuchsia: 'rgb(217, 70, 239)',
       lime: 'rgb(132, 204, 22)',
-      emerald: 'rgb(16, 185, 129)'
+      emerald: 'rgb(16, 185, 129)',
+      grey: 'rgb(75, 85, 99)',
+      yellow: 'rgb(234, 179, 8)'
     };
     return colorMap[themeColor] || 'rgb(37, 99, 235)'; // default to blue
   };
@@ -95,6 +175,11 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
   const selectedQuizConfig = getSelectedQuizConfig();
   const accentColor = selectedQuizConfig?.themeColor || 'blue';
 
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    // The useEffect will automatically set the first quiz in this category
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
@@ -113,49 +198,57 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
             </button>
           </div>
 
-          {/* Quiz Selection */}
-          {USE_DROPDOWN_QUIZ_SELECTOR ? (
-            <div className="relative inline-block">
-              <select
-                value={selectedQuiz}
-                onChange={(e) => setSelectedQuiz(e.target.value)}
-                className="w-full md:w-auto pl-4 pr-9 py-2 rounded-lg border-2 border-gray-200 text-sm font-medium appearance-none cursor-pointer hover:border-gray-300 focus:outline-none focus:border-gray-400 transition-colors"
-                style={{
-                  color: selectedQuizConfig?.themeColor ? getColorValue(selectedQuizConfig.themeColor) : '#374151'
-                }}
-              >
-                {quizzes.map((quiz) => (
-                  <option
-                    key={quiz.config.quizKey}
-                    value={quiz.config.quizKey}
-                    style={{
-                      color: getColorValue(quiz.config.themeColor)
-                    }}
-                  >
-                    {getQuizDisplayName(quiz)}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown 
-                className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" 
-                size={18} 
-              />
-            </div>
-          ) : (
+          {/* Category Selection */}
+          <div className="mb-4">
             <div className="flex gap-2 flex-wrap">
-              {quizzes.map((quiz) => (
+              {categorizedQuizzes.map(({ category, quizzes }) => (
                 <button
-                  key={quiz.config.quizKey}
-                  onClick={() => setSelectedQuiz(quiz.config.quizKey)}
+                  key={category}
+                  onClick={() => handleCategorySelect(category)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    selectedQuiz === quiz.config.quizKey
-                      ? `bg-${quiz.config.themeColor}-600 text-white`
-                      : `text-${quiz.config.themeColor}-600 hover:bg-${quiz.config.themeColor}-50`
+                    selectedCategory === category
+                      ? 'bg-gray-800 text-white'
+                      : 'text-gray-800 hover:bg-gray-100 border border-gray-300'
                   }`}
                 >
-                  {getQuizDisplayName(quiz)}
+                  {getCategoryDisplayName(category, quizzes)}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Quiz Selection (only show dropdown if category has multiple quizzes and it's not a single quiz category) */}
+          {quizzesInCategory.length > 1 && !isSingleQuizCategory && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                Select Quiz:
+              </label>
+              <div className="relative w-full">
+                <select
+                  value={selectedQuiz}
+                  onChange={(e) => setSelectedQuiz(e.target.value)}
+                  className="w-full pl-4 pr-9 py-3 rounded-lg border-2 border-gray-300 text-base font-medium appearance-none cursor-pointer hover:border-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all shadow-sm bg-white"
+                  style={{
+                    color: selectedQuizConfig?.themeColor ? getColorValue(selectedQuizConfig.themeColor) : '#374151'
+                  }}
+                >
+                  {quizzesInCategory.map((quiz) => (
+                    <option
+                      key={quiz.config.quizKey}
+                      value={quiz.config.quizKey}
+                      style={{
+                        color: getColorValue(quiz.config.themeColor)
+                      }}
+                    >
+                      {getQuizDisplayName(quiz)}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown 
+                  className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500" 
+                  size={20} 
+                />
+              </div>
             </div>
           )}
         </div>

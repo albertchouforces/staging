@@ -107,6 +107,87 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
         studyGuideHover: 'hover:bg-teal-50',
         modalHeader: 'bg-teal-50',
         modalTitle: 'text-teal-600'
+      },
+      sky: {
+        title: 'text-sky-600',
+        button: 'bg-sky-600',
+        buttonHover: 'hover:bg-sky-700',
+        studyGuideText: 'text-sky-600',
+        studyGuideHover: 'hover:bg-sky-50',
+        modalHeader: 'bg-sky-50',
+        modalTitle: 'text-sky-600'
+      },
+      cyan: {
+        title: 'text-cyan-600',
+        button: 'bg-cyan-600',
+        buttonHover: 'hover:bg-cyan-700',
+        studyGuideText: 'text-cyan-600',
+        studyGuideHover: 'hover:bg-cyan-50',
+        modalHeader: 'bg-cyan-50',
+        modalTitle: 'text-cyan-600'
+      },
+      rose: {
+        title: 'text-rose-600',
+        button: 'bg-rose-600',
+        buttonHover: 'hover:bg-rose-700',
+        studyGuideText: 'text-rose-600',
+        studyGuideHover: 'hover:bg-rose-50',
+        modalHeader: 'bg-rose-50',
+        modalTitle: 'text-rose-600'
+      },
+      amber: {
+        title: 'text-amber-600',
+        button: 'bg-amber-600',
+        buttonHover: 'hover:bg-amber-700',
+        studyGuideText: 'text-amber-600',
+        studyGuideHover: 'hover:bg-amber-50',
+        modalHeader: 'bg-amber-50',
+        modalTitle: 'text-amber-600'
+      },
+      lime: {
+        title: 'text-lime-600',
+        button: 'bg-lime-600',
+        buttonHover: 'hover:bg-lime-700',
+        studyGuideText: 'text-lime-600',
+        studyGuideHover: 'hover:bg-lime-50',
+        modalHeader: 'bg-lime-50',
+        modalTitle: 'text-lime-600'
+      },
+      violet: {
+        title: 'text-violet-600',
+        button: 'bg-violet-600',
+        buttonHover: 'hover:bg-violet-700',
+        studyGuideText: 'text-violet-600',
+        studyGuideHover: 'hover:bg-violet-50',
+        modalHeader: 'bg-violet-50',
+        modalTitle: 'text-violet-600'
+      },
+      fuchsia: {
+        title: 'text-fuchsia-600',
+        button: 'bg-fuchsia-600',
+        buttonHover: 'hover:bg-fuchsia-700',
+        studyGuideText: 'text-fuchsia-600',
+        studyGuideHover: 'hover:bg-fuchsia-50',
+        modalHeader: 'bg-fuchsia-50',
+        modalTitle: 'text-fuchsia-600'
+      },
+      emerald: {
+        title: 'text-emerald-600',
+        button: 'bg-emerald-600',
+        buttonHover: 'hover:bg-emerald-700',
+        studyGuideText: 'text-emerald-600',
+        studyGuideHover: 'hover:bg-emerald-50',
+        modalHeader: 'bg-emerald-50',
+        modalTitle: 'text-emerald-600'
+      },
+      grey: {
+        title: 'text-gray-600',
+        button: 'bg-gray-600',
+        buttonHover: 'hover:bg-gray-700',
+        studyGuideText: 'text-gray-600',
+        studyGuideHover: 'hover:bg-gray-50',
+        modalHeader: 'bg-gray-50',
+        modalTitle: 'text-gray-600'
       }
     };
 

@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, MouseEvent } from 'react';
 import type { QuestionData, QuizConfig } from '@/react-app/types';
 import { getCorrectAnswers, isMultiSelect, isMatchingQuestion } from '@/react-app/lib/utils';
-import { BookOpen, Check, ImageOff, X } from 'lucide-react';
+import { BookOpen, Check, ImageOff, X, Info } from 'lucide-react';
 import { AudioPlayer } from '@/react-app/components/AudioPlayer';
 import { MatchingCard } from '@/react-app/components/MatchingCard';
 
@@ -29,9 +29,13 @@ export function FlashCard({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [options, setOptions] = useState<string[]>([]);
+  const [showMultiSelectInfo, setShowMultiSelectInfo] = useState(false);
+  const [showMatchingInfo, setShowMatchingInfo] = useState(false);
   const isMultiSelectQuestion = isMultiSelect(question.correctAnswer);
   const isMatchQuestion = isMatchingQuestion(question.correctAnswer);
   const cardRef = useRef<HTMLDivElement>(null);
+  const multiSelectInfoBoxRef = useRef<HTMLDivElement>(null);
+  const matchingInfoBoxRef = useRef<HTMLDivElement>(null);
 
   // Helper to check if audio is nested array (multiple playback options)
   const isNestedAudioArray = useCallback((url: string | string[] | string[][] | undefined): url is string[][] => {
@@ -106,6 +110,38 @@ export function FlashCard({
       cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [question.id]);
+
+  // Close multi-select info box when clicking outside
+  useEffect(() => {
+    if (!showMultiSelectInfo) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (multiSelectInfoBoxRef.current && !multiSelectInfoBoxRef.current.contains(event.target as Node)) {
+        setShowMultiSelectInfo(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside as any);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside as any);
+    };
+  }, [showMultiSelectInfo]);
+
+  // Close matching info box when clicking outside
+  useEffect(() => {
+    if (!showMatchingInfo) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (matchingInfoBoxRef.current && !matchingInfoBoxRef.current.contains(event.target as Node)) {
+        setShowMatchingInfo(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside as any);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside as any);
+    };
+  }, [showMatchingInfo]);
 
   const handleOptionClick = useCallback((answer: string) => {
     if (showResult) return;
@@ -196,6 +232,17 @@ export function FlashCard({
     setImageLoaded(true);
   }, []);
 
+  const handleFactClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'A') {
+      e.preventDefault();
+      const href = target.getAttribute('href');
+      if (href) {
+        window.open(href, '_blank', 'noopener,noreferrer');
+      }
+    }
+  }, []);
+
   const getOptionStyles = useCallback((option: string) => {
     const correctAnswers = getCorrectAnswers(question.correctAnswer);
     const isSelected = selectedAnswers.has(option);
@@ -261,10 +308,40 @@ export function FlashCard({
 
           {/* Matching Section */}
           <div className="w-full p-6 border-b border-gray-100">
-            <div className="text-center mb-4">
-              <span className="inline-block px-4 py-2 text-sm text-blue-700 font-bold bg-blue-50 border-2 border-blue-400 rounded-full shadow-md">
+            <div className="text-center mb-4 relative">
+              <span className="inline-flex items-center gap-2 px-4 py-2 text-sm text-blue-700 font-bold bg-blue-50 border-2 border-blue-400 rounded-full shadow-md">
                 MATCH THE PAIRS BY SELECTING ONE ITEM FROM EACH COLUMN
+                <button
+                  onClick={() => setShowMatchingInfo(!showMatchingInfo)}
+                  className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
+                  aria-label="Help"
+                >
+                  <Info size={16} />
+                </button>
               </span>
+              
+              {/* Info Box */}
+              {showMatchingInfo && (
+                <div ref={matchingInfoBoxRef} className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-80 bg-white border-2 border-blue-400 rounded-lg shadow-xl p-4 z-10">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-semibold text-blue-800 text-sm">How to play:</h3>
+                    <button
+                      onClick={() => setShowMatchingInfo(false)}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Close"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                  <ol className="text-xs text-gray-700 space-y-2 list-decimal list-inside">
+                    <li>Click an item from the left column to select it</li>
+                    <li>Click the matching item from the right column</li>
+                    <li>If correct, both items will turn green and lock in place</li>
+                    <li>If incorrect, both items will briefly turn red and reset</li>
+                    <li>Match all pairs correctly to complete the question!</li>
+                  </ol>
+                </div>
+              )}
             </div>
             <MatchingCard 
               key={question.id}
@@ -302,7 +379,11 @@ export function FlashCard({
                     <span className="font-semibold">{quizConfig.factHeading || 'Did you know?'}</span>
                   </div>
                   {question.fact && (
-                    <div className="text-blue-900 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.fact }} />
+                    <div 
+                      className="text-blue-900 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1 [&_a]:text-blue-600 [&_a]:underline [&_a:hover]:text-blue-800 [&_a]:cursor-pointer" 
+                      dangerouslySetInnerHTML={{ __html: question.fact }}
+                      onClick={handleFactClick}
+                    />
                   )}
                   
                   {/* Fact Audio Players */}
@@ -404,10 +485,40 @@ export function FlashCard({
         {/* Options Section */}
         <div className="w-full p-6 border-b border-gray-100">
           {isMultiSelectQuestion && !showResult && (
-            <div className="text-center mb-4">
-              <span className="inline-block px-4 py-2 text-sm text-blue-700 font-bold bg-blue-50 border-2 border-blue-400 rounded-full shadow-md">
+            <div className="text-center mb-4 relative">
+              <span className="inline-flex items-center gap-2 px-4 py-2 text-sm text-blue-700 font-bold bg-blue-50 border-2 border-blue-400 rounded-full shadow-md">
                 SELECT ALL THAT APPLY
+                <button
+                  onClick={() => setShowMultiSelectInfo(!showMultiSelectInfo)}
+                  className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
+                  aria-label="Help"
+                >
+                  <Info size={16} />
+                </button>
               </span>
+              
+              {/* Info Box */}
+              {showMultiSelectInfo && (
+                <div ref={multiSelectInfoBoxRef} className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-80 bg-white border-2 border-blue-400 rounded-lg shadow-xl p-4 z-10">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-semibold text-blue-800 text-sm">How to play:</h3>
+                    <button
+                      onClick={() => setShowMultiSelectInfo(false)}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Close"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                  <ol className="text-xs text-gray-700 space-y-2 list-decimal list-inside">
+                    <li>Click to select multiple correct answers</li>
+                    <li>Selected answers will be highlighted in blue</li>
+                    <li>Click again to deselect an answer</li>
+                    <li>You must select ALL correct answers to get it right</li>
+                    <li>Click "Submit Answer" when ready to check your selections</li>
+                  </ol>
+                </div>
+              )}
             </div>
           )}
           <div className="grid grid-cols-1 gap-3 w-full max-w-xl mx-auto">

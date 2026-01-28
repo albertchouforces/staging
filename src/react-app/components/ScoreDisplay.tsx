@@ -1,4 +1,4 @@
-import { RotateCcw, Trophy, Clock } from 'lucide-react';
+import { RotateCcw, Trophy, Clock, Shuffle } from 'lucide-react';
 import { Timer } from '@/react-app/components/Timer';
 import { BestRun, QuizConfig } from '@/react-app/types';
 import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
@@ -8,8 +8,8 @@ interface ScoreDisplayProps {
   total: number;
   highScore: number;
   onRestart: () => void;
+  onRestartQuiz?: () => void;
   isFinished: boolean;
-  totalQuestions: number;
   currentTime: number;
   bestRun: BestRun | null;
   quizConfig: QuizConfig;
@@ -20,8 +20,8 @@ export function ScoreDisplay({
   total, 
   highScore, 
   onRestart,
+  onRestartQuiz,
   isFinished,
-  totalQuestions,
   currentTime,
   bestRun,
   quizConfig
@@ -69,7 +69,7 @@ export function ScoreDisplay({
           </div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">Quiz Complete!</h3>
           <p className="text-gray-600 mb-4">
-            You correctly identified {correct} out of {totalQuestions} questions.
+            You correctly identified {correct} out of {total} questions.
           </p>
           {correct > highScore && (
             <p className={`text-${accentColor}-600 font-semibold mb-4`}>New High Score!</p>
@@ -82,13 +82,24 @@ export function ScoreDisplay({
         </div>
       )}
 
-      <button
-        onClick={onRestart}
-        className={`flex items-center gap-2 px-4 py-2 text-sm font-medium text-${accentColor}-600 hover:text-${accentColor}-700 transition-colors`}
-      >
-        <RotateCcw size={16} />
-        {isFinished ? 'Start New Quiz' : 'Restart Quiz'}
-      </button>
+      <div className="flex gap-3">
+        {onRestartQuiz && (
+          <button
+            onClick={onRestartQuiz}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium text-${accentColor}-600 hover:text-${accentColor}-700 transition-colors`}
+          >
+            <RotateCcw size={16} />
+            Restart Quiz
+          </button>
+        )}
+        <button
+          onClick={onRestart}
+          className={`flex items-center gap-2 px-4 py-2 text-sm font-medium text-${accentColor}-600 hover:text-${accentColor}-700 transition-colors`}
+        >
+          <Shuffle size={16} />
+          Start New Quiz
+        </button>
+      </div>
     </div>
   );
 }

@@ -156,6 +156,41 @@
 //      factAudioLoopCount: 1  // Optional - plays once (default)
 //    }
 //
+// FILL-IN-THE-BLANK QUESTIONS:
+//
+// To create fill-in-the-blank questions, add `fillInTheBlank: true` to the quiz config.
+// When enabled, questions can use (blank) markers that users click to fill in.
+//
+//    Example fill-in-the-blank question:
+//    {
+//      id: 1,
+//      question: "The capital of France is (blank) and the Eiffel Tower is (blank) meters tall.",
+//      correctAnswer: ["Paris", "330", "London", "Berlin", "Rome"],  // First 2 are correct answers for the blanks, rest are distractors
+//      description: "French geography and landmarks",
+//      fact: "The Eiffel Tower was completed in 1889!",
+//      imageUrl: "/images/geography/eiffel-tower.jpg"
+//    }
+//
+// Fill-in-the-blank format:
+//    * Use (blank) in the question text to mark where blanks should appear (must be exactly this text with parentheses)
+//    * correctAnswer must be an array of strings
+//    * The first N answers (where N = number of blanks) are the correct answers in order
+//    * Any additional answers beyond the first N are distractor options
+//    * Each blank is worth 1 point on the leaderboard
+//    * Wrong answers reveal the correct answer for that blank
+//    * Questions and answer options can both be randomized if enabled in quiz config
+//    * Users click on a blank to select it, then choose an answer from the available options
+//
+//    Example with 3 blanks and 2 distractors:
+//    {
+//      id: 2,
+//      question: "Water freezes at (blank)°C, boils at (blank)°C, and has a pH of (blank).",
+//      correctAnswer: ["0", "100", "7", "50", "14"],  // First 3 fill blanks, last 2 are distractors
+//      description: "Properties of water",
+//      fact: "Water is one of the few substances that expands when it freezes!",
+//      imageUrl: "/images/science/water.jpg"
+//    }
+//
 // Available theme colors:
 // - Basic: 'blue', 'green', 'red', 'purple', 'orange', 'pink'
 // - Cool: 'sky', 'cyan', 'teal', 'indigo', 'violet'
@@ -175,6 +210,7 @@ interface QuizDefinition {
 // Categories not in this list will appear after these in alphabetical order
 // Quizzes without a category appear first (before any categorized quizzes)
 export const CATEGORY_ORDER: string[] = [
+  'Col Regs Rule 3',
   'Col Regs Rules 23-31',
   'Col Regs Rules 32-34',
   'Col Regs Rule 35',
@@ -2410,7 +2446,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 8,
-        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>at anchor</strong> shall ring the _______ rapidly for about ______________ at intervals ______________.",
+        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>at anchor</strong> shall ring the _______ rapidly for about (blank)__ at intervals (blank)__.",
         audioUrl: "",
         correctAnswer: ["bell; 5 seconds; of not more than 1 minute"],
         answerPool: ["bell; 5 seconds; of not more than 1 minute",
@@ -2423,7 +2459,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 9,
-        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>at anchor</strong> shall ring the bell rapidly for about ______________ in the forepart and immediately afterwards the gong shall be sounded rapidly in the after part for about ______________ at intervals of not more than ______________.",
+        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>at anchor</strong> shall ring the bell rapidly for about (blank)__ in the forepart and immediately afterwards the gong shall be sounded rapidly in the after part for about (blank)__ at intervals of not more than (blank)__.",
         audioUrl: "",
         correctAnswer: ["5 seconds; 5 seconds; 1 minute"],
         answerPool: ["5 seconds; 5 seconds; 1 minute",
@@ -2446,7 +2482,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 11,
-        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell at intervals of not more than ______________.  ",
+        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for (blank)__, followed by ____ separate and distinct strokes on the bell at intervals of not more than (blank)__.  ",
         audioUrl: "",
         correctAnswer: ["3; 5 seconds; 3; 1 minute"],
         answerPool: ["3; 5 seconds; 3; 1 minute",
@@ -2458,7 +2494,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 12,
-        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell, followed by rapid sounding of the _______ at intervals of not more than ______________.  ",
+        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for (blank)__, followed by ____ separate and distinct strokes on the bell, followed by rapid sounding of the _______ at intervals of not more than (blank)__.  ",
         audioUrl: "",
         correctAnswer: ["3; 5 seconds; 3; gong; 1 minute"],
         answerPool: ["3; 5 seconds; 3; gong; 1 minute",
@@ -2940,6 +2976,44 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ],
         description: "",
         fact: "35(k), (a); 35(k), (b); 35(k), (g)"
+      },
+    ]
+  },
+  {
+    config: {
+      id: "3fill",
+      title: "Col Regs Rule 3",
+      description: "Definitions",
+      themeColor: 'grey',
+      quizKey: "3fill",
+      startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
+      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
+      factHeading: "",
+      category: "Col Regs Rule 3",
+      fillInTheBlank: true,
+      hidden: false
+    },
+    questions: [
+      {
+        id: 1,
+        question: "The word “vessel” includes every description of (blank) craft, including non-displacement craft, (blank) craft and (blank), used or capable of being used as a means of (blank) on water.",
+        correctAnswer: ["water", "WIG", "seaplanes", "transportation"],
+        description: "R3(a)",
+        fact: "A WIG craft can travel further on the same fuel and with the same payload as an aircraft and much faster than a ship. This enables WIG craft to fill the gap between low cost, slow sea freight and fast, yet high-cost air freight. <a href='https://www.wigcraft.com'>www.wigcraft.com</a>"
+      },
+      {
+        id: 2,
+        question: "The term (blank) vessel means any (blank) propelled by (blank).",
+        correctAnswer: ["power-driven", "vessel", "machinery", "sailing"],
+        description: "R3(b)",
+        fact: "A power-driven vessel <strong>under 50 metres in length</strong> is required to display <strong>one masthead light</strong>. Displaying a <strong>second masthead light</strong>, positioned higher and aft of (behind) the first, is <strong>optional</strong>. <i>R23(a)</i>"
+      },
+      {
+        id: 3,
+        question: "The term (blank) vessel means any vessel under (blank) provided that propelling (blank) , if fitted, is (blank) being used.",
+        correctAnswer: ["sailing", "sail", "machinery", "not"],
+        description: "R3(c)",
+        fact: "Using your engine only to charge batteries or power onboard systems (without propelling the vessel) still allows the vessel to be classified as a sailing vessel."
       },
     ]
   },

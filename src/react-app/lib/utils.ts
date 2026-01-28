@@ -52,6 +52,24 @@ export const hasAnswerPool = (answerPool: string[] | undefined): boolean => {
 };
 
 /**
+ * Check if a question is fill-in-the-blank (has (blank) markers in question text)
+ */
+export const isFillInTheBlank = (question: string, fillInTheBlankEnabled: boolean): boolean => {
+  return fillInTheBlankEnabled && question.includes('(blank)');
+};
+
+/**
+ * Parse question text to extract parts and blank positions
+ */
+export const parseBlankQuestion = (question: string): { parts: string[]; blankCount: number } => {
+  const parts = question.split('(blank)');
+  return {
+    parts,
+    blankCount: parts.length - 1
+  };
+};
+
+/**
  * Get options for a question with custom answer pool
  * Returns all items from the pool in shuffled order
  * Automatically includes correct answers if they're missing from the pool

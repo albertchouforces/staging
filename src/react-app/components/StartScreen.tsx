@@ -108,15 +108,20 @@ export function StartScreen({
     <div className="max-w-6xl w-full mx-auto px-4">
       {/* Header */}
       <div className="text-center mb-12">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <NotebookText className="text-blue-600" size={32} />
-          <h1 className="text-4xl font-bold text-gray-800">
-            NWO Quiz Collection
-          </h1>
+        <div className="inline-block bg-white rounded-2xl shadow-xl border border-[#1a365d] px-6 py-4 mb-4">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <div className="p-2 bg-[#1a365d]/10 rounded-xl border border-[#1a365d]">
+              <NotebookText className="text-[#1a365d]" size={28} />
+            </div>
+            <h1 className="text-3xl font-black text-[#1a365d] tracking-tight">
+              NWO Quiz Collection
+            </h1>
+          </div>
+          <div className="h-1 w-20 bg-[#fbbf24] rounded-full mx-auto mb-2" />
+          <h2 className="text-base text-black font-medium">
+            Choose a quiz to test your knowledge
+          </h2>
         </div>
-        <h2 className="text-xl text-gray-600">
-          Choose a quiz to test your knowledge
-        </h2>
       </div>
 
       {/* Quiz Sections by Category */}
