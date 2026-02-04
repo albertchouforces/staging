@@ -223,8 +223,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "23to31vessel",
-      title: "Col Regs Rules 23-31 Lights Challenge",
-      description: "Identify the Vessel",
+      title: "Lights Challenge – Rules 23-31: Identify the Vessel",
+      description: "",
       themeColor: 'yellow',
       quizKey: "23to31vessel",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -500,8 +500,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "23to31aspect",
-      title: "Col Regs Rules 23-31 Lights Challenge",
-      description: "Identify the Aspect",
+      title: "Lights Challenge – Rules 23-31: Identify the Aspect",
+      description: "",
       themeColor: 'yellow',
       quizKey: "23to31aspect",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -802,8 +802,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "23to31length",
-      title: "Col Regs Rules 23-31 Lights Challenge",
-      description: "Identify the Length",
+      title: "Lights Challenge – Rules 23-31: Identify the Length",
+      description: "",
       themeColor: 'yellow',
       quizKey: "23to31length",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -1087,8 +1087,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "23to31status",
-      title: "Col Regs Rules 23-31 Lights Challenge",
-      description: "Identify the Status of the Vessel",
+      title: "Lights Challenge – Rules 23-31: Identify the Status",
+      description: "",
       themeColor: 'yellow',
       quizKey: "23to31status",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -1367,8 +1367,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "23to31vals",
-      title: "Col Regs Rules 23-31 Lights Challenge",
-      description: "Identify the Vessel, Aspect, Length, and Status",
+      title: "Lights Challenge – Rules 23-31: Identify the Vessel, Aspect, Length, and Status",
+      description: "",
       themeColor: 'yellow',
       quizKey: "23to31vals",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -1647,8 +1647,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "32to34sounds",
-      title: "Col Regs Rules 32-34 Sound Signals Challenge",
-      description: "Test your knowledge of Col Regs Rules 32 to 34",
+      title: "Sound Signals Challenge – Rules 32-34: Identify the Sound Signals",
+      description: "",
       themeColor: 'blue',
       quizKey: "32to34sounds",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -1919,8 +1919,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "32to34auditory",
-      title: "Col Regs Rules 32-34 Auditory Recognition Challenge",
-      description: "Test your knowledge of Col Regs Rules 32 to 34",
+      title: "Auditory Recognition Challenge – Rules 32-34",
+      description: "",
       themeColor: 'blue',
       quizKey: "32to34auditory",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -1995,8 +1995,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "35sounds",
-      title: "Col Regs Rule 35 Sound Signals Challenge",
-      description: "Identify the Sound Signals",
+      title: "Sound Signals Challenge – Rule 35: Identify the Sound Signals",
+      description: "",
       themeColor: 'red',
       quizKey: "35sounds",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -2353,8 +2353,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "35intervals",
-      title: "Col Regs Rule 35 Sound Signals Challenge",
-      description: "Identify the Intervals",
+      title: "Sound Signals Challenge – Rule 35: Identify the Intervals",
+      description: "",
       themeColor: 'red',
       quizKey: "35intervals",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -2482,7 +2482,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 11,
-        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for (blank)__, followed by ____ separate and distinct strokes on the bell at intervals of not more than (blank)__.  ",
+        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell at intervals of not more than ______________.",
         audioUrl: "",
         correctAnswer: ["3; 5 seconds; 3; 1 minute"],
         answerPool: ["3; 5 seconds; 3; 1 minute",
@@ -2494,7 +2494,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 12,
-        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for (blank)__, followed by ____ separate and distinct strokes on the bell, followed by rapid sounding of the _______ at intervals of not more than (blank)__.  ",
+        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell, followed by rapid sounding of the _______ at intervals of not more than ______________.",
         audioUrl: "",
         correctAnswer: ["3; 5 seconds; 3; gong; 1 minute"],
         answerPool: ["3; 5 seconds; 3; gong; 1 minute",
@@ -2541,8 +2541,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "35si",
-      title: "Col Regs Rule 35 Sound Signals Challenge",
-      description: "Identify the Sound Signals & Intervals",
+      title: "Sound Signals Challenge – Rule 35: Identify the Sounds Signals, and Intervals",
+      description: "",
       themeColor: 'red',
       quizKey: "35si",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -2845,7 +2845,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "35auditory",
-      title: "Col Regs Rule 35 Auditory Recognition Challenge",
+      title: "Auditory Recognition Challenge – Rule 35",
       description: "Test your knowledge of Col Regs Rule 35",
       themeColor: 'red',
       quizKey: "35auditory",
@@ -2983,7 +2983,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     config: {
       id: "3fill",
       title: "Col Regs Rule 3",
-      description: "Definitions",
+      description: "",
       themeColor: 'grey',
       quizKey: "3fill",
       startScreenImage: "https://cafrank.pages.dev/services/navy-emblem.svg",
@@ -2999,7 +2999,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The word “vessel” includes every description of (blank) craft, including non-displacement craft, (blank) craft and (blank), used or capable of being used as a means of (blank) on water.",
         correctAnswer: ["water", "WIG", "seaplanes", "transportation"],
         description: "R3(a)",
-        fact: "A WIG craft can travel further on the same fuel and with the same payload as an aircraft and much faster than a ship. This enables WIG craft to fill the gap between low cost, slow sea freight and fast, yet high-cost air freight. <a href='https://www.wigcraft.com'>www.wigcraft.com</a>"
+        fact: "A WIG craft can travel further on the same fuel and with the same payload as an aircraft and much faster than a ship. This enables WIG craft to fill the gap between low cost, slow sea freight and fast, yet high-cost air freight."
       },
       {
         id: 2,
