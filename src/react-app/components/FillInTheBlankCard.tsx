@@ -51,53 +51,68 @@ export function FillInTheBlankCard({
     return (question.correctAnswer.slice(blankCount) as string[]).filter((ans): ans is string => typeof ans === 'string');
   }, [question.correctAnswer, blankCount]);
 
-  // Helper to check if audio is nested array (multiple playback options)
-  const isNestedAudioArray = useCallback((url: string | string[] | string[][] | undefined): url is string[][] => {
-    return Array.isArray(url) && url.length > 0 && Array.isArray(url[0]);
-  }, []);
-
-  // Helper to check if a string is likely a URL/file path (vs a label)
-  const isLikelyUrl = useCallback((str: string): boolean => {
-    if (!str) return false;
-    return str.startsWith('http://') || 
-           str.startsWith('https://') || 
-           str.startsWith('/') || 
-           /\.(mp3|wav|ogg|m4a|aac)$/i.test(str);
-  }, []);
-
-  // Extract label and audio files from an array
-  const extractLabelAndFiles = useCallback((arr: string[]): { label: string; files: string[] } => {
-    if (arr.length === 0) return { label: 'Play audio', files: [] };
-    if (!isLikelyUrl(arr[0])) {
-      return {
-        label: arr[0],
-        files: arr.slice(1)
-      };
-    }
-    return {
-      label: 'Play audio',
-      files: arr
-    };
-  }, [isLikelyUrl]);
-
-  // Get audio groups with labels
+  // Get audio groups with labels - memoized with stable dependencies
   const audioGroups = useMemo((): Array<{ label: string; files: string[] }> => {
+    const isNestedArray = (url: any): url is string[][] => {
+      return Array.isArray(url) && url.length > 0 && Array.isArray(url[0]);
+    };
+    
+    const isUrl = (str: string): boolean => {
+      if (!str) return false;
+      return str.startsWith('http://') || 
+             str.startsWith('https://') || 
+             str.startsWith('/') || 
+             /\.(mp3|wav|ogg|m4a|aac)$/i.test(str);
+    };
+    
+    const extractLabelAndFiles = (arr: string[]): { label: string; files: string[] } => {
+      if (arr.length === 0) return { label: 'Play audio', files: [] };
+      if (!isUrl(arr[0])) {
+        return { label: arr[0], files: arr.slice(1) };
+      }
+      return { label: 'Play audio', files: arr };
+    };
+    
     if (!question.audioUrl) return [];
     if (typeof question.audioUrl === 'string') return [{ label: 'Play audio', files: [question.audioUrl] }];
-    if (isNestedAudioArray(question.audioUrl)) {
+    if (isNestedArray(question.audioUrl)) {
       return question.audioUrl.map(group => extractLabelAndFiles(group));
     }
     return [extractLabelAndFiles(question.audioUrl)];
-  }, [question.audioUrl, question.id, isNestedAudioArray, extractLabelAndFiles]);
+  }, [question.audioUrl, question.id]);
   
   const factAudioGroups = useMemo((): Array<{ label: string; files: string[] }> => {
+    const isNestedArray = (url: any): url is string[][] => {
+      return Array.isArray(url) && url.length > 0 && Array.isArray(url[0]);
+    };
+    
+    const isUrl = (str: string): boolean => {
+      if (!str) return false;
+      return str.startsWith('http://') || 
+             str.startsWith('https://') || 
+             str.startsWith('/') || 
+             /\.(mp3|wav|ogg|m4a|aac)$/i.test(str);
+    };
+    
+    const extractLabelAndFiles = (arr: string[]): { label: string; files: string[] } => {
+      if (arr.length === 0) return { label: 'Play audio', files: [] };
+      if (!isUrl(arr[0])) {
+        return { label: arr[0], files: arr.slice(1) };
+      }
+      return { label: 'Play audio', files: arr };
+    };
+    
     if (!question.factAudioUrl) return [];
     if (typeof question.factAudioUrl === 'string') return [{ label: 'Play audio', files: [question.factAudioUrl] }];
-    if (isNestedAudioArray(question.factAudioUrl)) {
+    if (isNestedArray(question.factAudioUrl)) {
       return question.factAudioUrl.map(group => extractLabelAndFiles(group));
     }
     return [extractLabelAndFiles(question.factAudioUrl)];
-  }, [question.factAudioUrl, question.id, isNestedAudioArray, extractLabelAndFiles]);
+  }, [question.factAudioUrl, question.id]);
+  
+  // Normalize loop counts with defensive bounds
+  const audioLoopCount = Math.min(Math.max(question.audioLoopCount || 1, 1), 10);
+  const factAudioLoopCount = Math.min(Math.max(question.factAudioLoopCount || 1, 1), 10);
 
   // Initialize blanks and options
   useEffect(() => {
@@ -341,7 +356,7 @@ export function FillInTheBlankCard({
                   <AudioPlayer 
                     key={`q${question.id}-audio-player-${index}`}
                     audioFiles={audioGroup.files} 
-                    loopCount={question.audioLoopCount}
+                    loopCount={audioLoopCount}
                     label={audioGroup.label}
                     colorScheme="blue"
                   />
@@ -445,7 +460,7 @@ export function FillInTheBlankCard({
                         <AudioPlayer 
                           key={`q${question.id}-fact-player-${index}`}
                           audioFiles={factAudioGroup.files} 
-                          loopCount={question.factAudioLoopCount}
+                          loopCount={factAudioLoopCount}
                           label={factAudioGroup.label}
                           colorScheme="blue"
                         />

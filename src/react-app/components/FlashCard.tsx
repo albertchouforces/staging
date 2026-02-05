@@ -37,58 +37,69 @@ export function FlashCard({
   const multiSelectInfoBoxRef = useRef<HTMLDivElement>(null);
   const matchingInfoBoxRef = useRef<HTMLDivElement>(null);
 
-  // Helper to check if audio is nested array (multiple playback options)
-  const isNestedAudioArray = useCallback((url: string | string[] | string[][] | undefined): url is string[][] => {
-    return Array.isArray(url) && url.length > 0 && Array.isArray(url[0]);
-  }, []);
-
-  // Helper to check if a string is likely a URL/file path (vs a label)
-  const isLikelyUrl = useCallback((str: string): boolean => {
-    if (!str) return false;
-    // Check for common URL patterns or file extensions
-    return str.startsWith('http://') || 
-           str.startsWith('https://') || 
-           str.startsWith('/') || 
-           /\.(mp3|wav|ogg|m4a|aac)$/i.test(str);
-  }, []);
-
-  // Extract label and audio files from an array
-  const extractLabelAndFiles = useCallback((arr: string[]): { label: string; files: string[] } => {
-    if (arr.length === 0) return { label: 'Play audio', files: [] };
-    
-    // If first element is not a URL, treat it as a label
-    if (!isLikelyUrl(arr[0])) {
-      return {
-        label: arr[0],
-        files: arr.slice(1)
-      };
-    }
-    
-    return {
-      label: 'Play audio',
-      files: arr
-    };
-  }, [isLikelyUrl]);
-
-  // Get audio groups with labels - memoized to prevent re-creation on re-renders
+  // Get audio groups with labels - memoized with stable dependencies
   const audioGroups = useMemo((): Array<{ label: string; files: string[] }> => {
+    const isNestedArray = (url: any): url is string[][] => {
+      return Array.isArray(url) && url.length > 0 && Array.isArray(url[0]);
+    };
+    
+    const isUrl = (str: string): boolean => {
+      if (!str) return false;
+      return str.startsWith('http://') || 
+             str.startsWith('https://') || 
+             str.startsWith('/') || 
+             /\.(mp3|wav|ogg|m4a|aac)$/i.test(str);
+    };
+    
+    const extractLabelAndFiles = (arr: string[]): { label: string; files: string[] } => {
+      if (arr.length === 0) return { label: 'Play audio', files: [] };
+      if (!isUrl(arr[0])) {
+        return { label: arr[0], files: arr.slice(1) };
+      }
+      return { label: 'Play audio', files: arr };
+    };
+    
     if (!question.audioUrl) return [];
     if (typeof question.audioUrl === 'string') return [{ label: 'Play audio', files: [question.audioUrl] }];
-    if (isNestedAudioArray(question.audioUrl)) {
+    if (isNestedArray(question.audioUrl)) {
       return question.audioUrl.map(group => extractLabelAndFiles(group));
     }
     return [extractLabelAndFiles(question.audioUrl)];
-  }, [question.audioUrl, question.id, isNestedAudioArray, extractLabelAndFiles]);
+  }, [question.audioUrl, question.id]);
   
-  // Get fact audio groups with labels - memoized to prevent re-creation on re-renders
+  // Get fact audio groups with labels - memoized with stable dependencies
   const factAudioGroups = useMemo((): Array<{ label: string; files: string[] }> => {
+    const isNestedArray = (url: any): url is string[][] => {
+      return Array.isArray(url) && url.length > 0 && Array.isArray(url[0]);
+    };
+    
+    const isUrl = (str: string): boolean => {
+      if (!str) return false;
+      return str.startsWith('http://') || 
+             str.startsWith('https://') || 
+             str.startsWith('/') || 
+             /\.(mp3|wav|ogg|m4a|aac)$/i.test(str);
+    };
+    
+    const extractLabelAndFiles = (arr: string[]): { label: string; files: string[] } => {
+      if (arr.length === 0) return { label: 'Play audio', files: [] };
+      if (!isUrl(arr[0])) {
+        return { label: arr[0], files: arr.slice(1) };
+      }
+      return { label: 'Play audio', files: arr };
+    };
+    
     if (!question.factAudioUrl) return [];
     if (typeof question.factAudioUrl === 'string') return [{ label: 'Play audio', files: [question.factAudioUrl] }];
-    if (isNestedAudioArray(question.factAudioUrl)) {
+    if (isNestedArray(question.factAudioUrl)) {
       return question.factAudioUrl.map(group => extractLabelAndFiles(group));
     }
     return [extractLabelAndFiles(question.factAudioUrl)];
-  }, [question.factAudioUrl, question.id, isNestedAudioArray, extractLabelAndFiles]);
+  }, [question.factAudioUrl, question.id]);
+  
+  // Normalize loop counts with defensive bounds
+  const audioLoopCount = Math.min(Math.max(question.audioLoopCount || 1, 1), 10);
+  const factAudioLoopCount = Math.min(Math.max(question.factAudioLoopCount || 1, 1), 10);
 
   // Set options when they change from parent
   useEffect(() => {
@@ -394,7 +405,7 @@ export function FlashCard({
                           <AudioPlayer 
                             key={`q${question.id}-fact-player-${index}`}
                             audioFiles={factAudioGroup.files} 
-                            loopCount={question.factAudioLoopCount}
+                            loopCount={factAudioLoopCount}
                             label={factAudioGroup.label}
                             colorScheme="blue"
                           />
@@ -464,7 +475,7 @@ export function FlashCard({
                     <AudioPlayer 
                       key={`q${question.id}-audio-player-${index}`}
                       audioFiles={audioGroup.files} 
-                      loopCount={question.audioLoopCount}
+                      loopCount={audioLoopCount}
                       label={audioGroup.label}
                       colorScheme="blue"
                     />
@@ -634,8 +645,9 @@ export function FlashCard({
                 </div>
                 {question.fact && (
                   <div 
-                    className="text-blue-900 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" 
-                    dangerouslySetInnerHTML={{ __html: question.fact }} 
+                    className="text-blue-900 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1 [&_a]:text-blue-600 [&_a]:underline [&_a:hover]:text-blue-800 [&_a]:cursor-pointer" 
+                    dangerouslySetInnerHTML={{ __html: question.fact }}
+                    onClick={handleFactClick}
                   />
                 )}
                 
@@ -647,7 +659,7 @@ export function FlashCard({
                         <AudioPlayer 
                           key={`q${question.id}-fact-player-${index}`}
                           audioFiles={factAudioGroup.files} 
-                          loopCount={question.factAudioLoopCount}
+                          loopCount={factAudioLoopCount}
                           label={factAudioGroup.label}
                           colorScheme="blue"
                         />

@@ -15,6 +15,8 @@ export function AudioPlayer({
   label = 'Play audio',
   colorScheme = 'blue'
 }: AudioPlayerProps) {
+  // Normalize loop count with defensive bounds (1-10)
+  const normalizedLoopCount = Math.min(Math.max(loopCount || 1, 1), 10);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const [currentLoop, setCurrentLoop] = useState(0);
@@ -52,6 +54,7 @@ export function AudioPlayer({
       setAudioError(true);
       setIsPlaying(false);
       isPlayingRef.current = false;
+      audioManager.stop(playerIdRef.current);
       return;
     }
     
@@ -79,6 +82,7 @@ export function AudioPlayer({
             setAudioError(true);
             setIsPlaying(false);
             isPlayingRef.current = false;
+            audioManager.stop(playerIdRef.current);
           }
         });
     }
@@ -121,7 +125,7 @@ export function AudioPlayer({
     } else {
       const nextLoop = currentLoop + 1;
       
-      if (nextLoop < loopCount) {
+      if (nextLoop < normalizedLoopCount) {
         setCurrentLoop(nextLoop);
         setCurrentFileIndex(0);
       } else {
@@ -132,7 +136,7 @@ export function AudioPlayer({
         audioManager.stop(playerIdRef.current);
       }
     }
-  }, [currentLoop, currentFileIndex, audioFiles.length, loopCount]);
+  }, [currentLoop, currentFileIndex, audioFiles.length, normalizedLoopCount]);
 
   const handleAudioError = useCallback(() => {
     if (!isPlayingRef.current) return;

@@ -1953,7 +1953,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Incorrect%20duration%20for%20short%20or%20prolonged%20blast.m4a", "This sound signal does not meet the criteria to be considered a short or prolonged blast"]
                         ],
         description: "",
-        fact: "32(b); 32(c); 32(b), (c)"
+        fact: "32(b); 32(c)"
       },
       {
         id: 2,
@@ -1989,7 +1989,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/Warning%20Signal_7%20Short%20Blasts.m4a", "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"]
                       ],
         description: "",
-        fact: "34(c)(i); 34(c)(ii); 34(d)"
+        fact: "9(e)(i); 34(c)(i); 34(c)(ii); 34(d)"
       },
       {
         id: 5,
@@ -2002,7 +2002,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["https://github.com/albertchouforces/sample/raw/refs/heads/main/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"]
                       ],
         description: "",
-        fact: "34(c)(i); 34(c)(ii); 34(d); 34(e);"
+        fact: "34(c)(i); 34(c)(ii); 34(d); 34(e)"
       },
     ]
   },
