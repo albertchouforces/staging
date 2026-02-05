@@ -1765,13 +1765,13 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 7,
-        question: "When vessels are in sight of one another, which vessels underway must signal their manoeuvre as required by the Rules?",
+        question: "When <strong>vessels are in sight of one another</strong>, which vessels underway must signal their manoeuvre as required by the Rules?",
         correctAnswer: "power-driven vessels",
         answerPool: [
                       "power-driven vessels",
                       "sailing vessels",
                       "vessels engaged in fishing",
-                      "vessel restricted in their ability to manoeuvre (RAM)"
+                      "vessels restricted in their ability to manoeuvre (RAM)"
                     ],
         description: "",
         fact: "Rule 34(a)",
@@ -1913,6 +1913,20 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         description: "",
         fact: "Rule 34(e)",
         audioUrl: "https://raw.githubusercontent.com/albertchouforces/sample/main/sounds/2_Prolonged_Blast%20.mp3",
+      },
+      {
+        id: 17,
+        question: "The word <strong>whistle</strong> means:",
+        correctAnswer: "any sound signalling appliance capable of producing the prescribed blasts and complying with the specifications in Annex III",
+        answerPool: [
+                      "any sound signalling appliance capable of producing the prescribed blasts and complying with the specifications in Annex III",
+                      "any device capable of producing loud sound signals audible to nearby vessels and complying with the specifications in Annex I",
+                      "any sound signalling appliance capable of producing the prescribed blasts and complying with the specifications in Rule 35",
+                      "any horn or siren capable of producing the prescribed blasts in Rule 34 and permanently fitted to a vessel"
+                    ],
+        description: "",
+        fact: "Rule 32(a)",
+        audioUrl: "",
       },
     ]
   },
