@@ -58,34 +58,42 @@ export function AudioPlayer({
       return;
     }
     
+    const audio = audioRef.current;
+    
     // Set src if it's different
-    if (audioRef.current.src !== targetSrc) {
-      audioRef.current.src = targetSrc;
-      audioRef.current.load();
+    if (audio.src !== targetSrc) {
+      audio.src = targetSrc;
+      audio.load();
     }
     
-    const playPromise = audioRef.current.play();
-    
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          // Ensure state is set when play succeeds
-          if (isPlayingRef.current) {
-            setIsPlaying(true);
-            setAudioError(false);
-          }
-        })
-        .catch((error) => {
-          // Only log error if we're still trying to play
-          if (isPlayingRef.current) {
-            console.error('Audio playback failed:', error);
-            setAudioError(true);
-            setIsPlaying(false);
-            isPlayingRef.current = false;
-            audioManager.stop(playerIdRef.current);
-          }
-        });
-    }
+    // Safari requires a small delay after load() before play() for reliable playback
+    // Use a microtask to ensure the load has started
+    Promise.resolve().then(() => {
+      if (!isPlayingRef.current || !audioRef.current) return;
+      
+      const playPromise = audioRef.current.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // Ensure state is set when play succeeds
+            if (isPlayingRef.current) {
+              setIsPlaying(true);
+              setAudioError(false);
+            }
+          })
+          .catch((error) => {
+            // Only log error if we're still trying to play
+            if (isPlayingRef.current) {
+              console.error('Audio playback failed:', error);
+              setAudioError(true);
+              setIsPlaying(false);
+              isPlayingRef.current = false;
+              audioManager.stop(playerIdRef.current);
+            }
+          });
+      }
+    });
   }, [audioFiles, currentFileIndex]);
 
   const toggleAudioPlayback = useCallback(() => {
@@ -120,6 +128,9 @@ export function AudioPlayer({
   }, [isPlaying, currentFileIndex, audioFiles, loadAndPlayAudio]);
 
   const handleAudioEnded = useCallback(() => {
+    // Safari can sometimes fire ended multiple times - guard against that
+    if (!isPlayingRef.current) return;
+    
     if (currentFileIndex < audioFiles.length - 1) {
       setCurrentFileIndex(prev => prev + 1);
     } else {
@@ -164,9 +175,20 @@ export function AudioPlayer({
 
   // Handle when audio pauses
   const handlePause = useCallback(() => {
-    // Only update state if we're not at the end (handled by onEnded) and we're supposed to be playing
+    // Safari fires pause events aggressively. Only update state if:
+    // 1. We're not at the end (handled by onEnded)
+    // 2. We're supposed to be playing
+    // 3. The audio hasn't been explicitly stopped by user or ended naturally
     if (audioRef.current && !audioRef.current.ended && isPlayingRef.current) {
-      setIsPlaying(false);
+      // Check if this is a legitimate pause (user initiated or error) vs Safari's spurious events
+      // Safari sometimes fires pause during transitions between files
+      const audio = audioRef.current;
+      const isTransitioning = audio.currentTime === 0 && audio.readyState >= 2;
+      
+      // Don't update state if we're just transitioning between files
+      if (!isTransitioning) {
+        setIsPlaying(false);
+      }
     }
   }, []);
 

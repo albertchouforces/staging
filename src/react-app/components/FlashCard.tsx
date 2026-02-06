@@ -343,8 +343,8 @@ export function FlashCard({
         
         <div ref={cardRef} className="w-full max-w-4xl bg-white rounded-xl shadow-lg">
           <div className="flex flex-col w-full">
-          {/* Question Section */}
-          <div className="p-6 border-b border-gray-100">
+            {/* Question Section */}
+            <div className="p-6 border-b border-gray-100">
             <div className="mb-4">
               <div className="flex justify-end mb-3">
                 <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
@@ -357,10 +357,10 @@ export function FlashCard({
             {question.description && question.description.trim() !== '' && (
               <div className="text-lg text-gray-600 italic text-center max-w-xl mx-auto [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.description }} />
             )}
-          </div>
+            </div>
 
-          {/* Matching Section */}
-          <div className="w-full p-6 border-b border-gray-100">
+            {/* Matching Section */}
+            <div className="w-full p-6 border-b border-gray-100">
             <div className="text-center mb-4 relative">
               <span className="inline-flex items-center gap-2 px-4 py-2 text-sm text-blue-700 font-bold bg-blue-50 border-2 border-blue-400 rounded-full shadow-md">
                 MATCH THE PAIRS BY SELECTING ONE ITEM FROM EACH COLUMN
@@ -404,10 +404,10 @@ export function FlashCard({
                 onAnswer(correct);
               }}
             />
-          </div>
+            </div>
 
-          {/* Result Section for Matching */}
-          {showResult && (
+            {/* Result Section for Matching */}
+            {showResult && (
             <div className="w-full p-6 flex flex-col gap-6">
               <div className="bg-green-50 p-4 rounded-lg border border-green-200 max-w-xl mx-auto w-full">
                 <p className="text-green-800 text-sm font-medium">
@@ -461,10 +461,10 @@ export function FlashCard({
                 </div>
               )}
             </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </>
+      </>
     );
   }
 

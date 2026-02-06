@@ -278,7 +278,16 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
                 {scores.map((score, index) => (
                   <tr 
                     key={`${score.user_name}-${index}`} 
-                    className={`border-t border-gray-100 transition-colors hover:bg-${accentColor}-50 hover:shadow-sm cursor-pointer`}
+                    className="border-t border-gray-100 transition-colors hover:shadow-sm cursor-pointer"
+                    style={{
+                      '--hover-bg': `${getColorValue(accentColor)}10`
+                    } as React.CSSProperties}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = `${getColorValue(accentColor)}10`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '';
+                    }}
                   >
                     <td className="py-2 pl-2">{getPositionDisplay(index)}</td>
                     <td className="py-2 font-medium">{score.user_name}</td>
@@ -296,8 +305,11 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
             </table>
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-center p-8">
-              <div className={`w-16 h-16 rounded-full bg-${accentColor}-50 flex items-center justify-center mb-4`}>
-                <Trophy className={`text-${accentColor}-600`} size={32} />
+              <div 
+                className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                style={{ backgroundColor: `${getColorValue(accentColor)}10` }}
+              >
+                <Trophy style={{ color: getColorValue(accentColor) }} size={32} />
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">
                 Be the First Champion!
@@ -305,7 +317,10 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
               <p className="text-gray-600 max-w-md">
                 No scores have been recorded yet for this quiz. Complete the challenge and claim your spot at the top of the leaderboard!
               </p>
-              <div className={`mt-6 text-${accentColor}-600 text-sm font-medium`}>
+              <div 
+                className="mt-6 text-sm font-medium"
+                style={{ color: getColorValue(accentColor) }}
+              >
                 Your score could be the first one here
               </div>
             </div>
