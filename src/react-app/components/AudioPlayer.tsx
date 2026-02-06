@@ -65,17 +65,14 @@ export function AudioPlayer({
       return;
     }
     
-    // iOS fix: If the audio has ended (from a previous playback), we must reset it
-    // before iOS will allow it to play again
-    if (audio.ended && audio.src === targetSrc) {
-      audio.currentTime = 0;
-      audio.load();
-    }
-    
     // Set src if it's different
     if (audio.src !== targetSrc) {
       audio.src = targetSrc;
       audio.load();
+    } else if (audio.ended) {
+      // iOS fix: If replaying the same source that has ended, just reset time
+      // Don't call load() as it can trigger unwanted events on iOS
+      audio.currentTime = 0;
     }
     
     // Safari/iOS requires a small delay after load() before play() for reliable playback
