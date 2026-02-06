@@ -128,18 +128,27 @@ export function AudioPlayer({
   }, [isPlaying, currentFileIndex, audioFiles, loadAndPlayAudio]);
 
   const handleAudioEnded = useCallback(() => {
-    // Safari can sometimes fire ended multiple times - guard against that
-    if (!isPlayingRef.current) return;
+    // Guard: only proceed if we think we're playing
+    if (!isPlayingRef.current) {
+      return;
+    }
+    
+    // Ensure UI shows playing state during transitions (Safari fix)
+    setIsPlaying(true);
     
     if (currentFileIndex < audioFiles.length - 1) {
+      // Move to next file in sequence
       setCurrentFileIndex(prev => prev + 1);
     } else {
+      // Completed all files in current loop
       const nextLoop = currentLoop + 1;
       
       if (nextLoop < normalizedLoopCount) {
+        // Start next loop
         setCurrentLoop(nextLoop);
         setCurrentFileIndex(0);
       } else {
+        // All loops complete - stop playback
         setIsPlaying(false);
         setCurrentLoop(0);
         setCurrentFileIndex(0);
@@ -175,21 +184,30 @@ export function AudioPlayer({
 
   // Handle when audio pauses
   const handlePause = useCallback(() => {
-    // Safari fires pause events aggressively. Only update state if:
-    // 1. We're not at the end (handled by onEnded)
-    // 2. We're supposed to be playing
-    // 3. The audio hasn't been explicitly stopped by user or ended naturally
-    if (audioRef.current && !audioRef.current.ended && isPlayingRef.current) {
-      // Check if this is a legitimate pause (user initiated or error) vs Safari's spurious events
-      // Safari sometimes fires pause during transitions between files
-      const audio = audioRef.current;
-      const isTransitioning = audio.currentTime === 0 && audio.readyState >= 2;
-      
-      // Don't update state if we're just transitioning between files
-      if (!isTransitioning) {
+    // Safari fires pause events unpredictably (sometimes before ended, sometimes during transitions)
+    // Only update state for explicit user-initiated pauses, never for system events
+    // We'll rely on onEnded for natural playback completion
+    if (!audioRef.current || !isPlayingRef.current) return;
+    
+    const audio = audioRef.current;
+    
+    // Ignore pause events that occur:
+    // 1. At the end of playback (ended will handle this)
+    // 2. During file transitions (currentTime = 0 with data loaded)
+    // 3. During buffering/loading states
+    if (audio.ended || 
+        audio.currentTime === 0 || 
+        audio.readyState < 2) {
+      return;
+    }
+    
+    // If we get here, it's likely a real pause (though Safari can still be spurious)
+    // Only update if the audio is truly paused and we haven't just called play()
+    setTimeout(() => {
+      if (audioRef.current && audioRef.current.paused && !audioRef.current.ended && isPlayingRef.current) {
         setIsPlaying(false);
       }
-    }
+    }, 100);
   }, []);
 
   // Handle waiting (buffering) state
