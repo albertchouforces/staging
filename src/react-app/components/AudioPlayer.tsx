@@ -24,6 +24,7 @@ export function AudioPlayer({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isPlayingRef = useRef(false);
   const playerIdRef = useRef<string>(Math.random().toString(36).substring(7));
+  const isResettingRef = useRef(false);
 
   const colors = {
     blue: {
@@ -65,14 +66,17 @@ export function AudioPlayer({
       return;
     }
     
-    // Set src if it's different
-    if (audio.src !== targetSrc) {
+    // Set src if it's different OR if we need to reset an ended audio element
+    if (audio.src !== targetSrc || audio.ended) {
+      // iOS requires load() to properly reset ended audio elements
+      // Set flag to ignore spurious ended events during reset
+      isResettingRef.current = true;
       audio.src = targetSrc;
       audio.load();
-    } else if (audio.ended) {
-      // iOS fix: If replaying the same source that has ended, just reset time
-      // Don't call load() as it can trigger unwanted events on iOS
-      audio.currentTime = 0;
+      // Clear the reset flag after a brief moment to allow load() to complete
+      setTimeout(() => {
+        isResettingRef.current = false;
+      }, 50);
     }
     
     // Safari/iOS requires a small delay after load() before play() for reliable playback
@@ -144,6 +148,12 @@ export function AudioPlayer({
   const handleAudioEnded = useCallback(() => {
     // Guard: only proceed if we think we're playing
     if (!isPlayingRef.current) {
+      return;
+    }
+    
+    // iOS fix: Ignore ended events that fire during audio reset/load operations
+    // These are spurious events from calling load() and should not advance playback
+    if (isResettingRef.current) {
       return;
     }
     
