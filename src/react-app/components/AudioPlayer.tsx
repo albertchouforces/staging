@@ -60,16 +60,26 @@ export function AudioPlayer({
     
     const audio = audioRef.current;
     
+    // Prevent duplicate plays on iOS - check if already playing the same source
+    if (audio.src === targetSrc && !audio.paused && !audio.ended) {
+      return;
+    }
+    
     // Set src if it's different
     if (audio.src !== targetSrc) {
       audio.src = targetSrc;
       audio.load();
     }
     
-    // Safari requires a small delay after load() before play() for reliable playback
+    // Safari/iOS requires a small delay after load() before play() for reliable playback
     // Use a microtask to ensure the load has started
     Promise.resolve().then(() => {
       if (!isPlayingRef.current || !audioRef.current) return;
+      
+      // Double-check we're not already playing (iOS guard)
+      if (!audioRef.current.paused && !audioRef.current.ended) {
+        return;
+      }
       
       const playPromise = audioRef.current.play();
       
@@ -184,7 +194,7 @@ export function AudioPlayer({
 
   // Handle when audio pauses
   const handlePause = useCallback(() => {
-    // Safari fires pause events unpredictably (sometimes before ended, sometimes during transitions)
+    // Safari/iOS fires pause events unpredictably (sometimes before ended, sometimes during transitions)
     // Only update state for explicit user-initiated pauses, never for system events
     // We'll rely on onEnded for natural playback completion
     if (!audioRef.current || !isPlayingRef.current) return;
@@ -201,11 +211,13 @@ export function AudioPlayer({
       return;
     }
     
-    // If we get here, it's likely a real pause (though Safari can still be spurious)
-    // Only update if the audio is truly paused and we haven't just called play()
+    // iOS fix: If we get here, verify this is a real pause after a short delay
+    // This prevents iOS's spurious pause events from breaking playback
     setTimeout(() => {
       if (audioRef.current && audioRef.current.paused && !audioRef.current.ended && isPlayingRef.current) {
+        // CRITICAL: Keep isPlayingRef in sync with isPlaying state
         setIsPlaying(false);
+        isPlayingRef.current = false;
       }
     }, 100);
   }, []);
