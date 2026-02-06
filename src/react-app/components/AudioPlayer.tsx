@@ -25,6 +25,7 @@ export function AudioPlayer({
   const isPlayingRef = useRef(false);
   const playerIdRef = useRef<string>(Math.random().toString(36).substring(7));
   const isResettingRef = useRef(false);
+  const isUserInitiatedRef = useRef(false);
 
   const colors = {
     blue: {
@@ -66,17 +67,27 @@ export function AudioPlayer({
       return;
     }
     
-    // Set src if it's different OR if we need to reset an ended audio element
-    if (audio.src !== targetSrc || audio.ended) {
-      // iOS requires load() to properly reset ended audio elements
+    // Determine if we need to call load() or just reset playback position
+    // Only call load() when:
+    // 1. Changing to a different source file, OR
+    // 2. User clicked play button (user-initiated) on an ended audio
+    const needsLoad = audio.src !== targetSrc || (audio.ended && isUserInitiatedRef.current);
+    
+    if (needsLoad) {
       // Set flag to ignore spurious ended events during reset
       isResettingRef.current = true;
       audio.src = targetSrc;
       audio.load();
+      // Clear user-initiated flag since we've now loaded
+      isUserInitiatedRef.current = false;
       // Clear the reset flag after a brief moment to allow load() to complete
       setTimeout(() => {
         isResettingRef.current = false;
       }, 50);
+    } else if (audio.ended || audio.currentTime > 0) {
+      // Audio ended during automatic loop continuation
+      // Just reset time without calling load() to avoid triggering spurious events on iOS
+      audio.currentTime = 0;
     }
     
     // Safari/iOS requires a small delay after load() before play() for reliable playback
@@ -136,6 +147,8 @@ export function AudioPlayer({
       setCurrentFileIndex(0);
       setIsPlaying(true);
       isPlayingRef.current = true;
+      // Mark this as a user-initiated play (not an automatic loop)
+      isUserInitiatedRef.current = true;
     }
   }, [isPlaying, audioFiles.length]);
 
