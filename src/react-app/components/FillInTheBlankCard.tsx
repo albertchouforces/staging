@@ -32,6 +32,8 @@ export function FillInTheBlankCard({
   const [showResult, setShowResult] = useState(false);
   const [options, setOptions] = useState<string[]>([]);
   const [showInfo, setShowInfo] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState('');
   const cardRef = useRef<HTMLDivElement>(null);
   const infoBoxRef = useRef<HTMLDivElement>(null);
 
@@ -277,14 +279,54 @@ export function FillInTheBlankCard({
       e.preventDefault();
       const href = target.getAttribute('href');
       if (href) {
-        window.open(href, '_blank', 'noopener,noreferrer');
+        // Check if the link points to an image
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg'];
+        const isImageLink = imageExtensions.some(ext => href.toLowerCase().endsWith(ext));
+        
+        if (isImageLink) {
+          // Open image in modal
+          setModalImageUrl(href);
+          setIsImageModalOpen(true);
+        } else {
+          // Open regular link in new tab
+          window.open(href, '_blank', 'noopener,noreferrer');
+        }
       }
     }
   }, []);
 
   return (
-    <div ref={cardRef} className="w-full max-w-3xl bg-white rounded-xl shadow-lg border-2 border-purple-600">
-      <div className="flex flex-col w-full">
+    <>
+      {/* Image Modal */}
+      {isImageModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setIsImageModalOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsImageModalOpen(false)}
+              className="absolute top-4 right-4 z-10 h-10 w-10 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors shadow-lg"
+              aria-label="Close"
+            >
+              <X size={28} className="text-gray-600 hover:text-gray-800" />
+            </button>
+            <div className="p-6 flex items-center justify-center bg-gray-50 min-h-[400px]">
+              <img
+                src={modalImageUrl}
+                alt="Fact"
+                className="max-w-full max-h-[calc(90vh-3rem)] object-contain rounded-lg shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <div ref={cardRef} className="w-full max-w-3xl bg-white rounded-xl shadow-lg border-2 border-purple-600">
+        <div className="flex flex-col w-full">
         {/* Question Section */}
         <div className="p-6 border-b border-gray-100">
           <div className="mb-4">
@@ -330,10 +372,10 @@ export function FillInTheBlankCard({
             </div>
             
             {/* Question with interactive blanks */}
-            <div className="text-xl font-semibold text-gray-800 text-center mb-4">
+            <div className="text-xl font-semibold text-gray-800 text-center mb-4 [&_i]:italic">
               {parts.map((part, index) => (
                 <span key={index}>
-                  {part}
+                  <span dangerouslySetInnerHTML={{ __html: part }} />
                   {index < parts.length - 1 && (
                     <button
                       onClick={() => handleBlankClick(index)}
@@ -421,9 +463,9 @@ export function FillInTheBlankCard({
                   : 'text-red-800'
               }`}>
                 {correctCount === totalBlanks
-                  ? `Perfect! All ${totalBlanks} blanks filled correctly.`
+                  ? `Perfect! All ${totalBlanks} blank${totalBlanks === 1 ? '' : 's'} filled correctly.`
                   : correctCount > 0
-                  ? `You got ${correctCount} out of ${totalBlanks} blanks correct.`
+                  ? `You got ${correctCount} out of ${totalBlanks} blank${totalBlanks === 1 ? '' : 's'} correct.`
                   : `No blanks filled correctly. The correct answers are shown above.`}
               </p>
             </div>
@@ -477,5 +519,6 @@ export function FillInTheBlankCard({
         )}
       </div>
     </div>
+    </>
   );
 }

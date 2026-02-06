@@ -31,6 +31,8 @@ export function FlashCard({
   const [options, setOptions] = useState<string[]>([]);
   const [showMultiSelectInfo, setShowMultiSelectInfo] = useState(false);
   const [showMatchingInfo, setShowMatchingInfo] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState('');
   const isMultiSelectQuestion = isMultiSelect(question.correctAnswer);
   const isMatchQuestion = isMatchingQuestion(question.correctAnswer);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -249,7 +251,18 @@ export function FlashCard({
       e.preventDefault();
       const href = target.getAttribute('href');
       if (href) {
-        window.open(href, '_blank', 'noopener,noreferrer');
+        // Check if the link points to an image
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg'];
+        const isImageLink = imageExtensions.some(ext => href.toLowerCase().endsWith(ext));
+        
+        if (isImageLink) {
+          // Open image in modal
+          setModalImageUrl(href);
+          setIsImageModalOpen(true);
+        } else {
+          // Open regular link in new tab
+          window.open(href, '_blank', 'noopener,noreferrer');
+        }
       }
     }
   }, []);
@@ -299,8 +312,37 @@ export function FlashCard({
   // Handle matching questions separately
   if (isMatchQuestion) {
     return (
-      <div ref={cardRef} className="w-full max-w-4xl bg-white rounded-xl shadow-lg">
-        <div className="flex flex-col w-full">
+      <>
+        {/* Image Modal */}
+        {isImageModalOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setIsImageModalOpen(false)}
+          >
+            <div 
+              className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setIsImageModalOpen(false)}
+                className="absolute top-4 right-4 z-10 h-10 w-10 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors shadow-lg"
+                aria-label="Close"
+              >
+                <X size={28} className="text-gray-600 hover:text-gray-800" />
+              </button>
+              <div className="p-6 flex items-center justify-center bg-gray-50 min-h-[400px]">
+                <img
+                  src={modalImageUrl}
+                  alt="Fact"
+                  className="max-w-full max-h-[calc(90vh-3rem)] object-contain rounded-lg shadow-sm"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <div ref={cardRef} className="w-full max-w-4xl bg-white rounded-xl shadow-lg">
+          <div className="flex flex-col w-full">
           {/* Question Section */}
           <div className="p-6 border-b border-gray-100">
             <div className="mb-4">
@@ -308,7 +350,7 @@ export function FlashCard({
                 <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
               </div>
               <h3 
-                className="text-xl font-semibold text-gray-800 text-center [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1"
+                className="text-xl font-semibold text-gray-800 text-center [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1 [&_i]:italic"
                 dangerouslySetInnerHTML={{ __html: question.question }}
               />
             </div>
@@ -422,11 +464,41 @@ export function FlashCard({
           )}
         </div>
       </div>
+    </>
     );
   }
 
   return (
-    <div ref={cardRef} className={`w-full max-w-3xl bg-white rounded-xl shadow-lg ${isMultiSelectQuestion && !showResult ? 'border-2 border-blue-600' : ''}`}>
+    <>
+      {/* Image Modal */}
+      {isImageModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setIsImageModalOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsImageModalOpen(false)}
+              className="absolute top-4 right-4 z-10 h-10 w-10 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors shadow-lg"
+              aria-label="Close"
+            >
+              <X size={28} className="text-gray-600 hover:text-gray-800" />
+            </button>
+            <div className="p-6 flex items-center justify-center bg-gray-50 min-h-[400px]">
+              <img
+                src={modalImageUrl}
+                alt="Fact"
+                className="max-w-full max-h-[calc(90vh-3rem)] object-contain rounded-lg shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <div ref={cardRef} className={`w-full max-w-3xl bg-white rounded-xl shadow-lg ${isMultiSelectQuestion && !showResult ? 'border-2 border-blue-600' : ''}`}>
       <div className="flex flex-col w-full">
         {/* Question Section */}
         <div className="p-6 border-b border-gray-100">
@@ -435,7 +507,7 @@ export function FlashCard({
               <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
             </div>
             <h3 
-              className="text-xl font-semibold text-gray-800 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1"
+              className="text-xl font-semibold text-gray-800 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1 [&_i]:italic"
               dangerouslySetInnerHTML={{ __html: question.question }}
             />
           </div>
@@ -676,5 +748,6 @@ export function FlashCard({
         )}
       </div>
     </div>
+    </>
   );
 }
