@@ -2860,7 +2860,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     config: {
       id: "35auditory",
       title: "Auditory Recognition Challenge – Rule 35",
-      description: "Test your knowledge of Col Regs Rule 35",
+      description: "",
       themeColor: 'red',
       quizKey: "35auditory",
       startScreenImage: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/naval-operations-branch-600.png",
