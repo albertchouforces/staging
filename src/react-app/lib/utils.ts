@@ -53,9 +53,14 @@ export const hasAnswerPool = (answerPool: string[] | undefined): boolean => {
 
 /**
  * Check if a question is fill-in-the-blank (has (blank) markers in question text)
+ * Checks both quiz-level and question-level settings
  */
-export const isFillInTheBlank = (question: string, fillInTheBlankEnabled: boolean): boolean => {
-  return fillInTheBlankEnabled && question.includes('(blank)');
+export const isFillInTheBlank = (
+  question: string, 
+  quizLevelEnabled: boolean, 
+  questionLevelEnabled?: boolean
+): boolean => {
+  return (quizLevelEnabled || !!questionLevelEnabled) && question.includes('(blank)');
 };
 
 /**

@@ -174,7 +174,7 @@ function App() {
       setCorrectAnswers(prev => prev + correct);
       // For fill-in-the-blank, count each blank as a separate answer
       const currentQuestion = getCurrentQuestion();
-      if (currentQuestion && selectedQuiz?.config.fillInTheBlank && isFillInTheBlank(currentQuestion.question, selectedQuiz.config.fillInTheBlank)) {
+      if (currentQuestion && isFillInTheBlank(currentQuestion.question, selectedQuiz?.config.fillInTheBlank || false, currentQuestion.fillInTheBlank)) {
         const blankCount = currentQuestion.question.split('(blank)').length - 1;
         setTotalAnswers(prev => prev + blankCount);
       }
@@ -303,7 +303,7 @@ function App() {
                     bestRun={getStatsForQuiz(selectedQuiz.config.quizKey).bestRun}
                     quizConfig={selectedQuiz.config}
                   />
-                  {selectedQuiz.config.fillInTheBlank && isFillInTheBlank(getCurrentQuestion().question, selectedQuiz.config.fillInTheBlank) ? (
+                  {isFillInTheBlank(getCurrentQuestion().question, selectedQuiz.config.fillInTheBlank || false, getCurrentQuestion().fillInTheBlank) ? (
                     <FillInTheBlankCard
                       key={`session-${quizSessionKey}-q-${currentQuestionIndex}`}
                       question={getCurrentQuestion()}

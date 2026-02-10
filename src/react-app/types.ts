@@ -13,6 +13,7 @@ export interface QuestionData {
   audioLoopCount?: number; // Optional number of times to loop audio sequence (default: 1, plays once)
   factAudioUrl?: string | string[] | string[][];  // Optional fact audio - single file, array of files (play sequentially), or array of arrays (multiple playback options)
   factAudioLoopCount?: number; // Optional number of times to loop fact audio sequence (default: 1, plays once)
+  fillInTheBlank?: boolean; // Optional per-question fill-in-the-blank mode (overrides quiz-level setting for this question)
 }
 
 export interface HighScoreEntry {
