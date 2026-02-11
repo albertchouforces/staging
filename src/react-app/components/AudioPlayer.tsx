@@ -218,6 +218,11 @@ export function AudioPlayer({
       }
     }
     
+    // CRITICAL: Set resetting flag immediately to prevent duplicate ended events
+    // Safari can fire multiple ended events rapidly before we start loading the next file
+    isResettingRef.current = true;
+    console.log('[AudioPlayer] Processing ended event, advancing playback');
+    
     // Ensure UI shows playing state during transitions (Safari fix)
     setIsPlaying(true);
     
