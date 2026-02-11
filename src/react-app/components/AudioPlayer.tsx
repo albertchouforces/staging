@@ -197,7 +197,7 @@ export function AudioPlayer({
     if (isPlaying && audioFiles.length > 0) {
       loadAndPlayAudio();
     }
-  }, [isPlaying, currentFileIndex, audioFiles, loadAndPlayAudio]);
+  }, [isPlaying, currentFileIndex, audioFiles]);
 
   const handleAudioEnded = useCallback(() => {
     if (!audioRef.current) return;
