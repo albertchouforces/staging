@@ -150,18 +150,27 @@ export function AudioPlayer({
         }
       };
       
-      // Use canplay event for local files, loadedmetadata as fallback
-      audio.addEventListener('canplay', handleCanPlay, { once: true });
+      // Listen for canplay event to know when file is ready
+      const canPlayListener = () => {
+        handleCanPlay();
+        audio.removeEventListener('canplay', canPlayListener);
+        audio.removeEventListener('loadeddata', canPlayListener);
+      };
       
-      // Safari fix: Also handle if the audio is already ready (cached/fast load)
+      audio.addEventListener('canplay', canPlayListener);
+      audio.addEventListener('loadeddata', canPlayListener);
+      
+      // Handle if audio is already ready (cached/fast load)
       if (audio.readyState >= 3) {
+        audio.removeEventListener('canplay', canPlayListener);
+        audio.removeEventListener('loadeddata', canPlayListener);
         handleCanPlay();
       }
       
       return;
     }
     
-    // If not loading a new file, play immediately
+    // Path for when not loading - just play
     if (!audio.paused && !audio.ended) {
       return;
     }
@@ -179,7 +188,7 @@ export function AudioPlayer({
         .catch((error) => {
           if (!isPlayingRef.current) return;
           
-          console.warn('Audio playback promise rejected (no load):', error.name, error.message);
+          console.warn('Audio playback rejected (no-load path):', error.name, error.message);
           
           const isTransientError = error.name === 'NotAllowedError' || 
                                    error.name === 'NotSupportedError' ||
