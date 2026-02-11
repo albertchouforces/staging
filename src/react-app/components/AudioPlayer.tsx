@@ -93,8 +93,11 @@ export function AudioPlayer({
           return;
         }
         
-        // Clear reset flag
-        isResettingRef.current = false;
+        // Clear reset flag after a brief delay to ensure any spurious events are ignored
+        // This prevents Safari from firing ended/pause events immediately after load
+        setTimeout(() => {
+          isResettingRef.current = false;
+        }, 150);
         
         // Play the audio
         const playPromise = audioRef.current.play();
@@ -189,14 +192,17 @@ export function AudioPlayer({
   }, [isPlaying, currentFileIndex, audioFiles, loadAndPlayAudio]);
 
   const handleAudioEnded = useCallback(() => {
+    console.log('[AudioPlayer] ended event fired, isPlaying:', isPlayingRef.current, 'isResetting:', isResettingRef.current);
+    
     // Guard: only proceed if we think we're playing
     if (!isPlayingRef.current) {
       return;
     }
     
-    // iOS fix: Ignore ended events that fire during audio reset/load operations
+    // Safari/iOS fix: Ignore ended events that fire during audio reset/load operations
     // These are spurious events from calling load() and should not advance playback
     if (isResettingRef.current) {
+      console.log('[AudioPlayer] Ignoring ended event during reset');
       return;
     }
     
@@ -204,8 +210,10 @@ export function AudioPlayer({
     // Ignore premature ended events (Safari sometimes fires these at position 0)
     if (audioRef.current) {
       const audio = audioRef.current;
+      console.log('[AudioPlayer] Audio position:', audio.currentTime, 'of', audio.duration);
       // If duration is known and currentTime is suspiciously far from the end, ignore this event
       if (audio.duration > 0 && audio.currentTime < audio.duration * 0.95) {
+        console.log('[AudioPlayer] Ignoring premature ended event');
         return;
       }
     }
@@ -265,6 +273,8 @@ export function AudioPlayer({
 
   // Handle when audio pauses
   const handlePause = useCallback(() => {
+    console.log('[AudioPlayer] pause event fired, isPlaying:', isPlayingRef.current, 'isResetting:', isResettingRef.current);
+    
     // Safari/iOS fires pause events unpredictably (sometimes before ended, sometimes during transitions)
     // Only update state for explicit user-initiated pauses, never for system events
     // We'll rely on onEnded for natural playback completion
@@ -274,6 +284,7 @@ export function AudioPlayer({
     
     // Ignore pause events during reset/load operations
     if (isResettingRef.current) {
+      console.log('[AudioPlayer] Ignoring pause during reset');
       return;
     }
     
@@ -286,6 +297,7 @@ export function AudioPlayer({
         audio.currentTime === 0 || 
         audio.readyState < 2 ||
         (audio.duration > 0 && audio.currentTime >= audio.duration * 0.95)) {
+      console.log('[AudioPlayer] Ignoring pause - system event');
       return;
     }
     
@@ -297,6 +309,7 @@ export function AudioPlayer({
           !audioRef.current.ended && 
           isPlayingRef.current &&
           !isResettingRef.current) {
+        console.log('[AudioPlayer] Real pause detected, stopping playback');
         // CRITICAL: Keep isPlayingRef in sync with isPlaying state
         setIsPlaying(false);
         isPlayingRef.current = false;
