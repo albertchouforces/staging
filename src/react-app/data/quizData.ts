@@ -2555,7 +2555,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
       id: "35si",
-      title: "Sound Signals Challenge – Rule 35: Identify the Sounds Signals, and Intervals",
+      title: "Sound Signals Challenge – Rule 35: Identify the Sound Signals, and Intervals",
       description: "",
       themeColor: 'red',
       quizKey: "35si",
