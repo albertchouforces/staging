@@ -81,7 +81,7 @@ export function AudioPlayer({
       // Safari fix: Extended timeout to handle delayed event firing on Safari/iOS
       setTimeout(() => {
         isResettingRef.current = false;
-      }, 150);
+      }, 75);
     }
     
     // Safari/iOS requires a small delay after load() before play() for reliable playback
