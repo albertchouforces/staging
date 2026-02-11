@@ -25,8 +25,6 @@ export function AudioPlayer({
   const isPlayingRef = useRef(false);
   const playerIdRef = useRef<string>(Math.random().toString(36).substring(7));
   const isResettingRef = useRef(false);
-  const isUserInitiatedRef = useRef(false);
-  const loadingGracePeriodRef = useRef(false);
 
   const colors = {
     blue: {
@@ -63,42 +61,30 @@ export function AudioPlayer({
     
     const audio = audioRef.current;
     
-    // Prevent duplicate plays on iOS - check if already playing the same source
+    // Prevent duplicate plays - check if already playing the same source
     if (audio.src === targetSrc && !audio.paused && !audio.ended) {
       return;
     }
     
-    // Safari fix: Always call load() when transitioning or resetting to avoid spurious events
-    // This ensures a clean state and prevents Safari from firing unexpected ended events
+    // Need to load a new file or reset current one
     const needsLoad = audio.src !== targetSrc || audio.ended || audio.currentTime > 0;
     
     if (needsLoad) {
-      // Set flag to ignore spurious ended events during reset
+      // Mark that we're in a reset/load operation
       isResettingRef.current = true;
-      // Set grace period to ignore error events during initial load
-      loadingGracePeriodRef.current = true;
+      
       audio.src = targetSrc;
       audio.load();
-      // Clear user-initiated flag since we've now loaded
-      isUserInitiatedRef.current = false;
       
-      // Wait for the file to be ready before playing
-      // This prevents "AbortError: play() interrupted by load()"
-      // Use setTimeout instead of events for more reliable behavior
-      setTimeout(() => {
+      // After load completes, play the audio
+      // Use loadeddata event for reliability across all file types
+      const handleLoaded = () => {
         if (!isPlayingRef.current || !audioRef.current) return;
         
-        // Clear loading flags
+        // Clear reset flag
         isResettingRef.current = false;
-        setTimeout(() => {
-          loadingGracePeriodRef.current = false;
-        }, 100);
         
-        // Check we're not already playing
-        if (!audioRef.current.paused && !audioRef.current.ended) {
-          return;
-        }
-        
+        // Play the audio
         const playPromise = audioRef.current.play();
         
         if (playPromise !== undefined) {
@@ -110,35 +96,9 @@ export function AudioPlayer({
               }
             })
             .catch((error) => {
-              if (!isPlayingRef.current) return;
-              
-              console.warn('Audio playback failed after load:', error.name, error.message);
-              
-              // For local files that might need more time
-              if (error.name === 'AbortError' || error.name === 'NotSupportedError') {
-                setTimeout(() => {
-                  if (!isPlayingRef.current || !audioRef.current) return;
-                  
-                  const retryPromise = audioRef.current.play();
-                  if (retryPromise !== undefined) {
-                    retryPromise
-                      .then(() => {
-                        if (isPlayingRef.current) {
-                          setIsPlaying(true);
-                          setAudioError(false);
-                        }
-                      })
-                      .catch(() => {
-                        if (isPlayingRef.current) {
-                          setAudioError(true);
-                          setIsPlaying(false);
-                          isPlayingRef.current = false;
-                          audioManager.stop(playerIdRef.current);
-                        }
-                      });
-                  }
-                }, 200);
-              } else {
+              console.warn('Play failed:', error.name, error.message);
+              // On error, mark as error and stop
+              if (isPlayingRef.current) {
                 setAudioError(true);
                 setIsPlaying(false);
                 isPlayingRef.current = false;
@@ -146,16 +106,15 @@ export function AudioPlayer({
               }
             });
         }
-      }, 100);
+      };
+      
+      // Listen for when the audio is loaded and ready
+      audio.addEventListener('loadeddata', handleLoaded, { once: true });
       
       return;
     }
     
-    // If not loading a new file, play immediately
-    if (!audio.paused && !audio.ended) {
-      return;
-    }
-    
+    // Already loaded, just play
     const playPromise = audio.play();
     
     if (playPromise !== undefined) {
@@ -167,38 +126,8 @@ export function AudioPlayer({
           }
         })
         .catch((error) => {
-          if (!isPlayingRef.current) return;
-          
-          console.warn('Audio playback rejected (no-load path):', error.name, error.message);
-          
-          const isTransientError = error.name === 'NotAllowedError' || 
-                                   error.name === 'NotSupportedError' ||
-                                   error.name === 'AbortError';
-          
-          if (isTransientError) {
-            setTimeout(() => {
-              if (!isPlayingRef.current || !audioRef.current) return;
-              
-              const retryPromise = audioRef.current.play();
-              if (retryPromise !== undefined) {
-                retryPromise
-                  .then(() => {
-                    if (isPlayingRef.current) {
-                      setIsPlaying(true);
-                      setAudioError(false);
-                    }
-                  })
-                  .catch(() => {
-                    if (isPlayingRef.current) {
-                      setAudioError(true);
-                      setIsPlaying(false);
-                      isPlayingRef.current = false;
-                      audioManager.stop(playerIdRef.current);
-                    }
-                  });
-              }
-            }, 200);
-          } else {
+          console.warn('Play failed (no load):', error.name, error.message);
+          if (isPlayingRef.current) {
             setAudioError(true);
             setIsPlaying(false);
             isPlayingRef.current = false;
@@ -230,8 +159,6 @@ export function AudioPlayer({
       setCurrentFileIndex(0);
       setIsPlaying(true);
       isPlayingRef.current = true;
-      // Mark this as a user-initiated play (not an automatic loop)
-      isUserInitiatedRef.current = true;
     }
   }, [isPlaying, audioFiles.length]);
 
@@ -291,42 +218,21 @@ export function AudioPlayer({
   const handleAudioError = useCallback(() => {
     if (!isPlayingRef.current) return;
     
-    // During loading grace period, ignore all error events
-    // This prevents false positives with local files that trigger errors during initial load
-    if (loadingGracePeriodRef.current) {
-      console.log('Ignoring error during loading grace period');
-      return;
-    }
-    
     const audio = audioRef.current;
     if (audio?.error) {
-      console.warn('Audio error code:', audio.error.code);
-      console.warn('Audio error message:', audio.error.message);
-      console.warn('Audio source:', audio.src);
+      console.warn('Audio error:', audio.error.code, audio.error.message);
       
-      // Only treat as a real error if it's a network error (code 2) or decode error (code 3)
-      // Ignore MEDIA_ERR_ABORTED (code 1) which can fire during normal load operations
-      const errorCode = audio.error.code;
-      if (errorCode === 1) {
-        // MEDIA_ERR_ABORTED - loading was aborted, ignore
+      // Ignore abort errors during load operations
+      if (audio.error.code === 1) {
         return;
       }
       
-      // For all other errors, add a delay to verify this is a persistent error
-      // This prevents false positives with local files that may load slightly slower
-      setTimeout(() => {
-        if (!isPlayingRef.current || loadingGracePeriodRef.current) return;
-        if (audioRef.current?.error && audioRef.current.error.code > 1) {
-          setAudioError(true);
-          setIsPlaying(false);
-          isPlayingRef.current = false;
-          audioManager.stop(playerIdRef.current);
-        }
-      }, 200);
-      return;
+      // Real error - show error state
+      setAudioError(true);
+      setIsPlaying(false);
+      isPlayingRef.current = false;
+      audioManager.stop(playerIdRef.current);
     }
-    
-    // No error object, but error event fired - treat as transient, ignore
   }, []);
 
   // Handle when audio actually starts playing
