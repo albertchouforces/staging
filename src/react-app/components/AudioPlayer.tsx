@@ -26,8 +26,7 @@ export function AudioPlayer({
   const playerIdRef = useRef<string>(Math.random().toString(36).substring(7));
   const isResettingRef = useRef(false);
   const lastLoadedSrcRef = useRef<string>('');
-  const lastEndedTimeRef = useRef<number>(0);
-  const lastProcessedEndedRef = useRef<{ loop: number; fileIndex: number } | null>(null);
+  const expectedEndingSrcRef = useRef<string>('');
 
   const colors = {
     blue: {
@@ -84,6 +83,8 @@ export function AudioPlayer({
       console.log('[AudioPlayer] Setting src and calling load()');
       audio.src = targetSrc;
       lastLoadedSrcRef.current = targetSrc;
+      // Track which file we expect to complete - this is our source of truth
+      expectedEndingSrcRef.current = targetSrc;
       audio.load();
       
       // After load completes, play the audio
@@ -175,7 +176,7 @@ export function AudioPlayer({
       setCurrentLoop(0);
       setCurrentFileIndex(0);
       isPlayingRef.current = false;
-      lastProcessedEndedRef.current = null;
+      expectedEndingSrcRef.current = '';
       audioManager.stop(playerIdRef.current);
     } else {
       // Notify the audio manager that this player is starting
@@ -185,7 +186,7 @@ export function AudioPlayer({
       setCurrentFileIndex(0);
       setIsPlaying(true);
       isPlayingRef.current = true;
-      lastProcessedEndedRef.current = null;
+      expectedEndingSrcRef.current = '';
     }
   }, [isPlaying, audioFiles.length]);
 
@@ -196,8 +197,12 @@ export function AudioPlayer({
   }, [isPlaying, currentFileIndex, audioFiles, loadAndPlayAudio]);
 
   const handleAudioEnded = useCallback(() => {
-    const now = Date.now();
-    console.log('[AudioPlayer] ended event fired, currentLoop:', currentLoop, 'currentFileIndex:', currentFileIndex, 'isPlaying:', isPlayingRef.current, 'isResetting:', isResettingRef.current);
+    if (!audioRef.current) return;
+    
+    const audio = audioRef.current;
+    const endedSrc = audio.currentSrc || audio.src;
+    
+    console.log('[AudioPlayer] ended event, src:', endedSrc, 'expected:', expectedEndingSrcRef.current, 'isPlaying:', isPlayingRef.current);
     
     // Guard: only proceed if we think we're playing
     if (!isPlayingRef.current) {
@@ -205,80 +210,53 @@ export function AudioPlayer({
       return;
     }
     
-    // Safari/iOS fix: Debounce ended events - ignore if we just processed one within 300ms
-    // Safari can fire multiple ended events in rapid succession
-    if (now - lastEndedTimeRef.current < 300) {
-      console.log('[AudioPlayer] Ignoring duplicate ended event (debounce)');
+    // CRITICAL Safari fix: Verify this ended event is for the file we're currently expecting to end
+    // Safari fires spurious ended events from previous files - ignore anything that doesn't match
+    if (endedSrc !== expectedEndingSrcRef.current) {
+      console.log('[AudioPlayer] Ignoring ended event from unexpected source');
       return;
     }
     
     // Safari/iOS fix: Ignore ended events that fire during audio reset/load operations
-    // These are spurious events from calling load() and should not advance playback
     if (isResettingRef.current) {
       console.log('[AudioPlayer] Ignoring ended event during reset');
       return;
     }
     
     // Safari fix: Verify the audio actually reached the end naturally
-    // Ignore premature ended events (Safari sometimes fires these at position 0)
-    if (audioRef.current) {
-      const audio = audioRef.current;
-      console.log('[AudioPlayer] Audio position:', audio.currentTime, 'of', audio.duration);
-      // If duration is known and currentTime is suspiciously far from the end, ignore this event
-      if (audio.duration > 0 && audio.currentTime < audio.duration * 0.95) {
-        console.log('[AudioPlayer] Ignoring premature ended event');
-        return;
-      }
-    }
-    
-    // Calculate what the next state will be
-    let nextLoop = currentLoop;
-    let nextFileIndex = currentFileIndex;
-    let shouldStop = false;
-    
-    if (currentFileIndex < audioFiles.length - 1) {
-      nextFileIndex = currentFileIndex + 1;
-    } else {
-      nextLoop = currentLoop + 1;
-      if (nextLoop < normalizedLoopCount) {
-        nextFileIndex = 0;
-      } else {
-        shouldStop = true;
-      }
-    }
-    
-    // CRITICAL Safari fix: Check if we already processed a transition to this next state
-    // This prevents duplicate ended events from advancing playback multiple times
-    const lastProcessed = lastProcessedEndedRef.current;
-    if (lastProcessed && lastProcessed.loop === nextLoop && lastProcessed.fileIndex === nextFileIndex) {
-      console.log('[AudioPlayer] Ignoring duplicate ended event - already transitioned to', nextLoop, nextFileIndex);
+    if (audio.duration > 0 && audio.currentTime < audio.duration * 0.95) {
+      console.log('[AudioPlayer] Ignoring premature ended event at', audio.currentTime, '/', audio.duration);
       return;
     }
     
-    // Mark the transition to the next state as processed BEFORE updating state
-    // This ensures any duplicate ended events that fire before React updates state will be blocked
-    lastProcessedEndedRef.current = { loop: nextLoop, fileIndex: nextFileIndex };
-    lastEndedTimeRef.current = now;
+    // Clear the expected ending source so we don't process this ended event again
+    expectedEndingSrcRef.current = '';
     isResettingRef.current = true;
-    console.log('[AudioPlayer] Processing ended event, transitioning to loop:', nextLoop, 'file:', nextFileIndex);
     
-    // Ensure UI shows playing state during transitions (Safari fix)
+    console.log('[AudioPlayer] Processing valid ended event, advancing playback');
+    
+    // Ensure UI shows playing state during transitions
     setIsPlaying(true);
     
-    if (shouldStop) {
-      // All loops complete - stop playback
-      setIsPlaying(false);
-      setCurrentLoop(0);
-      setCurrentFileIndex(0);
-      isPlayingRef.current = false;
-      audioManager.stop(playerIdRef.current);
-    } else if (currentFileIndex < audioFiles.length - 1) {
+    if (currentFileIndex < audioFiles.length - 1) {
       // Move to next file in sequence
-      setCurrentFileIndex(nextFileIndex);
+      setCurrentFileIndex(prev => prev + 1);
     } else {
-      // Start next loop
-      setCurrentLoop(nextLoop);
-      setCurrentFileIndex(0);
+      // Completed all files in current loop
+      const nextLoop = currentLoop + 1;
+      
+      if (nextLoop < normalizedLoopCount) {
+        // Start next loop
+        setCurrentLoop(nextLoop);
+        setCurrentFileIndex(0);
+      } else {
+        // All loops complete - stop playback
+        setIsPlaying(false);
+        setCurrentLoop(0);
+        setCurrentFileIndex(0);
+        isPlayingRef.current = false;
+        audioManager.stop(playerIdRef.current);
+      }
     }
   }, [currentLoop, currentFileIndex, audioFiles.length, normalizedLoopCount]);
 
@@ -395,8 +373,7 @@ export function AudioPlayer({
     setCurrentFileIndex(0);
     isPlayingRef.current = false;
     lastLoadedSrcRef.current = '';
-    lastEndedTimeRef.current = 0;
-    lastProcessedEndedRef.current = null;
+    expectedEndingSrcRef.current = '';
     audioManager.stop(playerIdRef.current);
   }, [audioFilesKey]);
 
@@ -410,7 +387,7 @@ export function AudioPlayer({
         audioRef.current.load();
       }
       lastLoadedSrcRef.current = '';
-      lastEndedTimeRef.current = 0;
+      expectedEndingSrcRef.current = '';
       audioManager.stop(playerIdRef.current);
     };
   }, []);
