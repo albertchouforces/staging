@@ -106,9 +106,49 @@ export function AudioPlayer({
             }
           })
           .catch((error) => {
-            // Only log error if we're still trying to play
-            if (isPlayingRef.current) {
-              console.error('Audio playback failed:', error);
+            // Only treat as error if we're still trying to play
+            if (!isPlayingRef.current) return;
+            
+            console.warn('Audio playback promise rejected:', error.name, error.message);
+            
+            // Common transient errors that don't indicate file problems:
+            // - NotAllowedError: user interaction required (browser policy)
+            // - NotSupportedError: may resolve after file loads
+            // - AbortError: loading was interrupted, may succeed on retry
+            
+            // For local files, the browser may need a moment to resolve the path
+            // Retry once after a brief delay before marking as error
+            const isTransientError = error.name === 'NotAllowedError' || 
+                                     error.name === 'NotSupportedError' ||
+                                     error.name === 'AbortError';
+            
+            if (isTransientError) {
+              // Give it one retry after a brief moment
+              setTimeout(() => {
+                if (!isPlayingRef.current || !audioRef.current) return;
+                
+                const retryPromise = audioRef.current.play();
+                if (retryPromise !== undefined) {
+                  retryPromise
+                    .then(() => {
+                      if (isPlayingRef.current) {
+                        setIsPlaying(true);
+                        setAudioError(false);
+                      }
+                    })
+                    .catch(() => {
+                      // Retry failed - now mark as error
+                      if (isPlayingRef.current) {
+                        setAudioError(true);
+                        setIsPlaying(false);
+                        isPlayingRef.current = false;
+                        audioManager.stop(playerIdRef.current);
+                      }
+                    });
+                }
+              }, 150);
+            } else {
+              // Non-transient error - mark as failed immediately
               setAudioError(true);
               setIsPlaying(false);
               isPlayingRef.current = false;
