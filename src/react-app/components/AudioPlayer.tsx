@@ -27,6 +27,7 @@ export function AudioPlayer({
   const isResettingRef = useRef(false);
   const lastLoadedSrcRef = useRef<string>('');
   const lastEndedTimeRef = useRef<number>(0);
+  const lastProcessedEndedRef = useRef<{ loop: number; fileIndex: number } | null>(null);
 
   const colors = {
     blue: {
@@ -174,6 +175,7 @@ export function AudioPlayer({
       setCurrentLoop(0);
       setCurrentFileIndex(0);
       isPlayingRef.current = false;
+      lastProcessedEndedRef.current = null;
       audioManager.stop(playerIdRef.current);
     } else {
       // Notify the audio manager that this player is starting
@@ -183,6 +185,7 @@ export function AudioPlayer({
       setCurrentFileIndex(0);
       setIsPlaying(true);
       isPlayingRef.current = true;
+      lastProcessedEndedRef.current = null;
     }
   }, [isPlaying, audioFiles.length]);
 
@@ -194,11 +197,19 @@ export function AudioPlayer({
 
   const handleAudioEnded = useCallback(() => {
     const now = Date.now();
-    console.log('[AudioPlayer] ended event fired, isPlaying:', isPlayingRef.current, 'isResetting:', isResettingRef.current, 'timeSinceLastEnded:', now - lastEndedTimeRef.current);
+    console.log('[AudioPlayer] ended event fired, currentLoop:', currentLoop, 'currentFileIndex:', currentFileIndex, 'isPlaying:', isPlayingRef.current, 'isResetting:', isResettingRef.current);
     
     // Guard: only proceed if we think we're playing
     if (!isPlayingRef.current) {
       console.log('[AudioPlayer] Ignoring ended - not playing');
+      return;
+    }
+    
+    // CRITICAL Safari fix: Check if we already processed an ended event for this exact file/loop combination
+    // This prevents late-firing ended events from the previous file from advancing playback again
+    const lastProcessed = lastProcessedEndedRef.current;
+    if (lastProcessed && lastProcessed.loop === currentLoop && lastProcessed.fileIndex === currentFileIndex) {
+      console.log('[AudioPlayer] Ignoring duplicate ended event for same file/loop');
       return;
     }
     
@@ -228,7 +239,8 @@ export function AudioPlayer({
       }
     }
     
-    // CRITICAL: Mark this ended event as processed and set resetting flag
+    // CRITICAL: Mark this file/loop combination as processed
+    lastProcessedEndedRef.current = { loop: currentLoop, fileIndex: currentFileIndex };
     lastEndedTimeRef.current = now;
     isResettingRef.current = true;
     console.log('[AudioPlayer] Processing ended event, advancing playback');
@@ -372,6 +384,7 @@ export function AudioPlayer({
     isPlayingRef.current = false;
     lastLoadedSrcRef.current = '';
     lastEndedTimeRef.current = 0;
+    lastProcessedEndedRef.current = null;
     audioManager.stop(playerIdRef.current);
   }, [audioFilesKey]);
 
