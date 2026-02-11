@@ -1862,7 +1862,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                     ],
         description: "",
         fact: "Rule 34(c)(ii)",
-        audioUrl: "/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a",
+        audioUrl: "/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a",
       },
       {
         id: 14,
@@ -1898,7 +1898,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                     ],
         description: "",
         fact: "Rule 34(d)",
-        audioUrl: "/sounds/8_Warning_Wake-Up_Signal_%2B5.mp3",
+        audioUrl: "/sounds/8_Warning_Wake-Up_Signal_ 5.mp3",
       },
       {
         id: 16,
@@ -1950,7 +1950,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         correctAnswer: [
                         ["/sounds/1_Short_Blast.mp3", "Short Blast"],
                         ["/sounds/2_Prolonged_Blast.mp3", "Prolonged Blast"],
-                        ["/sounds/Incorrect%20duration%20for%20short%20or%20prolonged%20blast.m4a", "This sound signal does not meet the criteria to be considered a short or prolonged blast"]
+                        ["/sounds/Incorrect duration for short or prolonged blast.m4a", "This sound signal does not meet the criteria to be considered a short or prolonged blast"]
                         ],
         description: "",
         fact: "32(b); 32(c)"
@@ -1985,8 +1985,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         correctAnswer: [
                         ["/sounds/4_Overtake_Stbd.mp3", "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"],
                         ["/sounds/5_Overtake_Port.mp3", "the intention to overtake another vessel on its port side when in a narrow channel or fairway"],
-                        ["/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"],
-                        ["/sounds/Warning%20Signal_7%20Short%20Blasts.m4a", "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"]
+                        ["/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"],
+                        ["/sounds/Warning Signal_7 Short Blasts.m4a", "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"]
                       ],
         description: "",
         fact: "9(e)(i); 34(c)(i); 34(c)(ii); 34(d)"
@@ -1996,10 +1996,10 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "You are <strong>in sight</strong> of another vessel <strong>and/or in clear visibility</strong>. Match the sound signal with the correct action/response.",
         correctAnswer: [
                         ["/sounds/2_Prolonged_Blast.mp3", "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction <strong>OR</strong> the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction"],
-                        ["/sounds/8_Warning_Wake-Up_Signal_%2B5.mp3", "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"],
+                        ["/sounds/8_Warning_Wake-Up_Signal_ 5.mp3", "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"],
                         ["/sounds/4_Overtake_Stbd.mp3", "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"],
                         ["/sounds/5_Overtake_Port.mp3", "the intention to overtake another vessel on its port side when in a narrow channel or fairway"],
-                        ["/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"]
+                        ["/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"]
                       ],
         description: "",
         fact: "34(c)(i); 34(c)(ii); 34(d); 34(e)"
@@ -2317,7 +2317,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 24,
         question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/Pilot%20Vsl_Making%20Way.m4a",
+        audioUrl: "/sounds/Pilot Vsl_Making Way.m4a",
         correctAnswer: ["a pilot vessel engaged in pilotage duties making way through the water"],
         answerPool: ["a pilot vessel engaged in pilotage duties making way through the water",
             "a pilot vessel engaged in pilotage duties underway but stopped and making no way through the water",
@@ -2329,7 +2329,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 25,
         question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/Pilot%20Vsl_Underway%20but%20stopped_FV2.m4a",
+        audioUrl: "/sounds/Pilot Vsl_Underway but stopped_FV2.m4a",
         correctAnswer: ["a pilot vessel engaged in pilotage duties underway but stopped and making no way through the water"],
         answerPool: ["a pilot vessel engaged in pilotage duties underway but stopped and making no way through the water",
             "a pilot vessel engaged in pilotage duties making way through the water",
@@ -2353,7 +2353,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 27,
         question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: ["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot%20Vsl_Identity%20Signal_Low%20Pitch.m4a"],
+        audioUrl: ["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot Vsl_Identity Signal_Low Pitch.m4a"],
         correctAnswer: ["a pilot vessel 100 m or more in length at anchor engaged in pilotage duties"],
         answerPool: ["a pilot vessel 100 m or more in length at anchor engaged in pilotage duties",
             "a pilot vessel less than 100 m in length at anchor engaged in pilotage duties",
@@ -2809,7 +2809,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 21,
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/Pilot%20Vsl_Making%20Way.m4a",
+        audioUrl: "/sounds/Pilot Vsl_Making Way.m4a",
         correctAnswer: ["pilot vessel engaged in pilotage duties making way through the water", "intervals of not more than 2 minutes"],
         answerPool: ["pilot vessel engaged in pilotage duties making way through the water",
             "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water",
@@ -2821,7 +2821,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 22,
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/Pilot%20Vsl_Underway%20but%20stopped_FV2.m4a",
+        audioUrl: "/sounds/Pilot Vsl_Underway but stopped_FV2.m4a",
         correctAnswer: ["pilot vessel engaged in pilotage duties underway but stopped and making no way through the water", "intervals of not more than 2 minutes"],
         answerPool: ["pilot vessel engaged in pilotage duties underway but stopped and making no way through the water",
             "vessel towing another vessel; the vessel being towed or if more than one vessel is being towed the last vessel of the tow has a crew onboard (&quot;manned&quot;)",
@@ -2845,7 +2845,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 24,
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: ["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot%20Vsl_Identity%20Signal_Low%20Pitch.m4a"],
+        audioUrl: ["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot Vsl_Identity Signal_Low Pitch.m4a"],
         correctAnswer: ["pilot vessel 100 m or more in length at anchor engaged in pilotage duties", "intervals of not more than 1 minute"],
         answerPool: ["pilot vessel 100 m or more in length at anchor engaged in pilotage duties",
             "vessel 100 m or more in length aground",
@@ -2886,7 +2886,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 2,
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
-                        ["/sounds/PDV%20Underway%20Not%20Making%20Way_High%20Pitch.m4a", "power-driven vessel underway but stopped and making no way through the water; interval of NMT 2 min"],
+                        ["/sounds/PDV Underway Not Making Way_High Pitch.m4a", "power-driven vessel underway but stopped and making no way through the water; interval of NMT 2 min"],
                         [["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"], "vessel towing another vessel; the vessel being towed or if more than one vessel is being towed the last vessel of the tow has a crew onboard (&quot;manned&quot;); interval NMT 2 min"],
                         ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel restricted in its ability to manoeuvre; interval NMT 2 min"],
                         ["/sounds/8_Anchor_100m_Or_More.mp3", "vessel 100 m or more in length at anchor; interval NMT 1 min"]
@@ -2912,8 +2912,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         correctAnswer: [
                         ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "sailing vessel; interval NMT 2 min"],
                         ["/sounds/11_Aground_100m_Or_More.mp3", "vessel 100 m or more in length aground; interval NMT 1 min"],
-                        ["/sounds/Pilot%20Vsl_Making%20Way.m4a", "pilot vessel engaged in pilotage duties making way through the water; interval NMT 2 min"],
-                        ["/sounds/Prolonged%20Blast_Low%20Pitch.m4a", "power-driven vessel making way through the water; interval of NMT 2 min"]
+                        ["/sounds/Pilot Vsl_Making Way.m4a", "pilot vessel engaged in pilotage duties making way through the water; interval NMT 2 min"],
+                        ["/sounds/Prolonged Blast_Low Pitch.m4a", "power-driven vessel making way through the water; interval of NMT 2 min"]
                         ],
         description: "",
         fact: "35(a); 35(c); 35(h), (g); 35(k), (a)"
@@ -2923,7 +2923,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
                         ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel engaged in fishing; interval of NMT 2 min"],
-                        ["/sounds/Pilot%20Vsl_Underway%20but%20stopped_FV2.m4a", "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water; interval NMT 2 min"],
+                        ["/sounds/Pilot Vsl_Underway but stopped_FV2.m4a", "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water; interval NMT 2 min"],
                         ["/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
                         ["/sounds/7_Anchor_Less_Than_100m.mp3", "vessel less than 100 m in length at anchor; interval NMT 1 min"]
                         ],
@@ -2959,7 +2959,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
                         ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "vessel restricted in its ability to manoeuvre at anchor; interval NMT 2 min"],
-                        [["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot%20Vsl_Identity%20Signal_Low%20Pitch.m4a"], "pilot vessel 100 m or more in length at anchor engaged in pilotage duties; interval NMT 1 min"],
+                        [["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot Vsl_Identity Signal_Low Pitch.m4a"], "pilot vessel 100 m or more in length at anchor engaged in pilotage duties; interval NMT 1 min"],
                         ["/sounds/10_Aground_Less_Than_100m.mp3", "vessel less than 100 m in length aground; interval NMT 1 min"],
                         ["/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"]
                         ],
@@ -2983,10 +2983,10 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 10,
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
-                        ["/sounds/Pilot%20Vsl_Making%20Way.m4a", "pilot vessel engaged in pilotage duties making way through the water; interval NMT 2 min"],
-                        ["/sounds/Pilot%20Vsl_Underway%20but%20stopped_FV2.m4a", "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water; interval NMT 2 min"],
+                        ["/sounds/Pilot Vsl_Making Way.m4a", "pilot vessel engaged in pilotage duties making way through the water; interval NMT 2 min"],
+                        ["/sounds/Pilot Vsl_Underway but stopped_FV2.m4a", "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water; interval NMT 2 min"],
                         [["/sounds/7_Anchor_Less_Than_100m.mp3", "/sounds/12_Pilotage_Duties_Additional.mp3"], "pilot vessel less than 100 m in length at anchor engaged in pilotage duties; interval NMT 1 min"],
-                        [["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot%20Vsl_Identity%20Signal_Low%20Pitch.m4a"], "pilot vessel 100 m or more in length at anchor engaged in pilotage duties; interval NMT 1 min"]
+                        [["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot Vsl_Identity Signal_Low Pitch.m4a"], "pilot vessel 100 m or more in length at anchor engaged in pilotage duties; interval NMT 1 min"]
                         ],
         description: "",
         fact: "35(k), (a); 35(k), (b); 35(k), (g)"
@@ -3516,7 +3516,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction","/sounds/2_Prolonged_Blast.mp3"],
                         ["the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction","/sounds/2_Prolonged_Blast.mp3"],
                         ["Distractor #1","/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],
-                        ["Distractor #2","/sounds/6_Overtaking%20Narrow%20Channel%20Fairway%20Agreement%20Signal_V2.m4a"]
+                        ["Distractor #2","/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a"]
                       ],
         description: "",
         fact: ""
