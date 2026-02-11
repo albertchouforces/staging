@@ -67,11 +67,9 @@ export function AudioPlayer({
       return;
     }
     
-    // Determine if we need to call load() or just reset playback position
-    // Only call load() when:
-    // 1. Changing to a different source file, OR
-    // 2. User clicked play button (user-initiated) on an ended audio
-    const needsLoad = audio.src !== targetSrc || (audio.ended && isUserInitiatedRef.current);
+    // Safari fix: Always call load() when transitioning or resetting to avoid spurious events
+    // This ensures a clean state and prevents Safari from firing unexpected ended events
+    const needsLoad = audio.src !== targetSrc || audio.ended || audio.currentTime > 0;
     
     if (needsLoad) {
       // Set flag to ignore spurious ended events during reset
@@ -80,14 +78,10 @@ export function AudioPlayer({
       audio.load();
       // Clear user-initiated flag since we've now loaded
       isUserInitiatedRef.current = false;
-      // Clear the reset flag after a brief moment to allow load() to complete
+      // Safari fix: Timeout to handle delayed event firing on Safari/iOS
       setTimeout(() => {
         isResettingRef.current = false;
       }, 50);
-    } else if (audio.ended || audio.currentTime > 0) {
-      // Audio ended during automatic loop continuation
-      // Just reset time without calling load() to avoid triggering spurious events on iOS
-      audio.currentTime = 0;
     }
     
     // Safari/iOS requires a small delay after load() before play() for reliable playback
@@ -170,6 +164,16 @@ export function AudioPlayer({
       return;
     }
     
+    // Safari fix: Verify the audio actually reached the end naturally
+    // Ignore premature ended events (Safari sometimes fires these at position 0)
+    if (audioRef.current) {
+      const audio = audioRef.current;
+      // If duration is known and currentTime is suspiciously far from the end, ignore this event
+      if (audio.duration > 0 && audio.currentTime < audio.duration * 0.95) {
+        return;
+      }
+    }
+    
     // Ensure UI shows playing state during transitions (Safari fix)
     setIsPlaying(true);
     
@@ -228,25 +232,36 @@ export function AudioPlayer({
     
     const audio = audioRef.current;
     
+    // Ignore pause events during reset/load operations
+    if (isResettingRef.current) {
+      return;
+    }
+    
     // Ignore pause events that occur:
     // 1. At the end of playback (ended will handle this)
     // 2. During file transitions (currentTime = 0 with data loaded)
     // 3. During buffering/loading states
+    // 4. Very close to the end (within last 5% - let ended event handle it)
     if (audio.ended || 
         audio.currentTime === 0 || 
-        audio.readyState < 2) {
+        audio.readyState < 2 ||
+        (audio.duration > 0 && audio.currentTime >= audio.duration * 0.95)) {
       return;
     }
     
-    // iOS fix: If we get here, verify this is a real pause after a short delay
-    // This prevents iOS's spurious pause events from breaking playback
+    // Safari fix: Verify this is a real pause, not a system event
+    // This prevents Safari's spurious pause events from breaking playback
     setTimeout(() => {
-      if (audioRef.current && audioRef.current.paused && !audioRef.current.ended && isPlayingRef.current) {
+      if (audioRef.current && 
+          audioRef.current.paused && 
+          !audioRef.current.ended && 
+          isPlayingRef.current &&
+          !isResettingRef.current) {
         // CRITICAL: Keep isPlayingRef in sync with isPlaying state
         setIsPlaying(false);
         isPlayingRef.current = false;
       }
-    }, 100);
+    }, 75);
   }, []);
 
   // Handle waiting (buffering) state
