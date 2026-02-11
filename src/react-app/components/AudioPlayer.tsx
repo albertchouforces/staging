@@ -78,7 +78,7 @@ export function AudioPlayer({
       audio.load();
       // Clear user-initiated flag since we've now loaded
       isUserInitiatedRef.current = false;
-      // Safari fix: Timeout to handle delayed event firing on Safari/iOS
+      // Safari fix: Extended timeout to handle delayed event firing on Safari/iOS
       setTimeout(() => {
         isResettingRef.current = false;
       }, 75);
@@ -200,6 +200,8 @@ export function AudioPlayer({
   }, [currentLoop, currentFileIndex, audioFiles.length, normalizedLoopCount]);
 
   const handleAudioError = useCallback(() => {
+    if (!isPlayingRef.current) return;
+    
     const audio = audioRef.current;
     if (audio?.error) {
       console.error('Audio error code:', audio.error.code);
@@ -207,19 +209,10 @@ export function AudioPlayer({
       console.error('Audio source:', audio.src);
     }
     
-    // Only show error if we're actively trying to play
-    // This prevents showing "unavailable" for transient network errors or load issues
-    if (isPlayingRef.current) {
-      // Give the audio a moment to recover - sometimes errors are transient
-      setTimeout(() => {
-        if (audioRef.current && audioRef.current.error && isPlayingRef.current) {
-          setAudioError(true);
-          setIsPlaying(false);
-          isPlayingRef.current = false;
-          audioManager.stop(playerIdRef.current);
-        }
-      }, 100);
-    }
+    setAudioError(true);
+    setIsPlaying(false);
+    isPlayingRef.current = false;
+    audioManager.stop(playerIdRef.current);
   }, []);
 
   // Handle when audio actually starts playing
@@ -256,7 +249,7 @@ export function AudioPlayer({
       return;
     }
     
-    // Safari fix: Verify this is a real pause, not a system event
+    // Safari fix: Extended delay to verify this is a real pause, not a system event
     // This prevents Safari's spurious pause events from breaking playback
     setTimeout(() => {
       if (audioRef.current && 
@@ -268,7 +261,7 @@ export function AudioPlayer({
         setIsPlaying(false);
         isPlayingRef.current = false;
       }
-    }, 80);
+    }, 150);
   }, []);
 
   // Handle waiting (buffering) state
