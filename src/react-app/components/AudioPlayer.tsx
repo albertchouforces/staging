@@ -47,10 +47,19 @@ export function AudioPlayer({
 
   const colorClass = colors[colorScheme];
 
+  // Store latest values in refs to avoid recreating callback
+  const audioFilesRef = useRef(audioFiles);
+  const currentFileIndexRef = useRef(currentFileIndex);
+  
+  useEffect(() => {
+    audioFilesRef.current = audioFiles;
+    currentFileIndexRef.current = currentFileIndex;
+  });
+
   const loadAndPlayAudio = useCallback(() => {
-    if (!audioRef.current || audioFiles.length === 0 || !isPlayingRef.current) return;
+    if (!audioRef.current || audioFilesRef.current.length === 0 || !isPlayingRef.current) return;
     
-    const targetSrc = audioFiles[currentFileIndex];
+    const targetSrc = audioFilesRef.current[currentFileIndexRef.current];
     
     console.log('[AudioPlayer] loadAndPlayAudio called for:', targetSrc);
     
@@ -164,7 +173,7 @@ export function AudioPlayer({
           }
         });
     }
-  }, [audioFiles, currentFileIndex]);
+  }, []); // Empty deps - callback is now stable
 
   const toggleAudioPlayback = useCallback(() => {
     if (audioFiles.length === 0) return;
@@ -197,7 +206,7 @@ export function AudioPlayer({
     if (isPlaying && audioFiles.length > 0) {
       loadAndPlayAudio();
     }
-  }, [isPlaying, currentFileIndex, audioFiles]);
+  }, [isPlaying, currentFileIndex]); // Removed loadAndPlayAudio from deps
 
   const handleAudioEnded = useCallback(() => {
     if (!audioRef.current) return;
