@@ -50,6 +50,8 @@ export function AudioPlayer({
     
     const targetSrc = audioFiles[currentFileIndex];
     
+    console.log('[AudioPlayer] loadAndPlayAudio called for:', targetSrc);
+    
     if (!targetSrc || targetSrc.trim() === '') {
       console.error('Invalid audio URL: empty or undefined');
       setAudioError(true);
@@ -63,23 +65,31 @@ export function AudioPlayer({
     
     // Prevent duplicate plays - check if already playing the same source
     if (audio.src === targetSrc && !audio.paused && !audio.ended) {
+      console.log('[AudioPlayer] Already playing this source, skipping');
       return;
     }
     
     // Need to load a new file or reset current one
     const needsLoad = audio.src !== targetSrc || audio.ended || audio.currentTime > 0;
     
+    console.log('[AudioPlayer] needsLoad:', needsLoad, 'readyState:', audio.readyState);
+    
     if (needsLoad) {
       // Mark that we're in a reset/load operation
       isResettingRef.current = true;
       
+      console.log('[AudioPlayer] Setting src and calling load()');
       audio.src = targetSrc;
       audio.load();
       
       // After load completes, play the audio
       // Use loadeddata event for reliability across all file types
       const handleLoaded = () => {
-        if (!isPlayingRef.current || !audioRef.current) return;
+        console.log('[AudioPlayer] loadeddata event fired, attempting play');
+        if (!isPlayingRef.current || !audioRef.current) {
+          console.log('[AudioPlayer] Skipping play - not in playing state');
+          return;
+        }
         
         // Clear reset flag
         isResettingRef.current = false;
@@ -90,13 +100,14 @@ export function AudioPlayer({
         if (playPromise !== undefined) {
           playPromise
             .then(() => {
+              console.log('[AudioPlayer] Play promise resolved successfully');
               if (isPlayingRef.current) {
                 setIsPlaying(true);
                 setAudioError(false);
               }
             })
             .catch((error) => {
-              console.warn('Play failed:', error.name, error.message);
+              console.warn('[AudioPlayer] Play promise rejected:', error.name, error.message);
               // On error, mark as error and stop
               if (isPlayingRef.current) {
                 setAudioError(true);
@@ -111,22 +122,29 @@ export function AudioPlayer({
       // Listen for when the audio is loaded and ready
       audio.addEventListener('loadeddata', handleLoaded, { once: true });
       
+      // Also try canplaythrough as a backup
+      audio.addEventListener('canplaythrough', () => {
+        console.log('[AudioPlayer] canplaythrough event fired');
+      }, { once: true });
+      
       return;
     }
     
     // Already loaded, just play
+    console.log('[AudioPlayer] Audio already loaded, playing directly');
     const playPromise = audio.play();
     
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
+          console.log('[AudioPlayer] Direct play succeeded');
           if (isPlayingRef.current) {
             setIsPlaying(true);
             setAudioError(false);
           }
         })
         .catch((error) => {
-          console.warn('Play failed (no load):', error.name, error.message);
+          console.warn('[AudioPlayer] Direct play failed:', error.name, error.message);
           if (isPlayingRef.current) {
             setAudioError(true);
             setIsPlaying(false);
