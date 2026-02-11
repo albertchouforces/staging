@@ -83,8 +83,6 @@ export function AudioPlayer({
       console.log('[AudioPlayer] Setting src and calling load()');
       audio.src = targetSrc;
       lastLoadedSrcRef.current = targetSrc;
-      // Track which file we expect to complete - this is our source of truth
-      expectedEndingSrcRef.current = targetSrc;
       audio.load();
       
       // After load completes, play the audio
@@ -95,6 +93,11 @@ export function AudioPlayer({
           console.log('[AudioPlayer] Skipping play - not in playing state');
           return;
         }
+        
+        // CRITICAL: Track the actual resolved URL from the browser as our expected ending source
+        // The browser converts relative paths to absolute URLs, so we must use currentSrc
+        expectedEndingSrcRef.current = audioRef.current.currentSrc || audioRef.current.src;
+        console.log('[AudioPlayer] Expecting to complete:', expectedEndingSrcRef.current);
         
         // Clear reset flag after a brief delay to ensure any spurious events are ignored
         // This prevents Safari from firing ended/pause events immediately after load
