@@ -25,6 +25,7 @@ export function AudioPlayer({
   const isPlayingRef = useRef(false);
   const playerIdRef = useRef<string>(Math.random().toString(36).substring(7));
   const isResettingRef = useRef(false);
+  const lastLoadedSrcRef = useRef<string>('');
 
   const colors = {
     blue: {
@@ -64,15 +65,15 @@ export function AudioPlayer({
     const audio = audioRef.current;
     
     // Prevent duplicate plays - check if already playing the same source
-    if (audio.src === targetSrc && !audio.paused && !audio.ended) {
+    if (lastLoadedSrcRef.current === targetSrc && !audio.paused && !audio.ended) {
       console.log('[AudioPlayer] Already playing this source, skipping');
       return;
     }
     
     // Need to load a new file or reset current one
-    const needsLoad = audio.src !== targetSrc || audio.ended || audio.currentTime > 0;
+    const needsLoad = lastLoadedSrcRef.current !== targetSrc || audio.ended || audio.currentTime > 0;
     
-    console.log('[AudioPlayer] needsLoad:', needsLoad, 'readyState:', audio.readyState);
+    console.log('[AudioPlayer] needsLoad:', needsLoad, 'lastLoaded:', lastLoadedSrcRef.current, 'target:', targetSrc, 'readyState:', audio.readyState);
     
     if (needsLoad) {
       // Mark that we're in a reset/load operation
@@ -80,6 +81,7 @@ export function AudioPlayer({
       
       console.log('[AudioPlayer] Setting src and calling load()');
       audio.src = targetSrc;
+      lastLoadedSrcRef.current = targetSrc;
       audio.load();
       
       // After load completes, play the audio
@@ -340,6 +342,7 @@ export function AudioPlayer({
     setCurrentLoop(0);
     setCurrentFileIndex(0);
     isPlayingRef.current = false;
+    lastLoadedSrcRef.current = '';
     audioManager.stop(playerIdRef.current);
   }, [audioFilesKey]);
 
@@ -352,6 +355,7 @@ export function AudioPlayer({
         audioRef.current.removeAttribute('src');
         audioRef.current.load();
       }
+      lastLoadedSrcRef.current = '';
       audioManager.stop(playerIdRef.current);
     };
   }, []);
