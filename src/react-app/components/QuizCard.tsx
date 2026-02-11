@@ -15,6 +15,21 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
   const [imageLoaded, setImageLoaded] = useState(false);
   const [showStudyGuide, setShowStudyGuide] = useState(false);
   const [studyGuideType, setStudyGuideType] = useState<'image' | 'pdf' | 'web' | 'other'>('image');
+  const imageTimeoutRef = useCallback(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+    return {
+      set: (callback: () => void, delay: number) => {
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(callback, delay);
+      },
+      clear: () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+      }
+    };
+  }, [])();
 
   // Map theme colors to actual Tailwind classes
   const getColorClasses = useCallback((color: string) => {
@@ -270,15 +285,36 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
 
   // Image error handler with proper dependency array
   const handleImageError = useCallback(() => {
+    imageTimeoutRef.clear();
     setImageError(true);
     setImageLoaded(true);
-  }, []);
+  }, [imageTimeoutRef]);
+  
+  // Image load handler to clear timeout
+  const handleImageLoad = useCallback(() => {
+    imageTimeoutRef.clear();
+    setImageLoaded(true);
+  }, [imageTimeoutRef]);
 
-  // Reset image state when config changes
+  // Reset image state when config changes and set timeout for loading
   useEffect(() => {
     setImageError(false);
     setImageLoaded(false);
-  }, [config.startScreenImage]);
+    
+    // Set a timeout to prevent infinite loading state
+    // If the image doesn't load within 10 seconds, treat it as an error
+    if (config.startScreenImage && config.startScreenImage.trim() !== '') {
+      imageTimeoutRef.set(() => {
+        setImageError(true);
+        setImageLoaded(true);
+      }, 10000);
+    }
+    
+    // Cleanup timeout on unmount or when config changes
+    return () => {
+      imageTimeoutRef.clear();
+    };
+  }, [config.startScreenImage, imageTimeoutRef]);
 
   return (
     <>
@@ -304,7 +340,7 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
                   src={config.startScreenImage}
                   alt={config.title}
                   className={`max-w-full max-h-full object-contain ${imageLoaded ? 'block' : 'hidden'}`}
-                  onLoad={() => setImageLoaded(true)}
+                  onLoad={handleImageLoad}
                   onError={handleImageError}
                 />
               </div>
