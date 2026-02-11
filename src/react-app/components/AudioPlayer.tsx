@@ -26,6 +26,7 @@ export function AudioPlayer({
   const playerIdRef = useRef<string>(Math.random().toString(36).substring(7));
   const isResettingRef = useRef(false);
   const lastLoadedSrcRef = useRef<string>('');
+  const lastEndedTimeRef = useRef<number>(0);
 
   const colors = {
     blue: {
@@ -192,10 +193,19 @@ export function AudioPlayer({
   }, [isPlaying, currentFileIndex, audioFiles, loadAndPlayAudio]);
 
   const handleAudioEnded = useCallback(() => {
-    console.log('[AudioPlayer] ended event fired, isPlaying:', isPlayingRef.current, 'isResetting:', isResettingRef.current);
+    const now = Date.now();
+    console.log('[AudioPlayer] ended event fired, isPlaying:', isPlayingRef.current, 'isResetting:', isResettingRef.current, 'timeSinceLastEnded:', now - lastEndedTimeRef.current);
     
     // Guard: only proceed if we think we're playing
     if (!isPlayingRef.current) {
+      console.log('[AudioPlayer] Ignoring ended - not playing');
+      return;
+    }
+    
+    // Safari/iOS fix: Debounce ended events - ignore if we just processed one within 300ms
+    // Safari can fire multiple ended events in rapid succession
+    if (now - lastEndedTimeRef.current < 300) {
+      console.log('[AudioPlayer] Ignoring duplicate ended event (debounce)');
       return;
     }
     
@@ -218,8 +228,8 @@ export function AudioPlayer({
       }
     }
     
-    // CRITICAL: Set resetting flag immediately to prevent duplicate ended events
-    // Safari can fire multiple ended events rapidly before we start loading the next file
+    // CRITICAL: Mark this ended event as processed and set resetting flag
+    lastEndedTimeRef.current = now;
     isResettingRef.current = true;
     console.log('[AudioPlayer] Processing ended event, advancing playback');
     
@@ -361,6 +371,7 @@ export function AudioPlayer({
     setCurrentFileIndex(0);
     isPlayingRef.current = false;
     lastLoadedSrcRef.current = '';
+    lastEndedTimeRef.current = 0;
     audioManager.stop(playerIdRef.current);
   }, [audioFilesKey]);
 
@@ -374,6 +385,7 @@ export function AudioPlayer({
         audioRef.current.load();
       }
       lastLoadedSrcRef.current = '';
+      lastEndedTimeRef.current = 0;
       audioManager.stop(playerIdRef.current);
     };
   }, []);
