@@ -82,18 +82,19 @@ export function AudioPlayer({
       // Clear user-initiated flag since we've now loaded
       isUserInitiatedRef.current = false;
       
-      // Wait for the audio to be ready before playing
-      // This prevents "AbortError: play() interrupted by load()" on local files
-      const handleCanPlay = () => {
+      // Wait for the file to be ready before playing
+      // This prevents "AbortError: play() interrupted by load()"
+      // Use setTimeout instead of events for more reliable behavior
+      setTimeout(() => {
         if (!isPlayingRef.current || !audioRef.current) return;
         
-        // Clear loading flags once ready
+        // Clear loading flags
         isResettingRef.current = false;
         setTimeout(() => {
           loadingGracePeriodRef.current = false;
         }, 100);
         
-        // Double-check we're not already playing
+        // Check we're not already playing
         if (!audioRef.current.paused && !audioRef.current.ended) {
           return;
         }
@@ -111,13 +112,10 @@ export function AudioPlayer({
             .catch((error) => {
               if (!isPlayingRef.current) return;
               
-              console.warn('Audio playback promise rejected:', error.name, error.message);
+              console.warn('Audio playback failed after load:', error.name, error.message);
               
-              const isTransientError = error.name === 'NotAllowedError' || 
-                                       error.name === 'NotSupportedError' ||
-                                       error.name === 'AbortError';
-              
-              if (isTransientError) {
+              // For local files that might need more time
+              if (error.name === 'AbortError' || error.name === 'NotSupportedError') {
                 setTimeout(() => {
                   if (!isPlayingRef.current || !audioRef.current) return;
                   
@@ -139,7 +137,7 @@ export function AudioPlayer({
                         }
                       });
                   }
-                }, 350);
+                }, 200);
               } else {
                 setAudioError(true);
                 setIsPlaying(false);
@@ -148,29 +146,12 @@ export function AudioPlayer({
               }
             });
         }
-      };
-      
-      // Listen for canplay event to know when file is ready
-      const canPlayListener = () => {
-        handleCanPlay();
-        audio.removeEventListener('canplay', canPlayListener);
-        audio.removeEventListener('loadeddata', canPlayListener);
-      };
-      
-      audio.addEventListener('canplay', canPlayListener);
-      audio.addEventListener('loadeddata', canPlayListener);
-      
-      // Handle if audio is already ready (cached/fast load)
-      if (audio.readyState >= 3) {
-        audio.removeEventListener('canplay', canPlayListener);
-        audio.removeEventListener('loadeddata', canPlayListener);
-        handleCanPlay();
-      }
+      }, 100);
       
       return;
     }
     
-    // Path for when not loading - just play
+    // If not loading a new file, play immediately
     if (!audio.paused && !audio.ended) {
       return;
     }
