@@ -205,14 +205,6 @@ export function AudioPlayer({
       return;
     }
     
-    // CRITICAL Safari fix: Check if we already processed an ended event for this exact file/loop combination
-    // This prevents late-firing ended events from the previous file from advancing playback again
-    const lastProcessed = lastProcessedEndedRef.current;
-    if (lastProcessed && lastProcessed.loop === currentLoop && lastProcessed.fileIndex === currentFileIndex) {
-      console.log('[AudioPlayer] Ignoring duplicate ended event for same file/loop');
-      return;
-    }
-    
     // Safari/iOS fix: Debounce ended events - ignore if we just processed one within 300ms
     // Safari can fire multiple ended events in rapid succession
     if (now - lastEndedTimeRef.current < 300) {
@@ -239,34 +231,54 @@ export function AudioPlayer({
       }
     }
     
-    // CRITICAL: Mark this file/loop combination as processed
-    lastProcessedEndedRef.current = { loop: currentLoop, fileIndex: currentFileIndex };
+    // Calculate what the next state will be
+    let nextLoop = currentLoop;
+    let nextFileIndex = currentFileIndex;
+    let shouldStop = false;
+    
+    if (currentFileIndex < audioFiles.length - 1) {
+      nextFileIndex = currentFileIndex + 1;
+    } else {
+      nextLoop = currentLoop + 1;
+      if (nextLoop < normalizedLoopCount) {
+        nextFileIndex = 0;
+      } else {
+        shouldStop = true;
+      }
+    }
+    
+    // CRITICAL Safari fix: Check if we already processed a transition to this next state
+    // This prevents duplicate ended events from advancing playback multiple times
+    const lastProcessed = lastProcessedEndedRef.current;
+    if (lastProcessed && lastProcessed.loop === nextLoop && lastProcessed.fileIndex === nextFileIndex) {
+      console.log('[AudioPlayer] Ignoring duplicate ended event - already transitioned to', nextLoop, nextFileIndex);
+      return;
+    }
+    
+    // Mark the transition to the next state as processed BEFORE updating state
+    // This ensures any duplicate ended events that fire before React updates state will be blocked
+    lastProcessedEndedRef.current = { loop: nextLoop, fileIndex: nextFileIndex };
     lastEndedTimeRef.current = now;
     isResettingRef.current = true;
-    console.log('[AudioPlayer] Processing ended event, advancing playback');
+    console.log('[AudioPlayer] Processing ended event, transitioning to loop:', nextLoop, 'file:', nextFileIndex);
     
     // Ensure UI shows playing state during transitions (Safari fix)
     setIsPlaying(true);
     
-    if (currentFileIndex < audioFiles.length - 1) {
+    if (shouldStop) {
+      // All loops complete - stop playback
+      setIsPlaying(false);
+      setCurrentLoop(0);
+      setCurrentFileIndex(0);
+      isPlayingRef.current = false;
+      audioManager.stop(playerIdRef.current);
+    } else if (currentFileIndex < audioFiles.length - 1) {
       // Move to next file in sequence
-      setCurrentFileIndex(prev => prev + 1);
+      setCurrentFileIndex(nextFileIndex);
     } else {
-      // Completed all files in current loop
-      const nextLoop = currentLoop + 1;
-      
-      if (nextLoop < normalizedLoopCount) {
-        // Start next loop
-        setCurrentLoop(nextLoop);
-        setCurrentFileIndex(0);
-      } else {
-        // All loops complete - stop playback
-        setIsPlaying(false);
-        setCurrentLoop(0);
-        setCurrentFileIndex(0);
-        isPlayingRef.current = false;
-        audioManager.stop(playerIdRef.current);
-      }
+      // Start next loop
+      setCurrentLoop(nextLoop);
+      setCurrentFileIndex(0);
     }
   }, [currentLoop, currentFileIndex, audioFiles.length, normalizedLoopCount]);
 
