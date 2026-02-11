@@ -207,12 +207,31 @@ export function AudioPlayer({
       console.error('Audio error code:', audio.error.code);
       console.error('Audio error message:', audio.error.message);
       console.error('Audio source:', audio.src);
+      
+      // Only treat as a real error if it's a network error (code 2) or decode error (code 3)
+      // Ignore MEDIA_ERR_ABORTED (code 1) which can fire during normal load operations
+      // Ignore MEDIA_ERR_SRC_NOT_SUPPORTED (code 4) initially - give it time to load
+      const errorCode = audio.error.code;
+      if (errorCode === 1) {
+        // MEDIA_ERR_ABORTED - loading was aborted, ignore
+        return;
+      }
+      
+      // For all other errors, add a brief delay to verify this is a persistent error
+      // This prevents false positives with local files that may load slightly slower
+      setTimeout(() => {
+        if (!isPlayingRef.current) return;
+        if (audioRef.current?.error && audioRef.current.error.code > 1) {
+          setAudioError(true);
+          setIsPlaying(false);
+          isPlayingRef.current = false;
+          audioManager.stop(playerIdRef.current);
+        }
+      }, 100);
+      return;
     }
     
-    setAudioError(true);
-    setIsPlaying(false);
-    isPlayingRef.current = false;
-    audioManager.stop(playerIdRef.current);
+    // No error object, but error event fired - treat as transient, ignore
   }, []);
 
   // Handle when audio actually starts playing
