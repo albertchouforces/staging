@@ -1996,7 +1996,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "You are <strong>in sight</strong> of another vessel <strong>and/or in clear visibility</strong>. Match the sound signal with the correct action/response.",
         correctAnswer: [
                         ["/sounds/2_Prolonged_Blast.mp3", "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction <strong>OR</strong> the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction"],
-                        ["/sounds/8_Warning_Wake-Up_Signal_ 5.mp3", "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"],
+                        ["/sounds/8_Warning_Wake-Up_Signal_+5.mp3", "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"],
                         ["/sounds/4_Overtake_Stbd.mp3", "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"],
                         ["/sounds/5_Overtake_Port.mp3", "the intention to overtake another vessel on its port side when in a narrow channel or fairway"],
                         ["/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"]
