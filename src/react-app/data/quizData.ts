@@ -2269,7 +2269,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 20,
         question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/11_Aground_100m_Or_More.mp3",
+        audioUrl: "/sounds/10_Aground_100m_Or_More_V2.m4a",
         correctAnswer: ["a vessel 100 m or more in length aground"],
         answerPool: ["a vessel 100 m or more in length aground",
             "a vessel less than 100 m in length aground",
@@ -2414,7 +2414,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 4,
-        question: "A vessel engaged in fishing, when at anchor, and a RAM vessel when carrying out its work at anchor, shall sound in succession one prolonged followed by two short blasts ( _____ . . ) at:",
+        question: "A vessel engaged in fishing while at anchor, and a RAM vessel carrying out its work while at anchor, shall sound in succession one prolonged followed by two short blasts ( _____ . . ) at:",
         audioUrl: "",
         correctAnswer: ["intervals of not more than 2 minutes"],
         answerPool: ["intervals of not more than 2 minutes",
@@ -2425,9 +2425,9 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 5,
-        question: "A vessel towed or if more than one vessel is towed the last vessel of the tow, if it has a crew onboard (&quot;manned&quot;), shall sound in succession one prolonged followed by three short blasts ( _____ . . . ) at:",
+        question: "A vessel being towed, or—if more than one vessel is towed—the last vessel of the tow, shall, when it has a crew onboard (&quot;manned&quot;), sound one prolonged blast followed by three short blasts ( _____ . . . ) at:",
         audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes, and when practical, this signal shall be made immediately <strong>after</strong> the signal made by the towing vessel", "intervals of not more than 2 minutes, and when practical, this signal shall be made immediately <strong>before</strong> the signal made by the towing vessel"],
+        correctAnswer: ["intervals of not more than 2 minutes, and when practical, this signal shall be made immediately <strong>after</strong> the signal made by the towing vessel"],
         answerPool: ["intervals of not more than 2 minutes, and when practical, this signal shall be made immediately <strong>after</strong> the signal made by the towing vessel",
             "intervals of not more than 1 minute, and when practical, this signal shall be made immediately <strong>after</strong> the signal made by the towing vessel",
             "intervals of not more than 2 minutes, and when practical, this signal shall be made immediately <strong>before</strong> the signal made by the towing vessel",
@@ -2460,7 +2460,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 8,
-        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>at anchor</strong> shall ring the _______ rapidly for about (blank)__ at intervals (blank)__.",
+        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>at anchor</strong> shall ring the _______ rapidly for about ______________ at intervals ______________.",
         audioUrl: "",
         correctAnswer: ["bell; 5 seconds; of not more than 1 minute"],
         answerPool: ["bell; 5 seconds; of not more than 1 minute",
@@ -2473,24 +2473,24 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 9,
-        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>at anchor</strong> shall ring the bell rapidly for about (blank)__ in the forepart and immediately afterwards the gong shall be sounded rapidly in the after part for about (blank)__ at intervals of not more than (blank)__.",
+        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>at anchor</strong> shall ring the bell rapidly for about ______________ in the forepart and immediately afterwards the _______ shall be sounded rapidly in the after part for about ______________ at intervals of not more than ______________.",
         audioUrl: "",
-        correctAnswer: ["5 seconds; 5 seconds; 1 minute"],
-        answerPool: ["5 seconds; 5 seconds; 1 minute",
-            "5 seconds; 5 seconds; 2 minutes",
-            "10 seconds; 10 seconds; 1 minute",
-            "10 seconds; 10 seconds; 2 minutes"],
+        correctAnswer: ["5 seconds; gong; 5 seconds; 1 minute"],
+        answerPool: ["5 seconds; gong; 5 seconds; 1 minute",
+            "5 seconds; gong; 5 seconds; 2 minutes",
+            "10 seconds; bell; 10 seconds; 1 minute",
+            "3 seconds; gong; 3 seconds; 2 minutes"],
         description: "35(g)",
         factAudioUrl: "/sounds/8_Anchor_100m_Or_More.mp3"
       },
       {
         id: 10,
-        question: "A vessel at anchor may in addition to the bell or bell and gong sound signals sound in succession one short, one prolonged, and one short blast ( . _____ . ), to give warning of its position and of the possibility of collision to an approaching vessel at:",
+        question: "For a vessel at anchor sounding the optional whistle signal of one short, one prolonged, and one short blast ( . _____ . ), to give warning of its position and of the possibility of collision to an approaching vessel, there:",
         audioUrl: "",
-        correctAnswer: ["an interval of their choice"],
-        answerPool: ["an interval of their choice",
-            "intervals of not more than 1 minute",
-            "intervals of not more than 2 minutes"],
+        correctAnswer: ["is no required interval in which to sound this signal"],
+        answerPool: ["is no required interval in which to sound this signal",
+            "is a requirement to sound this signal at an interval of not more than 1 minute",
+            "is a requirement to sound this signal at an interval of not more than 2 minutes"],
         description: "35(g)",
         factAudioUrl: "/sounds/9_Anchor_Additional_Sound_Signal.mp3"
       },
@@ -2504,23 +2504,23 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
             "5; 10 seconds; 5; 1 minute",
             "5; 5 seconds; 5; 2 minutes"],
         description: "35(h), (g)",
-        factAudioUrl: "/sounds/10_Aground_Less_Than_100m.mp3"
+        factAudioUrl: "/sounds/10_Aground_Less_than_100m_V2.m4a"
       },
       {
         id: 12,
-        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell, followed by rapid sounding of the _______ at intervals of not more than ______________.",
+        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell, followed by rapid sounding of the _______ for ____at intervals of not more than ______________.",
         audioUrl: "",
-        correctAnswer: ["3; 5 seconds; 3; gong; 1 minute"],
-        answerPool: ["3; 5 seconds; 3; gong; 1 minute",
-            "3; 5 seconds; 3; bell; 2 minutes",
-            "5; 10 seconds; 5; gong; 1 minute",
-            "5; 5 seconds; 5; bell; 2 minutes"],
+        correctAnswer: ["3; 5 seconds; 3; gong; 5 seconds; 1 minute"],
+        answerPool: ["3; 5 seconds; 3; gong; 5 seconds; 1 minute",
+            "3; 5 seconds; 3; bell; 5 seconds; 2 minutes",
+            "5; 10 seconds; 5; gong; 3 seconds; 1 minute",
+            "5; 5 seconds; 5; bell; 10 seconds; 2 minutes"],
         description: "35(h), (g)",
-        factAudioUrl: "/sounds/11_Aground_100m_Or_More.mp3"
+        factAudioUrl: "/sounds/10_Aground_100m_Or_More_V2.m4a"
       },
       {
         id: 13,
-        question: "A vessel aground may in addition to the bell or bell and gong signals sound an appropriate whistle signal. ",
+        question: "A vessel aground may, in addition to the required bell or bell-and-gong signals, sound an appropriate whistle signal.",
         audioUrl: "",
         correctAnswer: ["True"],
         answerPool: ["True",
@@ -2530,7 +2530,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 14,
-        question: "A vessel of <strong>12 m or more but less than 20 m</strong> in length is not obligated to give the bell signals for a vessel at anchor or aground, however, if it does not, it must make some other efficient sound signal at:",
+        question: "A vessel of <strong>12 m or more but less than 20 m</strong> in length is <ul>not</ul> obligated to give the bell signals for a vessel at anchor or aground, however, if it does not, it must make some other efficient sound signal at:",
         audioUrl: "",
         correctAnswer: ["intervals of not more than 2 minutes"],
         answerPool: ["intervals of not more than 2 minutes",
@@ -2541,7 +2541,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 15,
-        question: "A vessel of <strong>less than 12 m</strong> in length is not required to give any of the sound signals listed in Rule 35 – Sound Signals in Restricted Visibility, but if it does not, it must make some other efficient sound signal at: ",
+        question: "A vessel of <strong>less than 12 m</strong> in length is <ul>not</ul> required to give any of the sound signals listed in Rule 35 – Sound Signals in Restricted Visibility, but if it does not, it must make some other efficient sound signal at: ",
         audioUrl: "",
         correctAnswer: ["intervals of not more than 2 minutes"],
         answerPool: ["intervals of not more than 2 minutes",
@@ -2568,7 +2568,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     questions: [
       {
         id: 1,
-        question: "The sound signals prescribed in Rule 35 – Sound Signals in Restricted Visibility – shall be used:",
+        question: "The sound signals prescribed in Rule 35 – Sound Signals in Restricted Visibility, shall be used:",
         audioUrl: "",
         correctAnswer: ["when in or near an area of restricted visibility, by day or night"],
         answerPool: ["when in or near an area of restricted visibility, by day or night",
@@ -2714,8 +2714,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 13,
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
         audioUrl: ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"],
-        correctAnswer: ["vessel towing another vessel; the vessel being towed or if more than one vessel is being towed the last vessel of the tow has a crew onboard (&quot;manned&quot;)", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel towing another vessel; the vessel being towed or if more than one vessel is being towed the last vessel of the tow has a crew onboard (&quot;manned&quot;)",
+        correctAnswer: ["vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;)", "intervals of not more than 2 minutes"],
+        answerPool: ["vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;)",
             "it is not a recognized sound signal",
             "intervals of not more than 2 minutes",
             "intervals of not more than 1 minute"],
@@ -2774,10 +2774,10 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         id: 18,
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
         audioUrl: "/sounds/9_Anchor_Additional_Sound_Signal.mp3",
-        correctAnswer: ["optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel", "any interval is acceptable"],
+        correctAnswer: ["optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel", "there is no required interval in which to sound this signal"],
         answerPool: ["optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel",
             "it is not a recognized sound signal",
-            "any interval is acceptable",
+            "there is no required interval in which to sound this signal",
             "intervals of not more than 1 minute"],
         description: "35(g)",
         fact: ""
@@ -2797,7 +2797,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 20,
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/11_Aground_100m_Or_More.mp3",
+        audioUrl: "/sounds/10_Aground_100m_Or_More_V2.m4a",
         correctAnswer: ["vessel 100 m or more in length aground", "intervals of not more than 1 minute"],
         answerPool: ["vessel 100 m or more in length aground",
             "vessel less than 100 m in length aground",
@@ -2824,7 +2824,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         audioUrl: "/sounds/Pilot Vsl_Underway but stopped_FV2.m4a",
         correctAnswer: ["pilot vessel engaged in pilotage duties underway but stopped and making no way through the water", "intervals of not more than 2 minutes"],
         answerPool: ["pilot vessel engaged in pilotage duties underway but stopped and making no way through the water",
-            "vessel towing another vessel; the vessel being towed or if more than one vessel is being towed the last vessel of the tow has a crew onboard (&quot;manned&quot;)",
+            "vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;)",
             "intervals of not more than 1 minute",
             "intervals of not more than 2 minutes"],
         description: "35(k), (b)",
@@ -2887,7 +2887,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
                         ["/sounds/PDV Underway Not Making Way_High Pitch.m4a", "power-driven vessel underway but stopped and making no way through the water; interval of NMT 2 min"],
-                        [["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"], "vessel towing another vessel; the vessel being towed or if more than one vessel is being towed the last vessel of the tow has a crew onboard (&quot;manned&quot;); interval NMT 2 min"],
+                        [["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"], "vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;); interval NMT 2 min"],
                         ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel restricted in its ability to manoeuvre; interval NMT 2 min"],
                         ["/sounds/8_Anchor_100m_Or_More.mp3", "vessel 100 m or more in length at anchor; interval NMT 1 min"]
                         ],
@@ -2901,7 +2901,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel constrained by its draught; interval NMT 2 min"],
                         ["/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
                         ["/sounds/12_Pilotage_Duties_Additional.mp3", "the identity signal of a pilot vessel engaged in pilotage duties"],
-                        ["/sounds/10_Aground_Less_Than_100m.mp3", "vessel less than 100 m in length aground; interval NMT 1 min"]
+                        ["/sounds/10_Aground_Less_than_100m_V2.m4a", "vessel less than 100 m in length aground; interval NMT 1 min"]
                         ],
         description: "",
         fact: "35(c); 35(g); 35(h), (g); 35(k)"
@@ -2911,7 +2911,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
         correctAnswer: [
                         ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "sailing vessel; interval NMT 2 min"],
-                        ["/sounds/11_Aground_100m_Or_More.mp3", "vessel 100 m or more in length aground; interval NMT 1 min"],
+                        ["/sounds/10_Aground_100m_Or_More_V2.m4a", "vessel 100 m or more in length aground; interval NMT 1 min"],
                         ["/sounds/Pilot Vsl_Making Way.m4a", "pilot vessel engaged in pilotage duties making way through the water; interval NMT 2 min"],
                         ["/sounds/Prolonged Blast_Low Pitch.m4a", "power-driven vessel making way through the water; interval of NMT 2 min"]
                         ],
@@ -2948,8 +2948,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         correctAnswer: [
                         ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel engaged in fishing at anchor; interval NMT 2 min"],
                         [["/sounds/7_Anchor_Less_Than_100m.mp3", "/sounds/12_Pilotage_Duties_Additional.mp3"], "pilot vessel less than 100 m in length at anchor engaged in pilotage duties; interval NMT 1 min"],
-                        ["/sounds/11_Aground_100m_Or_More.mp3", "vessel 100 m or more in length aground; interval NMT 1 min"],
-                        [["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"], "vessel towing another vessel; the vessel being towed or if more than one vessel is being towed the last vessel of the tow has a crew onboard (&quot;manned&quot;); interval NMT 2 min"]
+                        ["/sounds/10_Aground_100m_Or_More_V2.m4a", "vessel 100 m or more in length aground; interval NMT 1 min"],
+                        [["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"], "vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;); interval NMT 2 min"]
                         ],
         description: "",
         fact: "35(c), (e); 35(d), (c); 35(h), (g); 35(k), (g)"
@@ -2960,7 +2960,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         correctAnswer: [
                         ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "vessel restricted in its ability to manoeuvre at anchor; interval NMT 2 min"],
                         [["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot Vsl_Identity Signal_Low Pitch.m4a"], "pilot vessel 100 m or more in length at anchor engaged in pilotage duties; interval NMT 1 min"],
-                        ["/sounds/10_Aground_Less_Than_100m.mp3", "vessel less than 100 m in length aground; interval NMT 1 min"],
+                        ["/sounds/10_Aground_Less_than_100m_V2.m4a", "vessel less than 100 m in length aground; interval NMT 1 min"],
                         ["/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"]
                         ],
         description: "",
@@ -2973,8 +2973,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                         ["/sounds/7_Anchor_Less_Than_100m.mp3", "vessel less than 100 m in length at anchor; interval NMT 1 min"],
                         ["/sounds/8_Anchor_100m_Or_More.mp3", "vessel 100 m or more in length at anchor; interval NMT 1 min"],
                         ["/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
-                        ["/sounds/10_Aground_Less_Than_100m.mp3", "vessel less than 100 m in length aground; interval NMT 1 min"],
-                        ["/sounds/11_Aground_100m_Or_More.mp3", "vessel 100 m or more in length aground; interval NMT 1 min"]
+                        ["/sounds/10_Aground_Less_than_100m_V2.m4a", "vessel less than 100 m in length aground; interval NMT 1 min"],
+                        ["/sounds/10_Aground_100m_Or_More_V2.m4a", "vessel 100 m or more in length aground; interval NMT 1 min"]
                         ],
         description: "",
         fact: "35(g); 35(h), (g)"
