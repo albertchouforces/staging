@@ -2530,7 +2530,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 14,
-        question: "A vessel of <strong>12 m or more but less than 20 m</strong> in length is <ul>not</ul> obligated to give the bell signals for a vessel at anchor or aground, however, if it does not, it must make some other efficient sound signal at:",
+        question: "A vessel of <strong>12 m or more but less than 20 m</strong> in length is <u>not</u> obligated to give the bell signals for a vessel at anchor or aground, however, if it does not, it must make some other efficient sound signal at:",
         audioUrl: "",
         correctAnswer: ["intervals of not more than 2 minutes"],
         answerPool: ["intervals of not more than 2 minutes",
@@ -2541,7 +2541,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 15,
-        question: "A vessel of <strong>less than 12 m</strong> in length is <ul>not</ul> required to give any of the sound signals listed in Rule 35 – Sound Signals in Restricted Visibility, but if it does not, it must make some other efficient sound signal at: ",
+        question: "A vessel of <strong>less than 12 m</strong> in length is <u>not</u> required to give any of the sound signals listed in Rule 35 – Sound Signals in Restricted Visibility, but if it does not, it must make some other efficient sound signal at: ",
         audioUrl: "",
         correctAnswer: ["intervals of not more than 2 minutes"],
         answerPool: ["intervals of not more than 2 minutes",
