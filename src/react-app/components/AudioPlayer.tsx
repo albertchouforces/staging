@@ -409,10 +409,7 @@ export function AudioPlayer({
       <Volume2 size={12} className="text-gray-400 absolute top-1 right-1" />
       <div className="relative mb-1">
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleAudioPlayback();
-          }}
+          onClick={toggleAudioPlayback}
           className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full transition-colors text-white ${
             audioError 
               ? `${colorClass.errorBg} ${colorClass.errorHover}` 

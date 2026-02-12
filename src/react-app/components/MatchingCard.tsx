@@ -282,12 +282,13 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
       const audioFiles = Array.isArray(item.value) ? item.value as string[] : [item.value as string];
       const label = item.label || "Play audio";
       return (
-        <div
+        <button
           key={item.id}
           onClick={onClick}
+          disabled={isMatched}
           className={`${baseClasses} ${stateClasses} flex-col gap-2 relative overflow-hidden`}
         >
-          <div className="min-w-0">
+          <div className="min-w-0" onClick={(e) => e.stopPropagation()}>
             <AudioPlayer
               audioFiles={audioFiles}
               loopCount={1}
@@ -300,18 +301,19 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
               <Check className="text-green-600 bg-white rounded-full p-1" size={24} />
             </div>
           )}
-        </div>
+        </button>
       );
     }
 
     if (item.type === 'audio-or' && item.orValues) {
       return (
-        <div
+        <button
           key={item.id}
           onClick={onClick}
+          disabled={isMatched}
           className={`${baseClasses} ${stateClasses} flex-col gap-1.5 relative justify-center overflow-hidden p-2`}
         >
-          <div className="flex flex-wrap items-center justify-center gap-1 w-full">
+          <div className="flex flex-wrap items-center justify-center gap-1 w-full" onClick={(e) => e.stopPropagation()}>
             {item.orValues.map((audioFiles, index) => {
               const label = item.orLabels?.[index] || "Play audio";
               return (
@@ -336,7 +338,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
               <Check className="text-green-600 bg-white rounded-full p-1" size={20} />
             </div>
           )}
-        </div>
+        </button>
       );
     }
 
