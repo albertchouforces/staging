@@ -351,10 +351,10 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
           const rightItem = rightItems[index];
           return (
             <Fragment key={index}>
-              <div>
+              <div className="h-full flex">
                 {renderItem(leftItem, true)}
               </div>
-              <div>
+              <div className="h-full flex">
                 {renderItem(rightItem, false)}
               </div>
             </Fragment>
