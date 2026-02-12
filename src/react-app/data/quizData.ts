@@ -1898,7 +1898,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
                     ],
         description: "",
         fact: "Rule 34(d)",
-        audioUrl: "/sounds/8_Warning_Wake-Up_Signal_ 5.mp3",
+        audioUrl: "/sounds/8_Warning_Wake-Up_Signal_+5.mp3",
       },
       {
         id: 16,
