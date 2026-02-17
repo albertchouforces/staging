@@ -2257,7 +2257,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       {
         id: 19,
         question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/10_Aground_Less_Than_100m.mp3",
+        audioUrl: "/sounds/10_Aground_Less_than_100m_V2.m4a",
         correctAnswer: ["a vessel less than 100 m in length aground"],
         answerPool: ["a vessel less than 100 m in length aground",
             "a vessel 100 m or more in length aground",
