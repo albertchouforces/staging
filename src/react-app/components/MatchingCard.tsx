@@ -288,7 +288,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
           disabled={isMatched}
           className={`${baseClasses} ${stateClasses} flex-col gap-2 relative overflow-hidden`}
         >
-          <div className="min-w-0" onClick={(e) => e.stopPropagation()}>
+          <div className="min-w-0">
             <AudioPlayer
               audioFiles={audioFiles}
               loopCount={1}
@@ -313,7 +313,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
           disabled={isMatched}
           className={`${baseClasses} ${stateClasses} flex-col gap-1.5 relative justify-center overflow-hidden p-2`}
         >
-          <div className="flex flex-wrap items-center justify-center gap-1 w-full" onClick={(e) => e.stopPropagation()}>
+          <div className="flex flex-wrap items-center justify-center gap-1 w-full">
             {item.orValues.map((audioFiles, index) => {
               const label = item.orLabels?.[index] || "Play audio";
               return (
