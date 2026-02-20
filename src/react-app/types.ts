@@ -41,25 +41,7 @@ export interface QuizConfig {
   id: string;          // Unique identifier for the quiz
   title: string;
   description: string;
-  themeColor: 
-    | 'blue' 
-    | 'green' 
-    | 'sky' 
-    | 'red' 
-    | 'purple' 
-    | 'orange' 
-    | 'yellow'
-    | 'pink'
-    | 'indigo'
-    | 'teal'
-    | 'rose'
-    | 'amber'
-    | 'lime'
-    | 'cyan'
-    | 'violet'
-    | 'fuchsia'
-    | 'emerald'
-    | 'grey';
+  themeColor: string; // Accepts predefined color names (blue, green, etc.) or hex codes (#RRGGBB)
   quizKey: string;     // Unique key for storage and database identification
   startScreenImage?: string;
   studyGuide?: string; // Optional URL or path to study guide image

@@ -16,8 +16,63 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
   const [showStudyGuide, setShowStudyGuide] = useState(false);
   const [studyGuideType, setStudyGuideType] = useState<'image' | 'pdf' | 'web' | 'other'>('image');
 
-  // Map theme colors to actual Tailwind classes
-  const getColorClasses = useCallback((color: string) => {
+  // Helper to check if a string is a hex color
+  const isHexColor = useCallback((color: string): boolean => {
+    return /^#([0-9A-F]{3}){1,2}$/i.test(color);
+  }, []);
+
+  // Helper to darken a hex color for hover states
+  const darkenHexColor = useCallback((hex: string, amount: number = 20): string => {
+    // Remove # if present
+    const color = hex.replace('#', '');
+    
+    // Convert to RGB
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+    
+    // Darken by subtracting amount
+    const newR = Math.max(0, r - amount);
+    const newG = Math.max(0, g - amount);
+    const newB = Math.max(0, b - amount);
+    
+    // Convert back to hex
+    return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+  }, []);
+
+  // Helper to lighten a hex color for backgrounds
+  const lightenHexColor = useCallback((hex: string, amount: number = 220): string => {
+    // Remove # if present
+    const color = hex.replace('#', '');
+    
+    // Convert to RGB
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+    
+    // Lighten by moving towards 255
+    const newR = Math.min(255, r + amount);
+    const newG = Math.min(255, g + amount);
+    const newB = Math.min(255, b + amount);
+    
+    // Convert back to hex
+    return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+  }, []);
+
+  // Map theme colors to actual Tailwind classes or generate hex-based styles
+  const getColorClasses = useCallback((color: string): { 
+    title: string;
+    button: string;
+    buttonHover: string;
+    studyGuideText: string;
+    studyGuideHover: string;
+    modalHeader: string;
+    modalTitle: string;
+    isHex?: boolean;
+    hexColor?: string;
+    hexColorDark?: string;
+    hexColorLight?: string;
+  } => {
     const colorMap: Record<string, { 
       title: string;
       button: string;
@@ -191,8 +246,25 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
       }
     };
 
+    // Check if it's a hex color
+    if (isHexColor(color)) {
+      return {
+        title: '',
+        button: '',
+        buttonHover: '',
+        studyGuideText: '',
+        studyGuideHover: '',
+        modalHeader: '',
+        modalTitle: '',
+        isHex: true,
+        hexColor: color,
+        hexColorDark: darkenHexColor(color),
+        hexColorLight: lightenHexColor(color)
+      };
+    }
+
     return colorMap[color] || colorMap.blue;
-  }, []);
+  }, [isHexColor, darkenHexColor, lightenHexColor]);
 
   const colors = getColorClasses(config.themeColor);
 
@@ -316,7 +388,10 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
         <div className="px-6 pb-6 pt-2 flex flex-col flex-grow">
           {/* Top section that can grow/shrink */}
           <div className="flex-grow">
-            <h3 className={`text-xl font-bold ${colors.title} mb-2 text-center`}>
+            <h3 
+              className={`text-xl font-bold mb-2 text-center ${colors.title}`}
+              style={colors.isHex ? { color: colors.hexColor } : undefined}
+            >
               {config.title}
             </h3>
             <p className="text-gray-600 mb-4 text-center">
@@ -328,7 +403,10 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
               <div className="mb-6 flex justify-center">
                 <button
                   onClick={handleStudyGuideClick}
-                  className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium ${colors.studyGuideText} ${colors.studyGuideHover} rounded-lg transition-colors`}
+                  className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${colors.studyGuideText} ${colors.studyGuideHover}`}
+                  style={colors.isHex && colors.hexColor ? { color: colors.hexColor } : undefined}
+                  onMouseEnter={(e) => colors.isHex && colors.hexColorLight && (e.currentTarget.style.backgroundColor = colors.hexColorLight)}
+                  onMouseLeave={(e) => colors.isHex && (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
                   {studyGuideButton.icon}
                   {studyGuideButton.text}
@@ -351,7 +429,10 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
 
             <button
               onClick={onStart}
-              className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 ${colors.button} ${colors.buttonHover} text-white rounded-lg transition-colors font-semibold`}
+              className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 text-white rounded-lg transition-colors font-semibold ${colors.button} ${colors.buttonHover}`}
+              style={colors.isHex && colors.hexColor ? { backgroundColor: colors.hexColor } : undefined}
+              onMouseEnter={(e) => colors.isHex && colors.hexColorDark && (e.currentTarget.style.backgroundColor = colors.hexColorDark)}
+              onMouseLeave={(e) => colors.isHex && colors.hexColor && (e.currentTarget.style.backgroundColor = colors.hexColor)}
             >
               <Play size={20} />
               Start Quiz
@@ -364,8 +445,14 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
       {showStudyGuide && studyGuideType === 'image' && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-            <div className={`p-4 border-b border-gray-200 flex justify-between items-center ${colors.modalHeader}`}>
-              <h3 className={`text-lg font-semibold ${colors.modalTitle}`}>Study Guide</h3>
+            <div 
+              className={`p-4 border-b border-gray-200 flex justify-between items-center ${colors.modalHeader}`}
+              style={colors.isHex ? { backgroundColor: colors.hexColorLight } : undefined}
+            >
+              <h3 
+                className={`text-lg font-semibold ${colors.modalTitle}`}
+                style={colors.isHex ? { color: colors.hexColor } : undefined}
+              >Study Guide</h3>
               <button
                 onClick={() => setShowStudyGuide(false)}
                 className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
