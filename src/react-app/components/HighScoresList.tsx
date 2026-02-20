@@ -20,6 +20,52 @@ export function HighScoresList({
 }: HighScoresListProps) {
   const accentColor = quizConfig.themeColor;
 
+  // Convert named colors to hex values, pass through hex colors
+  const getColorValue = (color: string) => {
+    if (color.startsWith('#')) {
+      return color;
+    }
+    
+    const colorMap: Record<string, string> = {
+      blue: '#2563eb',
+      green: '#16a34a',
+      red: '#dc2626',
+      purple: '#9333ea',
+      orange: '#ea580c',
+      pink: '#ec4899',
+      sky: '#0ea5e9',
+      cyan: '#06b6d4',
+      teal: '#14b8a6',
+      indigo: '#6366f1',
+      violet: '#8b5cf6',
+      rose: '#f43f5e',
+      amber: '#f59e0b',
+      fuchsia: '#d946ef',
+      lime: '#84cc16',
+      emerald: '#10b981',
+      yellow: '#eab308'
+    };
+    
+    return colorMap[color] || '#2563eb';
+  };
+
+  // Lighten a hex color for backgrounds
+  const lightenHexColor = (hex: string, amount: number = 220) => {
+    const color = hex.replace('#', '');
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+    
+    const newR = Math.min(255, r + amount);
+    const newG = Math.min(255, g + amount);
+    const newB = Math.min(255, b + amount);
+    
+    return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+  };
+
+  const colorValue = getColorValue(accentColor);
+  const colorLight = lightenHexColor(colorValue);
+
   const formatTime = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
@@ -44,12 +90,15 @@ export function HighScoresList({
     <div className="w-full">
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-          <MedalIcon size={20} className={`text-${accentColor}-600`} />
+          <MedalIcon size={20} style={{ color: colorValue }} />
           {title}
         </h4>
         <button
           onClick={onReset}
-          className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium text-${accentColor}-600 hover:bg-${accentColor}-50 transition-colors`}
+          className="flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium transition-colors"
+          style={{ color: colorValue }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colorLight}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           title="Reset Local Top Scores"
         >
           <Trash2 size={16} />
@@ -60,7 +109,7 @@ export function HighScoresList({
         <div className="bg-white rounded-lg shadow-sm overflow-x-auto">
           <table className="w-full min-w-[300px]">
             <thead>
-              <tr className={headerBackground ? `bg-${accentColor}-50` : ''}>
+              <tr style={headerBackground ? { backgroundColor: colorLight } : undefined}>
                 <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap"></th>
                 <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600">Name</th>
                 <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Score</th>
