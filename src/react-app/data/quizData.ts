@@ -1014,7 +1014,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Greater than 20 m",
       "Unknown"],
     description: "25(b)",
-    fact: "",
+    fact: "Sailing vessels under 20 m may display a combined sidelights-and-sternlight lantern at or near the masthead for maximum visibility. Rule 25(b), (a)",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
     },
     {
@@ -2509,7 +2509,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 12,
-        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell, followed by rapid sounding of the _______ for ____at intervals of not more than ______________.",
+        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell, followed by rapid sounding of the _______ for ____ at intervals of not more than ______________.",
         audioUrl: "",
         correctAnswer: ["3; 5 seconds; 3; gong; 5 seconds; 1 minute"],
         answerPool: ["3; 5 seconds; 3; gong; 5 seconds; 1 minute",
