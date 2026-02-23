@@ -437,7 +437,7 @@ export function FillInTheBlankCard({
                       : 'bg-purple-50 hover:bg-purple-100 border-2 border-purple-300'
                   }`}
                 >
-                  <div dangerouslySetInnerHTML={{ __html: option }} />
+                  <div className="select-none pointer-events-none [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ul]:pointer-events-none [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_ol]:pointer-events-none [&_li]:mb-1 [&_li]:pointer-events-none [&_*]:pointer-events-none" dangerouslySetInnerHTML={{ __html: option }} />
                 </button>
               ))}
             </div>
