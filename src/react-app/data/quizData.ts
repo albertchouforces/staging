@@ -1119,7 +1119,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "26(c)(iii)",
-    fact: "Fishing vessels turn off their sidelights and sternlight when they aren’t making way. Rule 26(b), (c)",
+    fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way. Rule 26(b), (c)",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
     },
     {
@@ -1131,7 +1131,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "26(a); 26(b)(iii)",
-    fact: "Fishing vessels don’t follow the usual anchor light rule! Even when anchored, they keep the <strong>special lights and shapes for fishing</strong> (Rule 26), not the standard anchor lights and ball (Rule 30). This helps other vessels know they’re still engaged in fishing.",
+    fact: "Vessels engaged in fishing don’t follow the usual anchor light rule! Even when anchored, they keep the <strong>special lights and shapes for fishing</strong> (Rule 26), not the standard anchor lights and ball (Rule 30). This helps other vessels know they’re still engaged in fishing.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
     },
     {
@@ -1143,7 +1143,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "23(b), (a)",
-    fact: "",
+    fact: "An air-cushion vessel falls under the category of power-driven vessel. The lights of a power-driven vessel only tell you that they are underway—not whether they are making way or not making way. A handy reminder: the rule is called <strong>Power-driven Vessels Underway</strong> (Rule 23). ",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
     },
     {
@@ -1155,7 +1155,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "28(b); 23(a)",
-    fact: "",
+    fact: "A vessel constrained by its draught is, by definition, always a power‑driven vessel. And remember: the lights of a power‑driven vessel only show that it’s underway—not whether it’s making way or not. Rule 3(h)",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
     },
     {
@@ -1167,7 +1167,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "24(a), (d); 23(a)",
-    fact: "",
+    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
     },
     {
@@ -1179,7 +1179,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "26(a), (b)(iii)",
-    fact: "When vessels engaged in trawling are not making way through the water they will let us know by turning off their sidelights and sternlight. Rule 26(b)(iii)",
+    fact: "Vessels engaged in fishing don’t follow the usual anchor light rule! Even when anchored, they keep the <strong>special lights and shapes for fishing</strong> (Rule 26), not the standard anchor lights and ball (Rule 30). This helps other vessels know they’re still engaged in fishing.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
     },
     {
@@ -1191,7 +1191,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "24(a), (d); 23(a)",
-    fact: "",
+    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
     },
     {
@@ -1203,7 +1203,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "27(f); 23(a); Title of Rule 23",
-    fact: "",
+    fact: "Rule 27(f), which applies to vessels engaged in mineclearance operations, sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that mineclearance vessels display lights that only indicate they are underway—not whether they’re making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
     },
     {
@@ -1215,7 +1215,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway",
       "At anchor"],
     description: "30(d)",
-    fact: "",
+    fact: "Under Rule 3(i), a vessel aground cannot be regarded as “underway”.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
     },
     {
@@ -1227,7 +1227,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "25(a), Title of Rule 25",
-    fact: "",
+    fact: "The lights of a sailing vessel or a vessel under oars only tells you that they are underway—not whether they are making way or not making way. A handy reminder: the rule is called <strong>Sailing Vessels Underway and Vessels Under Oars</strong> (Rule 25).",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
     },
     {
@@ -1239,7 +1239,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "23(a), Title of Rule 23",
-    fact: "",
+    fact: "Some vessels indicate their making-way status by turning off their sidelights and sternlight when not making way. Power-driven vessels don’t do this because turning off these lights would make them invisible from astern and prevent other vessels from determining their aspect from any angle, which is critical for applying the correct Rules in a risk of collision situation.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
     },
     {
@@ -1251,7 +1251,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "Aground"],
     description: "24(a), (d); 23(a); Title of Rule 23",
-    fact: "",
+    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way. ",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
     },
     {
@@ -1263,7 +1263,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "26(a), (b)(iii)",
-    fact: "",
+    fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
     },
     {
@@ -1275,7 +1275,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "27(a)(iii)",
-    fact: "",
+    fact: "When a vessel not under command is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are off, it’s telling you it’s not making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
     },
     {
@@ -1287,7 +1287,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "27(b)(iii)",
-    fact: "",
+    fact: "When a RAM vessel is underway and turns off its masthead light(s), sidelights, and sternlight while still displaying the all‑round red‑over‑white‑over‑red lights, it’s telling you it’s not making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
     },
     {
@@ -1299,7 +1299,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "25(a), Title of Rule 25",
-    fact: "",
+    fact: "Some vessels indicate their making-way status by turning off their sidelights and sternlight when not making way. Sailing vessels don’t do this because turning off these lights would make them invisible at night!",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
     },
     {
@@ -1311,7 +1311,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "Aground"],
     description: "24(c), (d); 23(a); Title of Rule 23",
-    fact: "",
+    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
     },
     {
@@ -1323,7 +1323,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "26(c)(iii)",
-    fact: "",
+    fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
     },
     {
@@ -1335,7 +1335,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "Aground"],
     description: "24(a), (d); 23(a); Title of Rule 23",
-    fact: "",
+    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
     },
     {
@@ -1347,7 +1347,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "26(b)(iii)",
-    fact: "",
+    fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
     },
     {
@@ -1359,7 +1359,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Underway and making way",
       "At anchor"],
     description: "29(a)(ii)",
-    fact: "",
+    fact: "The lights of a vessel engaged in pilotage duties only tell you that they are underway—not whether they are making way or not making way.",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
     }
   ]
@@ -1380,7 +1380,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     questions: [
     {
     id: 1,
-    question: "What is the length of this vessel?",
+    question: "This image represents a:",
     correctAnswer: ["Power-driven vessel; head-on aspect; may be 50 m or greater in length; underway"],
     answerPool: ["Power-driven vessel; head-on aspect; may be 50 m or greater in length; underway",
       "Power-driven vessel; head-on aspect; less than 50 m in length",
@@ -1489,11 +1489,11 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
     id: 10,
     question: "This image represents a: ",
-    correctAnswer: ["Vessel aground; port aspect; may be greater than 50 m in length"],
-    answerPool: ["Vessel aground; port aspect; may be greater than 50 m in length",
-      "Vessel not under command at anchor; port aspect; may be greater than 50 m in length",
+    correctAnswer: ["Vessel aground; port aspect; may be 50 m or greater in length"],
+    answerPool: ["Vessel aground; port aspect; may be 50 m or greater in length",
+      "Vessel not under command at anchor; port aspect; may be 50 m or greater in length ",
       "Vessel engaged in fishing at anchor; nets are fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing;  stern aspect",
-      "Vessel engaged in pilotage duties; starboard aspect; may be greater than 50 m in length; underway"],
+      "Vessel engaged in pilotage duties; starboard aspect; may be 50 m or greater in length"],
     description: "30(d), (a)",
     fact: "",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
@@ -1551,20 +1551,20 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     question: "This image represents a: ",
     correctAnswer: ["Vessel not under command; underway but not making way"],
     answerPool: ["Vessel not under command; underway but not making way",
-      "Vessel engaged in trawling, net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; underway but not making way",
+      "Vessel engaged in trawling; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; underway but not making way",
       "Vessel constrained by its draught; underway",
       "Vessel restricted in its ability to manoeuvre; underway and making way"],
     description: "Rule 27(a)",
-    fact: "Vessels Not Under Command (NUC) aren’t the same as vessels Restricted in their Ability to Manoeuvre (RAM). NUC vessels are limited in their manoeuvrability due to exceptional circumstances—like a steering gear. Rule 3(f)",
+    fact: "Vessels Not Under Command (NUC) aren’t the same as vessels Restricted in their Ability to Manoeuvre (RAM). NUC vessels are limited in their manoeuvrability due to exceptional circumstances—like a steering gear breakdown. Rule 3(f)",
     imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
     },
     {
     id: 16,
     question: "This image represents a: ",
-    correctAnswer: ["Vessel restricted in its ability to manoeuvre; underway and but not making way"],
-    answerPool: ["Vessel restricted in its ability to manoeuvre; underway and but not making way",
+    correctAnswer: ["Vessel restricted in its ability to manoeuvre; underway but not making way"],
+    answerPool: ["Vessel restricted in its ability to manoeuvre; underway but not making way",
       "Vessel not under command; underway but not making way",
-      "Vessel engaged in fishing, net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; underway and making way",
+      "Vessel engaged in fishing; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; underway and making way",
       "Vessel constrained by its draught; underway"],
     description: "Rule 27(b)",
     fact: "Vessels Restricted in their Ability to Manoeuvre (RAM) aren’t the same as vessels Not Under Command (NUC). RAM vessels are limited in their manoeuvrability because of their work—like diving operations, laying submarine cables, or doing underwater surveys. Rule 3(g)",
