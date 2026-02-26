@@ -158,12 +158,14 @@
 //
 // FILL-IN-THE-BLANK QUESTIONS:
 //
-// To create fill-in-the-blank questions, add `fillInTheBlank: true` to the quiz config.
-// When enabled, questions can use (blank) markers that users click to fill in.
+// Fill-in-the-blank questions can be mixed with regular multiple-choice questions in the same quiz.
+// To create a fill-in-the-blank question, add `type: "fill-in-the-blank"` to the question object.
+// Questions without a type field (or with `type: "multiple-choice"`) will be regular MC questions.
 //
 //    Example fill-in-the-blank question:
 //    {
 //      id: 1,
+//      type: "fill-in-the-blank",  // REQUIRED for fill-in-the-blank questions
 //      question: "The capital of France is (blank) and the Eiffel Tower is (blank) meters tall.",
 //      correctAnswer: ["Paris", "330", "London", "Berlin", "Rome"],  // First 2 are correct answers for the blanks, rest are distractors
 //      description: "French geography and landmarks",
@@ -172,10 +174,12 @@
 //    }
 //
 // Fill-in-the-blank format:
+//    * Add `type: "fill-in-the-blank"` to the question object
 //    * Use (blank) in the question text to mark where blanks should appear (must be exactly this text with parentheses)
 //    * correctAnswer must be an array of strings
 //    * The first N answers (where N = number of blanks) are the correct answers in order
-//    * Any additional answers beyond the first N are distractor options
+//    * Any additional answers beyond the first N are distractor options (wrong answers)
+//    * All answers (correct + distractors) are shuffled together as clickable options
 //    * Each blank is worth 1 point on the leaderboard
 //    * Wrong answers reveal the correct answer for that blank
 //    * Questions and answer options can both be randomized if enabled in quiz config
@@ -184,11 +188,31 @@
 //    Example with 3 blanks and 2 distractors:
 //    {
 //      id: 2,
+//      type: "fill-in-the-blank",
 //      question: "Water freezes at (blank)°C, boils at (blank)°C, and has a pH of (blank).",
 //      correctAnswer: ["0", "100", "7", "50", "14"],  // First 3 fill blanks, last 2 are distractors
 //      description: "Properties of water",
 //      fact: "Water is one of the few substances that expands when it freezes!",
 //      imageUrl: "/images/science/water.jpg"
+//    }
+//
+//    Example quiz with MIXED question types (MC + fill-in-the-blank):
+//    {
+//      id: 1,
+//      question: "What is the largest planet in our solar system?",
+//      correctAnswer: "Jupiter",  // Regular MC question - no type field needed
+//      description: "A planet in our solar system",
+//      fact: "Jupiter is more than twice as massive as all other planets combined!",
+//      imageUrl: "/images/space/jupiter.jpg"
+//    },
+//    {
+//      id: 2,
+//      type: "fill-in-the-blank",  // Fill-in-the-blank question - type field required
+//      question: "Earth has (blank) moon(s) and Mars has (blank) moon(s).",
+//      correctAnswer: ["1", "2", "0", "3", "4"],  // First 2 are correct, rest are distractors
+//      description: "Moons in our solar system",
+//      fact: "Mars has two small moons: Phobos and Deimos!",
+//      imageUrl: "/images/space/moons.jpg"
 //    }
 //
 // Available theme colors:
@@ -3014,7 +3038,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The word “vessel” includes every description of water craft, including (blank), WIG craft and seaplanes, used or capable of being used as a means of (blank) on water. <i>R3(a)</i>",
         correctAnswer: ["non-displacement craft", "transportation", "amphibious", "taxiing"],
         description: "",
-        fact: "A WIG craft can travel further on the same fuel and with the same payload as an aircraft and much faster than a ship. This enables WIG craft to fill the gap between low cost, slow sea freight and fast, yet high-cost air freight."
+        fact: "A WIG craft can travel further on the same fuel and with the same payload as an aircraft and much faster than a ship. This enables WIG craft to fill the gap between low cost, slow sea freight and fast, yet high-cost air freight.<br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Picture1.jpg'>[Click Here for Image]</a>"
       },
       {
         id: 2,
@@ -3507,6 +3531,656 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
     ]
   },
+{
+  config: {
+    id: "3idb1",
+    title: "Interpretation – Definition Builder – Part I",
+    description: "",
+    themeColor: "grey",
+    quizKey: "3idb1",
+    startScreenImage: "/images/naval-operations-branch-600.png",
+    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
+    factHeading: "",
+    category: "Col Regs Rule 3",
+    fillInTheBlank: true,
+    hidden: false
+  },
+  questions: [
+    {
+      id: 1,
+      question:
+        "“Air cushion vessel” means a vessel designed so that the whole or a significant part of its (blank) can be supported, whether at rest or in motion, by a continuously generated cushion of (blank) dependent for its effectiveness on the proximity of the vessel to the surface over which it operates.",
+      correctAnswer: ["weight", "air", "body", "steam", "moisture"],
+      description: "",
+      fact:
+        "Air cushion vessels ride on a <i>continuously generated cushion of air</i>, allowing the hull to lift above the surface. This drastically reduces friction and lets them glide over water, mud, sand, and even ice."
+    },
+    {
+      id: 2,
+      question:
+        "“Barge” means a (blank) barge, scow, dredge, pile-driver, (blank), pontoon or houseboat.",
+      correctAnswer: ["non-self-propelled", "hopper", "self-propelled", "engine-propelled", "digger"],
+      description: "",
+      fact:
+        "A barge is non-self-propelled, meaning it has no engine. It must be pushed or towed by another vessel, usually a tugboat."
+    },
+    {
+      id: 3,
+      question:
+        "“Composite unit” means a (blank) vessel and an associated pushed vessel that are rigidly connected and that are designed as a dedicated and (blank) tug and barge combination.",
+      correctAnswer: ["pushing", "integrated", "pulling", "separate", "semi-integrated"],
+      description: "",
+      fact:
+        "Composite units are designed as dedicated and integrated combinations, meaning the tug is built specifically for that barge, and vice versa. They aren’t meant to mix and match with other vessels."
+    },
+    {
+      id: 4,
+      question:
+        "“Direction of traffic flow” means the direction for traffic on a (blank) that is indicated by (blank) on a reference chart.",
+      correctAnswer: ["route", "arrows", "chart", "narrow channel", "pecked lines"],
+      description: "",
+      fact:
+        "The system is part of a Traffic Separation Scheme (TSS), which helps prevent collisions in busy waterways where many vessels converge."
+    },
+    {
+      id: 5,
+      question:
+        "“Exploration or exploitation vessel” means a vessel capable of engaging in the (blank) for, or the production, conservation or processing of, (blank) or gas.",
+      correctAnswer: ["drilling", "oil", "filling", "water", "sediment"],
+      description: "",
+      fact:
+        "Exploration vessels often use dynamic positioning systems, allowing them to maintain a perfect spot over a drill site using GPS, thrusters, and computers, even in rough conditions."
+    },
+    {
+      id: 6,
+      question:
+        "“Give-way vessel” means a (blank) that is required by these Regulations to keep (blank) of another vessel.",
+      correctAnswer: [
+        "vessel",
+        "out of the way of",
+        "power-driven vessel",
+        "a steady course in relation to",
+        "alter course in relation to"
+      ],
+      description: "",
+      fact:
+        "One of the key responsibilities of the give-way vessel is to make its manoeuvre “early and substantial.” This means no tiny, slow turns or changes in speed, but rather big, obvious changes that the other vessel can clearly see. See Rule 8 and Rule 16 for details."
+    },
+    {
+      id: 7,
+      question:
+        "“Great Lakes Basin” means Lakes Ontario, Erie, Huron (including Georgian Bay), (blank) and Superior, their connecting and tributary waters and the Ottawa and St. Lawrence Rivers and their tributaries as far east as the lower exit of the (blank).",
+      correctAnswer: ["Michigan", "St. Lambert Lock", "Great Bear", "Winnipeg", "Ste. Catherine Lock"],
+      description: "",
+      fact:
+        "The Great Lakes Basin is a natural water highway. It forms a massive inland shipping route that connects the heart of North America to the Atlantic Ocean."
+    },
+    {
+      id: 8,
+      question:
+        "“Inconspicuous, partly submerged vessel or object” means a (blank) or vessel or any other floating object that is low in the water and is generally (blank) to see.",
+      correctAnswer: [
+        "raft",
+        "difficult",
+        "remotely operated vehicle (ROV)",
+        "bottom object inspection vehicle (BOIV)",
+        "easy"
+      ],
+      description: "",
+      fact:
+        "Since these objects sit so low and have little reflective surface, even advanced radar may not detect them."
+    },
+    {
+      id: 9,
+      question:
+        "“Inshore traffic zone” means a routing measure that is a designated area between the (blank) of a traffic separation scheme and the adjacent coast that is intended for (blank).",
+      correctAnswer: ["landward boundary", "local traffic", "seaward boundary", "large container vessels", "all traffic"],
+      description: "",
+      fact:
+        "By routing through-traffic farther offshore, inshore traffic zones prevent busy coastal areas from turning into chaotic, unpredictable clusters of vessels."
+    },
+    {
+      id: 10,
+      question:
+        "“Navigational Warning” means a(n) (blank) by the Department of Fisheries and Oceans to provide (blank) information.",
+      correctAnswer: ["urgent release", "marine", "monthly and annual release", "monthly and weekly release", "weather"],
+      description: "",
+      fact:
+        "They’re like the “breaking news” of the maritime world. When something urgent happens on the water—hazards, military exercises, drifting objects—the Department of Fisheries and Oceans (DFO) sends out a Navigational Warning so mariners know immediately."
+    },
+    {
+      id: 11,
+      question:
+        "“Notice to Mariners” means the (blank) by the Department of Fisheries and Oceans to provide (blank) information.",
+      correctAnswer: ["monthly and annual publication", "marine", "weekly and annual publication", "urgent release", "vessel traffic"],
+      description: "",
+      fact:
+        "They come in two editions: monthly and annual. The monthly notices give fresh updates, while the annual edition collects all the big changes into one handy reference."
+    },
+    {
+      id: 12,
+      question:
+        "“ODAS” means an (blank) that consists of any object on or in the water and is designed to collect, store or transmit samples or data relating to the (blank) or the atmosphere or to the uses thereof.",
+      correctAnswer: [
+        "ocean data acquisition system",
+        "marine environment",
+        "ocean diver acoustic system",
+        "subsurface environment",
+        "ocean digital atmosphere system"
+      ],
+      description: "",
+      fact:
+        "They come in all shapes and sizes. An ODAS might be a floating buoy, a moored sensor, an underwater package, or even a drifting device."
+    },
+    {
+      id: 13,
+      question: "“Raft” includes a (blank).",
+      correctAnswer: ["boom", "kisby ring", "buoy"],
+      description: "",
+      fact:
+        "A “raft” can be hundreds of metres long. A boom under tow, especially a log boom, can stretch farther than most ships."
+    },
+    {
+      id: 14,
+      question:
+        "“Route” means an area within which there are, at any point, one or two (blank) and that is delineated on two sides by separation lines, separation zones, natural obstacles or dashed tinted lines except that the continuity of such lines or zones may be interrupted where the route merges with, diverges from or (blank) another route.",
+      correctAnswer: ["directions of traffic flow", "crosses", "traffic lanes merging", "omits", "precautionary areas"],
+      description: "",
+      fact:
+        "Routes aren't random, they’re engineered. Authorities design each route based on things like shipping density, coastline shape, underwater hazards, and port traffic patterns. So every route reflects local knowledge and safety planning."
+    },
+    {
+      id: 15,
+      question:
+        "“Routing system” means any system of one or more (blank) or routing measures which systems may include (blank), two-way routes, recommended tracks, areas to be avoided, inshore traffic zones, roundabouts, precautionary areas and deep water routes.",
+      correctAnswer: ["routes", "traffic separation schemes", "traffic lanes", "separation lines", "separation zones"],
+      description: "",
+      fact:
+        "They’re like “traffic control for the water”. A routing system is the maritime version of a highway network — lanes, shoulders, medians, roundabouts, exits etc."
+    },
+    {
+      id: 16,
+      question: "“Seaplane” means any (blank) designed to manoeuvre on the (blank).",
+      correctAnswer: ["aircraft", "water", "hovercraft", "shore"],
+      description: "",
+      fact:
+        "No other craft in the Col Regs can switch modes like a seaplane:<br><ul><li>taxiing = vessel</li><li>taking off = still subject to the rules</li><li>airborne = no longer a “vessel”</li></ul>"
+    },
+    {
+      id: 17,
+      question:
+        "“Separation zone” or “separation line” means a zone or line separating (blank) in which vessels are proceeding in (blank) or nearly opposite directions or separating a route from the adjacent inshore traffic zone.",
+      correctAnswer: ["routes", "opposite", "routing systems", "open water", "the same"],
+      description: "",
+      fact:
+        "A <strong>separation line</strong> is a simple charted line, but a <strong>separation zone</strong> is a whole band of water. Both serve the same purpose: <strong>keeping traffic organized and predictable.</strong>"
+    },
+    {
+      id: 18,
+      question: "“Traffic lane” means a route within which there (blank) of (blank).",
+      correctAnswer: ["is one direction", "traffic flow", "are two directions", "are multiple directions", "merging traffic"],
+      description: "",
+      fact:
+        "Just like cars use one-way lanes to avoid head-on collisions, ships in a traffic lane all travel in the <strong>same direction</strong>, creating predictable and orderly flow — especially in busy waterways."
+    },
+    {
+      id: 19,
+      question:
+        "“Traffic separation scheme” means a routing measure that provides for the separation of (blank) streams of traffic by appropriate means and by the establishment of (blank).",
+      correctAnswer: ["opposing", "traffic lanes", "similar", "separation zones", "inshore traffic zones"],
+      description: "",
+      fact:
+        "The International Maritime Organization (IMO), the same organization behind the Col Regs, approves most Traffic Separation Schemes worldwide — giving mariners a consistent set of rules no matter where they sail."
+    },
+    {
+      id: 20,
+      question:
+        "“Trawling” means (blank) by dragging through the water a (blank) or other fishing apparatus.",
+      correctAnswer: ["fishing", "dredge net", "dredging", "towing", "gillnet"],
+      description: "",
+      fact:
+        "Trawlers don’t “troll” — they drag. Trawling drags a massive net through the water, while trolling simply tows baited or lured lines behind the boat."
+    }
+  ]
+},
+{
+  config: {
+    id: "3idb2",
+    title: "Interpretation – Definition Builder – Part II",
+    description: "",
+    themeColor: "grey",
+    quizKey: "3idb2",
+    startScreenImage: "/images/naval-operations-branch-600.png",
+    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
+    factHeading: "",
+    category: "Col Regs Rule 3",
+    fillInTheBlank: true,
+    hidden: false
+  },
+  questions: [
+    {
+      id: 1,
+      question:
+        "“(blank)” means a vessel designed so that the whole or a significant part of its weight can be supported, whether at rest or in (blank), by a continuously generated cushion of air dependent for its effectiveness on the proximity of the vessel to the (blank) over which it operates.",
+      correctAnswer: ["air cushion vessel", "motion", "surface", "wing-in-ground (WIG) craft", "air"],
+      description: "",
+      fact:
+        "Hovercraft, which are a type of air cushion vessel, are frequently used for rescue operations in areas where boats can’t go, such as flood zones, frozen lakes, tidal flats, and swamps."
+    },
+    {
+      id: 2,
+      question:
+        "“Barge” means a (blank) barge, (blank), hopper, pontoon or houseboat.",
+      correctAnswer: [
+        "non-self-propelled",
+        "scow, dredge, pile-driver",
+        "scow, vessel, pile-driver",
+        "surveyor, dredge, pile-driver",
+        "scow, dredge, boom"
+      ],
+      description: "",
+      fact:
+        "Pile-drivers are used to hammer long piles into the seabed, making them key players in building piers, bridges, docks, and marine structures."
+    },
+    {
+      id: 3,
+      question:
+        "“Composite unit” means a pushing vessel and an associated (blank) vessel that are (blank) and that are designed as a dedicated and integrated tug and (blank) combination.",
+      correctAnswer: ["pushed", "rigidly connected", "barge", "pulled", "semi-connected"],
+      description: "",
+      fact:
+        "These units often use articulated mechanical linkages or pins to form a stable, rigid connection that reduces yawing or pitching—making them safer in rough seas than traditional towing operations."
+    },
+    {
+      id: 4,
+      question:
+        "“Direction of traffic flow” means the (blank) for (blank) on a route that is indicated by arrows on a (blank).",
+      correctAnswer: ["direction", "traffic", "reference chart", "area", "power-driven vessels"],
+      description: "",
+      fact:
+        "On charts, traffic flow is often marked with arrows that show the intended movement direction, helping ships follow predictable paths in any condition of visibility."
+    },
+    {
+      id: 5,
+      question:
+        "“Exploration or exploitation vessel” means a (blank) capable of engaging in the drilling for, or the production, (blank) or processing of, oil or (blank).",
+      correctAnswer: ["vessel", "conservation", "gas", "platform", "demolition"],
+      description: "",
+      fact:
+        "Some modern drilling ships can operate in waters over 3,000 meters deep, making them crucial for developing deep-sea oil and gas fields."
+    },
+    {
+      id: 6,
+      question:
+        "“Give-way vessel” means a vessel that is required by (blank) to (blank) of (blank).",
+      correctAnswer: [
+        "these Regulations",
+        "keep out of the way",
+        "another vessel",
+        "Canadian law",
+        "a vessel restricted in its ability to manoeuvre"
+      ],
+      description: "",
+      fact:
+        "If both vessels misunderstand who is supposed to give way, things can get confusing, which is why the regulations for preventing collisions at sea (Col Regs) are internationally standardized and taught globally."
+    },
+    {
+      id: 7,
+      question:
+        "“Great Lakes Basin” means Lakes Ontario, Erie, Huron (including (blank)), Michigan and Superior, their (blank) and (blank) and the Ottawa and St. Lawrence Rivers and their tributaries as far east as the lower exit of the St. Lambert Lock.",
+      correctAnswer: ["Georgian Bay", "connecting", "tributary waters", "Gore Bay", "partitioning"],
+      description: "",
+      fact:
+        "Some Great Lakes waves can rival the ocean. Lake Superior has produced waves over 9 meters (30 feet) high!"
+    },
+    {
+      id: 8,
+      question:
+        "“Inconspicuous, partly submerged vessel or object” means a raft or vessel or any other (blank) that is (blank) and is generally difficult to (blank).",
+      correctAnswer: [
+        "floating object",
+        "low in the water",
+        "see",
+        "fully submerged object",
+        "below the water"
+      ],
+      description: "",
+      fact:
+        "Many towed objects ride so low they barely break the surface—log booms and floating platforms may show only centimeters above the water, meeting the Col Regs definition perfectly: “generally difficult to see”."
+    },
+    {
+      id: 9,
+      question:
+        "“Inshore traffic zone” means a (blank) that is a (blank) between the landward boundary of a (blank) and the adjacent coast that is intended for local traffic.",
+      correctAnswer: ["routing measure", "designated area", "traffic separation scheme", "route", "separation zone"],
+      description: "",
+      fact:
+        "Some inshore traffic zones are just a few hundred meters wide, while others run for dozens of nautical miles along complex coasts or narrow straits."
+    },
+    {
+      id: 10,
+      question: "“(blank)” means an urgent release by the (blank) to provide (blank).",
+      correctAnswer: [
+        "Navigational Warning",
+        "Department of Fisheries and Oceans",
+        "marine information",
+        "Notice to Mariners",
+        "sea state information"
+      ],
+      description: "",
+      fact:
+        "Unlike routine marine weather reports, Navigational Warnings (NAVWARNs) cover sudden hazards, such as unlit buoys, derelict vessels, hazards to navigation, cable-laying or dredging operations, search and rescue activity, and live-fire military zones."
+    },
+    {
+      id: 11,
+      question:
+        "“(blank)” means the monthly and annual publication by the (blank) to provide (blank).",
+      correctAnswer: [
+        "Notice to Mariners",
+        "Department of Fisheries and Oceans",
+        "marine information",
+        "Navigational Warning",
+        "meteorological"
+      ],
+      description: "",
+      fact:
+        "Notice to Mariners (NOTMAR) often highlight quiet but important changes, such as updates on things like buoy colours, light characteristics, chart notes, and restricted zones. Small details that make big differences on the water."
+    },
+    {
+      id: 12,
+      question:
+        "“ODAS” means an ocean data acquisition system that consists of any object (blank) and is designed to (blank), store or transmit samples or data relating to the marine environment or the (blank) or to the uses thereof.",
+      correctAnswer: ["on or in the water", "collect", "atmosphere", "above or in the water", "meteorology"],
+      description: "",
+      fact:
+        "They’re scientific gold mines. ODAS devices feed data into weather forecasts, tsunami warnings, climate models, and maritime safety systems. Some even help track ice movement in the Arctic."
+    },
+    {
+      id: 13,
+      question: "“Raft” (blank) a boom.",
+      correctAnswer: ["includes", "does not include", "is also called"],
+      description: "",
+      fact:
+        "Booms ride extremely low in the water, often with only a few centimeters showing. That’s why the Col Regs bundle them with rafts: both are hard to see and easy to hit if you’re not paying attention!"
+    },
+    {
+      id: 14,
+      question:
+        "“Route” means an area within which there are, at any point, (blank) directions of traffic flow and that is delineated on two sides by (blank), separation zones, natural obstacles or dashed tinted lines except that the continuity of such lines or zones may be (blank) where the route merges with, diverges from or crosses another route.",
+      correctAnswer: ["one or two", "separation lines", "may be interrupted", "two or three", "may not be interrupted"],
+      description: "",
+      fact:
+        "Routes help manage the world’s busiest waters. They help to prevent chaos and keep vessels predictable."
+    },
+    {
+      id: 15,
+      question:
+        "“Routing system” means any system of one or more routes or (blank) which systems may include traffic separation schemes, two-way routes, (blank), areas to be avoided, inshore traffic zones, roundabouts, precautionary areas and (blank) routes.",
+      correctAnswer: ["routing measures", "recommended tracks", "deep water", "traffic lanes", "shallow water"],
+      description: "",
+      fact:
+        "“Areas to be avoided” are like the ocean’s “Do Not Enter” signs. These zones often protect reefs, wildlife habitats, shipwreck sites, and dangerous shoals."
+    },
+    {
+      id: 16,
+      question: "“(blank)” means any aircraft designed to manoeuvre (blank) the (blank).",
+      correctAnswer: ["seaplane", "on", "water", "Wing-in-Ground (WIG) craft", "above"],
+      description: "",
+      fact:
+        "Seaplane pilots are trained not only in aviation rules but also in maritime rules, since seaplane is a vessel while on the water."
+    },
+    {
+      id: 17,
+      question:
+        "“(blank)” or “separation line” means a zone or line separating routes in which (blank) are proceeding in opposite or nearly opposite (blank) or separating a route from the adjacent inshore traffic zone.",
+      correctAnswer: ["separation zone", "vessels", "directions", "traffic lanes", "power-driven vessels"],
+      description: "",
+      fact:
+        "By physically separating opposing flows of traffic, separation zones drastically reduce the chance of two large ships meeting bow-to-bow — a scenario no mariner wants."
+    },
+    {
+      id: 18,
+      question:
+        "“Traffic lane” means a (blank) within which there is one (blank) of (blank).",
+      correctAnswer: ["route", "direction", "traffic flow", "routing system", "system"],
+      description: "",
+      fact:
+        "Traffic lanes make ships behave predictably. Even huge tankers and container ships — which can take a considerable distance to stop — follow traffic lanes so everyone knows exactly which direction they’ll be moving."
+    },
+    {
+      id: 19,
+      question:
+        "“Traffic separation scheme” means a (blank) that provides for the (blank) of opposing streams of traffic by appropriate means and by the establishment of (blank).",
+      correctAnswer: ["routing measure", "separation", "traffic lanes", "integration", "traffic flow"],
+      description: "",
+      fact:
+        "TSSs exist in the busiest waters on Earth. Places like the English Channel, Singapore Strait, and Strait of Gibraltar rely on TSSs to keep thousands of ships moving smoothly every day."
+    },
+    {
+      id: 20,
+      question:
+        "“Trawling” means fishing by (blank) through the water a dredge net or other (blank).",
+      correctAnswer: ["dragging", "fishing apparatus", "pushing", "fishing floats", "drifting"],
+      description: "",
+      fact:
+        "Trawlers move oddly compared to other vessels. Because they’re dragging heavy gear, trawlers may slow dramatically, zig-zag, or have limited turning ability. The Col Regs recognizes this and gives them special status."
+    }
+  ]
+},
+{
+  config: {
+    id: "3idb3",
+    title: "Interpretation – Definition Builder – Part III",
+    description: "",
+    themeColor: "grey",
+    quizKey: "3idb3",
+    startScreenImage: "/images/naval-operations-branch-600.png",
+    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
+    factHeading: "",
+    category: "Col Regs Rule 3",
+    fillInTheBlank: true,
+    hidden: false
+  },
+  questions: [
+    {
+      id: 1,
+      question:
+        "“Air cushion vessel” means a/n (blank) designed so that the whole or a significant part of its weight can be (blank), whether at rest or in motion, by a (blank) generated cushion of air dependent for its effectiveness on the proximity of the vessel to the surface over which it (blank).",
+      correctAnswer: ["vessel", "supported", "continuously", "operates", "aircraft"],
+      description: "",
+      fact:
+        "Their performance depends on surface proximity. If the vessel rises too far from the surface, the air cushion becomes ineffective, and lift is lost."
+    },
+    {
+      id: 2,
+      question:
+        "“(blank)” means a (blank) barge, scow, dredge, pile-driver, (blank).",
+      correctAnswer: [
+        "barge",
+        "non-self-propelled",
+        "hopper, pontoon or houseboat",
+        "self-propelled",
+        "hovercraft, pontoon or houseboat"
+      ],
+      description: "",
+      fact:
+        "Hoppers carry dredged material or bulk goods. Some have split hulls or opening bottoms that let them dump material directly into the water at specific disposal sites."
+    },
+    {
+      id: 3,
+      question:
+        "“(blank)” means a (blank) and an associated (blank) that are rigidly connected and that are designed as a dedicated and integrated (blank) combination.",
+      correctAnswer: ["composite unit", "pushing vessel", "pushed vessel", "tug and barge", "tug and vessel"],
+      description: "",
+      fact:
+        "Composite units are commonly used for oil, petroleum products, and bulk cargo, where stability and predictable handling are especially important."
+    },
+    {
+      id: 4,
+      question:
+        "“(blank)” means the direction for traffic on a (blank) that is indicated by (blank) on a (blank).",
+      correctAnswer: ["direction of traffic flow", "route", "arrows", "reference chart", "traffic separation scheme"],
+      description: "",
+      fact:
+        "The direction of traffic in a route is not guessed or decided by the vessel, it is established internationally through the International Maritime Organization (IMO)."
+    },
+    {
+      id: 5,
+      question:
+        "“Exploration or (blank)” means a vessel capable of (blank) the drilling for, or the (blank), conservation or processing of, (blank).",
+      correctAnswer: ["exploitation vessel", "engaging in", "production", "oil and gas", "exploitation platform"],
+      description: "",
+      fact:
+        "These vessels are vital for getting energy resources from places where traditional offshore platforms cannot be built, such as ultra-deep or remote waters."
+    },
+    {
+      id: 6,
+      question:
+        "“(blank)” means a vessel that (blank) by these Regulations to (blank) of another (blank).",
+      correctAnswer: ["give-way vessel", "is required", "keep out of the way", "vessel", "stand-on vessel"],
+      description: "",
+      fact:
+        "The give-way vessel is the one that must change course, change speed, or both, while the stand-on vessel keeps its course and speed, unless action is needed to avoid danger."
+    },
+    {
+      id: 7,
+      question:
+        "“Great Lakes Basin” means Lakes Ontario, Erie, Huron (including Georgian Bay), Michigan and Superior, their connecting and tributary waters and the Ottawa and St. Lawrence Rivers and their tributaries as far east as the lower exit of the St. Lambert Lock.",
+      correctAnswer: [
+        "Ottawa and St. Lawrence",
+        "tributaries",
+        "east as the lower exit",
+        "west as the upper exit",
+        "Richelieu and St. Lawrence"
+      ],
+      description: "",
+      fact:
+        "With more than 6,000 shipwrecks in the Great Lakes, mastering your Col Regs is always a smart move!"
+    },
+    {
+      id: 8,
+      question:
+        "“(blank), partly submerged vessel or object” means a (blank) or any other floating object that is (blank) and is generally (blank).",
+      correctAnswer: ["inconspicuous", "raft or vessel", "low in the water", "difficult to see", "conspicuous"],
+      description: "",
+      fact:
+        "Because these towed objects are so hard to see, the Col Regs give them special lighting and day-shape requirements. See Rule 24(g) for details."
+    },
+    {
+      id: 9,
+      question:
+        "“(blank)” means a (blank) that is a designated area between the (blank) of a traffic separation scheme and the (blank) that is intended for local traffic.",
+      correctAnswer: ["inshore traffic zone", "routing measure", "landward boundary", "adjacent coast", "separation zone"],
+      description: "",
+      fact:
+        "Keeping big ships out of inshore traffic zones reduces the risk of shoreline erosion, groundings, pollution near sensitive marine areas, and collisions with smaller vessels."
+    },
+    {
+      id: 10,
+      question:
+        "“(blank)” means an (blank) release by the Department of (blank) to provide (blank) information.",
+      correctAnswer: ["Navigational Warning", "urgent", "Fisheries and Oceans", "marine", "Transport Canada"],
+      description: "",
+      fact:
+        "Many warnings come from mariners themselves. Ships at sea often report hazards they spot, like a missing buoy or a floating hazard, and the DFO turns those reports into a Navigational Warning for others."
+    },
+    {
+      id: 11,
+      question:
+        "“(blank)” means the (blank) publication by the Department of (blank) to provide (blank) information.",
+      correctAnswer: ["Notice to Mariners", "monthly and annual", "Fisheries and Oceans", "marine", "Transport Canada"],
+      description: "",
+      fact:
+        "Just like software updates fix bugs, Notices to Mariners (NOTMAR) update charts, publications, and navigation information to keep mariners current and safe."
+    },
+    {
+      id: 12,
+      question:
+        "“ODAS” means an ocean data acquisition system that consists of any (blank) on or in the water and is designed to collect, (blank) or transmit (blank) or (data) relating to the marine environment or the atmosphere or to the uses thereof.",
+      correctAnswer: ["object", "store", "samples", "data", "vessel"],
+      description: "",
+      fact:
+        "They quietly watch the weather 24/7. Many ODAS devices transmit real-time data every few minutes, helping meteorologists track storms long before they reach land."
+    },
+    {
+      id: 13,
+      question: "“(blank)” includes a (blank).",
+      correctAnswer: ["raft", "boom", "ODAS", "composite unit", "buoy"],
+      description: "",
+      fact:
+        "Booms don’t manoeuvre, they just follow. Unlike a vessel, a boom can’t steer or speed up. It simply trails behind its tug, snaking with waves and currents—another reason it fits the “raft” category."
+    },
+    {
+      id: 14,
+      question:
+        "“(blank)” means an area within which there are, at any point, one or two directions of traffic flow and that is delineated on (blank) by separation lines, separation zones, (blank) or dashed tinted lines except that the continuity of such lines or zones may be interrupted where the route (blank), diverges from or crosses another route.",
+      correctAnswer: ["route", "two sides", "natural obstacles", "merges with", "routing system"],
+      description: "",
+      fact:
+        "Routes evolve with traffic. If shipping patterns change or new hazards appear, authorities update route designs—just like modern cities redesign road systems."
+    },
+    {
+      id: 15,
+      question:
+        "“(blank)” means any system of (blank) routes or routing measures which systems may include traffic separation schemes, two-way routes, recommended tracks, areas to be (blank), inshore traffic zones, (blank), precautionary areas and deep water routes.",
+      correctAnswer: ["routing system", "one or more", "avoided", "roundabouts", "route"],
+      description: "",
+      fact:
+        "Routing systems reduce chaos in the world’s busiest waters. These systems are used to prevent ships from playing “guess-the-traffic-pattern.”"
+    },
+    {
+      id: 16,
+      question:
+        "“(blank)” means any (blank) designed to manoeuvre (blank) the (blank).",
+      correctAnswer: ["seaplane", "aircraft", "on", "water", "over"],
+      description: "",
+      fact:
+        "As a seaplane accelerates for takeoff, it acts like a speedboat on steroids—lots of spray, lots of wake. That’s why Victoria Harbour gives them their own takeoff and landing zone."
+    },
+    {
+      id: 17,
+      question:
+        "“Separation zone” or “(blank)” means a zone or line (blank) routes in which vessels are proceeding in opposite or nearly opposite directions or separating a (blank) from the adjacent (blank).",
+      correctAnswer: ["separation line", "separating", "route", "inshore traffic zone", "convergent line"],
+      description: "",
+      fact:
+        "On paper and digital charts, separation zones are lightly tinted or hatched, while separation lines appear as bold or dashed boundaries."
+    },
+    {
+      id: 18,
+      question: "“(blank)” means a (blank) within which there is (blank) of (blank).",
+      correctAnswer: ["traffic lane", "route", "one direction", "traffic flow", "diverging traffic"],
+      description: "",
+      fact:
+        "The Col Regs require vessels to cross traffic lanes <strong>at right angles</strong> so other ships can easily judge the crossing vessel’s movements and avoid confusion."
+    },
+    {
+      id: 19,
+      question:
+        "“(blank)” means a (blank) that provides for the separation of (blank) by appropriate means and by the establishment of (blank).",
+      correctAnswer: [
+        "traffic separation scheme (TSS)",
+        "routing measure",
+        "opposing streams of traffic",
+        "traffic lanes",
+        "route"
+      ],
+      description: "",
+      fact:
+        "Some TSSs are designed around underwater hazards. Separation zones may bend or curve to avoid shoals, reefs, or sandbanks. The shape of a TSS always tells a story about the local environment."
+    },
+    {
+      id: 20,
+      question:
+        "“(blank)” means (blank) through the (blank) a (blank) or other fishing apparatus.",
+      correctAnswer: ["trawling", "fishing by dragging", "water", "dredge net", "trolling"],
+      description: "",
+      fact:
+        "There are three main categories of trawling: surface (skimming the top), midwater/pelagic (sweeping the open water), and bottom/benthic (scraping the seabed). All three count as trawling under the Col Regs."
+    }
+  ]
+}
+  
 ];
 
 /*
