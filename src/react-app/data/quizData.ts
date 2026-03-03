@@ -3023,7 +3023,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       id: "3db1",
       title: "Definition Builder – Rule 3 – Part I",
       description: "",
-      themeColor: 'grey',
+      themeColor: '#6e6d6a',
       quizKey: "3db1",
       startScreenImage: "/images/naval-operations-branch-600.png",
       studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
@@ -3038,7 +3038,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The word “vessel” includes every description of water craft, including (blank), WIG craft and seaplanes, used or capable of being used as a means of (blank) on water. <i>R3(a)</i>",
         correctAnswer: ["non-displacement craft", "transportation", "amphibious", "taxiing"],
         description: "",
-        fact: "A WIG craft can travel further on the same fuel and with the same payload as an aircraft and much faster than a ship. This enables WIG craft to fill the gap between low cost, slow sea freight and fast, yet high-cost air freight.<br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Picture1.jpg'>[Click Here for Image]</a>"
+        fact: "A WIG craft can travel further on the same fuel and with the same payload as an aircraft and much faster than a ship. This enables WIG craft to fill the gap between low cost, slow sea freight and fast, yet high-cost air freight.<br><a href='/images/3db1/Q1.jpg'>[Click Here for Image]</a>"
       },
       {
         id: 2,
@@ -3059,14 +3059,14 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The term “vessel engaged in fishing” means any vessel fishing with nets, lines, trawls or other fishing apparatus which restrict (blank), but (blank) a vessel fishing with trolling lines or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
         correctAnswer: ["manoeuvrability", "does not include", "stability", "does"],
         description: "",
-        fact: "By day, fishing vessels display two cones with apexes together, signalling restricted manoeuvrability due to fishing gear."
+        fact: "By day, fishing vessels display two cones with apexes together, signalling restricted manoeuvrability due to fishing gear.<br><a href='/images/3db1/Q4.png'>[Click Here for Image]</a>"
       },
       {
         id: 5,
         question: "The term “vessel engaged in fishing” means any vessel fishing with nets, lines, (blank) or other fishing apparatus which restrict manoeuvrability, but does not include a vessel fishing with (blank) or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
         correctAnswer: ["trawls", "trolling lines", "fishing floats", "trawling lines"],
         description: "",
-        fact: "During trawling, large nets, doors, and cables can extend hundreds of metres behind or beside the vessel, making sharp turns slow or impossible without risking gear damage. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q5_Vsl%20Engaged%20in%20Fishing.png'>[Click Here for Image]</a>"
+        fact: "During trawling, large nets, doors, and cables can extend hundreds of metres behind or beside the vessel, making sharp turns slow or impossible without risking gear damage. <br><a href='/images/3db1/Q5.jpeg'>[Click Here for Image]</a>"
       },
       {
         id: 6,
@@ -3077,24 +3077,24 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 7,
-        question: "The term vessel “(blank)” means a vessel which through some exceptional circumstance is restricted in (blank) as required by these Rules and is therefore unable to keep out of the way of another vessel. <i>R3(f)</i>",
-        correctAnswer: ["not under command (NUC)", "unable to manoeuvre", "its ability to manoeuvre", "restricted in its ability to manoeuvre (RAM)"],
+        question: "The term vessel “(blank)” means a vessel which through some exceptional circumstance is (blank) as required by these Rules and is therefore unable to keep out of the way of another vessel. <i>R3(f)</i>",
+        correctAnswer: ["not under command (NUC)", "unable to manoeuvre", "restricted in its manoeuvrability", "restricted in its ability to manoeuvre (RAM)"],
         description: "",
-        fact: "An example of an exceptional circumstance is a steering gear breakdown but only if it prevents the vessel from manoeuvring as required by the Rules to avoid another vessel. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q7%20-%20NUC.png'>[Click Here for Image]</a>"
+        fact: "An example of an exceptional circumstance is a steering gear breakdown but only if it prevents the vessel from manoeuvring as required by the Rules to avoid another vessel. <br><a href='/images/3db1/Q7.png'>[Click Here for Image]</a>"
       },
       {
         id: 8,
         question: "The term vessel “restricted in its ability to manoeuvre” means a vessel which from (blank) is restricted in its ability to manoeuvre as required by these Rules and is therefore unable to (blank). <i>R3(g)</i>",
         correctAnswer: ["the nature of its work", "keep out of the way of another vessel", "some exceptional circumstance", "decrease speed"],
         description: "",
-        fact: "RAM vessels do not all exhibit the same lights and shapes to identify them. The signals used depend on the nature of the work being carried out. See Rule 27(b) - (g) for details."
+        fact: "RAM vessels do not all exhibit the same lights and shapes to identify them. The signals used depend on the nature of the work being carried out. See Rule 27(b) - (g) for details.<br><a href='/images/3db1/Q8.jpg'>[Click Here for Image]</a>"
       },
       {
         id: 9,
         question: "The term “vessels restricted in their ability to manoeuvre (RAM)” shall include but not be limited to:<br><br>a vessel engaged in laying, (blank) or picking up a navigation mark, submarine cable or pipeline <i>R3(g)(i)</i>",
         correctAnswer: ["servicing", "transporting", "monitoring"],
         description: "",
-        fact: "When laying or recovering a cable or pipeline, a vessel’s movement is constrained by heavy gear under tension, making course changes slow or unsafe."
+        fact: "When laying or recovering a cable or pipeline, a vessel’s movement is constrained by heavy gear under tension, making course changes slow or unsafe.<br><a href='/images/3db1/Q9.png'>[Click Here for Image]</a>"
       },
       {
         id: 10,
@@ -3108,7 +3108,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, (blank) or picking up a (blank), submarine cable or pipeline <i>R3(g)(i)</i>",
         correctAnswer: ["servicing", "navigation mark", "dredging", "trawl float"],
         description: "",
-        fact: "These vessels often operate in high‑traffic areas. Submarine cables, pipelines, and navigation marks are commonly located near ports, channels, and coastal routes, where collision risk is naturally higher."
+        fact: "These vessels often operate in high‑traffic areas. Submarine cables, pipelines, and navigation marks are commonly located near ports, channels, and coastal routes, where collision risk is naturally higher.<br><a href='/images/3db1/Q11.jpeg'>[Click Here for Image]</a>"
       },
       {
         id: 12,
@@ -3136,7 +3136,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank) operations <i>R3(g)(v)</i>",
         correctAnswer: ["mineclearance", "minesweeping", "diving", "towing"],
         description: "",
-        fact: "Mineclearance vessels often must maintain precise tracks and speeds; sudden manoeuvres can trigger mines or disrupt clearance equipment. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q15_Mineclearance.png'>[Click Here for Image]</a>"
+        fact: "Mineclearance vessels often must maintain precise tracks and speeds; sudden manoeuvres can trigger mines or disrupt clearance equipment. <br><a href='/images/3db1/Q15.png'>[Click Here for Image]</a>"
       },
       {
         id: 16,
@@ -3150,21 +3150,21 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The term vessel “constrained by its draught” means a (blank) that, because of the vessel’s draught in relation to the available depth and (blank) of navigable water, is severely restricted in the vessel’s ability to deviate from the course the vessel is following. <i>R3(h)</i>",
         correctAnswer: ["power-driven vessel", "width", "any vessel", "speed"],
         description: "",
-        fact: "A vessel may be extremely large yet not constrained by its draught if sufficient depth and width of water are available. Constrained by draught status depends on available navigable water, not gross tonnage. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q17_CbyD.png'>[Click Here for Image]</a>"
+        fact: "A vessel may be extremely large yet not constrained by its draught if sufficient depth and width of water are available. Constrained by draught status depends on available navigable water, not gross tonnage. <br><a href='/images/3db1/Q17.png'>[Click Here for Image]</a>"
       },
       {
         id: 18,
         question: "The word “(blank)” means that a vessel is not at anchor, or (blank), or aground. <i>R3(i)</i>",
         correctAnswer: ["underway", "made fast to the shore", "making way", "heaving to"],
         description: "",
-        fact: "A vessel does not need to be moving to be considered underway. If it is not anchored, not made fast, and not aground, it is legally underway, even if its engines are stopped."
+        fact: "A vessel does not need to be moving to be considered underway. If it is not anchored, not made fast, and not aground, it is legally underway, even if its engines are stopped.<br><a href='/images/3db1/Q18.jpg'>[Click Here for Image]</a>"
       },
       {
         id: 19,
         question: "The words “length” and “(blank)” of a vessel mean its length overall and (blank) breadth. <i>R3(j)</i>",
         correctAnswer: ["breadth", "greatest", "clearance", "average"],
         description: "",
-        fact: "Several Rules change based on vessel length, including navigation lights, shapes, and sound signals. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q19_Length.png'>[Click Here for Image]</a>"
+        fact: "Several Rules change based on vessel length, including navigation lights, shapes, and sound signals. <br><a href='/images/3db1/Q19.png'>[Click Here for Image]</a>"
       },
       {
         id: 20,
@@ -3194,7 +3194,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       id: "3db2",
       title: "Definition Builder – Rule 3 – Part II",
       description: "",
-      themeColor: 'grey',
+      themeColor: '#6e6d6a',
       quizKey: "3db2",
       startScreenImage: "/images/naval-operations-branch-600.png",
       studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
@@ -3365,7 +3365,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       id: "3db3",
       title: "Definition Builder – Rule 3 – Part III",
       description: "",
-      themeColor: 'grey',
+      themeColor: '#6e6d6a',
       quizKey: "3db3",
       startScreenImage: "/images/naval-operations-branch-600.png",
       studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
@@ -3536,7 +3536,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     id: "3idb1",
     title: "Interpretation – Definition Builder – Part I",
     description: "",
-    themeColor: "grey",
+    themeColor: "#6e6d6a",
     quizKey: "3idb1",
     startScreenImage: "/images/naval-operations-branch-600.png",
     studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
@@ -3748,7 +3748,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     id: "3idb2",
     title: "Interpretation – Definition Builder – Part II",
     description: "",
-    themeColor: "grey",
+    themeColor: "#6e6d6a",
     quizKey: "3idb2",
     startScreenImage: "/images/naval-operations-branch-600.png",
     studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
@@ -3972,7 +3972,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     id: "3idb3",
     title: "Interpretation – Definition Builder – Part III",
     description: "",
-    themeColor: "grey",
+    themeColor: "#6e6d6a",
     quizKey: "3idb3",
     startScreenImage: "/images/naval-operations-branch-600.png",
     studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
