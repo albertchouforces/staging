@@ -3045,14 +3045,14 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The term “power-driven vessel” means any vessel propelled by (blank). <i>R3(b)</i>",
         correctAnswer: ["machinery", "sail", "solar-power"],
         description: "",
-        fact: "A power-driven vessel under 50 metres in length is required to display one masthead light. Displaying a second masthead light, positioned higher and aft of (behind) the first, is optional. <i>R23(a)</i> <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q2_power-driven%20vessel.png'>[Click Here for Image]</a>"
+        fact: "A power-driven vessel under 50 metres in length is required to display one masthead light. Displaying a second masthead light, positioned higher and aft of (behind) the first, is optional. <i>R23(a)</i> <br><a href='/images/3db1/Q2.png'>[Click Here for Image]</a>"
       },
       {
         id: 3,
         question: "The term “sailing vessel” means any vessel under sail provided that (blank) machinery, if fitted, (blank) being used. <i>R3(c)</i>",
         correctAnswer: ["propelling", "is not", "steering", "is"],
         description: "",
-        fact: "Using your engine only to charge batteries or power onboard systems (without propelling the vessel) still allows the vessel to be classified as a sailing vessel. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q3_Sailing%20Vessel.png'>[Click Here for Image]</a>"
+        fact: "Using your engine only to charge batteries or power onboard systems (without propelling the vessel) still allows the vessel to be classified as a sailing vessel. <br><a href='/images/3db1/Q3.png'>[Click Here for Image]</a>"
       },
       {
         id: 4,
@@ -3073,7 +3073,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The word “seaplane” includes any (blank) designed to manoeuvre on the (blank). <i>R3(e)</i>",
         correctAnswer: ["aircraft", "water", "hovercraft", "shore"],
         description: "",
-        fact: "When operating on water at night or in restricted visibility, seaplanes must display navigation lights that allow other vessels to assess their position and movement. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q6_Seaplane.png'>[Click Here for Image]</a>"
+        fact: "When operating on water at night or in restricted visibility, seaplanes must display navigation lights that allow other vessels to assess their position and movement. <br><a href='/images/3db1/Q6.png'>[Click Here for Image]</a>"
       },
       {
         id: 7,
@@ -3101,7 +3101,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a (blank), submarine cable or pipeline <i>R3(g)(i)</i>",
         correctAnswer: ["navigation mark", "trawl net", "drainage hose"],
         description: "",
-        fact: "Cables, pipelines, or marker chains may trail hundreds of metres astern or to the side of the RAM vessel, meaning the danger area is much larger than the vessel itself. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q10_Navigation%20Marks.png'>[Click Here for Image]</a>"
+        fact: "Cables, pipelines, or marker chains may trail hundreds of metres astern or to the side of the RAM vessel, meaning the danger area is much larger than the vessel itself. <br><a href='/images/3db1/Q10.png'>[Click Here for Image]</a>"
       },
       {
         id: 11,
@@ -3115,21 +3115,21 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), surveying or (blank) <i>R3(g)(ii)</i>",
         correctAnswer: ["dredging", "underwater operations", "anchoring", "cargo operations"],
         description: "",
-        fact: "<strong>Dredging</strong> involves removing sediment, sand, rock, or debris from the seabed to maintain or deepen channels, harbours, and waterways. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q12_Dredging.png'>[Click Here for Image]</a>"
+        fact: "<strong>Dredging</strong> involves removing sediment, sand, rock, or debris from the seabed to maintain or deepen channels, harbours, and waterways. <br><a href='/images/3db1/Q12.png'>[Click Here for Image]</a>"
       },
       {
         id: 13,
         question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank) or transferring (blank), provisions or cargo while underway <i>R3(g)(iii)</i>",
         correctAnswer: ["replenishment", "persons", "fuel monitoring", "mustering persons"],
         description: "",
-        fact: "When vessels transfer people, fuel, supplies, or cargo while underway, they must hold a steady course and speed relative to each other—severely limiting their ability to manoeuvre independently. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q13_RAS.png'>[Click Here for Image]</a>"
+        fact: "When vessels transfer people, fuel, supplies, or cargo while underway, they must hold a steady course and speed relative to each other—severely limiting their ability to manoeuvre independently. <br><a href='/images/3db1/Q13.png'>[Click Here for Image]</a>"
       },
       {
         id: 14,
         question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the (blank) or (blank) of aircraft <i>R3(g)(iv)</i>",
         correctAnswer: ["launching", "recovery", "refuelling", "maintenance"],
         description: "",
-        fact: "When launching or recovering aircraft, vessels often must maintain very specific headings and speeds to ensure safe takeoffs and landings, severely limiting manoeuvring options. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q14_Aircraft.png'>[Click Here for Image]</a>"
+        fact: "When launching or recovering aircraft, vessels often must maintain very specific headings and speeds to ensure safe takeoffs and landings, severely limiting manoeuvring options. <br><a href='/images/3db1/Q14.png'>[Click Here for Image]</a>"
       },
       {
         id: 15,
@@ -3143,7 +3143,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) the towing vessel and its tow in their ability to (blank) <i>R3(g)(vi)</i>",
         correctAnswer: ["severely restricts", "deviate from their course", "slightly affects", "reduce their speed"],
         description: "",
-        fact: "Not all towing makes a vessel RAM. Only towing operations that severely restrict the towing vessel and its tow from altering course qualify as restricted in their ability to manoeuvre. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q16_Towing.png'>[Click Here for Image]</a>"
+        fact: "Not all towing makes a vessel RAM. Only towing operations that severely restrict the towing vessel and its tow from altering course qualify as restricted in their ability to manoeuvre. <br><a href='/images/3db1/Q16.png'>[Click Here for Image]</a>"
       },
       {
         id: 17,
@@ -3171,21 +3171,21 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         question: "Vessels shall be deemed to be “(blank)” only when one can be observed (blank) from the other. <i>R3(k)</i>",
         correctAnswer: ["in sight of one another", "visually", "in close proximity to one another", "by Automatic Identification System (AIS)"],
         description: "",
-        fact: "Two vessels may be clearly detected on radar or AIS but are not considered in sight of one another unless they can actually be seen visually. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q20_Binos.png'>[Click Here for Image]</a>"
+        fact: "Two vessels may be clearly detected on radar or AIS but are not considered in sight of one another unless they can actually be seen visually. <br><a href='/images/3db1/Q20.png'>[Click Here for Image]</a>"
       },
       {
         id: 21,
         question: "The term “restricted visibility” means any condition in which visibility is restricted by fog, (blank), (blank), heavy rainstorms, sandstorms or any other similar causes. <i>R3(l)</i>",
         correctAnswer: ["mist", "falling snow", "intervening obstructions", "other vessels"],
         description: "",
-        fact: "Restricted visibility can exist in full daylight if weather or environmental conditions reduce what can be seen visually. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q21_Restricted%20Vis.png'>[Click Here for Image]</a>"
+        fact: "Restricted visibility can exist in full daylight if weather or environmental conditions reduce what can be seen visually. <br><a href='/images/3db1/Q21.png'>[Click Here for Image]</a>"
       },
       {
         id: 22,
         question: "The term “(blank)” means a multimodal craft which, in its main operational mode, flies in close proximity to the surface by utilizing (blank). <i>R3(m)</i>",
         correctAnswer: ["Wing-in-Ground (WIG) craft", "surface-effect action", "air cushion vessel", "propulsion‑induced thrust"],
         description: "",
-        fact: "WIG craft rely on surface-effect, where air trapped between the wing and the surface increases lift and efficiency, but only within a few metres of the water. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q22_WIG.png'>[Click Here for Image]</a>"
+        fact: "WIG craft rely on surface-effect, where air trapped between the wing and the surface increases lift and efficiency, but only within a few metres of the water. <br><a href='/images/3db1/Q22.png'>[Click Here for Image]</a>"
       },
     ]
   },
