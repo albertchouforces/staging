@@ -3211,14 +3211,14 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         "The word “(blank)” includes every description of water craft, including non-displacement craft, (blank) and seaplanes, used or capable of being used as a means of (blank) on water. <i>R3(a)</i>",
       correctAnswer: ["vessel", "WIG craft", "transportation", "power-driven patrolling"],
       description: "",
-      fact: "Non-displacement craft, such as hovercraft, are classified as vessels under the Rules, despite being supported by an air cushion rather than conventional buoyant displacement. <br><a href='/images/3db2/Q1.png'>[Click Here for Image]</a>",
+      fact: "Non-displacement craft, such as hovercraft, are classified as vessels under the Rules, despite being supported by an air cushion rather than conventional buoyant displacement. <br><a href='/images/3db2/Q1.jpg'>[Click Here for Image]</a>",
     },
     {
       id: 2,
       question: "The term “power-driven vessel” means any vessel (blank) by (blank). <i>R3(b)</i>",
       correctAnswer: ["propelled", "machinery", "stabilized", "generator power", "manual power"],
       description: "",
-      fact: "A vessel becomes power-driven the moment machinery is used for propulsion. If a sailing vessel starts its engine, even just to manoeuvre, it is considered a power-driven vessel under the Rules. Can you find the day shape on this vessel that lets us know it is also using its propulsion?  <br><a href='/images/3db2/Q2.png'>[Click Here for Image]</a>",
+      fact: "A vessel becomes power-driven the moment machinery is used for propulsion. If a sailing vessel starts its engine, even just to manoeuvre, it is considered a power-driven vessel under the Rules. Can you find the day shape on this vessel that lets us know it is also using its propulsion?  <br><a href='/images/3db2/Q2.jpg'>[Click Here for Image]</a>",
     },
     {
       id: 3,
@@ -3226,7 +3226,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         "The term “(blank)” means any vessel under sail provided that propelling machinery, if (blank), (blank) being used. <i>R3(c)</i>",
       correctAnswer: ["sailing vessel", "fitted", "is not", "power-driven", "is"],
       description: "",
-      fact: "At night, a sailing vessel is only required to display sidelights and a sternlight. Once masthead light(s) are switched on, this indicates it’s being propelled by machinery, and its status changes to a power-driven vessel. <br><a href='/images/3db2/Q3.png'>[Click Here for Image]</a>",
+      fact: "At night, a sailing vessel is only required to display sidelights and a sternlight. Once masthead light(s) are switched on, this indicates it’s being propelled by machinery, and its status changes to a power-driven vessel. <br><a href='/images/3db2/Q3.jpg'>[Click Here for Image]</a>",
     },
     {
       id: 4,
@@ -3289,7 +3289,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or (blank) a navigation mark, submarine cable or (blank) <i>R3(g)(i)</i>",
       correctAnswer: ["picking up", "pipeline", "monitoring", "anchor chain"],
       description: "",
-      fact: "RAM status ends when the work ends. Once a vessel is no longer engaged in the operation and can manoeuvre as required by the Rules, it must relinquish its RAM status. <br><a href='/images/3db2/Q11.png'>[Click Here for Image]</a>",
+      fact: "RAM status ends when the work ends. Once a vessel is no longer engaged in the operation and can manoeuvre as required by the Rules, it must relinquish its RAM status. <br><a href='/images/3db2/Q11.jpg'>[Click Here for Image]</a>",
     },
     {
       id: 12,
@@ -3313,7 +3313,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
         "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the (blank) or recovery of (blank) <i>R3(g)(iv)</i>",
       correctAnswer: ["launching", "aircraft", "loading", "liferafts"],
       description: "",
-      fact: "Sudden turns or speed changes during aircraft operations can cause aircraft loss, deck accidents, or serious injury to flight and deck crews, which is why these vessels qualify as RAM. <br><a href='/images/3db2/Q14.png'>[Click Here for Image]</a>",
+      fact: "Sudden turns or speed changes during aircraft operations can cause aircraft loss, deck accidents, or serious injury to flight and deck crews, which is why these vessels qualify as RAM. <br><a href='/images/3db2/Q14.jpg'>[Click Here for Image]</a>",
     },
     {
       id: 15,
