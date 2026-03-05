@@ -3021,7 +3021,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
   config: {
     id: "3idb1",
-    title: "Interpretation – Definition Builder – Part I",
+    title: "Definition Builder – Interpretation – Part I",
     description: "",
     themeColor: "#6e6d6a",
     quizKey: "3idb1",
@@ -3233,7 +3233,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
 {
   config: {
     id: "3idb2",
-    title: "Interpretation – Definition Builder – Part II",
+    title: "Definition Builder – Interpretation – Part II",
     description: "",
     themeColor: "#6e6d6a",
     quizKey: "3idb2",
@@ -3457,7 +3457,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
 {
   config: {
     id: "3idb3",
-    title: "Interpretation – Definition Builder – Part III",
+    title: "Definition Builder – Interpretation – Part III",
     description: "",
     themeColor: "#6e6d6a",
     quizKey: "3idb3",
