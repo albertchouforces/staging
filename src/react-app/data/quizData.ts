@@ -3740,56 +3740,56 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
       {
         id: 9,
-        question: "The term “vessels restricted in their ability to manoeuvre (RAM)” shall include but not be limited to:<br><br>a vessel engaged in laying, (blank) or picking up a navigation mark, submarine cable or pipeline <i>R3(g)(i)</i>",
+        question: "The term “vessels restricted in their ability to manoeuvre (RAM)” shall include but not be limited to:<br><br>a vessel engaged in laying, (blank) or picking up a navigation mark, submarine cable or pipeline. <i>R3(g)(i)</i>",
         correctAnswer: ["servicing", "transporting", "monitoring"],
         description: "",
         fact: "When laying or recovering a cable or pipeline, a vessel’s movement is constrained by heavy gear under tension, making course changes slow or unsafe.<br><a href='/images/3db1/Q9.png'>[Click Here for Image]</a>"
       },
       {
         id: 10,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a (blank), submarine cable or pipeline <i>R3(g)(i)</i>",
+        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a (blank), submarine cable or pipeline. <i>R3(g)(i)</i>",
         correctAnswer: ["navigation mark", "trawl net", "drainage hose"],
         description: "",
         fact: "Cables, pipelines, or marker chains may trail hundreds of metres astern or to the side of the RAM vessel, meaning the danger area is much larger than the vessel itself. <br><a href='/images/3db1/Q10.png'>[Click Here for Image]</a>"
       },
       {
         id: 11,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, (blank) or picking up a (blank), submarine cable or pipeline <i>R3(g)(i)</i>",
+        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, (blank) or picking up a (blank), submarine cable or pipeline. <i>R3(g)(i)</i>",
         correctAnswer: ["servicing", "navigation mark", "dredging", "trawl float"],
         description: "",
         fact: "These vessels often operate in high‑traffic areas. Submarine cables, pipelines, and navigation marks are commonly located near ports, channels, and coastal routes, where collision risk is naturally higher.<br><a href='/images/3db1/Q11.jpeg'>[Click Here for Image]</a>"
       },
       {
         id: 12,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), surveying or (blank) <i>R3(g)(ii)</i>",
+        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), surveying or (blank). <i>R3(g)(ii)</i>",
         correctAnswer: ["dredging", "underwater operations", "anchoring", "cargo operations"],
         description: "",
         fact: "<strong>Dredging</strong> involves removing sediment, sand, rock, or debris from the seabed to maintain or deepen channels, harbours, and waterways. <br><a href='/images/3db1/Q12.png'>[Click Here for Image]</a>"
       },
       {
         id: 13,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank) or transferring (blank), provisions or cargo while underway <i>R3(g)(iii)</i>",
+        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank) or transferring (blank), provisions or cargo while underway. <i>R3(g)(iii)</i>",
         correctAnswer: ["replenishment", "persons", "fuel monitoring", "mustering persons"],
         description: "",
         fact: "When vessels transfer people, fuel, supplies, or cargo while underway, they must hold a steady course and speed relative to each other—severely limiting their ability to manoeuvre independently. <br><a href='/images/3db1/Q13.png'>[Click Here for Image]</a>"
       },
       {
         id: 14,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the (blank) or (blank) of aircraft <i>R3(g)(iv)</i>",
+        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the (blank) or (blank) of aircraft. <i>R3(g)(iv)</i>",
         correctAnswer: ["launching", "recovery", "refuelling", "maintenance"],
         description: "",
         fact: "When launching or recovering aircraft, vessels often must maintain very specific headings and speeds to ensure safe takeoffs and landings, severely limiting manoeuvring options. <br><a href='/images/3db1/Q14.png'>[Click Here for Image]</a>"
       },
       {
         id: 15,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank) operations <i>R3(g)(v)</i>",
+        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank) operations. <i>R3(g)(v)</i>",
         correctAnswer: ["mineclearance", "minesweeping", "diving", "towing"],
         description: "",
         fact: "Mineclearance vessels often must maintain precise tracks and speeds; sudden manoeuvres can trigger mines or disrupt clearance equipment. <br><a href='/images/3db1/Q15.png'>[Click Here for Image]</a>"
       },
       {
         id: 16,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) the towing vessel and its tow in their ability to (blank) <i>R3(g)(vi)</i>",
+        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) the towing vessel and its tow in their ability to (blank). <i>R3(g)(vi)</i>",
         correctAnswer: ["severely restricts", "deviate from their course", "slightly affects", "reduce their speed"],
         description: "",
         fact: "Not all towing makes a vessel RAM. Only towing operations that severely restrict the towing vessel and its tow from altering course qualify as restricted in their ability to manoeuvre. <br><a href='/images/3db1/Q16.png'>[Click Here for Image]</a>"
@@ -3918,7 +3918,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 9,
       question:
-        "The term “vessels restricted in their ability to manoeuvre (RAM)” shall include but not be limited to:<br><br>a vessel engaged in (blank), servicing or (blank) a navigation mark, submarine cable or pipeline <i>R3(g)(i)</i>",
+        "The term “vessels restricted in their ability to manoeuvre (RAM)” shall include but not be limited to:<br><br>a vessel engaged in (blank), servicing or (blank) a navigation mark, submarine cable or pipeline. <i>R3(g)(i)</i>",
       correctAnswer: ["laying", "picking up", "towing", "loading"],
       description: "",
       fact: "Even with engines running, these vessels may be unable to turn or stop without endangering personnel, equipment or infrastructure, which is why they are classified as restricted in their ability to manoeuvre. <br><a href='/images/3db2/Q9.png'>[Click Here for Image]</a>",
@@ -3926,7 +3926,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 10,
       question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a navigation mark, (blank) or (blank) <i>R3(g)(i)</i>",
+        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a navigation mark, (blank) or (blank). <i>R3(g)(i)</i>",
       correctAnswer: ["submarine cable", "pipeline", "anchor", "fishing gear"],
       description: "",
       fact: "RAM lights and shapes tell other vessels that restricted manoeuvrability is due to ongoing work. See Rule 27 for details. <br><a href='/images/3db2/Q10.png'>[Click Here for Image]</a>",
@@ -3934,7 +3934,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 11,
       question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or (blank) a navigation mark, submarine cable or (blank) <i>R3(g)(i)</i>",
+        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or (blank) a navigation mark, submarine cable or (blank). <i>R3(g)(i)</i>",
       correctAnswer: ["picking up", "pipeline", "monitoring", "anchor chain"],
       description: "",
       fact: "RAM status ends when the work ends. Once a vessel is no longer engaged in the operation and can manoeuvre as required by the Rules, it must relinquish its RAM status. <br><a href='/images/3db2/Q11.jpg'>[Click Here for Image]</a>",
@@ -3942,7 +3942,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 12,
       question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or underwater operations <i>R3(g)(ii)</i>",
+        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or underwater operations. <i>R3(g)(ii)</i>",
       correctAnswer: ["dredging", "surveying", "trawling", "patrolling"],
       description: "",
       fact: "<strong>Surveying</strong> vessels collect data to map the seabed, locate hazards, plan construction, or update charts using sonar, sensors, or towed instruments. <br><a href='/images/3db2/Q12.png'>[Click Here for Image]</a>",
@@ -3950,7 +3950,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 13,
       question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in replenishment or (blank) (blank), provisions or cargo while (blank) <i>R3(g)(iii)</i>",
+        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in replenishment or (blank) (blank), provisions or cargo while (blank). <i>R3(g)(iii)</i>",
       correctAnswer: ["transferring", "persons", "underway", "equipment", "anchored"],
       description: "",
       fact: "Sudden turns or speed changes during a transfer can part lines, damage equipment, or injure personnel, which is why these vessels are classified as restricted in their ability to manoeuvre. <br><a href='/images/3db2/Q13.png'>[Click Here for Image]</a>",
@@ -3958,7 +3958,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 14,
       question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the (blank) or recovery of (blank) <i>R3(g)(iv)</i>",
+        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the (blank) or recovery of (blank). <i>R3(g)(iv)</i>",
       correctAnswer: ["launching", "aircraft", "loading", "liferafts"],
       description: "",
       fact: "Sudden turns or speed changes during aircraft operations can cause aircraft loss, deck accidents, or serious injury to flight and deck crews, which is why these vessels qualify as RAM. <br><a href='/images/3db2/Q14.jpg'>[Click Here for Image]</a>",
@@ -3966,7 +3966,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 15,
       question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in mineclearance (blank) <i>R3(g)(v)</i>",
+        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in mineclearance (blank). <i>R3(g)(v)</i>",
       correctAnswer: ["operations", "monitoring", "training", "procedures"],
       description: "",
       fact: "Vessels engaged in mineclearance operations have their very own distinct lighting configuration. See Rule 27(f) for details. <br><a href='/images/3db2/Q15.png'>[Click Here for Image]</a>",
@@ -3974,7 +3974,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 16,
       question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) the (blank) and its (blank) in their ability to deviate from their course <i>R3(g)(vi)</i>",
+        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) the (blank) and its (blank) in their ability to deviate from their course. <i>R3(g)(vi)</i>",
       correctAnswer: ["severely restricts", "towing vessel", "tow", "minimally limits", "equipment"],
       description: "",
       fact: "Very long tows, heavy structures, or tows with poor steering characteristics may dictate the entire movement of the towing vessel, leaving little or no ability to deviate safely. <br><a href='/images/3db2/Q16.png'>[Click Here for Image]</a>",
