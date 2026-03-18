@@ -4026,177 +4026,177 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     },
   ]
 },
-  {
-    config: {
-      id: "3db3",
-      title: "Definition Builder – Rule 3 – Part III",
-      description: "",
-      themeColor: '#6e6d6a',
-      quizKey: "3db3",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "",
-      category: "Col Regs Interpretation & Rule 3",
-      fillInTheBlank: true,
-      hidden: false
-    },
-    questions: [
-      {
-        id: 1,
-        question: "The word “vessel” includes every description of (blank), including non-displacement craft, (blank) craft and (blank), used or capable of being used as a means of (blank) on water. <i>R3(a)</i>",
-        correctAnswer: ["water craft", "WIG", "seaplanes", "transportation", "air"],
-        description: "",
-        fact: "In Canada, coastal and remote regions rely heavily on seaplanes for transportation, making clear vessel definitions especially important in shared waterways."
-      },
-      {
-        id: 2,
-        question: "The term “(blank) vessel” means any (blank) propelled by (blank). <i>R3(b)</i>",
-        correctAnswer: ["power-driven", "vessel", "machinery", "sailing", "hydraulics"],
-        description: "",
-        fact: "Whether it’s diesel, gasoline, electric, or hybrid, propulsion by any form of machinery makes a vessel power‑driven. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q2_power-driven%20vessel.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 3,
-        question: "The term “(blank) vessel” means any vessel under (blank) provided that propelling (blank), if fitted, is (blank) being used. <i>R3(c)</i>",
-        correctAnswer: ["sailing", "sail", "machinery", "is not", "is"],
-        description: "",
-        fact: "Sailing vessels are required to make sound signals in restricted visibility, using different signals than power‑driven vessels. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q3_Sailing%20Vessel.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 4,
-        question: "The term “vessel engaged in fishing” means any vessel fishing with nets, lines, (blank) or other fishing apparatus which (blank) manoeuvrability, but (blank) a vessel fishing with (blank) or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
-        correctAnswer: ["trawls", "restrict", "does not include", "trolling lines", "fishing"],
-        description: "",
-        fact: "Trolling isn’t included because the trailing lines don’t restrict manoeuvrability; the vessel can still turn, adjust speed, and avoid traffic like any sailing or power‑driven vessel."
-      },
-      {
-        id: 5,
-        question: "The term “(blank)” means any vessel fishing with (blank), (blank), (blank) or other fishing apparatus which restrict manoeuvrability, but does not include a vessel fishing with trolling lines or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
-        correctAnswer: ["vessel engaged in fishing", "nets", "lines", "trawls", "floats"],
-        description: "",
-        fact: "If a vessel engaged in fishing, other than trawling, has gear extending more than 150 m, an additional light or shape indicates the direction of its gear. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q5_Vsl%20Engaged%20in%20Fishing.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 6,
-        question: "The word “(blank)” includes any (blank) designed to manoeuvre (blank) the (blank). <i>R3(e)</i>",
-        correctAnswer: ["seaplane", "aircraft", "on", "water", "over"],
-        description: "",
-        fact: "When manoeuvring on water, a seaplane is subject to the International Collision Regulations just like other vessels, even though it’s an aircraft once airborne. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q6_Seaplane.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 7,
-        question: "The term vessel “not under command” (NUC) means a vessel which through some (blank) circumstance is (blank) to manoeuvre as required by these (blank) and is therefore unable to keep out of the way of another (blank). <i>R3(f)</i>",
-        correctAnswer: ["exceptional", "unable", "Rules", "vessel", "work"],
-        description: "",
-        fact: "An example of an exceptional circumstance is a sailing vessel with a broken mast, but only if the damage prevents the vessel from manoeuvring as required by the Rules to keep out of the way of another vessel. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q7%20-%20NUC.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 8,
-        question: "The term vessel “restricted in its ability to manoeuvre” (RAM) means a vessel which from the (blank) of its (blank) is restricted in its ability to manoeuvre as required by these (blank) and is therefore (blank) to keep out of the way of another vessel. <i>R3(g)</i>",
-        correctAnswer: ["nature", "work", "Rules", "unable", "navigation"],
-        description: "",
-        fact: "Under Rule 18, vessels Restricted in their Ability to Manoeuvre (RAM) and vessels Not Under Command (NUC) share the same highest tier of priority in the hierarchy, as they both have limited ability to keep clear of other vessels."
-      },
-      {
-        id: 9,
-        question: "The term “(blank)” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or (blank) a navigation mark, submarine cable or pipeline <i>R3(g)(i)</i>",
-        correctAnswer: ["vessels restricted in their ability to manoeuvre (RAM)", "laying", "servicing", "picking up", "not under command (NUC)"],
-        description: "",
-        fact: "Navigation marks, such as buoys and beacons are laid, lifted, and maintained by specialized vessels that must hold precise positions, sometimes in strong currents or narrow channels."
-      },
-      {
-        id: 10,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a (blank), (blank) or (blank) <i>R3(g)(i)</i>",
-        correctAnswer: ["navigation mark", "submarine cable", "pipeline", "mine", "fishing float"],
-        description: "",
-        fact: "By day, these vessels display shapes, warning mariners that manoeuvring may be severely limited. See Rule 27 for details. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q10_Navigation%20Marks.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 11,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or picking up a navigation mark, (blank) or pipeline <i>R3(g)(i)</i>",
-        correctAnswer: ["laying", "servicing", "submarine cable", "dredging", "nets"],
-        description: "",
-        fact: "This rule also helps protect infrastructure as well as lives. Damaging a cable or pipeline can disrupt power, communications, or fuel supplies far beyond the immediate area and may also cause environmental harm."
-      },
-      {
-        id: 12,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or (blank) <i>R3(g)(ii)</i>",
-        correctAnswer: ["dredging", "surveying", "underwater operations", "fishing", "minesweeping"],
-        description: "",
-        fact: "<strong>Underwater operations</strong> include diving, inspection, repair, salvage, or construction work below the surface—often involving divers, remotely operated vehicles (ROVs), or submersible equipment. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q12_Dredging.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 13,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in replenishment or transferring (blank), (blank) or (blank) while (blank) <i>R3(g)(iii)</i>",
-        correctAnswer: ["persons", "provisions", "cargo", "underway", "at anchor"],
-        description: "",
-        fact: "While underway replenishment is common in naval vessels, similar transfers also occur in commercial operations, offshore support, and emergency situations. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q13_RAS.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 14,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the launching or (blank) of (blank) <i>R3(g)(iv)</i>",
-        correctAnswer: ["recovery", "aircraft", "surveying", "landing craft", "servicing"],
-        description: "",
-        fact: "While commonly associated with military vessels, aircraft launch or recovery also occurs from civilian platforms such as research vessels, offshore support vessels, and ships operating helicopters. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q14_Aircraft.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 15,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank) <i>R3(g)(v)</i>",
-        correctAnswer: ["mineclearance operations", "environmental monitoring", "navigation training", "anchoring procedures"],
-        description: "",
-        fact: "Particular types of mineclearance operations, such as minehunting and minesweeping use influence systems, towed gear, or ROVs (remotely operated vehicles) that prevent sharp turns or speed changes. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q15_Mineclearance.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 16,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) restricts the (blank) vessel and its tow in their ability to (blank) from their (blank) <i>R3(g)(vi)</i>",
-        correctAnswer: ["severely", "towing", "deviate", "course", "speed"],
-        description: "",
-        fact: "Even with full propulsion available, the combined handling limits of the tug and tow can prevent standard collision-avoidance manoeuvres.  <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q16_Towing.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 17,
-        question: "The term vessel “constrained by its draught” means a (blank) vessel that, because of the vessel’s draught in relation to the available (blank) and (blank) of navigable water, is severely restricted in the vessel’s ability to deviate from the (blank) the vessel is following. <i>R3(h)</i>",
-        correctAnswer: ["power-driven", "depth", "width", "course", "any"],
-        description: "",
-        fact: "In the International Rules, vessels constrained by their draught <strong>may</strong> display, but are not required to display, the cylinder or additional red lights. Refer to Rule 28(a). <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q17_CbyD.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 18,
-        question: "The word “(blank)” means that a vessel is (blank) at anchor, or (blank), or (blank). <i>R3(i)</i>",
-        correctAnswer: ["underway", "not", "made fast to the shore", "aground", "making way"],
-        description: "",
-        fact: "A power-driven vessel’s light configuration changes depending on whether it is underway, at anchor, or aground, this helps other vessels to determine its status."
-      },
-      {
-        id: 19,
-        question: "The words “(blank)” and “breadth” of a (blank) mean its length (blank) and greatest (blank). <i>R3(j)</i>",
-        correctAnswer: ["vessel", "length", "overall", "breadth", "from port to starboard"],
-        description: "",
-        fact: "Crossing a length threshold (such as 12 m, 20 m, 50 m, 100 m or 200 m) can trigger additional lights or shapes, or different sound signals. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q19_Length.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 20,
-        question: "(blank) shall be deemed to be “(blank)” only when one can be observed (blank) from the (blank). <i>R3(k)</i>",
-        correctAnswer: ["vessels", "in sight of one another", "visually", "other", "by radar"],
-        description: "",
-        fact: "If a vessel’s navigation lights can be clearly seen, the vessels are considered in sight, even if the hull itself cannot be seen. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q20_Binos.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 21,
-        question: "The term “restricted visibility” means any condition in which visibility is (blank) by fog, mist, falling snow, (blank), (blank) or (blank). <i>R3(l)</i>",
-        correctAnswer: ["restricted", "heavy rainstorms", "sandstorms", "any other similar causes", "by night"],
-        description: "",
-        fact: "The phrase “any other similar causes” ensures the Rules still apply to conditions not explicitly listed, such as wildfire smoke or volcanic ash. <br><a href='https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/colregs/Q21_Restricted%20Vis.png'>[Click Here for Image]</a>"
-      },
-      {
-        id: 22,
-        question: "The term “Wing-in-Ground (WIG) craft” means a (blank) craft which, in its main operational mode, flies (blank) the (blank) by utilizing (blank). <i>R3(m)</i>",
-        correctAnswer: ["multimodal", "in close proximity to", "surface", "surface-effect action", "far away from", "lift"],
-        description: "",
-        fact: "A WIG craft may operate as a displacement vessel at rest, transition through planing, and then enter surface‑effect flight, all within navigable waters governed by the Collision Regulations. <br><a href='https://github.com/albertchouforces/sample/blob/main/images/colregs/Q22_WIG.png'>[Click Here for Image]</a>"
-      },
-    ]
+{
+  config: {
+    id: "3db3",
+    title: "Definition Builder – Rule 3 – Part III",
+    description: "",
+    themeColor: '#6e6d6a',
+    quizKey: "3db3",
+    startScreenImage: "/images/naval-operations-branch-600.png",
+    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
+    factHeading: "",
+    category: "Col Regs Interpretation & Rule 3",
+    fillInTheBlank: true,
+    hidden: false
   },
+  questions: [
+    {
+      id: 1,
+      question: "The word “vessel” includes every description of (blank), including non-displacement craft, (blank) craft and (blank), used or capable of being used as a means of (blank) on water. <i>R3(a)</i>",
+      correctAnswer: ["water craft", "WIG", "seaplanes", "transportation", "air"],
+      description: "",
+      fact: "In Canada, coastal and remote regions rely heavily on seaplanes for transportation, making clear vessel definitions especially important in shared waterways. <br><a href='/images/3db3/Q1.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 2,
+      question: "The term “(blank) vessel” means any (blank) propelled by (blank). <i>R3(b)</i>",
+      correctAnswer: ["power-driven", "vessel", "machinery", "sailing", "hydraulics"],
+      description: "",
+      fact: "Whether it’s diesel, gasoline, electric, or hybrid, propulsion by any form of machinery makes a vessel power-driven. <br><a href='/images/3db3/Q2.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 3,
+      question: "The term “(blank) vessel” means any vessel under (blank) provided that propelling (blank), if fitted, (blank) being used. <i>R3(c)</i>",
+      correctAnswer: ["sailing", "sail", "machinery", "is not", "is"],
+      description: "",
+      fact: "Sailing vessels are required to make sound signals in restricted visibility, using different signals than power-driven vessels. <br><a href='/images/3db3/Q3.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 4,
+      question: "The term “vessel engaged in fishing” means any vessel fishing with nets, lines, (blank) or other fishing apparatus which (blank) manoeuvrability, but (blank) a vessel fishing with (blank) or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
+      correctAnswer: ["trawls", "restrict", "does not include", "trolling lines", "fishing"],
+      description: "",
+      fact: "Trolling isn’t included because the trailing lines don’t restrict manoeuvrability; the vessel can still turn, adjust speed, and avoid traffic like any sailing or power-driven vessel. <br><a href='/images/3db3/Q4.jpg'>[Click Here for Image]</a>"
+    },
+    {
+      id: 5,
+      question: "The term “(blank)” means any vessel fishing with (blank) or other fishing apparatus which (blank), (blank) a vessel fishing with trolling lines or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
+      correctAnswer: ["vessel engaged in fishing", "nets", "lines", "trawls", "floats"],
+      description: "",
+      fact: "If a vessel engaged in fishing, other than trawling, has gear extending more than 150 m, an additional light or shape indicates the direction of its gear. <br><a href='/images/3db3/Q5.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 6,
+      question: "The word “(blank)” includes any (blank) designed to manoeuvre (blank) the (blank). <i>R3(e)</i>",
+      correctAnswer: ["seaplane", "aircraft", "on", "water", "over"],
+      description: "",
+      fact: "When manoeuvring on water, a seaplane is subject to the International Collision Regulations just like other vessels, even though it’s an aircraft once airborne. <br><a href='/images/3db3/Q6.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 7,
+      question: "The term vessel “not under command” (NUC) means a vessel which through some (blank) circumstance is (blank) to manoeuvre as required by these (blank) and is therefore unable to keep out of the way of another (blank). <i>R3(f)</i>",
+      correctAnswer: ["exceptional", "unable", "Rules", "vessel", "work"],
+      description: "",
+      fact: "An example of an exceptional circumstance is a sailing vessel with a broken mast, but only if the damage prevents the vessel from manoeuvring as required by the Rules to keep out of the way of another vessel. <br><a href='/images/3db3/Q7.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 8,
+      question: "The term vessel “restricted in its ability to manoeuvre” (RAM) means a vessel which from the (blank) of its (blank) is restricted in its ability to manoeuvre as required by these (blank) and is therefore (blank) to keep out of the way of another vessel. <i>R3(g)</i>",
+      correctAnswer: ["nature", "work", "Rules", "unable", "navigation"],
+      description: "",
+      fact: "Under Rule 18, vessels Restricted in their Ability to Manoeuvre (RAM) and vessels Not Under Command (NUC) share the same highest tier of priority in the hierarchy, as they both have limited ability to keep clear of other vessels. <br><a href='/images/3db3/Q8.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 9,
+      question: "The term “(blank)” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or (blank) a navigation mark, submarine cable or pipeline. <i>R3(g)(i)</i>",
+      correctAnswer: ["vessels restricted in their ability to manoeuvre (RAM)", "laying", "servicing", "picking up", "not under command (NUC)"],
+      description: "",
+      fact: "Navigation marks, such as buoys and beacons are laid, lifted, and maintained by specialized vessels that must hold precise positions, sometimes in strong currents or narrow channels. <br><a href='/images/3db3/Q9.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 10,
+      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a (blank), (blank) or (blank). <i>R3(g)(i)</i>",
+      correctAnswer: ["navigation mark", "submarine cable", "pipeline", "mine", "fishing float"],
+      description: "",
+      fact: "By day, these vessels display shapes, warning mariners that manoeuvring may be severely limited. See Rule 27 for details. <br><a href='/images/3db3/Q10.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 11,
+      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or picking up a navigation mark, (blank) or pipeline. <i>R3(g)(i)</i>",
+      correctAnswer: ["laying", "servicing", "submarine cable", "dredging", "nets"],
+      description: "",
+      fact: "This rule also helps protect infrastructure as well as lives. Damaging a cable or pipeline can disrupt power, communications, or fuel supplies far beyond the immediate area and may also cause environmental harm. <br><a href='/images/3db3/Q11.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 12,
+      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or (blank). <i>R3(g)(ii)</i>",
+      correctAnswer: ["dredging", "surveying", "underwater operations", "fishing", "minesweeping"],
+      description: "",
+      fact: "<strong>Underwater operations</strong> include diving, inspection, repair, salvage, or construction work below the surface—often involving divers, remotely operated vehicles (ROVs), or submersible equipment. <br><a href='/images/3db3/Q12.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 13,
+      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in replenishment or transferring (blank), (blank) or (blank) while (blank). <i>R3(g)(iii)</i>",
+      correctAnswer: ["persons", "provisions", "cargo", "underway", "at anchor"],
+      description: "",
+      fact: "While underway replenishment is common in naval vessels, similar transfers also occur in commercial operations, offshore support, and emergency situations. <br><a href='/images/3db3/Q13.jpg'>[Click Here for Image]</a>"
+    },
+    {
+      id: 14,
+      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the launching or (blank) of (blank). <i>R3(g)(iv)</i>",
+      correctAnswer: ["recovery", "aircraft", "surveying", "landing craft", "servicing"],
+      description: "",
+      fact: "While commonly associated with military vessels, aircraft launch or recovery also occurs from civilian platforms such as research vessels, offshore support vessels, and ships operating helicopters. <br><a href='/images/3db3/Q14.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 15,
+      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank). <i>R3(g)(v)</i>",
+      correctAnswer: ["mineclearance operations", "environmental monitoring", "navigation training", "anchoring procedures"],
+      description: "",
+      fact: "Particular types of mineclearance operations, such as minehunting and minesweeping use influence systems, towed gear, or ROVs (remotely operated vehicles) that prevent sharp turns or speed changes. <br><a href='/images/3db3/Q15.webp'>[Click Here for Image]</a>"
+    },
+    {
+      id: 16,
+      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) restricts the (blank) vessel and its tow in their ability to (blank) from their (blank). <i>R3(g)(vi)</i>",
+      correctAnswer: ["severely", "towing", "deviate", "course", "speed"],
+      description: "",
+      fact: "Even with full propulsion available, the combined handling limits of the tug and tow can prevent standard collision-avoidance manoeuvres.  <br><a href='/images/3db3/Q16.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 17,
+      question: "The term vessel “constrained by its draught” means a (blank) vessel that, because of the vessel’s draught in relation to the available (blank) and (blank) of navigable water, is severely restricted in the vessel’s ability to deviate from the (blank) the vessel is following. <i>R3(h)</i>",
+      correctAnswer: ["power-driven", "depth", "width", "course", "any"],
+      description: "",
+      fact: "In the International Rules, vessels constrained by their draught <strong>may</strong> display, but are not required to display, the cylinder or additional red lights. Refer to Rule 28(a). <br><a href='/images/3db3/Q17.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 18,
+      question: "The word “(blank)” means that a vessel is (blank) at anchor, or (blank), or (blank). <i>R3(i)</i>",
+      correctAnswer: ["underway", "not", "made fast to the shore", "aground", "making way"],
+      description: "",
+      fact: "A power-driven vessel’s light configuration changes depending on whether it is underway, at anchor, or aground, this helps other vessels to determine its status. <br><a href='/images/3db3/Q18.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 19,
+      question: "The words “(blank)” and “breadth” of a (blank) mean its length (blank) and greatest (blank). <i>R3(j)</i>",
+      correctAnswer: ["length", "vessel", "overall", "breadth", "from port to starboard"],
+      description: "",
+      fact: "Crossing a length threshold (such as 12 m, 20 m, 50 m, 100 m or 200 m) can trigger additional lights or shapes, or different sound signals. <br><a href='/images/3db3/Q19.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 20,
+      question: "(blank) shall be deemed to be “(blank)” only when one can be observed (blank) from the (blank). <i>R3(k)</i>",
+      correctAnswer: ["vessels", "in sight of one another", "visually", "other", "by radar"],
+      description: "",
+      fact: "If a vessel’s navigation lights can be clearly seen, the vessel is considered in sight, even if the hull itself cannot be seen. <br><a href='/images/3db3/Q20.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 21,
+      question: "The term “restricted visibility” means any condition in which visibility is (blank) by fog, mist, falling snow, (blank), (blank) or (blank). <i>R3(l)</i>",
+      correctAnswer: ["restricted", "heavy rainstorms", "sandstorms", "any other similar causes", "by night"],
+      description: "",
+      fact: "The phrase “any other similar causes” ensures the Rules still apply to conditions not explicitly listed, such as wildfire smoke or volcanic ash. <br><a href='/images/3db3/Q21.png'>[Click Here for Image]</a>"
+    },
+    {
+      id: 22,
+      question: "The term “Wing-in-Ground (WIG) craft” means a (blank) craft which, in its main operational mode, flies (blank) the (blank) by utilizing (blank). <i>R3(m)</i>",
+      correctAnswer: ["multimodal", "in close proximity to", "surface", "surface-effect action", "far away from", "lift"],
+      description: "",
+      fact: "A WIG craft may operate as a displacement vessel at rest, transition through planing, and then enter surface-effect flight, all within navigable waters governed by the Collision Regulations. <br><a href='/images/3db3/Q22.jpg'>[Click Here for Image]</a>"
+    },
+  ]
+},
   
 ];
 
