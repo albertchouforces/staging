@@ -3252,7 +3252,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["air cushion vessel", "motion", "surface", "wing-in-ground (WIG) craft", "air"],
       description: "",
       fact:
-        "Hovercraft, which are a type of air cushion vessel, are frequently used for rescue operations in areas where boats can’t go, such as flood zones, frozen lakes, tidal flats, and swamps."
+        "Hovercraft, which are a type of air cushion vessel, are frequently used for rescue operations in areas where boats can’t go, such as flood zones, frozen lakes, tidal flats, and swamps. <br><a href='/images/3idb2/Q1.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 2,
@@ -3267,7 +3267,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "Pile-drivers are used to hammer long piles into the seabed, making them key players in building piers, bridges, docks, and marine structures."
+        "Pile-drivers are used to hammer long piles into the seabed, making them key players in building piers, bridges, docks, and marine structures. <br><a href='/images/3idb2/Q2.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 3,
@@ -3276,7 +3276,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["pushed", "rigidly connected", "barge", "pulled", "semi-connected"],
       description: "",
       fact:
-        "These units often use articulated mechanical linkages or pins to form a stable, rigid connection that reduces yawing or pitching—making them safer in rough seas than traditional towing operations."
+        "These units often use articulated mechanical linkages or pins to form a stable, rigid connection that reduces yawing or pitching—making them safer in rough seas than traditional towing operations. <br><a href='/images/3idb2/Q3.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 4,
@@ -3285,7 +3285,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["direction", "traffic", "reference chart", "area", "power-driven vessels"],
       description: "",
       fact:
-        "On charts, traffic flow is often marked with arrows that show the intended movement direction, helping ships follow predictable paths in any condition of visibility."
+        "On charts, traffic flow is often marked with arrows that show the intended movement direction, helping ships follow predictable paths in any condition of visibility. <br><a href='/images/3idb2/Q4.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 5,
@@ -3294,7 +3294,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["vessel", "conservation", "gas", "platform", "demolition"],
       description: "",
       fact:
-        "Some modern drilling ships can operate in waters over 3,000 meters deep, making them crucial for developing deep-sea oil and gas fields."
+        "Some modern drilling ships can operate in waters over 3,000 meters deep, making them crucial for developing deep-sea oil and gas fields. <br><a href='/images/3idb2/Q5.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 6,
@@ -3309,7 +3309,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "If both vessels misunderstand who is supposed to give way, things can get confusing, which is why the regulations for preventing collisions at sea (Col Regs) are internationally standardized and taught globally."
+        "If both vessels misunderstand who is supposed to give way, things can get confusing, which is why the regulations for preventing collisions at sea (Col Regs) are internationally standardized and taught globally. <br><a href='/images/3idb2/Q6.png'>[Click Here for Image]</a>"
     },
     {
       id: 7,
@@ -3318,7 +3318,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["Georgian Bay", "connecting", "tributary waters", "Gore Bay", "partitioning"],
       description: "",
       fact:
-        "Some Great Lakes waves can rival the ocean. Lake Superior has produced waves over 9 meters (30 feet) high!"
+        "Some Great Lakes waves can rival the ocean. Lake Superior has produced waves over 9 meters (30 feet) high! <br><a href='/images/3idb2/Q7.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 8,
@@ -3333,7 +3333,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "Many towed objects ride so low they barely break the surface—log booms and floating platforms may show only centimeters above the water, meeting the Col Regs definition perfectly: “generally difficult to see”."
+        "Many towed objects ride so low they barely break the surface—log booms and floating platforms may show only centimeters above the water, meeting the Col Regs definition perfectly: “generally difficult to see”. <br><a href='/images/3idb2/Q8.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 9,
@@ -3342,7 +3342,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["routing measure", "designated area", "traffic separation scheme", "route", "separation zone"],
       description: "",
       fact:
-        "Some inshore traffic zones are just a few hundred meters wide, while others run for dozens of nautical miles along complex coasts or narrow straits."
+        "Some inshore traffic zones are just a few hundred meters wide, while others run for dozens of nautical miles along complex coasts or narrow straits. <br><a href='/images/3idb2/Q9.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 10,
@@ -3356,7 +3356,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "Unlike routine marine weather reports, Navigational Warnings (NAVWARNs) cover sudden hazards, such as unlit buoys, derelict vessels, hazards to navigation, cable-laying or dredging operations, search and rescue activity, and live-fire military zones."
+        "Unlike routine marine weather reports, Navigational Warnings (NAVWARNs) cover sudden hazards, such as unlit buoys, derelict vessels, hazards to navigation, cable-laying or dredging operations, search and rescue activity, and live-fire military zones. <br><a href='/images/3idb2/Q10.png'>[Click Here for Image]</a>"
     },
     {
       id: 11,
@@ -3371,7 +3371,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "Notice to Mariners (NOTMAR) often highlight quiet but important changes, such as updates on things like buoy colours, light characteristics, chart notes, and restricted zones. Small details that make big differences on the water."
+        "Notice to Mariners (NOTMAR) often highlight quiet but important changes, such as updates on things like buoy colours, light characteristics, chart notes, and restricted zones. Small details that make big differences on the water. <br><a href='/images/3idb2/Q11.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 12,
@@ -3380,7 +3380,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["on or in the water", "collect", "atmosphere", "above or in the water", "meteorology"],
       description: "",
       fact:
-        "They’re scientific gold mines. ODAS devices feed data into weather forecasts, tsunami warnings, climate models, and maritime safety systems. Some even help track ice movement in the Arctic."
+        "They’re scientific gold mines. ODAS devices feed data into weather forecasts, tsunami warnings, climate models, and maritime safety systems. Some even help track ice movement in the Arctic. <br><a href='/images/3idb2/Q12.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 13,
@@ -3388,7 +3388,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["includes", "does not include", "is also called"],
       description: "",
       fact:
-        "Booms ride extremely low in the water, often with only a few centimeters showing. That’s why the Col Regs bundle them with rafts: both are hard to see and easy to hit if you’re not paying attention!"
+        "Booms ride extremely low in the water, often with only a few centimeters showing. That’s why the Col Regs bundle them with rafts: both are hard to see and easy to hit if you’re not paying attention! <br><a href='/images/3idb2/Q13.png'>[Click Here for Image]</a>"
     },
     {
       id: 14,
@@ -3397,7 +3397,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["one or two", "separation lines", "may be interrupted", "two or three", "may not be interrupted"],
       description: "",
       fact:
-        "Routes help manage the world’s busiest waters. They help to prevent chaos and keep vessels predictable."
+        "Routes help manage the world’s busiest waters. They help to prevent chaos and keep vessels predictable. <br><a href='/images/3idb2/Q14.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 15,
@@ -3406,7 +3406,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["routing measures", "recommended tracks", "deep water", "traffic lanes", "shallow water"],
       description: "",
       fact:
-        "“Areas to be avoided” are like the ocean’s “Do Not Enter” signs. These zones often protect reefs, wildlife habitats, shipwreck sites, and dangerous shoals."
+        "“Areas to be avoided” are like the ocean’s “Do Not Enter” signs. These zones often protect reefs, wildlife habitats, shipwreck sites, and dangerous shoals. <br><a href='/images/3idb2/Q15.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 16,
@@ -3414,7 +3414,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["seaplane", "on", "water", "Wing-in-Ground (WIG) craft", "above"],
       description: "",
       fact:
-        "Seaplane pilots are trained not only in aviation rules but also in maritime rules, since seaplane is a vessel while on the water."
+        "Seaplane pilots are trained not only in aviation rules but also in maritime rules, since seaplane is a vessel while on the water. <br><a href='/images/3idb2/Q16.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 17,
@@ -3423,7 +3423,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["separation zone", "vessels", "directions", "traffic lanes", "power-driven vessels"],
       description: "",
       fact:
-        "By physically separating opposing flows of traffic, separation zones drastically reduce the chance of two large ships meeting bow-to-bow — a scenario no mariner wants."
+        "By physically separating opposing flows of traffic, separation zones drastically reduce the chance of two large ships meeting bow-to-bow — a scenario no mariner wants. <br><a href='/images/3idb2/Q17.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 18,
@@ -3432,7 +3432,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["route", "direction", "traffic flow", "routing system", "system"],
       description: "",
       fact:
-        "Traffic lanes make ships behave predictably. Even huge tankers and container ships — which can take a considerable distance to stop — follow traffic lanes so everyone knows exactly which direction they’ll be moving."
+        "Traffic lanes make ships behave predictably. Even huge tankers and container ships — which can take a considerable distance to stop — follow traffic lanes so everyone knows exactly which direction they’ll be moving. <br><a href='/images/3idb2/Q18.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 19,
@@ -3441,7 +3441,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["routing measure", "separation", "traffic lanes", "integration", "traffic flow"],
       description: "",
       fact:
-        "TSSs exist in the busiest waters on Earth. Places like the English Channel, Singapore Strait, and Strait of Gibraltar rely on TSSs to keep thousands of ships moving smoothly every day."
+        "TSSs exist in the busiest waters on Earth. Places like the English Channel, Singapore Strait, and Strait of Gibraltar rely on TSSs to keep thousands of ships moving smoothly every day. <br><a href='/images/3idb2/Q19.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 20,
@@ -3450,7 +3450,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["dragging", "fishing apparatus", "pushing", "fishing floats", "drifting"],
       description: "",
       fact:
-        "Trawlers move oddly compared to other vessels. Because they’re dragging heavy gear, trawlers may slow dramatically, zig-zag, or have limited turning ability. The Col Regs recognizes this and gives them special status."
+        "Trawlers move oddly compared to other vessels. Because they’re dragging heavy gear, trawlers may slow dramatically, zig-zag, or have limited turning ability. The Col Regs recognizes this and gives them special status. <br><a href='/images/3idb2/Q20.jpg'>[Click Here for Image]</a>"
     }
   ]
 },
