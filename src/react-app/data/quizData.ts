@@ -3018,7 +3018,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       },
     ]
   },
-  {
+{
   config: {
     id: "3idb1",
     title: "Definition Builder – Interpretation – Part I",
@@ -3040,7 +3040,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["weight", "air", "body", "steam", "moisture"],
       description: "",
       fact:
-        "Air cushion vessels ride on a <i>continuously generated cushion of air</i>, allowing the hull to lift above the surface. This drastically reduces friction and lets them glide over water, mud, sand, and even ice."
+        "Air cushion vessels ride on a <i>continuously generated cushion of air</i>, allowing the hull to lift above the surface. This drastically reduces friction and lets them glide over water, mud, sand, and even ice. <br><a href='/images/3idb1/Q1.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 2,
@@ -3049,7 +3049,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["non-self-propelled", "hopper", "self-propelled", "engine-propelled", "digger"],
       description: "",
       fact:
-        "A barge is non-self-propelled, meaning it has no engine. It must be pushed or towed by another vessel, usually a tugboat."
+        "A barge is non-self-propelled, meaning it has no engine. It must be pushed or towed by another vessel, usually a tugboat. <br><a href='/images/3idb1/Q2.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 3,
@@ -3058,7 +3058,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["pushing", "integrated", "pulling", "separate", "semi-integrated"],
       description: "",
       fact:
-        "Composite units are designed as dedicated and integrated combinations, meaning the tug is built specifically for that barge, and vice versa. They aren’t meant to mix and match with other vessels."
+        "Composite units are designed as dedicated and integrated combinations, meaning the tug is built specifically for that barge, and vice versa. They aren’t meant to mix and match with other vessels. <br><a href='/images/3idb1/Q3.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 4,
@@ -3067,7 +3067,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["route", "arrows", "chart", "narrow channel", "pecked lines"],
       description: "",
       fact:
-        "The system is part of a Traffic Separation Scheme (TSS), which helps prevent collisions in busy waterways where many vessels converge."
+        "This system is part of a Traffic Separation Scheme (TSS), which helps prevent collisions in busy waterways where many vessels converge. <br><a href='/images/3idb1/Q4.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 5,
@@ -3076,7 +3076,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["drilling", "oil", "filling", "water", "sediment"],
       description: "",
       fact:
-        "Exploration vessels often use dynamic positioning systems, allowing them to maintain a perfect spot over a drill site using GPS, thrusters, and computers, even in rough conditions."
+        "Exploration vessels often use dynamic positioning systems, allowing them to maintain a perfect spot over a drill site using GPS, thrusters, and computers, even in rough conditions. <br><a href='/images/3idb1/Q5.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 6,
@@ -3091,7 +3091,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "One of the key responsibilities of the give-way vessel is to make its manoeuvre “early and substantial.” This means no tiny, slow turns or changes in speed, but rather big, obvious changes that the other vessel can clearly see. See Rule 8 and Rule 16 for details."
+        "One of the key responsibilities of the give-way vessel is to make its manoeuvre “early and substantial.” This means no tiny, slow turns or changes in speed, but rather big, obvious changes that the other vessel can clearly see. See Rule 8 and Rule 16 for details. <br><a href='/images/3idb1/Q6.png'>[Click Here for Image]</a>"
     },
     {
       id: 7,
@@ -3100,7 +3100,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["Michigan", "St. Lambert Lock", "Great Bear", "Winnipeg", "Ste. Catherine Lock"],
       description: "",
       fact:
-        "The Great Lakes Basin is a natural water highway. It forms a massive inland shipping route that connects the heart of North America to the Atlantic Ocean."
+        "The Great Lakes Basin is a natural water highway. It forms a massive inland shipping route that connects the heart of North America to the Atlantic Ocean. <br><a href='/images/3idb1/Q7.png'>[Click Here for Image]</a>"
     },
     {
       id: 8,
@@ -3115,7 +3115,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "Since these objects sit so low and have little reflective surface, even advanced radar may not detect them."
+        "Since these objects sit so low and have little reflective surface, even advanced radar may not detect them. <br><a href='/images/3idb1/Q8.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 9,
@@ -3124,7 +3124,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["landward boundary", "local traffic", "seaward boundary", "large container vessels", "all traffic"],
       description: "",
       fact:
-        "By routing through-traffic farther offshore, inshore traffic zones prevent busy coastal areas from turning into chaotic, unpredictable clusters of vessels."
+        "By routing through-traffic farther offshore, inshore traffic zones prevent busy coastal areas from turning into chaotic, unpredictable clusters of vessels. <br><a href='/images/3idb1/Q9.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 10,
@@ -3133,7 +3133,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["urgent release", "marine", "monthly and annual release", "monthly and weekly release", "weather"],
       description: "",
       fact:
-        "They’re like the “breaking news” of the maritime world. When something urgent happens on the water—hazards, military exercises, drifting objects—the Department of Fisheries and Oceans (DFO) sends out a Navigational Warning so mariners know immediately."
+        "They’re like the “breaking news” of the maritime world. When something urgent happens on the water—hazards, military exercises, drifting objects—the Department of Fisheries and Oceans (DFO) sends out a Navigational Warning so mariners know immediately. <br><a href='/images/3idb1/Q10.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 11,
@@ -3142,7 +3142,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["monthly and annual publication", "marine", "weekly and annual publication", "urgent release", "vessel traffic"],
       description: "",
       fact:
-        "They come in two editions: monthly and annual. The monthly notices give fresh updates, while the annual edition collects all the big changes into one handy reference."
+        "They come in two editions: monthly and annual. The monthly notices give fresh updates, while the annual edition collects all the big changes into one handy reference. <br><a href='/images/3idb1/Q11.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 12,
@@ -3157,7 +3157,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "They come in all shapes and sizes. An ODAS might be a floating buoy, a moored sensor, an underwater package, or even a drifting device."
+        "They come in all shapes and sizes. An ODAS might be a floating buoy, a moored sensor, an underwater package, or even a drifting device. <br><a href='/images/3idb1/Q12.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 13,
@@ -3165,7 +3165,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["boom", "kisby ring", "buoy"],
       description: "",
       fact:
-        "A “raft” can be hundreds of metres long. A boom under tow, especially a log boom, can stretch farther than most ships."
+        "A “raft” can be hundreds of metres long. A boom under tow, especially a log boom, can stretch farther than most ships. <br><a href='/images/3idb1/Q13.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 14,
@@ -3174,7 +3174,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["directions of traffic flow", "crosses", "traffic lanes merging", "omits", "precautionary areas"],
       description: "",
       fact:
-        "Routes aren't random, they’re engineered. Authorities design each route based on things like shipping density, coastline shape, underwater hazards, and port traffic patterns. So every route reflects local knowledge and safety planning."
+        "Routes aren't random, they’re engineered. Authorities design each route based on things like shipping density, coastline shape, underwater hazards, and port traffic patterns. So every route reflects local knowledge and safety planning. <br><a href='/images/3idb1/Q14.png'>[Click Here for Image]</a>"
     },
     {
       id: 15,
@@ -3183,7 +3183,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["routes", "traffic separation schemes", "traffic lanes", "separation lines", "separation zones"],
       description: "",
       fact:
-        "They’re like “traffic control for the water”. A routing system is the maritime version of a highway network — lanes, shoulders, medians, roundabouts, exits etc."
+        "They’re like “traffic control for the water”. A routing system is the maritime version of a highway network — lanes, shoulders, medians, roundabouts, exits, etc. <br><a href='/images/3idb1/Q15.png'>[Click Here for Image]</a>"
     },
     {
       id: 16,
@@ -3191,7 +3191,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["aircraft", "water", "hovercraft", "shore"],
       description: "",
       fact:
-        "No other craft in the Col Regs can switch modes like a seaplane:<br><ul><li>taxiing = vessel</li><li>taking off = still subject to the rules</li><li>airborne = no longer a “vessel”</li></ul>"
+        "No other craft in the Col Regs can switch modes like a seaplane:<br><ul><li>taxiing = vessel</li><li>taking off = still subject to the rules</li><li>airborne = no longer a “vessel”</li></ul> <br><a href='/images/3idb1/Q16.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 17,
@@ -3200,7 +3200,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["routes", "opposite", "routing systems", "open water", "the same"],
       description: "",
       fact:
-        "A <strong>separation line</strong> is a simple charted line, but a <strong>separation zone</strong> is a whole band of water. Both serve the same purpose: <strong>keeping traffic organized and predictable.</strong>"
+        "A <strong>separation line</strong> is a simple charted line, but a <strong>separation zone</strong> is a whole band of water. Both serve the same purpose: <strong>keeping traffic organized and predictable.</strong> <br><a href='/images/3idb1/Q17.png'>[Click Here for Image]</a>"
     },
     {
       id: 18,
@@ -3208,7 +3208,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["is one direction", "traffic flow", "are two directions", "are multiple directions", "merging traffic"],
       description: "",
       fact:
-        "Just like cars use one-way lanes to avoid head-on collisions, ships in a traffic lane all travel in the <strong>same direction</strong>, creating predictable and orderly flow — especially in busy waterways."
+        "Just like cars use one-way lanes to avoid head-on collisions, ships in a traffic lane all travel in the <strong>same direction</strong>, creating predictable and orderly flow — especially in busy waterways. <br><a href='/images/3idb1/Q18.png'>[Click Here for Image]</a>"
     },
     {
       id: 19,
@@ -3217,7 +3217,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["opposing", "traffic lanes", "similar", "separation zones", "inshore traffic zones"],
       description: "",
       fact:
-        "The International Maritime Organization (IMO), the same organization behind the Col Regs, approves most Traffic Separation Schemes worldwide — giving mariners a consistent set of rules no matter where they sail."
+        "The International Maritime Organization (IMO), the same organization behind the Col Regs, approves most Traffic Separation Schemes worldwide — giving mariners a consistent set of rules no matter where they sail. <br><a href='/images/3idb1/Q19.png'>[Click Here for Image]</a>"
     },
     {
       id: 20,
@@ -3226,7 +3226,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["fishing", "dredge net", "dredging", "towing", "gillnet"],
       description: "",
       fact:
-        "Trawlers don’t “troll” — they drag. Trawling drags a massive net through the water, while trolling simply tows baited or lured lines behind the boat."
+        "Trawlers don’t “troll” — they drag. Trawling drags a massive net through the water, while trolling simply tows baited or lured lines behind the boat. <br><a href='/images/3idb1/Q20.jpg'>[Click Here for Image]</a>"
     }
   ]
 },
