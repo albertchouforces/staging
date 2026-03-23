@@ -3393,7 +3393,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 14,
       question:
-        "“Route” means an area within which there are, at any point, (blank) directions of traffic flow and that is delineated on two sides by (blank), separation zones, natural obstacles or dashed tinted lines except that the continuity of such lines or zones may be (blank) where the route merges with, diverges from or crosses another route.",
+        "“Route” means an area within which there are, at any point, (blank) directions of traffic flow and that is delineated on two sides by (blank), separation zones, natural obstacles or dashed tinted lines except that the continuity of such lines or zones (blank) where the route merges with, diverges from or crosses another route.",
       correctAnswer: ["one or two", "separation lines", "may be interrupted", "two or three", "may not be interrupted"],
       description: "",
       fact:
@@ -3414,7 +3414,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["seaplane", "on", "water", "Wing-in-Ground (WIG) craft", "above"],
       description: "",
       fact:
-        "Seaplane pilots are trained not only in aviation rules but also in maritime rules, since seaplane is a vessel while on the water. <br><a href='/images/3idb2/Q16.jpg'>[Click Here for Image]</a>"
+        "Seaplane pilots are trained not only in aviation rules but also in maritime rules, since seaplanes are vessels while on the water.<br><a href='/images/3idb2/Q16.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 17,
