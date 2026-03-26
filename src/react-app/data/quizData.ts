@@ -4072,7 +4072,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     {
       id: 5,
       question: "The term “(blank)” means any vessel fishing with (blank) or other fishing apparatus which (blank), (blank) a vessel fishing with trolling lines or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
-      correctAnswer: ["vessel engaged in fishing", "nets", "lines", "trawls", "floats"],
+      correctAnswer: ["vessel engaged in fishing", "nets, lines, trawls", "restrict manoeuvrability", "but does not include ", "and includes"],
       description: "",
       fact: "If a vessel engaged in fishing, other than trawling, has gear extending more than 150 m, an additional light or shape indicates the direction of its gear. <br><a href='/images/3db3/Q5.png'>[Click Here for Image]</a>"
     },
@@ -4130,7 +4130,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in replenishment or transferring (blank), (blank) or (blank) while (blank). <i>R3(g)(iii)</i>",
       correctAnswer: ["persons", "provisions", "cargo", "underway", "at anchor"],
       description: "",
-      fact: "While underway replenishment is common in naval vessels, similar transfers also occur in commercial operations, offshore support, and emergency situations. <br><a href='/images/3db3/Q13.jpg'>[Click Here for Image]</a>"
+      fact: "While underway replenishment is common in naval vessels, similar transfers also occur in commercial operations, offshore support, and emergency situations. <br><a href='/images/3db3/Q13.png'>[Click Here for Image]</a>"
     },
     {
       id: 14,
