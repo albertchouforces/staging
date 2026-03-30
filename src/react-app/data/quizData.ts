@@ -3476,7 +3476,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["vessel", "supported", "continuously", "operates", "aircraft"],
       description: "",
       fact:
-        "Their performance depends on surface proximity. If the vessel rises too far from the surface, the air cushion becomes ineffective, and lift is lost."
+        "Their performance depends on surface proximity. If the vessel rises too far from the surface, the air cushion becomes ineffective, and lift is lost. <br><a href='/images/3idb3/Q1.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 2,
@@ -3491,7 +3491,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "Hoppers carry dredged material or bulk goods. Some have split hulls or opening bottoms that let them dump material directly into the water at specific disposal sites."
+        "Hoppers carry dredged material or bulk goods. Some have split hulls or opening bottoms that let them dump material directly into the water at specific disposal sites. <br><a href='/images/3idb3/Q2.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 3,
@@ -3500,7 +3500,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["composite unit", "pushing vessel", "pushed vessel", "tug and barge", "tug and vessel"],
       description: "",
       fact:
-        "Composite units are commonly used for oil, petroleum products, and bulk cargo, where stability and predictable handling are especially important."
+        "Composite units are commonly used for oil, petroleum products, and bulk cargo, where stability and predictable handling are especially important. <br><a href='/images/3idb3/Q3.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 4,
@@ -3509,7 +3509,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["direction of traffic flow", "route", "arrows", "reference chart", "traffic separation scheme"],
       description: "",
       fact:
-        "The direction of traffic in a route is not guessed or decided by the vessel, it is established internationally through the International Maritime Organization (IMO)."
+        "The direction of traffic in a route is not guessed or decided by the vessel, it is established internationally through the International Maritime Organization (IMO). <br><a href='/images/3idb3/Q4.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 5,
@@ -3518,7 +3518,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["exploitation vessel", "engaging in", "production", "oil and gas", "exploitation platform"],
       description: "",
       fact:
-        "These vessels are vital for getting energy resources from places where traditional offshore platforms cannot be built, such as ultra-deep or remote waters."
+        "These vessels are vital for getting energy resources from places where traditional offshore platforms cannot be built, such as ultra-deep or remote waters. <br><a href='/images/3idb3/Q5.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 6,
@@ -3527,12 +3527,12 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["give-way vessel", "is required", "keep out of the way", "vessel", "stand-on vessel"],
       description: "",
       fact:
-        "The give-way vessel is the one that must change course, change speed, or both, while the stand-on vessel keeps its course and speed, unless action is needed to avoid danger."
+        "The give‑way vessel is required to take early and substantial action—by altering course, speed, or both—to avoid collision, while the stand‑on vessel shall maintain its course and speed, but must take action if it becomes necessary to avoid danger.  <br><a href='/images/3idb3/Q6.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 7,
       question:
-        "“Great Lakes Basin” means Lakes Ontario, Erie, Huron (including Georgian Bay), Michigan and Superior, their connecting and tributary waters and the Ottawa and St. Lawrence Rivers and their tributaries as far east as the lower exit of the St. Lambert Lock.",
+        "“Great Lakes Basin” means Lakes Ontario, Erie, Huron (including Georgian Bay), Michigan and Superior, their connecting and tributary waters and the (blank) Rivers and their (blank) as far (blank) of the St. Lambert Lock.",
       correctAnswer: [
         "Ottawa and St. Lawrence",
         "tributaries",
@@ -3542,7 +3542,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "With more than 6,000 shipwrecks in the Great Lakes, mastering your Col Regs is always a smart move!"
+        "With more than 6,000 shipwrecks in the Great Lakes, mastering your Col Regs is always a smart move! <br><a href='/images/3idb3/Q7.png'>[Click Here for Image]</a>"
     },
     {
       id: 8,
@@ -3551,7 +3551,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["inconspicuous", "raft or vessel", "low in the water", "difficult to see", "conspicuous"],
       description: "",
       fact:
-        "Because these towed objects are so hard to see, the Col Regs give them special lighting and day-shape requirements. See Rule 24(g) for details."
+        "Because these towed objects are so hard to see, the Col Regs give them special lighting and day-shape requirements. See Rule 24(g) for details. <br><a href='/images/3idb3/Q8.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 9,
@@ -3560,7 +3560,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["inshore traffic zone", "routing measure", "landward boundary", "adjacent coast", "separation zone"],
       description: "",
       fact:
-        "Keeping big ships out of inshore traffic zones reduces the risk of shoreline erosion, groundings, pollution near sensitive marine areas, and collisions with smaller vessels."
+        "Keeping big ships out of inshore traffic zones reduces the risk of shoreline erosion, groundings, pollution near sensitive marine areas, and collisions with smaller vessels. <br><a href='/images/3idb3/Q9.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 10,
@@ -3569,7 +3569,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["Navigational Warning", "urgent", "Fisheries and Oceans", "marine", "Transport Canada"],
       description: "",
       fact:
-        "Many warnings come from mariners themselves. Ships at sea often report hazards they spot, like a missing buoy or a floating hazard, and the DFO turns those reports into a Navigational Warning for others."
+        "Many warnings come from mariners themselves. Ships at sea often report hazards they spot, like a missing buoy or a floating hazard, and the DFO turns those reports into Navigational Warnings for others. <br><a href='/images/3idb3/Q10.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 11,
@@ -3578,16 +3578,16 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["Notice to Mariners", "monthly and annual", "Fisheries and Oceans", "marine", "Transport Canada"],
       description: "",
       fact:
-        "Just like software updates fix bugs, Notices to Mariners (NOTMAR) update charts, publications, and navigation information to keep mariners current and safe."
+        "Just like software updates fix bugs, Notices to Mariners (NOTMAR) update charts, publications, and navigation information to keep mariners current and safe. <br><a href='/images/3idb3/Q11.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 12,
       question:
-        "“ODAS” means an ocean data acquisition system that consists of any (blank) on or in the water and is designed to collect, (blank) or transmit (blank) or (data) relating to the marine environment or the atmosphere or to the uses thereof.",
+        "“ODAS” means an ocean data acquisition system that consists of any (blank) on or in the water and is designed to collect, (blank) or transmit (blank) or (blank) relating to the marine environment or the atmosphere or to the uses thereof.",
       correctAnswer: ["object", "store", "samples", "data", "vessel"],
       description: "",
       fact:
-        "They quietly watch the weather 24/7. Many ODAS devices transmit real-time data every few minutes, helping meteorologists track storms long before they reach land."
+        "They quietly watch the weather 24/7. Many ODAS devices transmit real-time data every few minutes, helping meteorologists track storms long before they reach land. <br><a href='/images/3idb3/Q12.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 13,
@@ -3595,7 +3595,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["raft", "boom", "ODAS", "composite unit", "buoy"],
       description: "",
       fact:
-        "Booms don’t manoeuvre, they just follow. Unlike a vessel, a boom can’t steer or speed up. It simply trails behind its tug, snaking with waves and currents—another reason it fits the “raft” category."
+        "Booms don’t manoeuvre, they just follow. Unlike a vessel, a boom can’t steer or speed up. It simply trails behind its tug, snaking with waves and currents—another reason it fits the “raft” category. <br><a href='/images/3idb3/Q13.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 14,
@@ -3604,7 +3604,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["route", "two sides", "natural obstacles", "merges with", "routing system"],
       description: "",
       fact:
-        "Routes evolve with traffic. If shipping patterns change or new hazards appear, authorities update route designs—just like modern cities redesign road systems."
+        "Routes evolve with traffic. If shipping patterns change or new hazards appear, authorities update route designs—just like modern cities redesign road systems. <br><a href='/images/3idb3/Q14.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 15,
@@ -3613,7 +3613,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["routing system", "one or more", "avoided", "roundabouts", "route"],
       description: "",
       fact:
-        "Routing systems reduce chaos in the world’s busiest waters. These systems are used to prevent ships from playing “guess-the-traffic-pattern.”"
+        "Routing systems reduce chaos in the world’s busiest waters. These systems are used to prevent ships from playing “guess-the-traffic-pattern.” <br><a href='/images/3idb3/Q15.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 16,
@@ -3622,7 +3622,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["seaplane", "aircraft", "on", "water", "over"],
       description: "",
       fact:
-        "As a seaplane accelerates for takeoff, it acts like a speedboat on steroids—lots of spray, lots of wake. That’s why Victoria Harbour gives them their own takeoff and landing zone."
+        "As a seaplane accelerates for takeoff, it acts like a speedboat on steroids—lots of spray, lots of wake. That’s why Victoria Harbour gives them their own takeoff and landing zone. <br><a href='/images/3idb3/Q16.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 17,
@@ -3631,7 +3631,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["separation line", "separating", "route", "inshore traffic zone", "convergent line"],
       description: "",
       fact:
-        "On paper and digital charts, separation zones are lightly tinted or hatched, while separation lines appear as bold or dashed boundaries."
+        "On paper and digital charts, separation zones are lightly tinted or hatched, while separation lines appear as bold or dashed boundaries. <br><a href='/images/3idb3/Q17.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 18,
@@ -3639,7 +3639,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["traffic lane", "route", "one direction", "traffic flow", "diverging traffic"],
       description: "",
       fact:
-        "The Col Regs require vessels to cross traffic lanes <strong>at right angles</strong> so other ships can easily judge the crossing vessel’s movements and avoid confusion."
+        "The Col Regs require vessels to cross traffic lanes <strong>at right angles</strong> so other ships can easily judge the crossing vessel’s movements and avoid confusion. <br><a href='/images/3idb3/Q18.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 19,
@@ -3654,7 +3654,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       ],
       description: "",
       fact:
-        "Some TSSs are designed around underwater hazards. Separation zones may bend or curve to avoid shoals, reefs, or sandbanks. The shape of a TSS always tells a story about the local environment."
+        "Some TSSs are designed around underwater hazards. Separation zones may bend or curve to avoid shoals, reefs, or sandbanks. The shape of a TSS always tells a story about the local environment. <br><a href='/images/3idb3/Q19.jpg'>[Click Here for Image]</a>"
     },
     {
       id: 20,
@@ -3663,7 +3663,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["trawling", "fishing by dragging", "water", "dredge net", "trolling"],
       description: "",
       fact:
-        "There are three main categories of trawling: surface (skimming the top), midwater/pelagic (sweeping the open water), and bottom/benthic (scraping the seabed). All three count as trawling under the Col Regs."
+        "There are three main categories of trawling: surface (skimming the top), midwater/pelagic (sweeping the open water), and bottom/benthic (scraping the seabed). All three count as trawling under the Col Regs. <br><a href='/images/3idb3/Q20.jpg'>[Click Here for Image]</a>"
     }
   ]
 },
