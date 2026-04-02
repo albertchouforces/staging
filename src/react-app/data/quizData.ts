@@ -3509,7 +3509,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       correctAnswer: ["direction of traffic flow", "route", "arrows", "reference chart", "traffic separation scheme"],
       description: "",
       fact:
-        "The direction of traffic in a route is not guessed or decided by the vessel, it is established internationally through the International Maritime Organization (IMO). <br><a href='/images/3idb3/Q4.jpg'>[Click Here for Image]</a>"
+        "The direction of traffic in a route is not guessed or decided by the vessel, it is established internationally through the International Maritime Organization (IMO). <br><a href='/images/3idb3/Q4.png'>[Click Here for Image]</a>"
     },
     {
       id: 5,
