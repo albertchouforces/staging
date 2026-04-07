@@ -103,10 +103,8 @@ export function StartScreen({
       
       <button
         onClick={() => onQuizSelect(quizIndex)}
-        className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2"
+        className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2 hover:opacity-90 active:opacity-80"
         style={{ backgroundColor: colors.primary }}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.hover}
-        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = colors.primary}
       >
         <Play size={20} />
         Start Quiz
