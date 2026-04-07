@@ -74,10 +74,8 @@ export function HighScoresList({
         </h4>
         <button
           onClick={onReset}
-          className="flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium transition-colors"
+          className="flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium transition-colors hover:opacity-80"
           style={{ color: colors.primary, backgroundColor: 'transparent' }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.light}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           title="Reset Top Scores"
         >
           <Trash2 size={16} />

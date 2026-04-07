@@ -193,10 +193,8 @@ export function FlashCard({
             <div className="flex justify-center w-full">
               <button
                 onClick={onNext}
-                className="px-6 py-2 text-white rounded-lg transition-colors"
+                className="px-6 py-2 text-white rounded-lg transition-colors hover:opacity-90"
                 style={{ backgroundColor: colors.primary }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.hover}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = colors.primary}
               >
                 {questionNumber === totalQuestions ? 'Finish Quiz' : 'Next Question'}
               </button>

@@ -88,20 +88,16 @@ export function ScoreDisplay({
       <div className="flex items-center gap-4">
         <button
           onClick={onRestart}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors hover:opacity-80"
           style={{ color: colors.primary }}
-          onMouseEnter={(e) => e.currentTarget.style.color = colors.hover}
-          onMouseLeave={(e) => e.currentTarget.style.color = colors.primary}
         >
           <RotateCcw size={16} />
           Restart Quiz
         </button>
         <button
           onClick={onStartNew}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors hover:opacity-80"
           style={{ color: colors.primary }}
-          onMouseEnter={(e) => e.currentTarget.style.color = colors.hover}
-          onMouseLeave={(e) => e.currentTarget.style.color = colors.primary}
         >
           <Shuffle size={16} />
           Start New Quiz

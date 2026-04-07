@@ -67,20 +67,10 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
     return (
       <button
         onClick={onClick}
-        className="px-4 py-2 rounded-lg font-medium transition-colors"
+        className="px-4 py-2 rounded-lg font-medium transition-colors hover:opacity-90"
         style={{
           backgroundColor: isSelected ? colors.primary : 'transparent',
           color: isSelected ? 'white' : colors.primary
-        }}
-        onMouseEnter={(e) => {
-          if (!isSelected) {
-            e.currentTarget.style.backgroundColor = colors.light;
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!isSelected) {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }
         }}
       >
         {config.title}
@@ -165,13 +155,7 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
                 {scores.map((score, index) => (
                   <tr 
                     key={`${score.user_name}-${index}`} 
-                    className="border-t border-gray-100 transition-colors"
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = currentThemeColors.light;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
+                    className="border-t border-gray-100 transition-colors hover:bg-gray-50"
                   >
                     <td className="py-2">{getPositionDisplay(index)}</td>
                     <td className="py-2 font-medium">{score.user_name}</td>
