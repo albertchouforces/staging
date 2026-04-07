@@ -4,12 +4,19 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  base: "/",
   server: {
     allowedHosts: true,
   },
   build: {
     chunkSizeWarningLimit: 5000,
     outDir: "dist-pages",
+    emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
   },
   resolve: {
     alias: {
