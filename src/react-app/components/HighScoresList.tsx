@@ -1,7 +1,8 @@
-import { Trash2, Medal as MedalIcon } from 'lucide-react';
+import { Trash2, Medal as MedalIcon, Info } from 'lucide-react';
+import { useState } from 'react';
 import { Medal } from '@/react-app/components/Medal';
 import { HighScoreEntry, QuizConfig } from '@/react-app/types';
-import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
+import { getThemeColor } from '@/react-app/lib/themeColors';
 
 interface HighScoresListProps {
   scores: HighScoreEntry[];
@@ -19,52 +20,8 @@ export function HighScoresList({
   quizConfig
 }: HighScoresListProps) {
   const accentColor = quizConfig.themeColor;
-
-  // Convert named colors to hex values, pass through hex colors
-  const getColorValue = (color: string) => {
-    if (color.startsWith('#')) {
-      return color;
-    }
-    
-    const colorMap: Record<string, string> = {
-      blue: '#2563eb',
-      green: '#16a34a',
-      red: '#dc2626',
-      purple: '#9333ea',
-      orange: '#ea580c',
-      pink: '#ec4899',
-      sky: '#0ea5e9',
-      cyan: '#06b6d4',
-      teal: '#14b8a6',
-      indigo: '#6366f1',
-      violet: '#8b5cf6',
-      rose: '#f43f5e',
-      amber: '#f59e0b',
-      fuchsia: '#d946ef',
-      lime: '#84cc16',
-      emerald: '#10b981',
-      yellow: '#eab308'
-    };
-    
-    return colorMap[color] || '#2563eb';
-  };
-
-  // Lighten a hex color for backgrounds
-  const lightenHexColor = (hex: string, amount: number = 220) => {
-    const color = hex.replace('#', '');
-    const r = parseInt(color.substring(0, 2), 16);
-    const g = parseInt(color.substring(2, 4), 16);
-    const b = parseInt(color.substring(4, 6), 16);
-    
-    const newR = Math.min(255, r + amount);
-    const newG = Math.min(255, g + amount);
-    const newB = Math.min(255, b + amount);
-    
-    return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
-  };
-
-  const colorValue = getColorValue(accentColor);
-  const colorLight = lightenHexColor(colorValue);
+  const colors = getThemeColor(accentColor);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const formatTime = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
@@ -90,16 +47,38 @@ export function HighScoresList({
     <div className="w-full">
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-          <MedalIcon size={20} style={{ color: colorValue }} />
+          <MedalIcon size={20} style={{ color: colors.primary }} />
           {title}
+          <div className="relative">
+            <button
+              onClick={() => setShowTooltip(!showTooltip)}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label="Information about local leaderboard"
+            >
+              <Info size={18} />
+            </button>
+            {showTooltip && (
+              <div className="absolute left-0 top-full mt-2 w-72 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3 z-10">
+                <p className="mb-2">
+                  <strong>How it works:</strong> Your scores are saved locally in your browser. The top 5 scores are displayed here.
+                </p>
+                <p className="text-gray-300">
+                  Note: Submitting your name to the leaderboard is optional. You can skip it and still play!
+                </p>
+                <div className="absolute -top-2 left-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-gray-800"></div>
+              </div>
+            )}
+          </div>
         </h4>
         <button
           onClick={onReset}
           className="flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium transition-colors"
-          style={{ color: colorValue }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colorLight}
+          style={{ color: colors.primary, backgroundColor: 'transparent' }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.light}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-          title="Reset Local Top Scores"
+          title="Reset Top Scores"
         >
           <Trash2 size={16} />
           Reset
@@ -109,13 +88,11 @@ export function HighScoresList({
         <div className="bg-white rounded-lg shadow-sm overflow-x-auto">
           <table className="w-full min-w-[300px]">
             <thead>
-              <tr style={headerBackground ? { backgroundColor: colorLight } : undefined}>
+              <tr style={headerBackground ? { backgroundColor: colors.light } : {}}>
                 <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap"></th>
                 <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600">Name</th>
                 <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Score</th>
-                {ENABLE_TIME_TRACKING && (
-                  <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Time</th>
-                )}
+                <th className="px-3 py-2 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Time</th>
               </tr>
             </thead>
             <tbody>
@@ -128,11 +105,9 @@ export function HighScoresList({
                   <td className="px-3 py-2 text-sm text-gray-600 whitespace-nowrap">
                     {score.score} ({score.accuracy}%)
                   </td>
-                  {ENABLE_TIME_TRACKING && (
-                    <td className="px-3 py-2 text-sm font-mono text-gray-600 whitespace-nowrap">
-                      {formatTime(score.time)}
-                    </td>
-                  )}
+                  <td className="px-3 py-2 text-sm font-mono text-gray-600 whitespace-nowrap">
+                    {formatTime(score.time)}
+                  </td>
                 </tr>
               ))}
             </tbody>

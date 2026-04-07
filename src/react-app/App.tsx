@@ -1,17 +1,16 @@
 import { useState, useEffect, useMemo } from 'react';
 import { FlashCard } from '@/react-app/components/FlashCard';
-import { FillInTheBlankCard } from '@/react-app/components/FillInTheBlankCard';
 import { ScoreDisplay } from '@/react-app/components/ScoreDisplay';
 import { StartScreen } from '@/react-app/components/StartScreen';
 import { UserNameInput } from '@/react-app/components/UserNameInput';
 import { Footer } from '@/react-app/components/Footer';
-import { QuizHeader } from '@/react-app/components/QuizHeader';
-import { QUIZ_COLLECTION } from '@/react-app/data/quizData';
-import { shuffleArray, getRandomOptions, getCorrectAnswers, isMultiSelect, hasAnswerPool, getAnswerPoolOptions, isFillInTheBlank } from '@/react-app/lib/utils';
-
+import { QUIZ_COLLECTION, getQuizByIndex } from '@/react-app/data/quizData';
+import { shuffleArray, getRandomOptions } from '@/react-app/lib/utils';
 import type { QuizStats, QuestionData, HighScoreEntry } from '@/react-app/types';
+import { Book } from 'lucide-react';
+import { getThemeColor } from '@/react-app/lib/themeColors';
 
-type GameState = 'selection' | 'playing' | 'entering-name';
+type GameState = 'start' | 'playing' | 'entering-name';
 
 const INITIAL_QUIZ_STATS: QuizStats = {
   highScore: 0,
@@ -20,7 +19,8 @@ const INITIAL_QUIZ_STATS: QuizStats = {
 };
 
 function App() {
-  const [gameState, setGameState] = useState<GameState>('selection');
+  const [selectedQuizIndex, setSelectedQuizIndex] = useState<number | null>(null);
+  const [gameState, setGameState] = useState<GameState>('start');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [totalAnswers, setTotalAnswers] = useState(0);
@@ -30,20 +30,33 @@ function App() {
   const [isPaused, setIsPaused] = useState(false);
   const [lastPauseTime, setLastPauseTime] = useState<number | null>(null);
   const [accumulatedTime, setAccumulatedTime] = useState(0);
-  const [selectedQuiz, setSelectedQuiz] = useState<typeof QUIZ_COLLECTION[0] | null>(null);
-  const [quizSessionKey, setQuizSessionKey] = useState(0);
+
+  const currentQuizDefinition = useMemo(() => {
+    if (selectedQuizIndex === null) return QUIZ_COLLECTION[0];
+    return getQuizByIndex(selectedQuizIndex) || QUIZ_COLLECTION[0];
+  }, [selectedQuizIndex]);
+
+  const currentQuizConfig = currentQuizDefinition.config;
+  
+  const themeColors = useMemo(() => {
+    return getThemeColor(currentQuizConfig.themeColor);
+  }, [currentQuizConfig.themeColor]);
 
   // Get all unique possible answers for the current quiz
-  // Only include single-answer questions without custom answer pools
   const allPossibleAnswers = useMemo(() => {
-    if (!selectedQuiz) return [];
-    
-    return Array.from(new Set(
-      selectedQuiz.questions
-        .filter(q => !isMultiSelect(q.correctAnswer) && !hasAnswerPool(q.answerPool))
-        .map(q => q.correctAnswer as string)
-    ));
-  }, [selectedQuiz]);
+    return Array.from(new Set(currentQuizDefinition.questions.map(q => q.correctAnswer)));
+  }, [currentQuizDefinition]);
+
+  // Load initial stats from localStorage
+  useEffect(() => {
+    if (selectedQuizIndex !== null) {
+      const statsKey = `quiz_stats_${currentQuizConfig.quizKey}`;
+      const storedStats = localStorage.getItem(statsKey);
+      if (!storedStats) {
+        localStorage.setItem(statsKey, JSON.stringify(INITIAL_QUIZ_STATS));
+      }
+    }
+  }, [selectedQuizIndex, currentQuizConfig.quizKey]);
 
   // Timer effect with pause functionality
   useEffect(() => {
@@ -61,22 +74,11 @@ function App() {
     };
   }, [gameState, startTime, isPaused, accumulatedTime]);
 
-  const getStatsForQuiz = (quizKey: string): QuizStats => {
-    try {
-      const statsKey = `quiz_stats_${quizKey}`;
-      const storedStats = localStorage.getItem(statsKey);
-      if (storedStats) {
-        const parsedStats = JSON.parse(storedStats);
-        // Validate the structure
-        if (typeof parsedStats === 'object' && 
-            'highScore' in parsedStats && 
-            'highScores' in parsedStats &&
-            Array.isArray(parsedStats.highScores)) {
-          return parsedStats;
-        }
-      }
-    } catch (error) {
-      console.error('Error reading stats from localStorage:', error);
+  const getCurrentStats = (): QuizStats => {
+    const statsKey = `quiz_stats_${currentQuizConfig.quizKey}`;
+    const storedStats = localStorage.getItem(statsKey);
+    if (storedStats) {
+      return JSON.parse(storedStats);
     }
     return INITIAL_QUIZ_STATS;
   };
@@ -97,50 +99,52 @@ function App() {
     }
   };
 
+  const handleQuizSelect = (quizIndex: number) => {
+    console.log('Selected quiz index:', quizIndex);
+    setSelectedQuizIndex(quizIndex);
+    setCurrentQuestionIndex(0);
+    handleStart(quizIndex);
+  };
+
   const updateStats = (userName: string) => {
-    if (!selectedQuiz) return;
+    const statsKey = `quiz_stats_${currentQuizConfig.quizKey}`;
+    const currentStats = getCurrentStats();
+    const accuracy = Math.round((correctAnswers / totalAnswers) * 100);
+
+    const newHighScore = Math.max(currentStats.highScore, correctAnswers);
+
+    const shouldUpdateBestRun = !currentStats.bestRun || 
+      (correctAnswers >= currentStats.bestRun.score && currentTime < currentStats.bestRun.time);
+
+    const newBestRun = shouldUpdateBestRun ? {
+      userName,
+      time: currentTime,
+      score: correctAnswers,
+      accuracy
+    } : currentStats.bestRun;
+
+    const newScore: HighScoreEntry = {
+      userName,
+      score: correctAnswers,
+      accuracy,
+      time: currentTime,
+      date: new Date().toISOString()
+    };
+
+    const newHighScores = [...currentStats.highScores, newScore]
+      .sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.time - b.time;
+      })
+      .slice(0, 5);
+
+    const newStats = {
+      highScore: newHighScore,
+      bestRun: newBestRun,
+      highScores: newHighScores
+    };
 
     try {
-      const statsKey = `quiz_stats_${selectedQuiz.config.quizKey}`;
-      const currentStats = getStatsForQuiz(selectedQuiz.config.quizKey);
-      const accuracy = Math.round((correctAnswers / totalAnswers) * 100);
-
-      const newHighScore = Math.max(currentStats.highScore, correctAnswers);
-
-      const shouldUpdateBestRun = !currentStats.bestRun || 
-        (correctAnswers >= currentStats.bestRun.score && currentTime < currentStats.bestRun.time);
-
-      const newBestRun = shouldUpdateBestRun ? {
-        userName,
-        time: currentTime,
-        score: correctAnswers,
-        accuracy
-      } : currentStats.bestRun;
-
-      const newScore: HighScoreEntry = {
-        userName,
-        score: correctAnswers,
-        accuracy,
-        time: currentTime,
-        date: new Date().toISOString()
-      };
-
-      // Ensure we only keep the top 5 scores
-      // Always sort by score (highest first) then time (fastest first)
-      // When ENABLE_TIME_TRACKING is false, the time column is simply hidden from display
-      const newHighScores = [...currentStats.highScores, newScore]
-        .sort((a, b) => {
-          if (b.score !== a.score) return b.score - a.score;
-          return a.time - b.time;
-        })
-        .slice(0, 5);
-
-      const newStats: QuizStats = {
-        highScore: newHighScore,
-        bestRun: newBestRun,
-        highScores: newHighScores
-      };
-
       localStorage.setItem(statsKey, JSON.stringify(newStats));
       console.log('Successfully saved local stats:', newStats);
     } catch (error) {
@@ -148,11 +152,17 @@ function App() {
     }
   };
 
-  const handleSelectQuiz = (quizId: string) => {
-    const quiz = QUIZ_COLLECTION.find(q => q.config.id === quizId);
-    if (!quiz) return;
-
-    setSelectedQuiz(quiz);
+  const handleStart = (quizIndex: number) => {
+    const quizDef = getQuizByIndex(quizIndex);
+    if (!quizDef) return;
+    
+    console.log(`Starting ${quizDef.config.title} with ${quizDef.questions.length} questions`);
+    
+    // Create a copy and shuffle all questions
+    const shuffledQuestions = shuffleArray([...quizDef.questions]);
+    console.log('Shuffled questions length:', shuffledQuestions.length);
+    
+    // Reset all state
     setGameState('playing');
     setCurrentQuestionIndex(0);
     setCorrectAnswers(0);
@@ -162,27 +172,15 @@ function App() {
     setIsPaused(false);
     setLastPauseTime(null);
     setAccumulatedTime(0);
-    
-    // Randomize questions order
-    setRandomizedQuestions(shuffleArray(quiz.questions));
+    setRandomizedQuestions(shuffledQuestions);
+
+    // Additional debug logging
+    console.log('Randomized questions set:', shuffledQuestions.length);
   };
 
-  const handleAnswer = (correct: boolean | number) => {
-    console.log('[App] handleAnswer called, correct:', correct, 'current totalAnswers:', totalAnswers);
-    // Handle fill-in-the-blank (number = count of correct blanks)
-    if (typeof correct === 'number') {
-      setCorrectAnswers(prev => prev + correct);
-      // For fill-in-the-blank, count each blank as a separate answer
-      const currentQuestion = getCurrentQuestion();
-      if (currentQuestion && isFillInTheBlank(currentQuestion.question, selectedQuiz?.config.fillInTheBlank || false, currentQuestion.fillInTheBlank)) {
-        const blankCount = currentQuestion.question.split('(blank)').length - 1;
-        setTotalAnswers(prev => prev + blankCount);
-      }
-    } else {
-      // Handle regular boolean answer
-      if (correct) setCorrectAnswers(prev => prev + 1);
-      setTotalAnswers(prev => prev + 1);
-    }
+  const handleAnswer = (correct: boolean) => {
+    if (correct) setCorrectAnswers(prev => prev + 1);
+    setTotalAnswers(prev => prev + 1);
     pauseTimer();
   };
 
@@ -196,159 +194,119 @@ function App() {
   };
 
   const handleRestart = () => {
-    setGameState('selection');
-    setSelectedQuiz(null);
+    // Restart with freshly shuffled questions
+    if (selectedQuizIndex !== null) {
+      handleStart(selectedQuizIndex);
+    }
   };
 
-  const handleRestartQuiz = () => {
-    if (!selectedQuiz) return;
-    
-    // Reset to playing state
-    setGameState('playing');
+  const handleStartNew = () => {
+    // Go back to home screen to select a new quiz
+    setGameState('start');
+    setSelectedQuizIndex(null);
     setCurrentQuestionIndex(0);
-    setCorrectAnswers(0);
-    setTotalAnswers(0);
-    setCurrentTime(0);
-    setStartTime(Date.now());
-    setIsPaused(false);
-    setLastPauseTime(null);
-    setAccumulatedTime(0);
-    
-    // Increment session key to force component remount
-    setQuizSessionKey(prev => prev + 1);
-    
-    // Re-randomize questions to create a fresh quiz
-    const shuffled = shuffleArray(selectedQuiz.questions);
-    setRandomizedQuestions(shuffled);
+    setRandomizedQuestions([]);
   };
 
   const handleUserNameSubmit = (userName: string) => {
-    if (!selectedQuiz) return;
-    
+    console.log('Handling username submit:', userName);
     try {
       updateStats(userName);
-      setGameState('selection');
-      setSelectedQuiz(null);
+      setGameState('start');
+      setSelectedQuizIndex(null);
     } catch (error) {
       console.error('Error in handleUserNameSubmit:', error);
     }
   };
 
   const getCurrentQuestion = () => {
+    if (!randomizedQuestions.length) return null;
     return randomizedQuestions[currentQuestionIndex];
   };
 
-  // Generate new shuffled options for each question
-  const getOptionsForCurrentQuestion = () => {
-    if (!randomizedQuestions.length) return [];
-    
+  const options = useMemo(() => {
     const currentQuestion = getCurrentQuestion();
     if (!currentQuestion) return [];
     
-    // Check if this question has a custom answer pool
-    if (hasAnswerPool(currentQuestion.answerPool)) {
-      const correctAnswers = getCorrectAnswers(currentQuestion.correctAnswer);
-      return getAnswerPoolOptions(currentQuestion.answerPool!, correctAnswers);
-    }
-    
-    // Otherwise use the pooled random options (default 4 choices)
-    // Get all correct answers for this question
-    const correctAnswers = getCorrectAnswers(currentQuestion.correctAnswer);
-    return getRandomOptions(allPossibleAnswers, correctAnswers, 4);
-  };
-
-  const [options, setOptions] = useState<string[]>([]);
-
-  // Update options whenever the question changes
-  useEffect(() => {
-    setOptions(getOptionsForCurrentQuestion());
+    return getRandomOptions(allPossibleAnswers, currentQuestion.correctAnswer, 4);
   }, [currentQuestionIndex, randomizedQuestions, allPossibleAnswers]);
 
   const handleResetScores = (quizKey: string) => {
-    try {
-      const statsKey = `quiz_stats_${quizKey}`;
-      localStorage.setItem(statsKey, JSON.stringify(INITIAL_QUIZ_STATS));
-      // Force a re-render to update the display
-      setGameState(prev => prev);
-    } catch (error) {
-      console.error('Error resetting scores:', error);
-    }
+    const statsKey = `quiz_stats_${quizKey}`;
+    localStorage.setItem(statsKey, JSON.stringify(INITIAL_QUIZ_STATS));
+    window.location.reload();
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      {gameState !== 'selection' && selectedQuiz && (
-        <QuizHeader quizConfig={selectedQuiz.config} />
-      )}
-      <div className="flex-1 py-8">
+      <div className="flex-1 py-8 px-4">
         <div className="container mx-auto flex flex-col items-center gap-8">
-          {gameState === 'selection' ? (
+          {gameState === 'start' ? (
             <StartScreen 
-              onSelectQuiz={handleSelectQuiz}
-              getStatsForQuiz={getStatsForQuiz}
+              onQuizSelect={handleQuizSelect}
               onResetScores={handleResetScores}
+              quizzes={QUIZ_COLLECTION}
             />
-          ) : selectedQuiz && (
+          ) : (
             <>
-              {gameState === 'playing' ? (
-                <div className="flex flex-col items-center gap-6">
-                  <ScoreDisplay 
-                    correct={correctAnswers} 
-                    total={totalAnswers} 
-                    highScore={getStatsForQuiz(selectedQuiz.config.quizKey).highScore}
-                    onRestart={handleRestart}
-                    onRestartQuiz={handleRestartQuiz}
-                    isFinished={false}
-                    currentTime={currentTime}
-                    bestRun={getStatsForQuiz(selectedQuiz.config.quizKey).bestRun}
-                    quizConfig={selectedQuiz.config}
-                  />
-                  {isFillInTheBlank(getCurrentQuestion().question, selectedQuiz.config.fillInTheBlank || false, getCurrentQuestion().fillInTheBlank) ? (
-                    <FillInTheBlankCard
-                      key={`session-${quizSessionKey}-q-${currentQuestionIndex}`}
-                      question={getCurrentQuestion()}
-                      onAnswer={handleAnswer}
-                      onNext={handleNext}
-                      questionNumber={currentQuestionIndex + 1}
-                      totalQuestions={randomizedQuestions.length}
-                      quizConfig={selectedQuiz.config}
-                    />
-                  ) : (
-                    <FlashCard
-                      key={`session-${quizSessionKey}-q-${currentQuestionIndex}`}
-                      question={getCurrentQuestion()}
-                      options={options}
-                      onAnswer={handleAnswer}
-                      onNext={handleNext}
-                      questionNumber={currentQuestionIndex + 1}
-                      totalQuestions={randomizedQuestions.length}
-                      quizConfig={selectedQuiz.config}
-                    />
-                  )}
+              {/* Quiz Title Header */}
+              <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg p-4 mb-2">
+                <div className="flex items-center justify-center gap-3">
+                  <Book size={24} style={{ color: themeColors.primary }} />
+                  <h1 className="text-2xl font-bold" style={{ color: themeColors.primary }}>
+                    {currentQuizConfig.title}
+                  </h1>
                 </div>
-              ) : (
+              </div>
+
+              {gameState === 'playing' && getCurrentQuestion() ? (
                 <div className="flex flex-col items-center gap-6">
                   <ScoreDisplay 
                     correct={correctAnswers} 
                     total={totalAnswers} 
-                    highScore={getStatsForQuiz(selectedQuiz.config.quizKey).highScore}
+                    highScore={getCurrentStats().highScore}
                     onRestart={handleRestart}
-                    onRestartQuiz={handleRestartQuiz}
-                    isFinished={true}
+                    onStartNew={handleStartNew}
+                    isFinished={false}
+                    totalQuestions={randomizedQuestions.length}
                     currentTime={currentTime}
-                    bestRun={getStatsForQuiz(selectedQuiz.config.quizKey).bestRun}
-                    quizConfig={selectedQuiz.config}
+                    bestRun={getCurrentStats().bestRun}
+                    quizConfig={currentQuizConfig}
+                  />
+                  <FlashCard
+                    question={getCurrentQuestion()!}
+                    options={options}
+                    onAnswer={handleAnswer}
+                    onNext={handleNext}
+                    questionNumber={currentQuestionIndex + 1}
+                    totalQuestions={randomizedQuestions.length}
+                    themeColor={currentQuizConfig.themeColor}
+                  />
+                </div>
+              ) : gameState === 'entering-name' ? (
+                <div className="flex flex-col items-center gap-6">
+                  <ScoreDisplay 
+                    correct={correctAnswers} 
+                    total={totalAnswers} 
+                    highScore={getCurrentStats().highScore}
+                    onRestart={handleRestart}
+                    onStartNew={handleStartNew}
+                    isFinished={true}
+                    totalQuestions={randomizedQuestions.length}
+                    currentTime={currentTime}
+                    bestRun={getCurrentStats().bestRun}
+                    quizConfig={currentQuizConfig}
                   />
                   <UserNameInput 
                     onSubmit={handleUserNameSubmit}
                     currentScore={correctAnswers}
                     currentTime={currentTime}
-                    highScores={getStatsForQuiz(selectedQuiz.config.quizKey).highScores}
-                    quizConfig={selectedQuiz.config}
+                    highScores={getCurrentStats().highScores}
+                    quizConfig={currentQuizConfig}
                     totalQuestions={randomizedQuestions.length}
                   />
                 </div>
-              )}
+              ) : null}
             </>
           )}
         </div>

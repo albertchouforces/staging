@@ -1,4264 +1,1192 @@
 // =================================================================
-// QUIZ COLLECTION - HOW TO ADD YOUR OWN QUIZZES
+// QUIZ COLLECTION - UNIFIED QUIZ DATA STRUCTURE
 // =================================================================
 //
-// This template allows you to create multiple image-based multiple choice quizzes.
-// Follow these steps to add a new quiz:
+// This file contains all quiz definitions in a unified structure.
+// Each quiz has its config and questions together for easy management.
 //
-// 1. PREPARE YOUR IMAGES:
-//    - Place all question images in the public/images/{quiz-name}/ folder
-//    - Recommended image dimensions: 800x600px or similar 4:3/16:9 ratio
-//    - Supported formats: PNG, JPG, SVG
-//    - Example path: public/images/animals/lion.jpg will be referenced as "/images/animals/lion.jpg"
+// HOW TO ADD A NEW QUIZ:
 //
-// 1.5. OPTIONAL: ADD AUDIO FILES TO QUESTIONS:
-//    - Place audio files in the public/audio/{quiz-name}/ folder
-//    - Supported formats: MP3, WAV, OGG, M4A
-//    - Example path: public/audio/animals/lion-roar.mp3 will be referenced as "/audio/animals/lion-roar.mp3"
-//    - Add the audioUrl field to any question where you want audio playback
-//    - The audio player will appear automatically when audioUrl is present
-//    - OPTIONAL: Add audioLoopCount to specify how many times to play the audio (default: 1)
-//      * audioLoopCount: 1 - plays once (default if not specified)
-//      * audioLoopCount: 3 - plays three times in a row
-//      * audioLoopCount: 5 - plays five times in a row, etc.
+// 1. Add a new object to the QUIZ_COLLECTION array below
+// 2. Fill in the config section:
+//    - id: Unique identifier (e.g., "signal-flags")
+//    - title: Display title
+//    - description: Brief description
+//    - themeColor: Choose from available colors
+//    - quizKey: Unique key for localStorage (e.g., "signalflags")
+//    - startScreenImage: Optional image path
+//    - studyGuide: Optional URL to study material
+//    - category: Optional category tag
+//    - hidden: Set to true to hide from start screen
+//    - isAdvanced: Set to true to show under "Advanced Challenge" heading
 //
-// 2. ADD YOUR QUIZ CONFIGURATION:
-//    - Add a new quiz configuration to the QUIZ_COLLECTION below
-//    - Each quiz needs:
-//      * id: Unique identifier for the quiz
-//      * title: Quiz title
-//      * description: Brief quiz description
-//      * themeColor: Choose from available theme colors
-//      * quizKey: Unique key for storage and database (use snake_case)
-//      * startScreenImage: Optional image for quiz card
-//      * studyGuide: Optional URL or path to study guide/materials:
-//         - Local images: Will be shown in a popup modal
-//         - External URLs (http/https): Will be opened in a new browser tab
-//         - Document files (PDFs, etc.): Will prompt a download
-//      * advancedChallenge: Optional boolean to mark as advanced challenge (deprecated - use category instead)
-//      * category: Optional string to group quizzes under a category heading (e.g., "Advanced Challenges", "Beginner Level")
-//         - Quizzes with the same category will be grouped together on the start screen
-//         - Category display order is controlled by the CATEGORY_ORDER array at the top of this file
-//         - Quizzes without a category appear first, before any categorized sections
-//      * hidden: Optional boolean to hide the quiz from display
-//      * factHeading: Optional custom heading for the fact section (defaults to "Did you know?")
-//      * questions: Array of questions following the QuestionData format
-//
-// 3. QUESTION FORMAT:
-//    Each question in the questions array must include the following fields:
-//
-//    REQUIRED FIELDS:
-//      * id: number - Unique identifier for the question (use sequential numbers)
-//      * question: string - The main question text displayed to the user
-//      * correctAnswer: string | string[] - The correct answer(s)
-//         - String format: Single correct answer. Uses pooled answers from other single-answer questions as distractors (default 4 options total)
-//         - Array format: Multi-select question - ALL items in the array must be selected to be correct
-//         - Multi-select questions show "Select all that apply" and require the user to click Submit
-//      * description: string - Brief context or additional information shown with the question
-//      * fact: string - Interesting fact shown after the user answers (educational content)
-//      * imageUrl: string - Path to the question image (relative to public folder)
-//
-//    OPTIONAL FIELDS (in addition to those listed below):
-//      * answerPool: string[] - Custom answer options for this question only (will be scrambled)
-//         - When provided, these are the ONLY options shown for this question
-//         - The correctAnswer(s) must be included in the answerPool
-//         - Overrides the default behavior of pooling answers from other questions
-//         - Can contain any number of options (not limited to 4)
-//         - Questions with answerPool are NOT used as distractors for other questions
-//
-//    OTHER OPTIONAL FIELDS:
-//      * audioUrl: string | string[] - Path(s) to audio file(s) for the question
-//         - Supported formats: MP3, WAV, OGG, M4A, AAC
-//         - Can be a single file path (string) or multiple file paths (array)
-//         - When multiple files are provided, they play sequentially in order
-//         - When provided, a play/pause audio player will appear
-//         - Audio automatically stops when moving to the next question
-//         - Single file example: "/audio/quiz-name/sound.mp3"
-//         - Multiple files example: ["/audio/sound1.mp3", "/audio/sound2.mp3", "/audio/sound3.mp3"]
-//      * audioLoopCount: number - Number of times to loop the entire audio sequence
-//         - Default: 1 (plays the sequence once if not specified)
-//         - Example: 3 (plays the entire sequence three times in succession)
-//         - With multiple files, all files play in order, then the sequence repeats
-//         - Note: Pressing pause will stop playback and reset to the beginning
-//      * factAudioUrl: string | string[] - Path(s) to audio file(s) for the fact section
-//         - Works identically to audioUrl but plays in the fact section after answering
-//         - Supported formats: MP3, WAV, OGG, M4A, AAC
-//         - Can be a single file path (string) or multiple file paths (array)
-//         - When multiple files are provided, they play sequentially in order
-//         - A separate play/pause audio player will appear in the fact section
-//         - Single file example: "/audio/quiz-name/fact-sound.mp3"
-//         - Multiple files example: ["/audio/fact1.mp3", "/audio/fact2.mp3"]
-//      * factAudioLoopCount: number - Number of times to loop the fact audio sequence
-//         - Default: 1 (plays the sequence once if not specified)
-//         - Example: 2 (plays the entire fact audio sequence twice)
-//         - Works the same as audioLoopCount but for fact audio
-//
-//    Example question with single answer and pooled options:
-//    {
-//      id: 1,
-//      question: "What is this animal?",
-//      correctAnswer: "Red Panda",  // String format - single answer, uses pooled answers from other questions as distractors
-//      description: "This animal is native to the eastern Himalayas",
-//      fact: "Red pandas are not closely related to giant pandas!",
-//      imageUrl: "/images/nature/red-panda.jpg",
-//      audioUrl: "/audio/nature/red-panda-sound.mp3",  // Optional - single file
-//      audioLoopCount: 3  // Optional - will play 3 times (default is 1)
-//    }
-//
-//    Example question with custom answer pool:
-//    {
-//      id: 2,
-//      question: "Which flag is this?",
-//      correctAnswer: "United States",  // Single correct answer
-//      answerPool: ["United States", "Canada", "Mexico", "Brazil", "Argentina"],  // Custom options (will be scrambled)
-//      description: "A North American country's flag",
-//      fact: "This flag has 50 stars representing the states!",
-//      imageUrl: "/images/flags/usa.jpg"
-//    }
-//
-//    Example multi-select question (requires ALL correct answers):
-//    {
-//      id: 3,
-//      question: "Which of these are primary colors?",
-//      correctAnswer: ["Red", "Blue", "Yellow"],  // Array format - ALL must be selected to be correct
-//      answerPool: ["Red", "Blue", "Yellow", "Green", "Orange", "Purple"],  // Custom pool with correct and incorrect answers
-//      description: "Select all primary colors",
-//      fact: "Primary colors cannot be created by mixing other colors!",
-//      imageUrl: "/images/colors/palette.jpg"
-//    }
-//
-//    Example question with multiple audio files:
-//    {
-//      id: 2,
-//      question: "What sound pattern is this?",
-//      correctAnswer: "Emergency Signal",
-//      description: "A sequence of warning sounds",
-//      fact: "This pattern is used internationally for emergencies!",
-//      imageUrl: "/images/signals/emergency.jpg",
-//      audioUrl: [  // Array of multiple audio files
-//        "/audio/signals/short-blast.mp3",
-//        "/audio/signals/long-blast.mp3",
-//        "/audio/signals/short-blast.mp3"
-//      ],
-//      audioLoopCount: 2  // Optional - plays the entire sequence twice
-//    }
-//
-//    Example question with fact audio:
-//    {
-//      id: 4,
-//      question: "What animal makes this sound?",
-//      correctAnswer: "Whale",
-//      description: "A marine mammal's vocalization",
-//      fact: "Whale songs can travel thousands of miles underwater!",
-//      imageUrl: "/images/nature/whale.jpg",
-//      audioUrl: "/audio/nature/whale-sound.mp3",
-//      factAudioUrl: "/audio/nature/whale-song.mp3",  // Optional - plays in the fact section
-//      factAudioLoopCount: 1  // Optional - plays once (default)
-//    }
-//
-// FILL-IN-THE-BLANK QUESTIONS:
-//
-// Fill-in-the-blank questions can be mixed with regular multiple-choice questions in the same quiz.
-// To create a fill-in-the-blank question, add `type: "fill-in-the-blank"` to the question object.
-// Questions without a type field (or with `type: "multiple-choice"`) will be regular MC questions.
-//
-//    Example fill-in-the-blank question:
-//    {
-//      id: 1,
-//      type: "fill-in-the-blank",  // REQUIRED for fill-in-the-blank questions
-//      question: "The capital of France is (blank) and the Eiffel Tower is (blank) meters tall.",
-//      correctAnswer: ["Paris", "330", "London", "Berlin", "Rome"],  // First 2 are correct answers for the blanks, rest are distractors
-//      description: "French geography and landmarks",
-//      fact: "The Eiffel Tower was completed in 1889!",
-//      imageUrl: "/images/geography/eiffel-tower.jpg"
-//    }
-//
-// Fill-in-the-blank format:
-//    * Add `type: "fill-in-the-blank"` to the question object
-//    * Use (blank) in the question text to mark where blanks should appear (must be exactly this text with parentheses)
-//    * correctAnswer must be an array of strings
-//    * The first N answers (where N = number of blanks) are the correct answers in order
-//    * Any additional answers beyond the first N are distractor options (wrong answers)
-//    * All answers (correct + distractors) are shuffled together as clickable options
-//    * Each blank is worth 1 point on the leaderboard
-//    * Wrong answers reveal the correct answer for that blank
-//    * Questions and answer options can both be randomized if enabled in quiz config
-//    * Users click on a blank to select it, then choose an answer from the available options
-//
-//    Example with 3 blanks and 2 distractors:
-//    {
-//      id: 2,
-//      type: "fill-in-the-blank",
-//      question: "Water freezes at (blank)°C, boils at (blank)°C, and has a pH of (blank).",
-//      correctAnswer: ["0", "100", "7", "50", "14"],  // First 3 fill blanks, last 2 are distractors
-//      description: "Properties of water",
-//      fact: "Water is one of the few substances that expands when it freezes!",
-//      imageUrl: "/images/science/water.jpg"
-//    }
-//
-//    Example quiz with MIXED question types (MC + fill-in-the-blank):
-//    {
-//      id: 1,
-//      question: "What is the largest planet in our solar system?",
-//      correctAnswer: "Jupiter",  // Regular MC question - no type field needed
-//      description: "A planet in our solar system",
-//      fact: "Jupiter is more than twice as massive as all other planets combined!",
-//      imageUrl: "/images/space/jupiter.jpg"
-//    },
-//    {
-//      id: 2,
-//      type: "fill-in-the-blank",  // Fill-in-the-blank question - type field required
-//      question: "Earth has (blank) moon(s) and Mars has (blank) moon(s).",
-//      correctAnswer: ["1", "2", "0", "3", "4"],  // First 2 are correct, rest are distractors
-//      description: "Moons in our solar system",
-//      fact: "Mars has two small moons: Phobos and Deimos!",
-//      imageUrl: "/images/space/moons.jpg"
-//    }
-//
-// Available theme colors:
-// - Basic: 'blue', 'green', 'red', 'purple', 'orange', 'pink'
-// - Cool: 'sky', 'cyan', 'teal', 'indigo', 'violet'
-// - Warm: 'rose', 'amber', 'fuchsia'
-// - Nature: 'lime', 'emerald'
+// 3. Add questions array with your questions
+//    - id: Unique number within this quiz
+//    - question: The question text
+//    - correctAnswer: The correct answer (exact match)
+//    - description: Context shown with question
+//    - fact: Interesting fact shown after answering
+//    - imageUrl: Path to image (relative to public folder)
 //
 // =================================================================
 
-import type { QuestionData, QuizConfig } from '@/react-app/types';
+import type { QuizDefinition } from '@/react-app/types';
 
-interface QuizDefinition {
-  config: QuizConfig;
-  questions: QuestionData[];
-}
-
-// Category display order on the start screen
-// Categories not in this list will appear after these in alphabetical order
-// Quizzes without a category appear first (before any categorized quizzes)
-export const CATEGORY_ORDER: string[] = [
-  'Col Regs Interpretation & Rule 3',
-  'Col Regs Rules 23-31',
-  'Col Regs Rules 32-34',
-  'Col Regs Rule 35',
-  'Advanced Challenges'
-  // Add more categories here in the desired order
-];
-
-// Collection of all available quizzes
 export const QUIZ_COLLECTION: QuizDefinition[] = [
   {
     config: {
-      id: "23to31vessel",
-      title: "Lights Challenge – Rules 23-31: Identify the Vessel",
-      description: "",
-      themeColor: 'yellow',
-      quizKey: "23to31vessel",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
+      id: "signal-flags",
+      title: "Signal Flags",
+      description: "Test your knowledge of Signal Flags.",
+      themeColor: 'purple',
+      quizKey: "signalflags",
+      startScreenImage: "/images/naval_communications_dep_badge.gif",
+      studyGuide: "",
       factHeading: "",
-      category: "Col Regs Rules 23-31",
-      hidden: false
-    },
-    questions: [
-    {
-    id: 1,
-    question: "What does this image represent?",
-    correctAnswer: ["Power-driven vessel (including a composite unit)", "Vessel engaged in towing"],
-    answerPool: ["Power-driven vessel (including a composite unit)", "Vessel pushing ahead another vessel", "Vessel engaged in towing", "Vessel engaged in pilotage duties"],
-    description: "23(a); 24(a), (b)",
-    fact: "A <strong>composite</strong> unit is a pushing vessel and another vessel pushed ahead, that are rigidly connected. Together, they count as one and display the same lights as a power-driven vessel of their <strong>combined length</strong>. Rule 24(b)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
-    },
-    {
-    id: 2,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in fishing, other than trawling"],
-    answerPool: ["Vessel engaged in fishing, other than trawling", 
-      "Vessel engaged in trawling", 
-      "Vessel engaged in pilotage duties", 
-      "Power-driven vessel"],
-    description: "26(c)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
-    },
-    {
-    id: 3,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in trawling; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing"],
-    answerPool: ["Vessel engaged in trawling; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing", 
-      "Vessel engaged in fishing, other than trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing", 
-      "Vessel not under command", "Vessel restricted in its ability to manoeuvre; obstruction on its port side"],
-    description: "26(b), (d); Annex II, 2(a)(iii)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
-    },
-    {
-    id: 4,
-    question: "What does this image represent?",
-    correctAnswer: ["Air cushion vessel in non-displacement mode"],
-    answerPool: ["Air cushion vessel in non-displacement mode", 
-      "Vessel pushing ahead another vessel", 
-      "Composite unit", 
-      "Vessel engaged in towing"],
-    description: "23(b), (a)",
-    fact: "Air-cushion vessels, like hovercraft, don’t move through the water like regular vessels—they hover above it! In this mode, they turn very differently and can reach speeds of over <strong>70 knots</strong>. To tell them apart from normal power-driven vessels, look for the <strong>yellow flashing light</strong>—it signals the vessel is in non-displacement (hover) mode.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
-    },
-    {
-    id: 5,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel constrained by its draught"],
-    answerPool: ["Vessel constrained by its draught", 
-      "Vessel not under command", 
-      "Vessel restricted in its ability to manoeuvre", 
-      "Vessel aground"],
-    description: "28(a); 23(a)",
-    fact: "A vessel’s <strong>draught</strong> is the depth of its <strong>keel</strong> (the bottom of the ship) below the waterline at any point along the <strong>hull</strong> (the main body of the ship).",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
-    },
-    {
-    id: 6,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in towing a partially submerged vessel/object"],
-    answerPool: ["Vessel engaged in towing a partially submerged vessel/object", 
-      "Vessel at anchor", 
-      "Power-driven vessel", 
-      "Vessel engaged in towing alongside"],
-    description: "24(a), (g); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
-    },
-    {
-    id: 7,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in trawling; shooting their nets; fishing in close proximity to other vessels engaged in fishing"],
-    answerPool: ["Vessel engaged in trawling; shooting their nets; fishing in close proximity to other vessels engaged in fishing", 
-      "Vessel engaged in fishing, other than trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing", 
-      "Vessel engaged in trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing", 
-      "Vessels engaged in mineclearance operations"],
-    description: "26(b), (d); Annex II, 2(a)(i)",
-    fact: "Sometimes trawlers fish together using a single net—this is called <strong>pair trawling</strong>. At night, each vessel shines a searchlight forward toward the other vessel to warn others: <strong>don’t pass between them!</strong> Annex II, 2(b)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
-    },
-    {
-    id: 8,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in towing a partially submerged vessel/object"],
-    answerPool: ["Vessel engaged in towing a partially submerged vessel/object", 
-      "Vessel at anchor", 
-      "Power-driven vessel", 
-      "Vessel engaged in towing alongside"],
-    description: "24(a), (g); 23(a)",
-    fact: "If a partially submerged vessel or object is <strong>over 100 m long</strong>, it must have extra all-round white lights so that the gap between them is <strong>no more than 100 m</strong>. Rule 24(g)(iii)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
-    },
-    {
-    id: 9,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in mineclearance operations"],
-    answerPool: ["Vessel engaged in mineclearance operations", 
-      "Vessel with an obstruction on its port side", 
-      "Vessel pushing ahead a barge", 
-      "Vessel engaged in trawling"],
-    description: "27(f)",
-    fact: "These vessels must show <strong>three all-round green lights</strong>, in addition to the usual lights for a power-driven vessel (Rule 23) or for a vessel at anchor (Rule 30).",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
-    },
-    {
-    id: 10,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel aground"],
-    answerPool: ["Vessel aground",
-      "Vessel not under command at anchor",
-      "Vessel engaged in fishing at anchor with its nets fast upon an obstruction",
-      "Vessel engaged in pilotage duties"],
-    description: "30(d), (a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
-    },
-    {
-    id: 11,
-    question: "What does this image represent?",
-    correctAnswer: ["Sailing vessel", "Vessel under oars"],
-    answerPool: ["Sailing vessel", 
-      "Vessel under oars",
-      "Power-driven vessel less than 7 m whose maximum speed does not exceed 7 kts",
-      "Power-driven vessel less than 12 m"],
-    description: "25(a), (d)(ii)",
-    fact: "A sailing vessel under sail only shows sidelights and a sternlight—but no masthead light! If it’s using its engine as well, it adds a masthead light and is considered a power-driven vessel. Rule 3(b), Rule 23(a)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
-    },
-    {
-    id: 12,
-    question: "What does this image represent?",
-    correctAnswer: ["Power-driven vessel"],
-    answerPool: ["Power-driven vessel",  
-      "Vessel pushing ahead another vessel",
-      "Vessel engaged in towing",
-      "Air cushion vessel in non-displacement mode"],
-    description: "23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
-    },
-    {
-    id: 13,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in towing two objects/vessels"],
-    answerPool: ["Vessel engaged in towing two objects/vessels",
-      "Vessel engaged in towing one object/vessel",
-      "Vessel constrained by its draught",
-      "Vessel restricted in its ability to manoeuvre"],
-    description: "24(a), (d), (e); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
-    },
-    {
-    id: 14,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing"],
-    answerPool: ["Vessel engaged in trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing",
-      "Vessel engaged in fishing, other than trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing",
-      "Vessel engaged in trawling; shooting their nets; fishing in close proximity to other vessels engaged in fishing",
-      "Vessels engaged in pilotage duties"],
-    description: "26(b), (d); Annex II, 2(a)(ii)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
-    },
-    {
-    id: 15,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel not under command"],
-    answerPool: ["Vessel not under command",
-      "Vessel engaged in trawling, its net has come fast upon an obstruction",
-      "Vessel constrained by its draught",
-      "Vessel restricted in its ability to manoeuvre"],
-    description: "27(a)",
-    fact: "Under Rule 18, vessels Not Under Command (NUC) and vessels Restricted in their Ability to Manoeuvre (RAM) rank highest in the hierarchy because they can’t easily keep clear of others.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
-    },
-    {
-    id: 16,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel restricted in its ability to manoeuvre"],
-    answerPool: ["Vessel restricted in its ability to manoeuvre",
-      "Vessel not under command",
-      "Vessel engaged in fishing, net has come fast upon an obstruction",
-      "Vessel constrained by its draught"],
-    description: "27(b)",
-    fact: "Under Rule 18, vessels Restricted in their Ability to Manoeuvre (RAM) and vessels Not Under Command (NUC) share the same top level in the hierarchy—because both have limited ability to keep clear of others.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
-    },
-    {
-    id: 17,
-    question: "What does this image represent?",
-    correctAnswer: ["Sailing vessel"],
-    answerPool: ["Sailing vessel",
-      "Vessel under sail and being propelled by machinery",
-      "Power-driven vessel less than 7 m whose maximum speed does not exceed 7 kts",
-      "Power-driven vessel less than 12 m"],
-    description: "25(a)",
-    fact: "Small sailing vessels under 20 m can combine their sidelights and sternlight into one lantern at or near the top of the mast. Rule 25(b)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
-    },
-    {
-    id: 18,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel pushing ahead"],
-    answerPool: ["Vessel pushing ahead",
-      "Vessel engaged in towing one object/vessel",
-      "Vessel engaged in towing two objects/vessels",
-      "Vessel towing alongside"],
-    description: "24(c), (d), (f)(i); 23(a)",
-    fact: "A vessel pushed ahead must show sidelights, but no sternlight is required. Rule 24(f)(i)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
-    },
-    {
-    id: 19,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in purse seining that is hampered by its fishing gear; fishing in close proximity to other vessels engaged in fishing"],
-    answerPool: ["Vessel engaged in purse seining that is hampered by its fishing gear; fishing in close proximity to other vessels engaged in fishing",
-      "Vessel engaged in trawling; fishing in close proximity to other vessels engaged in fishing",
-      "Vessel engaged in pilotage duties",
-      "Vessel restricted in its ability to manoeuvre"],
-    description: "26(c), (d); Annex II, 3",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
-    },
-    {
-    id: 20,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in towing one object/vessel"],
-    answerPool: ["Vessel engaged in towing one object/vessel",
-      "Vessel engaged in towing two objects/vessels",
-      "Vessel engaged in trawling that is shooting its nets",
-      "Vessel at anchor"],
-    description: "24(a), (d), (e); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
-    },
-    {
-    id: 21,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in trawling"],
-    answerPool: ["Vessel engaged in trawling",
-      "Vessel engaged in fishing, other than trawling",
-      "Vessel engaged in surveying",
-      "Power-driven vessel"],
-    description: "26(b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
-    },
-    {
-    id: 22,
-    question: "What does this image represent?",
-    correctAnswer: ["Vessel engaged in pilotage duties"],
-    answerPool: ["Vessel engaged in pilotage duties",
-      "Vessel engaged in fishing, other than trawling",
-      "Vessel restricted in its ability to manoeuvre",
-      "Vessel pushing ahead"],
-    description: "29(a)",
-    fact: "Many pilot vessels worldwide have “Pilot” painted on their sides for easy identification.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
-    }
-
-  ]
-  },
-  {
-    config: {
-      id: "23to31aspect",
-      title: "Lights Challenge – Rules 23-31: Identify the Aspect",
-      description: "",
-      themeColor: 'yellow',
-      quizKey: "23to31aspect",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "",
-      category: "Col Regs Rules 23-31",
-      hidden: false
-    },
-    questions: [
-    {
-    id: 1,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Head-on"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
-    },
-    {
-    id: 2,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Starboard"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(b), (e)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
-    },
-    {
-    id: 3,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "26(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
-    },
-    {
-    id: 4,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Port"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
-    },
-    {
-    id: 5,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Starboard"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
-    },
-    {
-    id: 6,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Starboard"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
-    },
-    {
-    id: 7,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "26(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
-    },
-    {
-    id: 8,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Starboard"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
-    },
-    {
-    id: 9,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Head-on"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
-    },
-    {
-    id: 10,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Port"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "30(d), (a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
-    },
-    {
-    id: 11,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Head-on"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
-    },
-    {
-    id: 12,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Head-on"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
-    },
-    {
-    id: 13,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Port"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
-    },
-    {
-    id: 14,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "26(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
-    },
-    {
-    id: 15,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "27(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
-    },
-    {
-    id: 16,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "27(b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
-    },
-    {
-    id: 17,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Head-on"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
-    },
-    {
-    id: 18,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Starboard"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
-    },
-    {
-    id: 19,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Port"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
-    },
-    {
-    id: 20,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Starboard"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(a), (b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
-    },
-    {
-    id: 21,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Port"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
-    },
-    {
-    id: 22,
-    question: "What is the aspect of this vessel?",
-    correctAnswer: ["Starboard"],
-    answerPool: ["Head-on",
-      "Port",
-      "Starboard",
-      "Stern",
-      "Unknown"],
-    description: "21(b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
-    }
-  ]
-  },
-  {
-    config: {
-      id: "23to31length",
-      title: "Lights Challenge – Rules 23-31: Identify the Length",
-      description: "",
-      themeColor: 'yellow',
-      quizKey: "23to31length",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "",
-      category: "Col Regs Rules 23-31",
-      hidden: false
-    },
-    questions: [
-    {
-    id: 1,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["May be 50 m or greater, if it is a power-driven vessel", "Less than 50 m, if it is a vessel engaged in towing (where the length of the overall tow does not exceed 200 m)"],
-    answerPool: ["May be 50 m or greater, if it is a power-driven vessel",
-      "Less than 50 m, if it is a power-driven vessel",
-      "Less than 50 m, if it is a vessel engaged in towing (where the length of the overall tow does not exceed 200 m)",
-      "May be 50 m or greater, if it is a vessel engaged in towing (where the length of the overall tow does not exceed 200 m)"],
-    description: "23(a); 24(a), (d)",
-    fact: "From a head-on aspect, you might not be able to tell whether you’re looking at a <strong>power-driven vessel that may be more than 50 m long</strong> or a <strong>vessel engaged in towing under 50 m</strong>. Their lights can look the same!",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
-    },
-    {
-    id: 2,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "26(c)",
-    fact: "The number and position of masthead lights help indicate the length of a vessel.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
-    },
-    {
-    id: 3,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "26(b); Annex II, 2(a), (c)",
-    fact: "Trawlers 20 m or longer must show signals for shooting nets, hauling nets, or when nets are fast on an obstruction when fishing near other vessels engaged in fishing. Smaller trawlers may use these signals too. Annex II, 2(a), (c)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
-    },
-    {
-    id: 4,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Less than 50 m"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "23(b), (a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
-    },
-    {
-    id: 5,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["May be 50 m or greater"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "28(a); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
-    },
-    {
-    id: 6,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Towing vessel is less than 50 m; overall tow is 200 m or less; inconspicuous vessel/object is 100 m or less"],
-    answerPool: ["Towing vessel is less than 50 m; overall tow is 200 m or less; inconspicuous vessel/object is 100 m or less",
-      "Towing vessel may be 50 m or greater; overall tow is 200 m or less; inconspicuous vessel/object is greater than 100 m",
-      "Towing vessel is less than 50 m; overall tow is greater than 200 m; inconspicuous vessel/object is 100 m or less",
-      "Towing vessel may be 50 m or greater; overall tow is greater than 200 m; inconspicuous vessel/object is greater than 100 m"],
-    description: "24(a), (d), (g)(iii); 23(a)",
-    fact: "We can also tell that this inconspicuous vessel/object is less than 25 m wide because we don’t see two extra all-round white lights (which is required when the breadth is 25 m or more). Rule 24(g)(i)(ii)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
-    },
-    {
-    id: 7,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "26(b); Annex II, 2(a), (c)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
-    },
-    {
-    id: 8,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Towing vessel is less than 50 m; overall tow is 200 m or less; inconspicuous vessel/object is greater than 100 m"],
-    answerPool: ["Towing vessel is less than 50 m; overall tow is 200 m or less; inconspicuous vessel/object is greater than 100 m",
-      "Towing vessel may be 50 m or greater; overall tow is 200 m or less; inconspicuous vessel/object is greater than 100 m",
-      "Towing vessel is less than 50 m; overall tow is greater than 200 m; inconspicuous vessel/object is 100 m or less",
-      "Towing vessel may be 50 m or greater; overall tow is greater than 200 m; inconspicuous vessel/object is greater than 100 m"],
-    description: "24(a), (d), (g)(iii); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
-    },
-    {
-    id: 9,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Less than 50 m"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "27(f); 23(a)",
-    fact: "Three all-round green lights mean it’s <strong>dangerous to approach within 1,000 m</strong> of a mineclearance vessel. Rule 27(f)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
-    },
-    {
-    id: 10,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["May be 50 m or greater"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "30(d), (a) ",
-    fact: "Vessels aground <strong>don’t use deck-illuminating lights</strong>—those are reserved for vessels at anchor. Rule 30(d), (c)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
-    },
-    {
-    id: 11,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Less than 7 m",
-      "Less than 20 m",
-      "Greater than 50 m",
-      "Unknown"],
-    description: "25(a), (b), (d)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
-    },
-    {
-    id: 12,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Less than 50 m"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "23(a)",
-    fact: "Two masthead lights on a power-driven vessel may indicate it is 50 meters or longer—but not always. Vessels under 50 meters may also display a second masthead light, it’s optional for them. Rule 23(a)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
-    },
-    {
-    id: 13,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Towing vessel is less than 50 m; overall tow is greater than 200 m; vessels/objects being towed is unknown"],
-    answerPool: ["Towing vessel is less than 50 m; overall tow is greater than 200 m; vessels/objects being towed is unknown",
-      "Towing vessel may be 50 m or greater; overall tow is 200 m or less; vessels/objects being towed is unknown",
-      "Towing vessel is less than 50 m; overall tow is greater than 200 m; vessels/objects being towed is 100 m or less",
-      "Towing vessel may be 50 m or greater; overall tow is greater than 200 m; vessels/objects being towed is greater than 100 m"],
-    description: "24(a), (d), (e); 23(a)",
-    fact: "Tow length is measured from the towing vessel’s bow to the stern of the last vessel or object being towed. If it’s over 200 m, the towing vessel must show <strong>three masthead lights in a vertical line</strong>. Rule 24(a)(i)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
-    },
-    {
-    id: 14,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "26(b); Annex II, 2(a), (c)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
-    },
-    {
-    id: 15,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "27(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
-    },
-    {
-    id: 16,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "27(b)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
-    },
-    {
-    id: 17,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Less than 20 m"],
-    answerPool: ["Less than 20 m",
-      "20 m",
-      "Greater than 20 m",
-      "Unknown"],
-    description: "25(b)",
-    fact: "Sailing vessels under 20 m may display a combined sidelights-and-sternlight lantern at or near the masthead for maximum visibility. Rule 25(b), (a)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
-    },
-    {
-    id: 18,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Pushing vessel is less than 50 m; pushed vessel is unknown"],
-    answerPool: ["Pushing vessel is less than 50 m; pushed vessel is unknown",
-      "Pushing vessel may be 50 m or greater; pushed vessel is unknown",
-      "Pushing vessel is less than 50 m; pushed vessel is less than 50 m",
-      "Pushing vessel may be 50 m or greater; pushed vessel is greater than 100 m"],
-    description: "24(c), (d), (f)(i); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
-    },
-    {
-    id: 19,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Less than 20 m",
-      "Less than 50 m",
-      "May be 50 m or greater",
-      "Unknown"],
-    description: "26(c); Annex II, 3",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
-    },
-    {
-    id: 20,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Towing vessel is less than 50 m; overall tow is 200 m or less; vessel/object being towed is unknown"],
-    answerPool: ["Towing vessel is less than 50 m; overall tow is 200 m or less; vessel/object being towed is unknown",
-      "Towing vessel may be 50 m or greater; overall tow is 200 m or less; vessel/object being towed is unknown",
-      "Towing vessel is less than 50 m; overall tow is greater than 200 m; vessel/object being towed is 100 m or less",
-      "Towing vessel may be 50 m or greater; overall tow is greater than 200 m; vessel/object being towed is greater than 100 m"],
-    description: "24(a), (d), (e); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
-    },
-    {
-    id: 21,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Less than 50 m"],
-    answerPool: ["Less than 50 m",
-      "May be 50 m or greater",
-      "Greater than 100 m",
-      "Unknown"],
-    description: "26(b)",
-    fact: `Fishing vessels engaged in trawling have a unique lighting rule:
-    <ul>
-    <li>If you see <strong>one masthead light</strong>, the vessel <strong>may be 50 m or longer</strong>.</li>
-    <li>If you see <strong>none</strong>, it’s <strong>under 50 m</strong>.</li>
-    </ul>
-    Rule 26(b)(ii)`,
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
-    },
-    {
-    id: 22,
-    question: "What is the length of this vessel?",
-    correctAnswer: ["Unknown"],
-    answerPool: ["Less than 20 m",
-      "Less than 50 m",
-      "May be 50 m or greater",
-      "Unknown"],
-    description: "29(a)",
-    fact: "When a pilot vessel is on duty, it doesn’t display masthead lights, making its length a mystery!",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
-    }
-  ]
-  },
-  {
-    config: {
-      id: "23to31status",
-      title: "Lights Challenge – Rules 23-31: Identify the Status",
-      description: "",
-      themeColor: 'yellow',
-      quizKey: "23to31status",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "",
-      category: "Col Regs Rules 23-31",
-      hidden: false
-    },
-    questions: [
-    {
-    id: 1,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "23(a); Title of Rule 23",
-    fact: "For power-driven vessels, their lights only tell you that they are underway—not whether they are making way or not making way. A handy reminder: the rule is called <strong>Power-driven Vessels Underway</strong>. Rule 23",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
-    },
-    {
-    id: 2,
-    question: "This vessel is:",
-    correctAnswer: ["Underway and making way"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "26(c)(iii)",
-    fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way. Rule 26(b), (c)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
-    },
-    {
-    id: 3,
-    question: "This vessel is:",
-    correctAnswer: ["Underway but not making way", "At anchor"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "26(a); 26(b)(iii)",
-    fact: "Vessels engaged in fishing don’t follow the usual anchor light rule! Even when anchored, they keep the <strong>special lights and shapes for fishing</strong> (Rule 26), not the standard anchor lights and ball (Rule 30). This helps other vessels know they’re still engaged in fishing.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
-    },
-    {
-    id: 4,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "23(b), (a)",
-    fact: "An air-cushion vessel falls under the category of power-driven vessel. The lights of a power-driven vessel only tell you that they are underway—not whether they are making way or not making way. A handy reminder: the rule is called <strong>Power-driven Vessels Underway</strong> (Rule 23). ",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
-    },
-    {
-    id: 5,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "28(b); 23(a)",
-    fact: "A vessel constrained by its draught is, by definition, always a power‑driven vessel. And remember: the lights of a power‑driven vessel only show that it’s underway—not whether it’s making way or not. Rule 3(h)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
-    },
-    {
-    id: 6,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "24(a), (d); 23(a)",
-    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
-    },
-    {
-    id: 7,
-    question: "This vessel is:",
-    correctAnswer: ["Underway but not making way", "At anchor"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "26(a), (b)(iii)",
-    fact: "Vessels engaged in fishing don’t follow the usual anchor light rule! Even when anchored, they keep the <strong>special lights and shapes for fishing</strong> (Rule 26), not the standard anchor lights and ball (Rule 30). This helps other vessels know they’re still engaged in fishing.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
-    },
-    {
-    id: 8,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "24(a), (d); 23(a)",
-    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
-    },
-    {
-    id: 9,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "27(f); 23(a); Title of Rule 23",
-    fact: "Rule 27(f), which applies to vessels engaged in mineclearance operations, sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that mineclearance vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
-    },
-    {
-    id: 10,
-    question: "This vessel is:",
-    correctAnswer: ["Aground"],
-    answerPool: ["Aground",
-      "Underway but not making way",
-      "Underway",
-      "At anchor"],
-    description: "30(d)",
-    fact: "Under Rule 3(i), a vessel aground cannot be regarded as “underway”.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
-    },
-    {
-    id: 11,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "25(a), Title of Rule 25",
-    fact: "The lights of a sailing vessel or a vessel under oars only tells you that they are underway—not whether they are making way or not making way. A handy reminder: the rule is called <strong>Sailing Vessels Underway and Vessels Under Oars</strong> (Rule 25).",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
-    },
-    {
-    id: 12,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "23(a), Title of Rule 23",
-    fact: "Some vessels indicate their making-way status by turning off their sidelights and sternlight when not making way. Power-driven vessels don’t do this because turning off these lights would make them invisible from astern and prevent other vessels from determining their aspect from any angle, which is critical for applying the correct Rules in a risk of collision situation.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
-    },
-    {
-    id: 13,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "Aground"],
-    description: "24(a), (d); 23(a); Title of Rule 23",
-    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way. ",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
-    },
-    {
-    id: 14,
-    question: "This vessel is:",
-    correctAnswer: ["Underway but not making way", "At anchor"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "26(a), (b)(iii)",
-    fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
-    },
-    {
-    id: 15,
-    question: "This vessel is:",
-    correctAnswer: ["Underway but not making way"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "27(a)(iii)",
-    fact: "When a vessel not under command is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are off, it’s telling you it’s not making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
-    },
-    {
-    id: 16,
-    question: "This vessel is:",
-    correctAnswer: ["Underway but not making way"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "27(b)(iii)",
-    fact: "When a RAM vessel is underway and turns off its masthead light(s), sidelights, and sternlight while still displaying the all‑round red‑over‑white‑over‑red lights, it’s telling you it’s not making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
-    },
-    {
-    id: 17,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "25(a), Title of Rule 25",
-    fact: "Some vessels indicate their making-way status by turning off their sidelights and sternlight when not making way. Sailing vessels don’t do this because turning off these lights would make them invisible at night!",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
-    },
-    {
-    id: 18,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "Aground"],
-    description: "24(c), (d); 23(a); Title of Rule 23",
-    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
-    },
-    {
-    id: 19,
-    question: "This vessel is:",
-    correctAnswer: ["Underway and making way"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "26(c)(iii)",
-    fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
-    },
-    {
-    id: 20,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "Aground"],
-    description: "24(a), (d); 23(a); Title of Rule 23",
-    fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
-    },
-    {
-    id: 21,
-    question: "This vessel is:",
-    correctAnswer: ["Underway and making way"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "26(b)(iii)",
-    fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
-    },
-    {
-    id: 22,
-    question: "This vessel is:",
-    correctAnswer: ["Underway"],
-    answerPool: ["Underway",
-      "Underway but not making way",
-      "Underway and making way",
-      "At anchor"],
-    description: "29(a)(ii)",
-    fact: "The lights of a vessel engaged in pilotage duties only tell you that they are underway—not whether they are making way or not making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
-    }
-  ]
-  },
-  {
-    config: {
-      id: "23to31vals",
-      title: "Lights Challenge – Rules 23-31: Identify the Vessel, Aspect, Length, and Status",
-      description: "",
-      themeColor: 'yellow',
-      quizKey: "23to31vals",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "",
-      category: "Col Regs Rules 23-31",
-      hidden: false
-    },
-    questions: [
-    {
-    id: 1,
-    question: "This image represents a:",
-    correctAnswer: ["Power-driven vessel; head-on aspect; may be 50 m or greater in length; underway"],
-    answerPool: ["Power-driven vessel; head-on aspect; may be 50 m or greater in length; underway",
-      "Power-driven vessel; head-on aspect; less than 50 m in length",
-      "Vessel pushing ahead another vessel; head-on aspect; length of the pushing vessel is less than 50 m in length",
-      "Composite unit; head-on aspect; less than 50 m in length"],
-    description: "23(a)",
-    fact: "Two masthead lights don’t always mean a vessel is 50 m or longer. Smaller vessels can have two—but it’s rare because the second light must be at least <strong>4.5 m higher</strong> than the first, and most small vessels simply don’t have the structure for that. Annex II, 2(a)(ii)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
-    },
-    {
-    id: 2,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in fishing, other than trawling; starboard aspect; underway and making way"],
-    answerPool: ["Vessel engaged in fishing, other than trawling; starboard aspect; underway and making way",
-      "Vessel engaged in trawling; starboard aspect; less than 50 m in length; underway and making way",
-      "Vessel engaged in pilotage duties; starboard aspect; underway",
-      "Power-driven vessel; head-on aspect; less than 50 m in length; underway"],
-    description: "26(c)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
-    },
-    {
-    id: 3,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in trawling; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; underway but not making way or at anchor"],
-    answerPool: ["Vessel engaged in trawling; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; underway but not making way or at anchor",
-      "Vessel engaged in fishing, other than trawling; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; underway and making way",
-      "Vessel not under command; starboard aspect; less than 50 m in length; underway and making way",
-      "Vessel restricted in its ability to manoeuvre; safe to pass on its starboard side; head-on aspect; underway and making way"],
-    description: "26(b), (d); Annex II, 2(a)(iii)",
-    fact: "If you knew you were looking at the <strong>bow</strong> of a trawler, the missing masthead light would tell you the vessel is <strong>under 50 m</strong>. But if you don’t know which aspect you’re seeing, its length remains a mystery! Rule 26(b)(ii)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
-    },
-    {
-    id: 4,
-    question: "This image represents a: ",
-    correctAnswer: ["Air cushion vessel in non-displacement mode; port aspect; less than 50 m in length; underway"],
-    answerPool: ["Air cushion vessel in non-displacement mode; port aspect; less than 50 m in length; underway",
-      "Vessel pushing ahead another vessel; port aspect; underway",
-      "Composite unit; stern aspect; underway",
-      "Vessel engaged in towing; stern aspect; underway and making way"],
-    description: "23(b), (a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
-    },
-    {
-    id: 5,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel constrained by its draught; starboard aspect; may be 50 m or greater in length; underway"],
-    answerPool: ["Vessel constrained by its draught; starboard aspect; may be 50 m or greater in length; underway",
-      "Vessel not under command; head-on aspect; may be 50 m or greater in length; underway and making way",
-      "Vessel restricted in its ability to manoeuvre; starboard aspect; less than 50 m in length; underway and making way",
-      "Vessel aground; starboard aspect; may be 50 m or greater in length; not underway"],
-    description: "28(a); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
-    },
-    {
-    id: 6,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in towing a partially submerged vessel/object; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; inconspicuous vessel/object is 100 m or less in length, and less than 25 m in breadth; underway"],
-    answerPool: ["Vessel engaged in towing a partially submerged vessel/object; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; inconspicuous vessel/object is 100 m or less in length, and less than 25 m in breadth; underway",
-      "Vessel engaged in towing; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; underway",
-      "Vessel engaged in towing alongside; head-on aspect; towing vessel may be 50 m or greater in length; underway and making way",
-      "Vessel at anchor; stern aspect; may be 100 m or greater in length"],
-    description: "24(a), (d), (g)(iii); 23(a)",
-    fact: "During the day, inconspicuous vessels or objects can be hard to spot until you’re very close. That’s why they are always required to display a diamond shape near the end—it helps you see them from farther away.  Rule 24(g)(iv)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
-    },
-    {
-    id: 7,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in trawling; shooting their nets; fishing in close proximity to other vessels engaged in fishing; underway but not making way or at anchor"],
-    answerPool: ["Vessel engaged in trawling; shooting their nets; fishing in close proximity to other vessels engaged in fishing; underway but not making way or at anchor",
-      "Vessel engaged in fishing, other than trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing; underway and making way",
-      "Vessel engaged in trawling; hauling their nets; less than 50 m in length; underway but not making way or at anchor",
-      "Vessels engaged in mineclearance operations; stern aspect; underway"],
-    description: "Rule 26(b), (d); Annex II, 2(a)(i)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
-    },
-    {
-    id: 8,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in towing a partially submerged vessel/object; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; inconspicuous vessel/object is greater than 100 m in length and less than 25 m in breadth; underway"],
-    answerPool: ["Vessel engaged in towing a partially submerged vessel/object; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; inconspicuous vessel/object is greater than 100 m in length and less than 25 m in breadth; underway",
-      "Vessel engaged in towing; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; underway",
-      "Vessel engaged in towing alongside; head-on aspect; towing vessel may be 50 m or greater in length; underway and making way",
-      "Vessel at anchor; stern aspect; may be 100 m or greater in length"],
-    description: "24(a), (d), (g)(iii); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
-    },
-    {
-    id: 9,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in mineclearance operations; head-on aspect; less than 50 m in length; underway"],
-    answerPool: ["Vessel engaged in mineclearance operations; head-on aspect; less than 50 m in length; underway",
-      "Vessel with an obstruction on its starboard side; stern aspect; underway and making way",
-      "Vessel pushing ahead a barge; head-on aspect; less than 50 m in length; underway",
-      "Vessel engaged in trawling; port aspect; may be greater than 50 m in length; underway and making way"],
-    description: "27(f); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
-    },
-    {
-    id: 10,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel aground; port aspect; may be 50 m or greater in length"],
-    answerPool: ["Vessel aground; port aspect; may be 50 m or greater in length",
-      "Vessel not under command at anchor; port aspect; may be 50 m or greater in length ",
-      "Vessel engaged in fishing at anchor; nets are fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing;  stern aspect",
-      "Vessel engaged in pilotage duties; starboard aspect; may be 50 m or greater in length"],
-    description: "30(d), (a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
-    },
-    {
-    id: 11,
-    question: "This image represents a: ",
-    correctAnswer: ["Sailing vessel; head-on aspect; underway"],
-    answerPool: ["Sailing vessel; head-on aspect; underway",
-      "Vessel under oars; head-on aspect; less than 7 m in length; underway and making way",
-      "Power-driven vessel; head-on aspect; less than 7 m in length whose maximum speed does not exceed 7 kts; underway",
-      "Power-driven vessel; port aspect; less than 12 m in length; underway"],
-    description: "25(a), (d)(ii)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
-    },
-    {
-    id: 12,
-    question: "This image represents a: ",
-    correctAnswer: ["Power-driven vessel; head-on aspect; less than 50 m in length; underway"],
-    answerPool: ["Power-driven vessel; head-on aspect; less than 50 m in length; underway",
-      "Vessel pushing ahead another vessel; starboard aspect; less than 50 m in length; underway and making way",
-      "Vessel engaged in towing; head-on aspect; less than 50 m in length; underway",
-      "Air cushion vessel in non-displacement mode; port aspect; underway but not making way"],
-    description: "23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
-    },
-    {
-    id: 13,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in towing two objects/vessels; port aspect; towing vessel is less than 50 m in length; overall length of the tow is greater than 200 m; underway"],
-    answerPool: ["Vessel engaged in towing two objects/vessels; port aspect; towing vessel is less than 50 m in length; overall length of the tow is greater than 200 m; underway",
-      "Vessel engaged in towing one object/vessel; port aspect; towing vessel is greater than 50 m in length; overall length of the tow is greater than 200 m; underway",
-      "Vessel constrained by its draught; port aspect; may be greater than 50 m in length; underway and making way",
-      "Vessel restricted in its ability to manoeuvre; port aspect; may be greater than 50 m in length; underway and making way"],
-    description: "24(a), (d), (e); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
-    },
-    {
-    id: 14,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing; underway but not making way or at anchor"],
-    answerPool: ["Vessel engaged in trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing; underway but not making way or at anchor",
-      "Vessel engaged in fishing, other than trawling; hauling their nets; fishing in close proximity to other vessels engaged in fishing; underway and making way",
-      "Vessel engaged in trawling; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; less than 50 m in length; underway but not making way or at anchor",
-      "Vessels engaged in pilotage duties; stern aspect; underway"],
-    description: "Rule 26(b), (d); Annex II, 2(a)(ii)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
-    },
-    {
-    id: 15,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel not under command; underway but not making way"],
-    answerPool: ["Vessel not under command; underway but not making way",
-      "Vessel engaged in trawling; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; underway but not making way",
-      "Vessel constrained by its draught; underway",
-      "Vessel restricted in its ability to manoeuvre; underway and making way"],
-    description: "Rule 27(a)",
-    fact: "Vessels Not Under Command (NUC) aren’t the same as vessels Restricted in their Ability to Manoeuvre (RAM). NUC vessels are limited in their manoeuvrability due to exceptional circumstances—like a steering gear breakdown. Rule 3(f)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
-    },
-    {
-    id: 16,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel restricted in its ability to manoeuvre; underway but not making way"],
-    answerPool: ["Vessel restricted in its ability to manoeuvre; underway but not making way",
-      "Vessel not under command; underway but not making way",
-      "Vessel engaged in fishing; net has come fast upon an obstruction; fishing in close proximity to other vessels engaged in fishing; underway and making way",
-      "Vessel constrained by its draught; underway"],
-    description: "Rule 27(b)",
-    fact: "Vessels Restricted in their Ability to Manoeuvre (RAM) aren’t the same as vessels Not Under Command (NUC). RAM vessels are limited in their manoeuvrability because of their work—like diving operations, laying submarine cables, or doing underwater surveys. Rule 3(g)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
-    },
-    {
-    id: 17,
-    question: "This image represents a: ",
-    correctAnswer: ["Sailing vessel; head-on aspect; less than 20 m in length; underway"],
-    answerPool: ["Sailing vessel; head-on aspect; less than 20 m in length; underway",
-      "Vessel under sail and being propelled by machinery; head-on aspect; less than 20 m in length; underway",
-      "Power-driven vessel; head-on aspect; less than 7 m in length whose maximum speed does not exceed 7 kts; underway",
-      "Vessel that is not identified in the Rules"],
-    description: "25(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
-    },
-    {
-    id: 18,
-    question: "This image represents a:",
-    correctAnswer: ["Vessel pushing ahead; starboard aspect; pushing vessel is less than 50 m in length; underway"],
-    answerPool: ["Vessel pushing ahead; starboard aspect; pushing vessel is less than 50 m in length; underway",
-      "Vessel engaged in towing one object/vessel; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; underway and making way",
-      "Vessel engaged in towing two objects/vessels; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; underway",
-      "Vessel towing alongside; head-on aspect; towing vessel may be greater than 50 m in length; underway but not making way"],
-    description: "24(c), (d), (f)(i); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
-    },
-    {
-    id: 19,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in purse seining; hampered by its fishing gear; fishing in close proximity to other vessels engaged in fishing; port aspect; underway and making way"],
-    answerPool: ["Vessel engaged in purse seining; hampered by its fishing gear; fishing in close proximity to other vessels engaged in fishing; port aspect; underway and making way",
-      "Vessel engaged in trawling; hampered by its fishing gear; fishing in close proximity to other vessels engaged in fishing; port aspect; less than 50 m in length; underway and making way",
-      "Vessel engaged in pilotage duties; port aspect; underway",
-      "Vessel restricted in its ability to manoeuvre; at anchor"],
-    description: "26(c), (d); Annex II, 3",
-    fact: "When you see two yellow lights flashing alternately every second, it signals that a purse seiner is hampered by its gear. Annex II, 3",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
-    },
-    {
-    id: 20,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in towing one object/vessel; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; underway"],
-    answerPool: ["Vessel engaged in towing one object/vessel; starboard aspect; towing vessel is less than 50 m in length; overall length of the tow is 200 m or less; underway",
-      "Vessel engaged in towing two objects/vessels; starboard aspect; towing vessel is greater than 50 m in length; overall length of the tow is 200 m or less; underway",
-      "Vessel engaged in trawling that is shooting its nets; starboard aspect; less than 50 m in length; underway and making way",
-      "Vessel at anchor; starboard aspect; may be greater than 50 m in length"],
-    description: "24(a), (d), (e); 23(a)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
-    },
-    {
-    id: 21,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in trawling; port aspect; less than 50 m in length; underway and making way"],
-    answerPool: ["Vessel engaged in trawling; port aspect; less than 50 m in length; underway and making way",
-      "Vessel engaged in fishing, other than trawling; port aspect; underway and making way",
-      "Vessel engaged in surveying; starboard aspect; underway",
-      "Power-driven vessel; head-on aspect; less than 50 m in length; underway"],
-    description: "26(c)",
-    fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
-    },
-    {
-    id: 22,
-    question: "This image represents a: ",
-    correctAnswer: ["Vessel engaged in pilotage duties; starboard aspect; underway"],
-    answerPool: ["Vessel engaged in pilotage duties; starboard aspect; underway",
-      "Vessel engaged in fishing, other than trawling; starboard aspect; underway and making way",
-      "Vessel restricted in its ability to manoeuvre; starboard aspect; underway and making way",
-      "Vessel pushing ahead; starboard aspect; may be 50 m or greater in length; underway"],
-    description: "29(a)",
-    fact: "Off duty, a pilot vessel follows the same lighting rules as other vessels of its length. E.g., a power-driven one would turn off its all-round white-over-red lights, turn on its masthead light(s), and keep its sidelights and sternlight on. Rule 29(b), Rule 23(a)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
-    }
-  ]
-  },
-  {
-    config: {
-      id: "32to34sounds",
-      title: "Sound Signals Challenge – Rules 32-34: Identify the Sound Signals",
-      description: "",
-      themeColor: 'blue',
-      quizKey: "32to34sounds",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "Additional Information",
-      category: "Col Regs Rules 32-34",
+      category: "Naval Communications",
       hidden: false
     },
     questions: [
       {
         id: 1,
-        question: "The term <strong>short blast</strong> means a blast of:",
-        correctAnswer: "about 1 second in duration",      
-        answerPool: [
-                      "about 1 second in duration", 
-                      "about 2 seconds in duration",
-                      "about 3 seconds in duration",
-                      "about 4 seconds in duration",
-                      "about 5 seconds in duration"
-                    ],
-        description: "",
-        fact: "Rule 32(b)",
-        factAudioUrl: "/sounds/1_Short_Blast.mp3",
+        question: "What does this represent?",
+        correctAnswer: "Alfa",
+        description: "Morse Code .-",
+        fact: "Single meaning: 'Divers/Friendly underwater demolition personnel down.'  International meaning: 'Diver down. Keep well clear at slow speed.'",
+        imageUrl: "/images/Alfa.png"
       },
       {
         id: 2,
-        question: "The term <strong>prolonged blast</strong> means a blast of:",
-        correctAnswer: "4 – 6 seconds in duration",      
-        answerPool: [
-                      "2 – 4 seconds in duration", 
-                      "3 – 4 seconds in duration",
-                      "4 – 6 seconds in duration",
-                      "5 – 7 seconds in duration"
-                    ],      
-        description: "",
-        fact: "Rule 32(c)",
-        factAudioUrl: "/sounds/2_Prolonged_Blast.mp3",
+        question: "What does this represent?",
+        correctAnswer: "Bravo",
+        description: "Morse Code -...",
+        fact: "Single meaning: 'Weapons practice. Fuelling or transferring explosives.'  International meaning: 'Taking in, discharging or carrying dangerous goods.'",
+        imageUrl: "/images/Bravo.png"
       },
       {
         id: 3,
-        question: "A vessel <strong>12 m or more</strong> in length:",
-        correctAnswer: "shall have a whistle",
-        answerPool: [
-                      "shall have a whistle",
-                      "shall have a bell",
-                      "shall have a gong",
-                      "shall have some other means of making an efficient sound signal if it does not have a whistle"    
-                    ],
-        description: "",
-        fact: "Rule 33(a)",
-        factAudioUrl: "/sounds/1_Short_Blast.mp3",
+        question: "What does this represent?",
+        correctAnswer: "Charlie",
+        description: "Morse Code -.-.",
+        fact: "Single meaning: 'Affirmative.'  International meaning: 'Yes. (Affirmative)'",
+        imageUrl: "/images/Charlie.png"
       },
       {
         id: 4,
-        question: "A vessel <strong>20 m or more</strong> in length:",
-        correctAnswer: [
-                        "shall have a whistle",
-                        "shall have a bell"
-                      ],
-        answerPool: [
-                      "shall have a whistle",
-                      "shall have a bell",
-                      "shall have a gong",
-                      "shall have some other means of making an efficient sound signal if it does not have a whistle"    
-                    ],
-        description: "",
-        fact: "Rule 33(a)",
-        factAudioUrl: [
-                        ["Whistle", "/sounds/1_Short_Blast.mp3"], 
-                        ["Bell", "/sounds/Bell.mp3"]
-                      ],
+        question: "What does this represent?",
+        correctAnswer: "Delta",
+        description: "Morse Code -..",
+        fact: "Single meaning: 'Degaussing.'. International meaning: 'Keep clear, I am manoeuvring with difficulty.'",
+        imageUrl: "/images/Delta.png"
       },
       {
         id: 5,
-        question: "A vessel <strong>100 m or more</strong> in length:",
-        correctAnswer: [
-                        "shall have a whistle",
-                        "shall have a bell",
-                        "shall have a gong"
-                      ],
-        answerPool: [
-                      "shall have a whistle",
-                      "shall have a bell",
-                      "shall have a gong",
-                      "shall have some other means of making an efficient sound signal if it does not have a whistle"    
-                    ],
-        description: "",
-        fact: "Rule 33(a)",
-        factAudioUrl: [
-                        ["Whistle", "/sounds/1_Short_Blast.mp3"], 
-                        ["Bell", "/sounds/Bell.mp3"],
-                        ["Gong", "/sounds/Gong.mp3"]
-                      ],
+        question: "What does this represent?",
+        correctAnswer: "Echo",
+        description: "Morse Code .",
+        fact: "International meaning: 'I am altering my course to Starboard.'",
+        imageUrl: "/images/Echo.png"
       },
       {
         id: 6,
-        question: "A vessel <strong>less than 12 m</strong> in length:",
-        correctAnswer: [
-                        "may have a whistle",
-                        "shall have some other means of making an efficient sound signal if it does not have a whistle"
-                      ],
-        answerPool: [
-                      "may have a whistle",
-                      "shall have some other means of making an efficient sound signal if it does not have a whistle",
-                      "shall have a bell",
-                      "shall have a gong"
-                    ],
-        description: "",
-        fact: "Rule 33(b)",
-        factAudioUrl: [
-                        ["Whistle", "/sounds/1_Short_Blast.mp3"],
-                        ["Air Horn", "/sounds/Airhorn.mp3"]
-                      ]
+        question: "What does this represent?",
+        correctAnswer: "Foxtrot",
+        description: "Morse Code ..-.",
+        fact: "Single meaning: 'Flight operations.'  International meaning: 'I am disabled. Communicate with me.'",
+        imageUrl: "/images/Foxtrot.png"
       },
       {
         id: 7,
-        question: "When <strong>vessels are in sight of one another</strong>, which vessels underway must signal their manoeuvre as required by the Rules?",
-        correctAnswer: "power-driven vessels",
-        answerPool: [
-                      "power-driven vessels",
-                      "sailing vessels",
-                      "vessels engaged in fishing",
-                      "vessels restricted in their ability to manoeuvre (RAM)"
-                    ],
-        description: "",
-        fact: "Rule 34(a)",
-        factAudioUrl: "",
+        question: "What does this represent?",
+        correctAnswer: "Golf",
+        description: "Morse Code --.",
+        fact: "Single meaning: 'Guide.'  International meaning: 'I require a pilot.'",
+        imageUrl: "/images/Golf.png"
       },
       {
         id: 8,
-        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
-        correctAnswer: "an alteration of course to starboard",
-        answerPool: [
-                      "an alteration of course to port",
-                      "operating astern propulsion",
-                      "an alteration of course to starboard",
-                      "failure to understand the intentions/actions of the other vessel",
-                      "in doubt that sufficient action is being taken by the other vessel to avoid collision"
-                    ],
-        description: "",
-        fact: "Rule 34(a)",
-        audioUrl: "/sounds/1_AC_Crse_Stbd.mp3",
+        question: "What does this represent?",
+        correctAnswer: "Hotel",
+        description: "Morse Code ....",
+        fact: "Single meaning: 'Helicopter operations.'  International meaning: 'I have a pilot onboard.'",
+        imageUrl: "/images/Hotel.png"
       },
       {
         id: 9,
-        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
-        correctAnswer: "an alteration of course to port",
-        answerPool: [
-                      "an alteration of course to port",
-                      "operating astern propulsion",
-                      "an alteration of course to starboard",
-                      "failure to understand the intentions/actions of the other vessel",
-                      "in doubt that sufficient action is being taken by the other vessel to avoid collision"
-                    ],
-        description: "",
-        fact: "Rule 34(a)",
-        audioUrl: "/sounds/2_AC_Crse_Port.mp3",
+        question: "What does this represent?",
+        correctAnswer: "India",
+        description: "Morse Code ..",
+        fact: "Single meaning: 'Going alongside in Port/Anchor.'  International meaning: 'Altering my course to Port.'",
+        imageUrl: "/images/India.png"
       },
       {
         id: 10,
-        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
-        correctAnswer: "operating astern propulsion",
-        answerPool: [
-                      "an alteration of course to port",
-                      "operating astern propulsion",
-                      "an alteration of course to starboard",
-                      "failure to understand the intentions/actions of the other vessel",
-                      "in doubt that sufficient action is being taken by the other vessel to avoid collision"
-                    ],
-        description: "",
-        fact: "Rule 34(a)",
-        audioUrl: "/sounds/3_Astern_Prop.mp3",
+        question: "What does this represent?",
+        correctAnswer: "Juliett",
+        description: "Morse Code .---",
+        fact: "Single meaning: 'Semaphore message.'  International meaning: 'I am on fire. Dangerous cargo, keep well clear.'",
+        imageUrl: "/images/Juliett.png"
       },
       {
         id: 11,
-        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
-        correctAnswer: "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
-        answerPool: [
-                      "the intention to overtake another vessel on its starboard side in any body of water",
-                      "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
-                      "the intention to overtake another vessel on its port side in any body of water",
-                      "the intention to overtake another vessel on its port side when in a narrow channel or fairway"
-                    ],
-        description: "",
-        fact: "Rule 34(c)(i)",
-        audioUrl: "/sounds/4_Overtake_Stbd.mp3",
+        question: "What does this represent?",
+        correctAnswer: "Kilo",
+        description: "Morse Code -.-",
+        fact: "Single meaning: 'Personnel working aloft.'  International meaning: 'I wish to communicate with you.'",
+        imageUrl: "/images/Kilo.png"
       },
       {
         id: 12,
-        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
-        correctAnswer: "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
-        answerPool: [
-                      "the intention to overtake another vessel on its starboard side in any body of water",
-                      "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
-                      "the intention to overtake another vessel on its port side in any body of water",
-                      "the intention to overtake another vessel on its port side when in a narrow channel or fairway"
-                    ],
-        description: "",
-        fact: "Rule 34(c)(i)",
-        audioUrl: "/sounds/5_Overtake_Port.mp3",
+        question: "What does this represent?",
+        correctAnswer: "Lima",
+        description: "Morse Code .-..",
+        fact: "Single meaning: 'Radhaz/Hero warning.'  International meaning: 'You should stop your vessel instantly.'",
+        imageUrl: "/images/Lima.png"
       },
       {
         id: 13,
-        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
-        correctAnswer: "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
-        answerPool: [
-                      "the agreement response from a vessel about to be overtaken in any body of water",
-                      "the agreement response from a vessel about to be overtaken in a narrow channel or fairway",
-                      "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway",
-                      "the intention to overtake another vessel on its starboard side in any body of water"
-                    ],
-        description: "",
-        fact: "Rule 34(c)(ii)",
-        audioUrl: "/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a",
+        question: "What does this represent?",
+        correctAnswer: "Mike",
+        description: "Morse Code --",
+        fact: "Single meaning: 'Medical/Dental Guard Duty ship. Disregard my movements.'  International meaning: 'My vessel is stopped.'",
+        imageUrl: "/images/Mike.png"
       },
       {
         id: 14,
-        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
-        correctAnswer: [
-                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-                        "failure to understand the intentions/actions of the other vessel "
-                      ],
-        answerPool: [
-                      "an alteration of course to port",
-                      "operating astern propulsion",
-                      "an alteration of course to starboard",
-                      "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-                      "failure to understand the intentions/actions of the other vessel "
-                    ],
-        description: "",
-        fact: "Rule 34(d)",
-        audioUrl: "/sounds/7_Warning_Wake-Up_Signal_5_short.mp3",
+        question: "What does this represent?",
+        correctAnswer: "November",
+        description: "Morse Code -.",
+        fact: "Single meaning: 'Your movements not understood. Not keeping Visual watch.'  International meaning: 'No. (Negative)'",
+        imageUrl: "/images/November.png"
       },
       {
         id: 15,
-        question: "When <strong>vessels are in sight of one another</strong> this sound signal represents:",
-        correctAnswer: [
-                        "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-                        "failure to understand the intentions/actions of the other vessel "
-                      ],
-        answerPool: [
-                      "an alteration of course to port",
-                      "operating astern propulsion",
-                      "an alteration of course to starboard",
-                      "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-                      "failure to understand the intentions/actions of the other vessel "
-                    ],
-        description: "",
-        fact: "Rule 34(d)",
-        audioUrl: "/sounds/8_Warning_Wake-Up_Signal_+5.mp3",
+        question: "What does this represent?",
+        correctAnswer: "Oscar",
+        description: "Morse Code ---",
+        fact: "Single and International meaning: 'Man overboard.'",
+        imageUrl: "/images/Oscar.png"
       },
       {
         id: 16,
-        question: "When in <strong>clear visibility</strong> this sound signal represents:",
-        correctAnswer: "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
-        answerPool: [
-                      "a power-driven vessel underway and making way",
-                      "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction",
-                      "an alteration of course to starboard",
-                      "I intend to leave you on your port side"
-                    ],
-        description: "",
-        fact: "Rule 34(e)",
-        audioUrl: "/sounds/2_Prolonged_Blast.mp3",
+        question: "What does this represent?",
+        correctAnswer: "Papa",
+        description: "Morse Code .--.",
+        fact: "Single meaning: 'General recall. Position indicator.'  International meaning: 'Recall. All persons to repair onboard. Vessel about to sail.'",
+        imageUrl: "/images/Papa.png"
       },
       {
         id: 17,
-        question: "The word <strong>whistle</strong> means:",
-        correctAnswer: "any sound signalling appliance capable of producing the prescribed blasts and complying with the specifications in Annex III",
-        answerPool: [
-                      "any sound signalling appliance capable of producing the prescribed blasts and complying with the specifications in Annex III",
-                      "any device capable of producing loud sound signals audible to nearby vessels and complying with the specifications in Annex I",
-                      "any sound signalling appliance capable of producing the prescribed blasts and complying with the specifications in Rule 35",
-                      "any horn or siren capable of producing the prescribed blasts in Rule 34 and permanently fitted to a vessel"
-                    ],
-        description: "",
-        fact: "Rule 32(a)",
-        audioUrl: "",
-      },
-    ]
-  },
-  {
-    config: {
-      id: "32to34auditory",
-      title: "Auditory Recognition Challenge – Rules 32-34",
-      description: "",
-      themeColor: 'blue',
-      quizKey: "32to34auditory",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "Rule reference(s)",
-      category: "Col Regs Rules 32-34",
-      hidden: false
-    },
-    questions: [
-      {
-        id: 1,
-        question: "Match the sound signal with the correct definition.",
-        correctAnswer: [
-                        ["/sounds/1_Short_Blast.mp3", "Short Blast"],
-                        ["/sounds/2_Prolonged_Blast.mp3", "Prolonged Blast"],
-                        ["/sounds/Incorrect duration for short or prolonged blast.m4a", "This sound signal does not meet the criteria to be considered a short or prolonged blast"]
-                        ],
-        description: "",
-        fact: "32(b); 32(c)"
-      },
-      {
-        id: 2,
-        question: "Match the length of the vessel with the correct sound-signalling device(s).",
-        correctAnswer: [
-                        [["/sounds/1_Short_Blast.mp3", "/sounds/Airhorn.mp3"], "less than 12 m "],
-                        [["/sounds/1_Short_Blast.mp3"], "12 m or more"],
-                        [["/sounds/1_Short_Blast.mp3", "/sounds/Bell.mp3"], "20 m or more"],
-                        [["/sounds/1_Short_Blast.mp3", "/sounds/Bell.mp3", "/sounds/Gong.mp3"], "100 m or more"]
-                        ],
-        description: "",
-        fact: "33(a); 33(b)"
-      },
-      {
-        id: 3,
-        question: "You are <strong>in sight</strong> of another vessel. Match the sound signal with the correct action/explanation.",
-        correctAnswer: [
-                        ["/sounds/1_AC_Crse_Stbd.mp3", "an alteration of course to starboard"],
-                        ["/sounds/2_AC_Crse_Port.mp3", "an alteration of course to port"],
-                        ["/sounds/3_Astern_Prop.mp3", "operating astern propulsion"],
-                        ["/sounds/7_Warning_Wake-Up_Signal_5_short.mp3", "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"]
-        ],
-        description: "",
-        fact: "34(a); 34(d)"
-      },
-      {
-        id: 4,
-        question: "You are <strong>in sight</strong> of another vessel. Match the sound signal with the correct action/response.",
-        correctAnswer: [
-                        ["/sounds/4_Overtake_Stbd.mp3", "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"],
-                        ["/sounds/5_Overtake_Port.mp3", "the intention to overtake another vessel on its port side when in a narrow channel or fairway"],
-                        ["/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"],
-                        ["/sounds/Warning Signal_7 Short Blasts.m4a", "the “in doubt” response from a vessel about to be overtaken in a narrow channel or fairway"]
-                      ],
-        description: "",
-        fact: "9(e)(i); 34(c)(i); 34(c)(ii); 34(d)"
-      },
-      {
-        id: 5,
-        question: "You are <strong>in sight</strong> of another vessel <strong>and/or in clear visibility</strong>. Match the sound signal with the correct action/response.",
-        correctAnswer: [
-                        ["/sounds/2_Prolonged_Blast.mp3", "a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction <strong>OR</strong> the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction"],
-                        ["/sounds/8_Warning_Wake-Up_Signal_+5.mp3", "failure to understand the intentions/actions of the other vessel <strong>OR</strong> in doubt that sufficient action is being taken by the other vessel to avoid collision"],
-                        ["/sounds/4_Overtake_Stbd.mp3", "the intention to overtake another vessel on its starboard side when in a narrow channel or fairway"],
-                        ["/sounds/5_Overtake_Port.mp3", "the intention to overtake another vessel on its port side when in a narrow channel or fairway"],
-                        ["/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a", "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"]
-                      ],
-        description: "",
-        fact: "34(c)(i); 34(c)(ii); 34(d); 34(e)"
-      },
-    ]
-  },
-  {
-    config: {
-      id: "35sounds",
-      title: "Sound Signals Challenge – Rule 35: Identify the Sound Signals",
-      description: "",
-      themeColor: 'red',
-      quizKey: "35sounds",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "Rule reference(s)",
-      category: "Col Regs Rule 35",
-      hidden: false
-    },
-    questions: [
-      {
-        id: 1,
-        question: "The sound signals prescribed in Rule 35 – Sound Signals in Restricted Visibility, shall be used:",
-        audioUrl: "",
-        correctAnswer: ["when in or near an area of restricted visibility, by day or night"],
-        answerPool: [
-          "when in or near an area of restricted visibility, by day or night",
-          "when in or near an area of restricted visibility, only during the day",
-          "only when near an area of restricted visibility, and only during the night",
-          "only when in an area of restricted visibility, by day or night"
-        ],
-        description: "35",
-        fact: ""
-      },
-      {
-        id: 2,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/2_Prolonged_Blast.mp3",
-        correctAnswer: ["a power-driven vessel making way through the water"],
-        answerPool: ["a power-driven vessel making way through the water",
-          "a power-driven vessel underway but stopped and making no way through the water",
-          "a vessel engaged in pushing another vessel",
-          "a sailing vessel"
-        ],
-        description: "35(a)",
-        fact: ""
-      },
-      {
-        id: 3,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/2_PDV_Underway_Not_Making_Way.mp3",
-        correctAnswer: ["a power-driven vessel underway but stopped and making no way through the water"],
-        answerPool: ["a power-driven vessel underway but stopped and making no way through the water",
-          "a power-driven vessel making way through the water",
-          "a vessel constrained by its draught",
-          "an alteration of course to port "],
-        description: "35(b)",
-        fact: ""
-      },
-      {
-        id: 4,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3",
-        correctAnswer: ["a vessel not under command",
-          "a vessel restricted in its ability to manoeuvre",
-          "a vessel constrained by its draught",
-          "a sailing vessel",
-          "a vessel engaged in fishing",
-          "a vessel engaged in towing another vessel",
-          "a vessel engaged in pushing another vessel"],
-        answerPool: ["a vessel not under command",
-          "a vessel restricted in its ability to manoeuvre",
-          "a vessel constrained by its draught",
-          "a sailing vessel",
-          "a vessel engaged in fishing",
-          "a vessel engaged in towing another vessel",
-          "a vessel engaged in pushing another vessel"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 5,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3",
-        correctAnswer: ["a vessel not under command",
-          "a vessel engaged in pushing another vessel"],
-        answerPool: ["a vessel not under command",
-          "a vessel engaged in pushing another vessel",
-          "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
-          "a vessel being towed that has a crew onboard (&quot;manned&quot;)"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 6,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3",
-        correctAnswer: ["a vessel restricted in its ability to manoeuvre",
-          "a vessel engaged in towing another vessel"],
-        answerPool: ["a vessel restricted in its ability to manoeuvre",
-          "a vessel engaged in towing another vessel",
-          "a vessel engaged in pilotage duties",
-          "a vessel at anchor giving warning of its position and of the possibility of collision with an approaching vessel"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 7,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3",
-        correctAnswer: ["a vessel constrained by its draught",
-          "a vessel engaged in fishing"],
-        answerPool: ["a vessel constrained by its draught",
-          "a vessel engaged in fishing",
-          "operating astern propulsion",
-          "the agreement response from a vessel about to be overtaken in a narrow channel or fairway"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 8,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3",
-        correctAnswer: ["a sailing vessel"],
-        answerPool: ["a sailing vessel",
-            "a power-driven vessel underway but stopped and making no way through the water",
-            "a vessel being towed that has a crew onboard (&quot;manned&quot;)",
-            "a trawler or purse seiner shooting its net or gear"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 9,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3",
-        correctAnswer: ["a vessel engaged in fishing at anchor",
-            "a vessel restricted in its ability to manoeuvre at anchor"],
-        answerPool: ["a vessel engaged in fishing at anchor",
-            "a vessel restricted in its ability to manoeuvre at anchor",
-            "a vessel not under command at anchor",
-            "a vessel at anchor giving warning of its position and of the possibility of collision with an approaching vessel"],
-        description: "35(d), (c)",
-        fact: ""
-      },
-      {
-        id: 10,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3",
-        correctAnswer: ["a vessel engaged in fishing at anchor",
-            "a vessel engaged in fishing"],
-        answerPool: ["a vessel engaged in fishing at anchor",
-            "a vessel engaged in fishing",
-            "a vessel constrained by its draught at anchor",
-            "a sailing vessel at anchor"],
-        description: "35(d), (c)",
-        fact: ""
-      },
-      {
-        id: 11,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3",
-        correctAnswer: ["a vessel restricted in its ability to manoeuvre at anchor",
-            "a vessel restricted in its ability to manoeuvre",
-            "a vessel not under command"],
-        answerPool: ["a vessel restricted in its ability to manoeuvre at anchor",
-            "a vessel restricted in its ability to manoeuvre",
-            "a vessel not under command at anchor",
-            "a vessel not under command"],
-        description: "35(d), (c)",
-        fact: ""
-      },
-      {
-        id: 12,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/6_Manned_Tow.mp3",
-        correctAnswer: ["a vessel being towed that has a crew onboard (&quot;manned&quot;)"],
-        answerPool: ["a vessel being towed that has a crew onboard (&quot;manned&quot;)",
-            "a vessel engaged in towing another vessel",
-            "a vessel operating astern propulsion",
-            "a vessel engaged in pilotage duties making way through the water"],
-        description: "35(e)",
-        fact: ""
-      },
-      {
-        id: 13,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"],
-        correctAnswer: ["a vessel towing another vessel, provided that the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;)"],
-        answerPool: ["a vessel towing another vessel, provided that the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;)",
-            "a vessel pushing another vessel; the vessel being pushed has a crew onboard (&quot;manned&quot;)",
-            "nothing, it is not a recognized sound signal",
-            "a trawler or purse seiner underway but stopped and making no way through the water, shooting its net or gear"],
-        description: "35(c), (e)",
-        fact: ""
-      },
-      {
-        id: 14,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/2_Prolonged_Blast.mp3",
-        correctAnswer: ["a composite unit making way through the water"],
-        answerPool: ["a composite unit making way through the water",
-            "a composite unit underway but stopped and making no way through the water",
-            "a vessel constrained by its draught",
-            "a sailing vessel"],
-        description: "35(f), (a)",
-        fact: ""
-      },
-      {
-        id: 15,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/2_PDV_Underway_Not_Making_Way.mp3",
-        correctAnswer: ["a composite unit underway but stopped and making no way through the water"],
-        answerPool: ["a composite unit underway but stopped and making no way through the water",
-            "a composite unit making way through the water",
-            "a vessel engaged in fishing",
-            "failure to understand the intentions/actions of the other vessel"],
-        description: "35(f), (b)",
-        fact: ""
-      },
-      {
-        id: 16,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/7_Anchor_Less_Than_100m.mp3",
-        correctAnswer: ["a vessel less than 100 m in length at anchor"],
-        answerPool: ["a vessel less than 100 m in length at anchor",
-            "a vessel 100 m or more in length at anchor",
-            "a vessel less than 100 m in length aground",
-            "a vessel 100 m or more in length aground"],
-        description: "35(g)",
-        fact: ""
-      },
-      {
-        id: 17,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/8_Anchor_100m_Or_More.mp3",
-        correctAnswer: ["a vessel 100 m or more in length at anchor"],
-        answerPool: ["a vessel 100 m or more in length at anchor",
-            "a vessel less than 100 m in length at anchor",
-            "a vessel less than 100 m in length aground",
-            "a vessel 100 m or more in length aground"],
-        description: "35(g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Quebec",
+        description: "Morse Code --.-",
+        fact: "Single meaning: 'Boat recall - own boats or those addressed.'  International meaning: 'Vessel is healthy. Request free pratique.'",
+        imageUrl: "/images/Quebec.png"
       },
       {
         id: 18,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/9_Anchor_Additional_Sound_Signal.mp3",
-        correctAnswer: ["an optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
-        answerPool: ["an optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel",
-            "a trawler or purse seiner that has a net or gear fast to an obstruction",
-            "nothing, it is not a recognized sound signal",
-            "a vessel not under command"],
-        description: "35(g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Romeo",
+        description: "Morse Code .-.",
+        fact: "Single meaning: 'Going alongside for Replenishing/Transfer/Fuelling at sea. Ready Duty ship. MCM Operations.'",
+        imageUrl: "/images/Romeo.png"
       },
       {
         id: 19,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/10_Aground_Less_than_100m_V2.m4a",
-        correctAnswer: ["a vessel less than 100 m in length aground"],
-        answerPool: ["a vessel less than 100 m in length aground",
-            "a vessel 100 m or more in length aground",
-            "a vessel less than 100 m in length at anchor",
-            "a vessel 100 m or more in length at anchor"],
-        description: "35(h), (g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Sierra",
+        description: "Morse Code ...",
+        fact: "Single meaning: 'Flag Hoist Drill signal.'  International meaning: 'My engines are going full speed astern.'",
+        imageUrl: "/images/Sierra.png"
       },
       {
         id: 20,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/10_Aground_100m_Or_More_V2.m4a",
-        correctAnswer: ["a vessel 100 m or more in length aground"],
-        answerPool: ["a vessel 100 m or more in length aground",
-            "a vessel less than 100 m in length aground",
-            "a vessel less than 100 m in length at anchor",
-            "a vessel 100 m or more in length at anchor"],
-        description: "35(h), (g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Tango",
+        description: "Morse Code -",
+        fact: "Single meaning: 'Time indicator.'  International meaning: 'Keep clear of me I am engaged in pair trawling.'",
+        imageUrl: "/images/Tango.png"
       },
       {
         id: 21,
-        question: "A vessel of 12 m or more but less than 20 m in length is:",
-        audioUrl: "",
-        correctAnswer: ["not required to give the bell signals when at anchor or aground, but if it does not, it must make some other efficient sound signal"],
-        answerPool: ["not required to give the bell signals when at anchor or aground, but if it does not, it must make some other efficient sound signal",
-            "required to give the bell signals when at anchor or aground",
-            "not required to make any sound signals when at anchor or aground",
-            "required to sound one prolonged blast followed by two short blasts ( _____ . . ) when at anchor or aground"],
-        description: "35(i)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Uniform",
+        description: "Morse Code ..-",
+        fact: "Single meaning: 'Anchoring, Mooring & Weighing.'  International meaning: 'You are running into danger.'",
+        imageUrl: "/images/Uniform.png"
       },
       {
         id: 22,
-        question: "A vessel of less than 12 m in length is:",
-        audioUrl: "",
-        correctAnswer: ["not required to give any of the sound signals listed in Rule 35 – Sound Signals in Restricted Visibility, but if it does not, it must make some other efficient sound signal"],
-        answerPool: ["not required to give any of the sound signals listed in Rule 35 – Sound Signals in Restricted Visibility, but if it does not, it must make some other efficient sound signal",
-            "required to give the sound signals listed in Rule 35 – Sound Signals in Restricted Visibility",
-            "not required to make any sound signals at all when in or near an area of restricted visibility",
-            "required to sound the same sound signals for a power-driven vessel when in or near an area of restricted visibility"],
-        description: "35(j)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Victor",
+        description: "Morse Code ...-",
+        fact: "Single meaning: 'Streaming/Recovering towed sonic devices - not including minesweeping equipment.'  International meaning: 'I require assistance.'",
+        imageUrl: "/images/Victor.png"
       },
       {
         id: 23,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/12_Pilotage_Duties_Additional.mp3",
-        correctAnswer: ["the identity signal of a pilot vessel engaged in pilotage duties"],
-        answerPool: ["the identity signal of a pilot vessel engaged in pilotage duties",
-            "in doubt that sufficient action is being taken by the other vessel to avoid collision",
-            "a vessel being towed that has a crew onboard (&quot;manned&quot;)",
-            "an optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
-        description: "35(k)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Whiskey",
+        description: "Morse Code .--",
+        fact: "Single meaning: 'Flag Hoise information addressee.'  International meaning: 'I require medical assistance.'",
+        imageUrl: "/images/Whiskey.png"
       },
       {
         id: 24,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/Pilot Vsl_Making Way.m4a",
-        correctAnswer: ["a pilot vessel engaged in pilotage duties making way through the water"],
-        answerPool: ["a pilot vessel engaged in pilotage duties making way through the water",
-            "a pilot vessel engaged in pilotage duties underway but stopped and making no way through the water",
-            "a vessel being towed that has a crew onboard (&quot;manned&quot;)",
-            "nothing, it is not a recognized sound signal"],
-        description: "35(k), (a)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Xray",
+        description: "Morse Code -..-",
+        fact: "Single meaning: 'Evolution or Exercise completed. X-ray tack (Signal). Carry out for Exercise the meaning of the signal.'  International meaning: 'Stop carrying out your intentions & watch for my signals.'",
+        imageUrl: "/images/Xray.png"
       },
       {
         id: 25,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: "/sounds/Pilot Vsl_Underway but stopped_FV2.m4a",
-        correctAnswer: ["a pilot vessel engaged in pilotage duties underway but stopped and making no way through the water"],
-        answerPool: ["a pilot vessel engaged in pilotage duties underway but stopped and making no way through the water",
-            "a pilot vessel engaged in pilotage duties making way through the water",
-            "a vessel towing another vessel, provided that the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;)",
-            "nothing, it is not a recognized sound signal"],
-        description: "35(k), (b)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Yankee",
+        description: "Morse Code -.--",
+        fact: "Single meaning: 'Acknowledge. OTC's Location. Visual Communication Duty Ship.'  International meaning: 'I am dragging my anchor.'",
+        imageUrl: "/images/Yankee.png"
       },
       {
         id: 26,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: ["/sounds/7_Anchor_Less_Than_100m.mp3", "/sounds/12_Pilotage_Duties_Additional.mp3"],
-        correctAnswer: ["a pilot vessel less than 100 m in length at anchor engaged in pilotage duties"],
-        answerPool: ["a pilot vessel less than 100 m in length at anchor engaged in pilotage duties",
-            "a pilot vessel 100 m or more in length at anchor engaged in pilotage duties",
-            "a vessel less than 100 m in length aground",
-            "an optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
-        description: "35(k), (g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Zulu",
+        description: "Morse Code --..",
+        fact: "International meaning: 'I require a tug.'",
+        imageUrl: "/images/Zulu.png"
       },
       {
         id: 27,
-        question: "When <strong>in or near an area of restricted visibility</strong> this sound signal represents:",
-        audioUrl: ["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot Vsl_Identity Signal_Low Pitch.m4a"],
-        correctAnswer: ["a pilot vessel 100 m or more in length at anchor engaged in pilotage duties"],
-        answerPool: ["a pilot vessel 100 m or more in length at anchor engaged in pilotage duties",
-            "a pilot vessel less than 100 m in length at anchor engaged in pilotage duties",
-            "a vessel being towed that has a crew onboard (&quot;manned&quot;)",
-            "a vessel 100 m or more in length aground"],
-        description: "35(k), (g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "One",
+        description: "Morse Code .----",
+        fact: "Single meaning: 'ASW Action Table'",
+        imageUrl: "/images/One.png"
       },
+      {
+        id: 28,
+        question: "What does this represent?",
+        correctAnswer: "Two",
+        description: "Morse Code ..---",
+        fact: "Single meaning: 'Surface Action Table'",
+        imageUrl: "/images/Two.png"
+      },
+      {
+        id: 29,
+        question: "What does this represent?",
+        correctAnswer: "Three",
+        description: "Morse Code ...--",
+        fact: "Single meaning: 'Boat signal. (Steer away)'",
+        imageUrl: "/images/Three.png"
+      },
+      {
+        id: 30,
+        question: "What does this represent?",
+        correctAnswer: "Four",
+        description: "Morse Code ....-",
+        fact: "Single meaning: 'ASW Exercises.'",
+        imageUrl: "/images/Four.png"
+      },
+      {
+        id: 31,
+        question: "What does this represent?",
+        correctAnswer: "Five",
+        description: "Morse Code .....",
+        fact: "Single meaning: 'Breakdown.'",
+        imageUrl: "/images/Five.png"
+      },
+      {
+        id: 32,
+        question: "What does this represent?",
+        correctAnswer: "Six",
+        description: "Morse Code -....",
+        fact: "Single meaning: 'Act at your discretion.'",
+        imageUrl: "/images/Six.png"
+      },
+      {
+        id: 33,
+        question: "What does this represent?",
+        correctAnswer: "Seven",
+        description: "Morse Code --...",
+        fact: "Single meaning: 'AAW Action Table.'",
+        imageUrl: "/images/Seven.png"
+      },
+      {
+        id: 34,
+        question: "What does this represent?",
+        correctAnswer: "Eight",
+        description: "Morse Code ---..",
+        fact: "Single meaning: 'Boat signal. (Steer towards)'",
+        imageUrl: "/images/Eight.png"
+      },
+      {
+        id: 35,
+        question: "What does this represent?",
+        correctAnswer: "Nine",
+        description: "Morse Code ----.",
+        fact: "Single meaning: 'Torpedo Action Table.'",
+        imageUrl: "/images/Nine.png"
+      },
+      {
+        id: 36,
+        question: "What does this represent?",
+        correctAnswer: "Zero",
+        description: "Morse Code -----",
+        fact: "Single meaning: 'Guard Mail. Military Guard.'.",
+        imageUrl: "/images/Zero.png"
+      },
+      {
+        id: 37,
+        question: "What does this represent?",
+        correctAnswer: "Division",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Division.png"
+      },
+      {
+        id: 38,
+        question: "What does this represent?",
+        correctAnswer: "Port",
+        description: "",
+        fact: "Single meaning: 'Indefinite turn to Port. Out of Routine.'",
+        imageUrl: "/images/Port.png"
+      },
+      {
+        id: 39,
+        question: "What does this represent?",
+        correctAnswer: "Squadron",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Squadron.png"
+      }
     ]
   },
   {
     config: {
-      id: "35intervals",
-      title: "Sound Signals Challenge – Rule 35: Identify the Intervals",
-      description: "",
-      themeColor: 'red',
-      quizKey: "35intervals",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "Additional Information",
-      category: "Col Regs Rule 35",
+      id: "pennants",
+      title: "Pennants",
+      description: "Test your knowledge of Pennants.",
+      themeColor: 'amber',
+      quizKey: "pennants",
+      startScreenImage: "/images/naval_communications_dep_badge.gif",
+      studyGuide: "",
+      factHeading: "",
+      category: "Naval Communications",
       hidden: false
     },
     questions: [
       {
         id: 1,
-        question: "A power-driven vessel making way through the water shall sound one prolonged blast ( _____ ) at:",
-        audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes"],
-        answerPool: ["intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute",
-            "an interval of their choice"],
-        description: "35(a)",
-        factAudioUrl: "/sounds/2_Prolonged_Blast.mp3",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Pennant One",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant One.png"
       },
       {
         id: 2,
-        question: "A power-driven vessel underway but stopped and making no way through the water shall sound two prolonged blasts in succession ( _____ _____ ) at:",
-        audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes, with an interval of 2 seconds between the prolonged blasts"],
-        answerPool: ["intervals of not more than 2 minutes, with an interval of 2 seconds between the prolonged blasts",
-            "intervals of not more than 1 minute, with an interval of 2 seconds between the prolonged blasts",
-            "any interval they choose, with an interval of 2 seconds between the prolonged blasts"],
-        description: "35(b)",
-        factAudioUrl: "/sounds/2_PDV_Underway_Not_Making_Way.mp3"
+        question: "What does this represent?",
+        correctAnswer: "Pennant Two",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Two.png"
       },
       {
         id: 3,
-        question: "A vessel constrained by its draught, NUC, sailing vessel, RAM, vessel engaged in fishing, and a vessel engaged in towing or pushing another vessel shall sound in succession one prolonged followed by two short blasts ( _____ . . ) at:",
-        audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes"],
-        answerPool: ["intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute",
-            "an interval of their choice"],
-        description: "35(c)",
-        factAudioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3"
+        question: "What does this represent?",
+        correctAnswer: "Pennant Three",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Three.png"
       },
       {
         id: 4,
-        question: "A vessel engaged in fishing while at anchor, and a RAM vessel carrying out its work while at anchor, shall sound in succession one prolonged followed by two short blasts ( _____ . . ) at:",
-        audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes"],
-        answerPool: ["intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute",
-            "an interval of their choice"],
-        description: "35(d), (c)",
-        factAudioUrl: "/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3"
+        question: "What does this represent?",
+        correctAnswer: "Pennant Four",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Four.png"
       },
       {
         id: 5,
-        question: "A vessel being towed, or—if more than one vessel is towed—the last vessel of the tow, shall, when it has a crew onboard (&quot;manned&quot;), sound one prolonged blast followed by three short blasts ( _____ . . . ) at:",
-        audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes, and when practical, this signal shall be made immediately <strong>after</strong> the signal made by the towing vessel"],
-        answerPool: ["intervals of not more than 2 minutes, and when practical, this signal shall be made immediately <strong>after</strong> the signal made by the towing vessel",
-            "intervals of not more than 1 minute, and when practical, this signal shall be made immediately <strong>after</strong> the signal made by the towing vessel",
-            "intervals of not more than 2 minutes, and when practical, this signal shall be made immediately <strong>before</strong> the signal made by the towing vessel",
-            "intervals of not more than 1 minute, and when practical, this signal shall be made immediately <strong>before</strong> the signal made by the towing vessel",
-            "an interval of their choice"],
-        description: "35(e), (c)",
-        factAudioUrl: ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"]
+        question: "What does this represent?",
+        correctAnswer: "Pennant Five",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Five.png"
       },
       {
         id: 6,
-        question: "A composite unit (which is regarded as a power-driven vessel) making way through the water shall sound one prolonged blast ( _____ ) at:",
-        audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes"],
-        answerPool: ["intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute",
-            "an interval of their choice"],
-        description: "35(f), (a)",
-        factAudioUrl: "/sounds/2_Prolonged_Blast.mp3"
+        question: "What does this represent?",
+        correctAnswer: "Pennant Six",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Six.png"
       },
       {
         id: 7,
-        question: "A composite unit (which is regarded as a power-driven vessel) underway but stopped and making no way through the water shall sound two prolonged blasts in succession ( _____ _____ ) at:",
-        audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes, with an interval of 2 seconds between the prolonged blasts"],
-        answerPool: ["intervals of not more than 2 minutes, with an interval of 2 seconds between the prolonged blasts",
-            "intervals of not more than 1 minute, with an interval of 2 seconds between the prolonged blasts",
-            "an interval of their choice, with an interval of 2 seconds between the prolonged blasts"],
-        description: "35(f), (b)",
-        factAudioUrl: "/sounds/2_PDV_Underway_Not_Making_Way.mp3"
+        question: "What does this represent?",
+        correctAnswer: "Pennant Seven",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Seven.png"
       },
       {
         id: 8,
-        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>at anchor</strong> shall ring the _______ rapidly for about ______________ at intervals ______________.",
-        audioUrl: "",
-        correctAnswer: ["bell; 5 seconds; of not more than 1 minute"],
-        answerPool: ["bell; 5 seconds; of not more than 1 minute",
-            "gong; 5 seconds; of not more than 2 minutes",
-            "bell; 10 seconds; of not more than 1 minute",
-            "gong; 10 seconds; of not more than 2 minutes",
-            "bell; 5 seconds; of their choice"],
-        description: "35(g)",
-        factAudioUrl: "/sounds/7_Anchor_Less_Than_100m.mp3"
+        question: "What does this represent?",
+        correctAnswer: "Pennant Eight",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Eight.png"
       },
       {
         id: 9,
-        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>at anchor</strong> shall ring the bell rapidly for about ______________ in the forepart and immediately afterwards the _______ shall be sounded rapidly in the after part for about ______________ at intervals of not more than ______________.",
-        audioUrl: "",
-        correctAnswer: ["5 seconds; gong; 5 seconds; 1 minute"],
-        answerPool: ["5 seconds; gong; 5 seconds; 1 minute",
-            "5 seconds; gong; 5 seconds; 2 minutes",
-            "10 seconds; bell; 10 seconds; 1 minute",
-            "3 seconds; gong; 3 seconds; 2 minutes"],
-        description: "35(g)",
-        factAudioUrl: "/sounds/8_Anchor_100m_Or_More.mp3"
+        question: "What does this represent?",
+        correctAnswer: "Pennant Nine",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Nine.png"
       },
       {
         id: 10,
-        question: "For a vessel at anchor sounding the optional whistle signal of one short, one prolonged, and one short blast ( . _____ . ), to give warning of its position and of the possibility of collision to an approaching vessel, there is:",
-        audioUrl: "",
-        correctAnswer: ["no required interval in which to sound this signal"],
-        answerPool: ["no required interval in which to sound this signal",
-            "a requirement to sound this signal at an interval of not more than 1 minute",
-            "a requirement to sound this signal at an interval of not more than 2 minutes"],
-        description: "35(g)",
-        factAudioUrl: "/sounds/9_Anchor_Additional_Sound_Signal.mp3"
+        question: "What does this represent?",
+        correctAnswer: "Pennant Zero",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Zero.png"
       },
       {
         id: 11,
-        question: "Fill in the blanks: <br>A vessel <strong>less than 100 m</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell at intervals of not more than ______________.",
-        audioUrl: "",
-        correctAnswer: ["3; 5 seconds; 3; 1 minute"],
-        answerPool: ["3; 5 seconds; 3; 1 minute",
-            "3; 5 seconds; 3; 2 minutes",
-            "5; 10 seconds; 5; 1 minute",
-            "5; 5 seconds; 5; 2 minutes"],
-        description: "35(h), (g)",
-        factAudioUrl: "/sounds/10_Aground_Less_than_100m_V2.m4a"
+        question: "What does this represent?",
+        correctAnswer: "Screen",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Screen.png"
       },
       {
         id: 12,
-        question: "Fill in the blanks: <br>A vessel <strong>100 m or more</strong> in length <strong>aground</strong> shall give ____ separate and distinct strokes on the bell, followed by rapid ringing of the bell for ______________, followed by ____ separate and distinct strokes on the bell, followed by rapid sounding of the _______ for ____ at intervals of not more than ______________.",
-        audioUrl: "",
-        correctAnswer: ["3; 5 seconds; 3; gong; 5 seconds; 1 minute"],
-        answerPool: ["3; 5 seconds; 3; gong; 5 seconds; 1 minute",
-            "3; 5 seconds; 3; bell; 5 seconds; 2 minutes",
-            "5; 10 seconds; 5; gong; 3 seconds; 1 minute",
-            "5; 5 seconds; 5; bell; 10 seconds; 2 minutes"],
-        description: "35(h), (g)",
-        factAudioUrl: "/sounds/10_Aground_100m_Or_More_V2.m4a"
+        question: "What does this represent?",
+        correctAnswer: "Code",
+        description: "",
+        fact: "Single meaning: 'Acknowledgement. Fractions. Use INTERCO.' It is also known as the Answering Pennant.",
+        imageUrl: "/images/Code Answer.png"
       },
       {
         id: 13,
-        question: "A vessel aground may, in addition to the required bell or bell-and-gong signals, sound an appropriate whistle signal.",
-        audioUrl: "",
-        correctAnswer: ["True"],
-        answerPool: ["True",
-            "False"],
-        description: "35(h)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Corpen",
+        description: "",
+        fact: "Single meaning: 'Stop the turn.'",
+        imageUrl: "/images/Corpen.png"
       },
       {
         id: 14,
-        question: "A vessel of <strong>12 m or more but less than 20 m</strong> in length is <u>not</u> obligated to give the bell signals for a vessel at anchor or aground, however, if it does not, it must make some other efficient sound signal at:",
-        audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes"],
-        answerPool: ["intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute",
-            "an interval of their choice"],
-        description: "35(i)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Desig",
+        description: "",
+        fact: "Single meaning: 'Plaint Text. Proceeding to Station/Berth. *Daylight Signalling lantern. Acknowledge DSL.*'",
+        imageUrl: "/images/Desig.png"
       },
       {
         id: 15,
-        question: "A vessel of <strong>less than 12 m</strong> in length is <u>not</u> required to give any of the sound signals listed in Rule 35 – Sound Signals in Restricted Visibility, but if it does not, it must make some other efficient sound signal at: ",
-        audioUrl: "",
-        correctAnswer: ["intervals of not more than 2 minutes"],
-        answerPool: ["intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute",
-            "an interval of their choice"],
-        description: "35(j)",
-        fact: ""
-      },
-    ]
-  },
-  {
-    config: {
-      id: "35si",
-      title: "Sound Signals Challenge – Rule 35: Identify the Sound Signals, and Intervals",
-      description: "",
-      themeColor: 'red',
-      quizKey: "35si",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "Rule reference(s)",
-      category: "Col Regs Rule 35",
-      hidden: false
-    },
-    questions: [
-      {
-        id: 1,
-        question: "The sound signals prescribed in Rule 35 – Sound Signals in Restricted Visibility, shall be used:",
-        audioUrl: "",
-        correctAnswer: ["when in or near an area of restricted visibility, by day or night"],
-        answerPool: ["when in or near an area of restricted visibility, by day or night",
-            "when in or near an area of restricted visibility, only during the day",
-            "only when near an area of restricted visibility, and only during the night",
-            "only when in an area of restricted visibility, by day or night"],
-        description: "35",
-        fact: ""
-      },
-      {
-        id: 2,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/2_Prolonged_Blast.mp3",
-        correctAnswer: ["power-driven vessel making way through the water", "intervals of not more than 2 minutes"],
-        answerPool: ["power-driven vessel making way through the water",
-            "power-driven vessel underway but stopped and making no way through the water",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(a)",
-        fact: ""
-      },
-      {
-        id: 3,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/2_PDV_Underway_Not_Making_Way.mp3",
-        correctAnswer: ["power-driven vessel underway but stopped and making no way through the water", "intervals of not more than 2 minutes"],
-        answerPool: ["power-driven vessel underway but stopped and making no way through the water",
-            "power-driven vessel making way through the water",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(b)",
-        fact: ""
-      },
-      {
-        id: 4,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3",
-        correctAnswer: ["vessel engaged in pushing another vessel", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel engaged in pushing another vessel",
-            "vessel at anchor giving warning of its position and of the possibility of collision with an approaching vessel",
-            "intervals of not more than 2 minutes",
-            "any interval is acceptable"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 5,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3",
-        correctAnswer: ["vessel not under command", "sailing vessel", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel not under command",
-            "sailing vessel",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 6,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3",
-        correctAnswer: ["vessel restricted in its ability to manoeuvre", "vessel engaged in towing another vessel", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel restricted in its ability to manoeuvre",
-            "vessel engaged in towing another vessel",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 7,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3",
-        correctAnswer: ["vessel constrained by its draught", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel constrained by its draught",
-            "the intention to overtake another vessel on its port side when in a narrow channel or fairway",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 8,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3",
-        correctAnswer: ["vessel engaged in fishing", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel engaged in fishing",
-            "vessel being towed that has a crew onboard (&quot;manned&quot;)",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(c)",
-        fact: ""
-      },
-      {
-        id: 9,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3",
-        correctAnswer: ["vessel restricted in its ability to manoeuvre at anchor", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel restricted in its ability to manoeuvre at anchor",
-            "vessel not under command at anchor",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(d), (c)",
-        fact: ""
-      },
-      {
-        id: 10,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3",
-        correctAnswer: ["vessel engaged in fishing at anchor", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel engaged in fishing at anchor",
-            "vessel constrained by its draught at anchor",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(d), (c)",
-        fact: ""
-      },
-      {
-        id: 11,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/3_NUC_RAM_Etc_High_Pitch.mp3",
-        correctAnswer: ["vessel restricted in its ability to manoeuvre at anchor", "vessel engaged in fishing at anchor", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel restricted in its ability to manoeuvre at anchor",
-            "vessel engaged in fishing at anchor",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(d), (c)",
-        fact: ""
-      },
-      {
-        id: 12,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/6_Manned_Tow.mp3",
-        correctAnswer: ["vessel being towed that has a crew onboard (&quot;manned&quot;)", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel being towed that has a crew onboard (&quot;manned&quot;)",
-            "vessel engaged in pilotage duties making way through the water",
-            "intervals of not more than 2 minutes",
-            "any interval is acceptable"],
-        description: "35(e)",
-        fact: ""
-      },
-      {
-        id: 13,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"],
-        correctAnswer: ["vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;)", "intervals of not more than 2 minutes"],
-        answerPool: ["vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;)",
-            "it is not a recognized sound signal",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(c), (e)",
-        fact: ""
-      },
-      {
-        id: 14,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/2_Prolonged_Blast.mp3",
-        correctAnswer: ["composite unit making way through the water", "intervals of not more than 2 minutes"],
-        answerPool: ["composite unit making way through the water",
-            "composite unit underway but stopped and making no way through the water",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(f), (a)",
-        fact: ""
-      },
-      {
-        id: 15,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/2_PDV_Underway_Not_Making_Way.mp3",
-        correctAnswer: ["composite unit underway but stopped and making no way through the water", "intervals of not more than 2 minutes"],
-        answerPool: ["composite unit underway but stopped and making no way through the water",
-            "composite unit making way through the water",
-            "intervals of not more than 2 minutes",
-            "intervals of not more than 1 minute"],
-        description: "35(f), (b)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Emergency",
+        description: "",
+        fact: "Single meaning: 'Signal(s) flying are to be obeyed as soon as understood.'",
+        imageUrl: "/images/Emergency.png"
       },
       {
         id: 16,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/7_Anchor_Less_Than_100m.mp3",
-        correctAnswer: ["vessel less than 100 m in length at anchor", "intervals of not more than 1 minute"],
-        answerPool: ["vessel less than 100 m in length at anchor",
-            "vessel 100 m or more in length at anchor",
-            "intervals of not more than 1 minute",
-            "intervals of not more than 2 minutes"],
-        description: "35(g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Flotilla",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Flotilla.png"
       },
       {
         id: 17,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/8_Anchor_100m_Or_More.mp3",
-        correctAnswer: ["vessel 100 m or more in length at anchor", "intervals of not more than 1 minute"],
-        answerPool: ["vessel 100 m or more in length at anchor",
-            "vessel less than 100 m in length at anchor",
-            "intervals of not more than 1 minute",
-            "intervals of not more than 2 minutes"],
-        description: "35(g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Formation",
+        description: "",
+        fact: "Single meaning: 'Refuse Boat is required.'",
+        imageUrl: "/images/Formation.png"
       },
       {
         id: 18,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/9_Anchor_Additional_Sound_Signal.mp3",
-        correctAnswer: ["optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel", "there is no required interval in which to sound this signal"],
-        answerPool: ["optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel",
-            "it is not a recognized sound signal",
-            "there is no required interval in which to sound this signal",
-            "intervals of not more than 1 minute"],
-        description: "35(g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Interogative",
+        description: "",
+        fact: "Single meaning: 'Signals not understood.'",
+        imageUrl: "/images/Interogative.png"
       },
       {
         id: 19,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/10_Aground_Less_than_100m_V2.m4a",
-        correctAnswer: ["vessel less than 100 m in length aground", "intervals of not more than 1 minute"],
-        answerPool: ["vessel less than 100 m in length aground",
-            "vessel 100 m or more in length aground",
-            "intervals of not more than 1 minute",
-            "any interval is acceptable"],
-        description: "35(h), (g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Negative",
+        description: "",
+        fact: "Single meaning: 'Negative. Flag Hoist Exemp Addressees.'",
+        imageUrl: "/images/Negative.png"
       },
       {
         id: 20,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/10_Aground_100m_Or_More_V2.m4a",
-        correctAnswer: ["vessel 100 m or more in length aground", "intervals of not more than 1 minute"],
-        answerPool: ["vessel 100 m or more in length aground",
-            "vessel less than 100 m in length aground",
-            "intervals of not more than 1 minute",
-            "intervals of not more than 2 minutes"],
-        description: "35(h), (g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Preparative",
+        description: "",
+        fact: "Single meaning: 'Replenishing (Receiving Vessel). Colours & Sunset. Preparative.'",
+        imageUrl: "/images/Preparative.png"
       },
       {
         id: 21,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/Pilot Vsl_Making Way.m4a",
-        correctAnswer: ["pilot vessel engaged in pilotage duties making way through the water", "intervals of not more than 2 minutes"],
-        answerPool: ["pilot vessel engaged in pilotage duties making way through the water",
-            "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water",
-            "intervals of not more than 1 minute",
-            "intervals of not more than 2 minutes"],
-        description: "35(k), (a)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Speed",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Speed.png"
       },
       {
         id: 22,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: "/sounds/Pilot Vsl_Underway but stopped_FV2.m4a",
-        correctAnswer: ["pilot vessel engaged in pilotage duties underway but stopped and making no way through the water", "intervals of not more than 2 minutes"],
-        answerPool: ["pilot vessel engaged in pilotage duties underway but stopped and making no way through the water",
-            "vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;)",
-            "intervals of not more than 1 minute",
-            "intervals of not more than 2 minutes"],
-        description: "35(k), (b)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Starboard",
+        description: "",
+        fact: "Single meaning: 'Indefinite turn to Starboard SCOPA.'",
+        imageUrl: "/images/Starboard.png"
       },
       {
         id: 23,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: ["/sounds/7_Anchor_Less_Than_100m.mp3", "/sounds/12_Pilotage_Duties_Additional.mp3"],
-        correctAnswer: ["pilot vessel less than 100 m in length at anchor engaged in pilotage duties", "intervals of not more than 1 minute"],
-        answerPool: ["pilot vessel less than 100 m in length at anchor engaged in pilotage duties",
-            "vessel less than 100 m in length aground",
-            "intervals of not more than 1 minute",
-            "intervals of not more than 2 minutes"],
-        description: "35(k), (g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Sub Division",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Sub Division.png"
       },
       {
         id: 24,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly identify this sound signal and its interval.",
-        audioUrl: ["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot Vsl_Identity Signal_Low Pitch.m4a"],
-        correctAnswer: ["pilot vessel 100 m or more in length at anchor engaged in pilotage duties", "intervals of not more than 1 minute"],
-        answerPool: ["pilot vessel 100 m or more in length at anchor engaged in pilotage duties",
-            "vessel 100 m or more in length aground",
-            "intervals of not more than 1 minute",
-            "intervals of not more than 2 minutes"],
-        description: "35(k), (g)",
-        fact: ""
+        question: "What does this represent?",
+        correctAnswer: "Turn",
+        description: "",
+        fact: "Single meaning: 'Water barge is required.'",
+        imageUrl: "/images/Turn.png"
       },
+      {
+        id: 25,
+        question: "What does this represent?",
+        correctAnswer: "First Substitute",
+        description: "",
+        fact: "Single meaning: 'Absentee Indicator - Flag Officer or Sqn Commander.'",
+        imageUrl: "/images/First Substitute.png"
+      },
+      {
+        id: 26,
+        question: "What does this represent?",
+        correctAnswer: "Second Substitute",
+        description: "",
+        fact: "Single meaning: 'Absentee Indicator - Chief of Staff.'",
+        imageUrl: "/images/Second Substitute.png"
+      },
+      {
+        id: 27,
+        question: "What does this represent?",
+        correctAnswer: "Third Substitute",
+        description: "",
+        fact: "Single meaning: 'Absentee Indicator - Commanding Officer/X.O.'",
+        imageUrl: "/images/Third Substitute.png"
+      },
+      {
+        id: 28,
+        question: "What does this represent?",
+        correctAnswer: "Fourth Substitute",
+        description: "",
+        fact: "Single meaning: 'Absentee Indicator - Civil or Military Official.'",
+        imageUrl: "/images/Fourth Substitute.png"
+      },
+      {
+        id: 29,
+        question: "What does this represent?",
+        correctAnswer: "Station",
+        description: "",
+        fact: "Single meaning: 'Take proper or assigned station.'",
+        imageUrl: "/images/Station.png"
+      }  
     ]
   },
   {
     config: {
-      id: "35auditory",
-      title: "Auditory Recognition Challenge – Rule 35",
-      description: "",
-      themeColor: 'red',
-      quizKey: "35auditory",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-      factHeading: "Rule reference(s)",
-      category: "Col Regs Rule 35",
-      hidden: false
-    },
-    questions: [
-      {
-        id: 1,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/2_Prolonged_Blast.mp3", "power-driven vessel making way through the water; interval of NMT 2 min"],
-                        ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "vessel not under command; interval NMT 2 min"],
-                        ["/sounds/6_Manned_Tow.mp3", "vessel being towed that has a crew onboard (&quot;manned&quot;)"],
-                        ["/sounds/7_Anchor_Less_Than_100m.mp3", "vessel less than 100 m in length at anchor; interval NMT 1 min"]
-                        ],
-        description: "",
-        fact: "35(a); 35(c); 35(e); 35(g)"
-      },
-      {
-        id: 2,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/PDV Underway Not Making Way_High Pitch.m4a", "power-driven vessel underway but stopped and making no way through the water; interval of NMT 2 min"],
-                        [["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"], "vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;); interval NMT 2 min"],
-                        ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel restricted in its ability to manoeuvre; interval NMT 2 min"],
-                        ["/sounds/8_Anchor_100m_Or_More.mp3", "vessel 100 m or more in length at anchor; interval NMT 1 min"]
-                        ],
-        description: "",
-        fact: "35(b); 35(c); 35(c), (e); 35(g)"
-      },
-      {
-        id: 3,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel constrained by its draught; interval NMT 2 min"],
-                        ["/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
-                        ["/sounds/12_Pilotage_Duties_Additional.mp3", "the identity signal of a pilot vessel engaged in pilotage duties"],
-                        ["/sounds/10_Aground_Less_than_100m_V2.m4a", "vessel less than 100 m in length aground; interval NMT 1 min"]
-                        ],
-        description: "",
-        fact: "35(c); 35(g); 35(h), (g); 35(k)"
-      },
-      {
-        id: 4,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "sailing vessel; interval NMT 2 min"],
-                        ["/sounds/10_Aground_100m_Or_More_V2.m4a", "vessel 100 m or more in length aground; interval NMT 1 min"],
-                        ["/sounds/Pilot Vsl_Making Way.m4a", "pilot vessel engaged in pilotage duties making way through the water; interval NMT 2 min"],
-                        ["/sounds/Prolonged Blast_Low Pitch.m4a", "power-driven vessel making way through the water; interval of NMT 2 min"]
-                        ],
-        description: "",
-        fact: "35(a); 35(c); 35(h), (g); 35(k), (a)"
-      },
-      {
-        id: 5,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel engaged in fishing; interval of NMT 2 min"],
-                        ["/sounds/Pilot Vsl_Underway but stopped_FV2.m4a", "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water; interval NMT 2 min"],
-                        ["/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
-                        ["/sounds/7_Anchor_Less_Than_100m.mp3", "vessel less than 100 m in length at anchor; interval NMT 1 min"]
-                        ],
-        description: "",
-        fact: "35(c); 35(g); 35(k), (b)"
-      },
-      {
-        id: 6,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "vessel engaged in towing or pushing another vessel; interval NMT 2 min "],
-                        ["/sounds/6_Manned_Tow.mp3", "vessel being towed that has a crew onboard (&quot;manned&quot;)"],
-                        ["/sounds/2_PDV_Underway_Not_Making_Way.mp3", "power-driven vessel underway but stopped and making no way through the water; interval of NMT 2 min"],
-                        ["/sounds/8_Anchor_100m_Or_More.mp3", "vessel 100 m or more in length at anchor; interval NMT 1 min"]
-                        ],
-        description: "",
-        fact: "35(b); 35(c); 35(e); 35(g)"
-      },
-      {
-        id: 7,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/4_NUC_RAM_Etc_Low_Pitch.mp3", "vessel engaged in fishing at anchor; interval NMT 2 min"],
-                        [["/sounds/7_Anchor_Less_Than_100m.mp3", "/sounds/12_Pilotage_Duties_Additional.mp3"], "pilot vessel less than 100 m in length at anchor engaged in pilotage duties; interval NMT 1 min"],
-                        ["/sounds/10_Aground_100m_Or_More_V2.m4a", "vessel 100 m or more in length aground; interval NMT 1 min"],
-                        [["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "/sounds/6_Manned_Tow.mp3"], "vessel towing another vessel; the vessel being towed — or, if several are being towed, the final vessel in the tow — has a crew onboard (&quot;manned&quot;); interval NMT 2 min"]
-                        ],
-        description: "",
-        fact: "35(c), (e); 35(d), (c); 35(h), (g); 35(k), (g)"
-      },
-      {
-        id: 8,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/3_NUC_RAM_Etc_High_Pitch.mp3", "vessel restricted in its ability to manoeuvre at anchor; interval NMT 2 min"],
-                        [["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot Vsl_Identity Signal_Low Pitch.m4a"], "pilot vessel 100 m or more in length at anchor engaged in pilotage duties; interval NMT 1 min"],
-                        ["/sounds/10_Aground_Less_than_100m_V2.m4a", "vessel less than 100 m in length aground; interval NMT 1 min"],
-                        ["/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"]
-                        ],
-        description: "",
-        fact: "35(d), (c); 35(g); 35(h), (g); 35(k), (g)"
-      },
-      {
-        id: 9,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/7_Anchor_Less_Than_100m.mp3", "vessel less than 100 m in length at anchor; interval NMT 1 min"],
-                        ["/sounds/8_Anchor_100m_Or_More.mp3", "vessel 100 m or more in length at anchor; interval NMT 1 min"],
-                        ["/sounds/9_Anchor_Additional_Sound_Signal.mp3", "optional sound signal for a vessel at anchor giving warning of its position and the possibility of collision with an approaching vessel"],
-                        ["/sounds/10_Aground_Less_than_100m_V2.m4a", "vessel less than 100 m in length aground; interval NMT 1 min"],
-                        ["/sounds/10_Aground_100m_Or_More_V2.m4a", "vessel 100 m or more in length aground; interval NMT 1 min"]
-                        ],
-        description: "",
-        fact: "35(g); 35(h), (g)"
-      },
-      {
-        id: 10,
-        question: "You are <strong>in or near an area of restricted visibility</strong>. Correctly match each sound signal to what it represents.",
-        correctAnswer: [
-                        ["/sounds/Pilot Vsl_Making Way.m4a", "pilot vessel engaged in pilotage duties making way through the water; interval NMT 2 min"],
-                        ["/sounds/Pilot Vsl_Underway but stopped_FV2.m4a", "pilot vessel engaged in pilotage duties underway but stopped and making no way through the water; interval NMT 2 min"],
-                        [["/sounds/7_Anchor_Less_Than_100m.mp3", "/sounds/12_Pilotage_Duties_Additional.mp3"], "pilot vessel less than 100 m in length at anchor engaged in pilotage duties; interval NMT 1 min"],
-                        [["/sounds/8_Anchor_100m_Or_More.mp3", "/sounds/Pilot Vsl_Identity Signal_Low Pitch.m4a"], "pilot vessel 100 m or more in length at anchor engaged in pilotage duties; interval NMT 1 min"]
-                        ],
-        description: "",
-        fact: "35(k), (a); 35(k), (b); 35(k), (g)"
-      },
-    ]
-  },
-{
-  config: {
-    id: "3idb1",
-    title: "Definition Builder – Interpretation – Part I",
-    description: "",
-    themeColor: "#6e6d6a",
-    quizKey: "3idb1",
-    startScreenImage: "/images/naval-operations-branch-600.png",
-    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html#h-512767",
-    factHeading: "",
-    category: "Col Regs Interpretation & Rule 3",
-    fillInTheBlank: true,
-    hidden: false
-  },
-  questions: [
-    {
-      id: 1,
-      question:
-        "“Air cushion vessel” means a vessel designed so that the whole or a significant part of its (blank) can be supported, whether at rest or in motion, by a continuously generated cushion of (blank) dependent for its effectiveness on the proximity of the vessel to the surface over which it operates.",
-      correctAnswer: ["weight", "air", "body", "steam", "moisture"],
-      description: "",
-      fact:
-        "Air cushion vessels ride on a <i>continuously generated cushion of air</i>, allowing the hull to lift above the surface. This drastically reduces friction and lets them glide over water, mud, sand, and even ice. <br><a href='/images/3idb1/Q1.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 2,
-      question:
-        "“Barge” means a (blank) barge, scow, dredge, pile-driver, (blank), pontoon or houseboat.",
-      correctAnswer: ["non-self-propelled", "hopper", "self-propelled", "engine-propelled", "digger"],
-      description: "",
-      fact:
-        "A barge is non-self-propelled, meaning it has no engine. It must be pushed or towed by another vessel, usually a tugboat. <br><a href='/images/3idb1/Q2.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 3,
-      question:
-        "“Composite unit” means a (blank) vessel and an associated pushed vessel that are rigidly connected and that are designed as a dedicated and (blank) tug and barge combination.",
-      correctAnswer: ["pushing", "integrated", "pulling", "separate", "semi-integrated"],
-      description: "",
-      fact:
-        "Composite units are designed as dedicated and integrated combinations, meaning the tug is built specifically for that barge, and vice versa. They aren’t meant to mix and match with other vessels. <br><a href='/images/3idb1/Q3.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 4,
-      question:
-        "“Direction of traffic flow” means the direction for traffic on a (blank) that is indicated by (blank) on a reference chart.",
-      correctAnswer: ["route", "arrows", "chart", "narrow channel", "pecked lines"],
-      description: "",
-      fact:
-        "This system is part of a Traffic Separation Scheme (TSS), which helps prevent collisions in busy waterways where many vessels converge. <br><a href='/images/3idb1/Q4.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 5,
-      question:
-        "“Exploration or exploitation vessel” means a vessel capable of engaging in the (blank) for, or the production, conservation or processing of, (blank) or gas.",
-      correctAnswer: ["drilling", "oil", "filling", "water", "sediment"],
-      description: "",
-      fact:
-        "Exploration vessels often use dynamic positioning systems, allowing them to maintain a perfect spot over a drill site using GPS, thrusters, and computers, even in rough conditions. <br><a href='/images/3idb1/Q5.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 6,
-      question:
-        "“Give-way vessel” means a (blank) that is required by these Regulations to keep (blank) of another vessel.",
-      correctAnswer: [
-        "vessel",
-        "out of the way of",
-        "power-driven vessel",
-        "a steady course in relation to",
-        "alter course in relation to"
-      ],
-      description: "",
-      fact:
-        "One of the key responsibilities of the give-way vessel is to make its manoeuvre “early and substantial.” This means no tiny, slow turns or changes in speed, but rather big, obvious changes that the other vessel can clearly see. See Rule 8 and Rule 16 for details. <br><a href='/images/3idb1/Q6.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 7,
-      question:
-        "“Great Lakes Basin” means Lakes Ontario, Erie, Huron (including Georgian Bay), (blank) and Superior, their connecting and tributary waters and the Ottawa and St. Lawrence Rivers and their tributaries as far east as the lower exit of the (blank).",
-      correctAnswer: ["Michigan", "St. Lambert Lock", "Great Bear", "Winnipeg", "Ste. Catherine Lock"],
-      description: "",
-      fact:
-        "The Great Lakes Basin is a natural water highway. It forms a massive inland shipping route that connects the heart of North America to the Atlantic Ocean. <br><a href='/images/3idb1/Q7.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 8,
-      question:
-        "“Inconspicuous, partly submerged vessel or object” means a (blank) or vessel or any other floating object that is low in the water and is generally (blank) to see.",
-      correctAnswer: [
-        "raft",
-        "difficult",
-        "remotely operated vehicle (ROV)",
-        "bottom object inspection vehicle (BOIV)",
-        "easy"
-      ],
-      description: "",
-      fact:
-        "Since these objects sit so low and have little reflective surface, even advanced radar may not detect them. <br><a href='/images/3idb1/Q8.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 9,
-      question:
-        "“Inshore traffic zone” means a routing measure that is a designated area between the (blank) of a traffic separation scheme and the adjacent coast that is intended for (blank).",
-      correctAnswer: ["landward boundary", "local traffic", "seaward boundary", "large container vessels", "all traffic"],
-      description: "",
-      fact:
-        "By routing through-traffic farther offshore, inshore traffic zones prevent busy coastal areas from turning into chaotic, unpredictable clusters of vessels. <br><a href='/images/3idb1/Q9.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 10,
-      question:
-        "“Navigational Warning” means a(n) (blank) by the Department of Fisheries and Oceans to provide (blank) information.",
-      correctAnswer: ["urgent release", "marine", "monthly and annual release", "monthly and weekly release", "weather"],
-      description: "",
-      fact:
-        "They’re like the “breaking news” of the maritime world. When something urgent happens on the water—hazards, military exercises, drifting objects—the Department of Fisheries and Oceans (DFO) sends out a Navigational Warning so mariners know immediately. <br><a href='/images/3idb1/Q10.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 11,
-      question:
-        "“Notice to Mariners” means the (blank) by the Department of Fisheries and Oceans to provide (blank) information.",
-      correctAnswer: ["monthly and annual publication", "marine", "weekly and annual publication", "urgent release", "vessel traffic"],
-      description: "",
-      fact:
-        "They come in two editions: monthly and annual. The monthly notices give fresh updates, while the annual edition collects all the big changes into one handy reference. <br><a href='/images/3idb1/Q11.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 12,
-      question:
-        "“ODAS” means an (blank) that consists of any object on or in the water and is designed to collect, store or transmit samples or data relating to the (blank) or the atmosphere or to the uses thereof.",
-      correctAnswer: [
-        "ocean data acquisition system",
-        "marine environment",
-        "ocean diver acoustic system",
-        "subsurface environment",
-        "ocean digital atmosphere system"
-      ],
-      description: "",
-      fact:
-        "They come in all shapes and sizes. An ODAS might be a floating buoy, a moored sensor, an underwater package, or even a drifting device. <br><a href='/images/3idb1/Q12.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 13,
-      question: "“Raft” includes a (blank).",
-      correctAnswer: ["boom", "kisby ring", "buoy"],
-      description: "",
-      fact:
-        "A “raft” can be hundreds of metres long. A boom under tow, especially a log boom, can stretch farther than most ships. <br><a href='/images/3idb1/Q13.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 14,
-      question:
-        "“Route” means an area within which there are, at any point, one or two (blank) and that is delineated on two sides by separation lines, separation zones, natural obstacles or dashed tinted lines except that the continuity of such lines or zones may be interrupted where the route merges with, diverges from or (blank) another route.",
-      correctAnswer: ["directions of traffic flow", "crosses", "traffic lanes merging", "omits", "precautionary areas"],
-      description: "",
-      fact:
-        "Routes aren't random, they’re engineered. Authorities design each route based on things like shipping density, coastline shape, underwater hazards, and port traffic patterns. So every route reflects local knowledge and safety planning. <br><a href='/images/3idb1/Q14.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 15,
-      question:
-        "“Routing system” means any system of one or more (blank) or routing measures which systems may include (blank), two-way routes, recommended tracks, areas to be avoided, inshore traffic zones, roundabouts, precautionary areas and deep water routes.",
-      correctAnswer: ["routes", "traffic separation schemes", "traffic lanes", "separation lines", "separation zones"],
-      description: "",
-      fact:
-        "They’re like “traffic control for the water”. A routing system is the maritime version of a highway network — lanes, shoulders, medians, roundabouts, exits, etc. <br><a href='/images/3idb1/Q15.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 16,
-      question: "“Seaplane” means any (blank) designed to manoeuvre on the (blank).",
-      correctAnswer: ["aircraft", "water", "hovercraft", "shore"],
-      description: "",
-      fact:
-        "No other craft in the Col Regs can switch modes like a seaplane:<br><ul><li>taxiing = vessel</li><li>taking off = still subject to the rules</li><li>airborne = no longer a “vessel”</li></ul> <br><a href='/images/3idb1/Q16.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 17,
-      question:
-        "“Separation zone” or “separation line” means a zone or line separating (blank) in which vessels are proceeding in (blank) or nearly opposite directions or separating a route from the adjacent inshore traffic zone.",
-      correctAnswer: ["routes", "opposite", "routing systems", "open water", "the same"],
-      description: "",
-      fact:
-        "A <strong>separation line</strong> is a simple charted line, but a <strong>separation zone</strong> is a whole band of water. Both serve the same purpose: <strong>keeping traffic organized and predictable.</strong> <br><a href='/images/3idb1/Q17.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 18,
-      question: "“Traffic lane” means a route within which there (blank) of (blank).",
-      correctAnswer: ["is one direction", "traffic flow", "are two directions", "are multiple directions", "merging traffic"],
-      description: "",
-      fact:
-        "Just like cars use one-way lanes to avoid head-on collisions, ships in a traffic lane all travel in the <strong>same direction</strong>, creating predictable and orderly flow — especially in busy waterways. <br><a href='/images/3idb1/Q18.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 19,
-      question:
-        "“Traffic separation scheme” means a routing measure that provides for the separation of (blank) streams of traffic by appropriate means and by the establishment of (blank).",
-      correctAnswer: ["opposing", "traffic lanes", "similar", "separation zones", "inshore traffic zones"],
-      description: "",
-      fact:
-        "The International Maritime Organization (IMO), the same organization behind the Col Regs, approves most Traffic Separation Schemes worldwide — giving mariners a consistent set of rules no matter where they sail. <br><a href='/images/3idb1/Q19.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 20,
-      question:
-        "“Trawling” means (blank) by dragging through the water a (blank) or other fishing apparatus.",
-      correctAnswer: ["fishing", "dredge net", "dredging", "towing", "gillnet"],
-      description: "",
-      fact:
-        "Trawlers don’t “troll” — they drag. Trawling drags a massive net through the water, while trolling simply tows baited or lured lines behind the boat. <br><a href='/images/3idb1/Q20.jpg'>[Click Here for Image]</a>"
-    }
-  ]
-},
-{
-  config: {
-    id: "3idb2",
-    title: "Definition Builder – Interpretation – Part II",
-    description: "",
-    themeColor: "#6e6d6a",
-    quizKey: "3idb2",
-    startScreenImage: "/images/naval-operations-branch-600.png",
-    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html#h-512767",
-    factHeading: "",
-    category: "Col Regs Interpretation & Rule 3",
-    fillInTheBlank: true,
-    hidden: false
-  },
-  questions: [
-    {
-      id: 1,
-      question:
-        "“(blank)” means a vessel designed so that the whole or a significant part of its weight can be supported, whether at rest or in (blank), by a continuously generated cushion of air dependent for its effectiveness on the proximity of the vessel to the (blank) over which it operates.",
-      correctAnswer: ["air cushion vessel", "motion", "surface", "wing-in-ground (WIG) craft", "air"],
-      description: "",
-      fact:
-        "Hovercraft, which are a type of air cushion vessel, are frequently used for rescue operations in areas where boats can’t go, such as flood zones, frozen lakes, tidal flats, and swamps. <br><a href='/images/3idb2/Q1.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 2,
-      question:
-        "“Barge” means a (blank) barge, (blank), hopper, pontoon or houseboat.",
-      correctAnswer: [
-        "non-self-propelled",
-        "scow, dredge, pile-driver",
-        "scow, vessel, pile-driver",
-        "surveyor, dredge, pile-driver",
-        "scow, dredge, boom"
-      ],
-      description: "",
-      fact:
-        "Pile-drivers are used to hammer long piles into the seabed, making them key players in building piers, bridges, docks, and marine structures. <br><a href='/images/3idb2/Q2.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 3,
-      question:
-        "“Composite unit” means a pushing vessel and an associated (blank) vessel that are (blank) and that are designed as a dedicated and integrated tug and (blank) combination.",
-      correctAnswer: ["pushed", "rigidly connected", "barge", "pulled", "semi-connected"],
-      description: "",
-      fact:
-        "These units often use articulated mechanical linkages or pins to form a stable, rigid connection that reduces yawing or pitching—making them safer in rough seas than traditional towing operations. <br><a href='/images/3idb2/Q3.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 4,
-      question:
-        "“Direction of traffic flow” means the (blank) for (blank) on a route that is indicated by arrows on a (blank).",
-      correctAnswer: ["direction", "traffic", "reference chart", "area", "power-driven vessels"],
-      description: "",
-      fact:
-        "On charts, traffic flow is often marked with arrows that show the intended movement direction, helping ships follow predictable paths in any condition of visibility. <br><a href='/images/3idb2/Q4.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 5,
-      question:
-        "“Exploration or exploitation vessel” means a (blank) capable of engaging in the drilling for, or the production, (blank) or processing of, oil or (blank).",
-      correctAnswer: ["vessel", "conservation", "gas", "platform", "demolition"],
-      description: "",
-      fact:
-        "Some modern drilling ships can operate in waters over 3,000 meters deep, making them crucial for developing deep-sea oil and gas fields. <br><a href='/images/3idb2/Q5.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 6,
-      question:
-        "“Give-way vessel” means a vessel that is required by (blank) to (blank) of (blank).",
-      correctAnswer: [
-        "these Regulations",
-        "keep out of the way",
-        "another vessel",
-        "Canadian law",
-        "a vessel restricted in its ability to manoeuvre"
-      ],
-      description: "",
-      fact:
-        "If both vessels misunderstand who is supposed to give way, things can get confusing, which is why the regulations for preventing collisions at sea (Col Regs) are internationally standardized and taught globally. <br><a href='/images/3idb2/Q6.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 7,
-      question:
-        "“Great Lakes Basin” means Lakes Ontario, Erie, Huron (including (blank)), Michigan and Superior, their (blank) and (blank) and the Ottawa and St. Lawrence Rivers and their tributaries as far east as the lower exit of the St. Lambert Lock.",
-      correctAnswer: ["Georgian Bay", "connecting", "tributary waters", "Gore Bay", "partitioning"],
-      description: "",
-      fact:
-        "Some Great Lakes waves can rival the ocean. Lake Superior has produced waves over 9 meters (30 feet) high! <br><a href='/images/3idb2/Q7.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 8,
-      question:
-        "“Inconspicuous, partly submerged vessel or object” means a raft or vessel or any other (blank) that is (blank) and is generally difficult to (blank).",
-      correctAnswer: [
-        "floating object",
-        "low in the water",
-        "see",
-        "fully submerged object",
-        "below the water"
-      ],
-      description: "",
-      fact:
-        "Many towed objects ride so low they barely break the surface—log booms and floating platforms may show only centimeters above the water, meeting the Col Regs definition perfectly: “generally difficult to see”. <br><a href='/images/3idb2/Q8.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 9,
-      question:
-        "“Inshore traffic zone” means a (blank) that is a (blank) between the landward boundary of a (blank) and the adjacent coast that is intended for local traffic.",
-      correctAnswer: ["routing measure", "designated area", "traffic separation scheme", "route", "separation zone"],
-      description: "",
-      fact:
-        "Some inshore traffic zones are just a few hundred meters wide, while others run for dozens of nautical miles along complex coasts or narrow straits. <br><a href='/images/3idb2/Q9.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 10,
-      question: "“(blank)” means an urgent release by the (blank) to provide (blank).",
-      correctAnswer: [
-        "Navigational Warning",
-        "Department of Fisheries and Oceans",
-        "marine information",
-        "Notice to Mariners",
-        "sea state information"
-      ],
-      description: "",
-      fact:
-        "Unlike routine marine weather reports, Navigational Warnings (NAVWARNs) cover sudden hazards, such as unlit buoys, derelict vessels, hazards to navigation, cable-laying or dredging operations, search and rescue activity, and live-fire military zones. <br><a href='/images/3idb2/Q10.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 11,
-      question:
-        "“(blank)” means the monthly and annual publication by the (blank) to provide (blank).",
-      correctAnswer: [
-        "Notice to Mariners",
-        "Department of Fisheries and Oceans",
-        "marine information",
-        "Navigational Warning",
-        "meteorological"
-      ],
-      description: "",
-      fact:
-        "Notice to Mariners (NOTMAR) often highlight quiet but important changes, such as updates on things like buoy colours, light characteristics, chart notes, and restricted zones. Small details that make big differences on the water. <br><a href='/images/3idb2/Q11.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 12,
-      question:
-        "“ODAS” means an ocean data acquisition system that consists of any object (blank) and is designed to (blank), store or transmit samples or data relating to the marine environment or the (blank) or to the uses thereof.",
-      correctAnswer: ["on or in the water", "collect", "atmosphere", "above or in the water", "meteorology"],
-      description: "",
-      fact:
-        "They’re scientific gold mines. ODAS devices feed data into weather forecasts, tsunami warnings, climate models, and maritime safety systems. Some even help track ice movement in the Arctic. <br><a href='/images/3idb2/Q12.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 13,
-      question: "“Raft” (blank) a boom.",
-      correctAnswer: ["includes", "does not include", "is also called"],
-      description: "",
-      fact:
-        "Booms ride extremely low in the water, often with only a few centimeters showing. That’s why the Col Regs bundle them with rafts: both are hard to see and easy to hit if you’re not paying attention! <br><a href='/images/3idb2/Q13.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 14,
-      question:
-        "“Route” means an area within which there are, at any point, (blank) directions of traffic flow and that is delineated on two sides by (blank), separation zones, natural obstacles or dashed tinted lines except that the continuity of such lines or zones (blank) where the route merges with, diverges from or crosses another route.",
-      correctAnswer: ["one or two", "separation lines", "may be interrupted", "two or three", "may not be interrupted"],
-      description: "",
-      fact:
-        "Routes help manage the world’s busiest waters. They help to prevent chaos and keep vessels predictable. <br><a href='/images/3idb2/Q14.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 15,
-      question:
-        "“Routing system” means any system of one or more routes or (blank) which systems may include traffic separation schemes, two-way routes, (blank), areas to be avoided, inshore traffic zones, roundabouts, precautionary areas and (blank) routes.",
-      correctAnswer: ["routing measures", "recommended tracks", "deep water", "traffic lanes", "shallow water"],
-      description: "",
-      fact:
-        "“Areas to be avoided” are like the ocean’s “Do Not Enter” signs. These zones often protect reefs, wildlife habitats, shipwreck sites, and dangerous shoals. <br><a href='/images/3idb2/Q15.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 16,
-      question: "“(blank)” means any aircraft designed to manoeuvre (blank) the (blank).",
-      correctAnswer: ["seaplane", "on", "water", "Wing-in-Ground (WIG) craft", "above"],
-      description: "",
-      fact:
-        "Seaplane pilots are trained not only in aviation rules but also in maritime rules, since seaplanes are vessels while on the water.<br><a href='/images/3idb2/Q16.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 17,
-      question:
-        "“(blank)” or “separation line” means a zone or line separating routes in which (blank) are proceeding in opposite or nearly opposite (blank) or separating a route from the adjacent inshore traffic zone.",
-      correctAnswer: ["separation zone", "vessels", "directions", "traffic lanes", "power-driven vessels"],
-      description: "",
-      fact:
-        "By physically separating opposing flows of traffic, separation zones drastically reduce the chance of two large ships meeting bow-to-bow — a scenario no mariner wants. <br><a href='/images/3idb2/Q17.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 18,
-      question:
-        "“Traffic lane” means a (blank) within which there is one (blank) of (blank).",
-      correctAnswer: ["route", "direction", "traffic flow", "routing system", "system"],
-      description: "",
-      fact:
-        "Traffic lanes make ships behave predictably. Even huge tankers and container ships — which can take a considerable distance to stop — follow traffic lanes so everyone knows exactly which direction they’ll be moving. <br><a href='/images/3idb2/Q18.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 19,
-      question:
-        "“Traffic separation scheme” means a (blank) that provides for the (blank) of opposing streams of traffic by appropriate means and by the establishment of (blank).",
-      correctAnswer: ["routing measure", "separation", "traffic lanes", "integration", "traffic flow"],
-      description: "",
-      fact:
-        "TSSs exist in the busiest waters on Earth. Places like the English Channel, Singapore Strait, and Strait of Gibraltar rely on TSSs to keep thousands of ships moving smoothly every day. <br><a href='/images/3idb2/Q19.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 20,
-      question:
-        "“Trawling” means fishing by (blank) through the water a dredge net or other (blank).",
-      correctAnswer: ["dragging", "fishing apparatus", "pushing", "fishing floats", "drifting"],
-      description: "",
-      fact:
-        "Trawlers move oddly compared to other vessels. Because they’re dragging heavy gear, trawlers may slow dramatically, zig-zag, or have limited turning ability. The Col Regs recognizes this and gives them special status. <br><a href='/images/3idb2/Q20.jpg'>[Click Here for Image]</a>"
-    }
-  ]
-},
-{
-  config: {
-    id: "3idb3",
-    title: "Definition Builder – Interpretation – Part III",
-    description: "",
-    themeColor: "#6e6d6a",
-    quizKey: "3idb3",
-    startScreenImage: "/images/naval-operations-branch-600.png",
-    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html#h-512767",
-    factHeading: "",
-    category: "Col Regs Interpretation & Rule 3",
-    fillInTheBlank: true,
-    hidden: false
-  },
-  questions: [
-    {
-      id: 1,
-      question:
-        "“Air cushion vessel” means a/n (blank) designed so that the whole or a significant part of its weight can be (blank), whether at rest or in motion, by a (blank) generated cushion of air dependent for its effectiveness on the proximity of the vessel to the surface over which it (blank).",
-      correctAnswer: ["vessel", "supported", "continuously", "operates", "aircraft"],
-      description: "",
-      fact:
-        "Their performance depends on surface proximity. If the vessel rises too far from the surface, the air cushion becomes ineffective, and lift is lost. <br><a href='/images/3idb3/Q1.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 2,
-      question:
-        "“(blank)” means a (blank) barge, scow, dredge, pile-driver, (blank).",
-      correctAnswer: [
-        "barge",
-        "non-self-propelled",
-        "hopper, pontoon or houseboat",
-        "self-propelled",
-        "hovercraft, pontoon or houseboat"
-      ],
-      description: "",
-      fact:
-        "Hoppers carry dredged material or bulk goods. Some have split hulls or opening bottoms that let them dump material directly into the water at specific disposal sites. <br><a href='/images/3idb3/Q2.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 3,
-      question:
-        "“(blank)” means a (blank) and an associated (blank) that are rigidly connected and that are designed as a dedicated and integrated (blank) combination.",
-      correctAnswer: ["composite unit", "pushing vessel", "pushed vessel", "tug and barge", "tug and vessel"],
-      description: "",
-      fact:
-        "Composite units are commonly used for oil, petroleum products, and bulk cargo, where stability and predictable handling are especially important. <br><a href='/images/3idb3/Q3.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 4,
-      question:
-        "“(blank)” means the direction for traffic on a (blank) that is indicated by (blank) on a (blank).",
-      correctAnswer: ["direction of traffic flow", "route", "arrows", "reference chart", "traffic separation scheme"],
-      description: "",
-      fact:
-        "The direction of traffic in a route is not guessed or decided by the vessel, it is established internationally through the International Maritime Organization (IMO). <br><a href='/images/3idb3/Q4.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 5,
-      question:
-        "“Exploration or (blank)” means a vessel capable of (blank) the drilling for, or the (blank), conservation or processing of, (blank).",
-      correctAnswer: ["exploitation vessel", "engaging in", "production", "oil and gas", "exploitation platform"],
-      description: "",
-      fact:
-        "These vessels are vital for getting energy resources from places where traditional offshore platforms cannot be built, such as ultra-deep or remote waters. <br><a href='/images/3idb3/Q5.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 6,
-      question:
-        "“(blank)” means a vessel that (blank) by these Regulations to (blank) of another (blank).",
-      correctAnswer: ["give-way vessel", "is required", "keep out of the way", "vessel", "stand-on vessel"],
-      description: "",
-      fact:
-        "The give‑way vessel is required to take early and substantial action—by altering course, speed, or both—to avoid collision, while the stand‑on vessel shall maintain its course and speed, but must take action if it becomes necessary to avoid danger.  <br><a href='/images/3idb3/Q6.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 7,
-      question:
-        "“Great Lakes Basin” means Lakes Ontario, Erie, Huron (including Georgian Bay), Michigan and Superior, their connecting and tributary waters and the (blank) Rivers and their (blank) as far (blank) of the St. Lambert Lock.",
-      correctAnswer: [
-        "Ottawa and St. Lawrence",
-        "tributaries",
-        "east as the lower exit",
-        "west as the upper exit",
-        "Richelieu and St. Lawrence"
-      ],
-      description: "",
-      fact:
-        "With more than 6,000 shipwrecks in the Great Lakes, mastering your Col Regs is always a smart move! <br><a href='/images/3idb3/Q7.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 8,
-      question:
-        "“(blank), partly submerged vessel or object” means a (blank) or any other floating object that is (blank) and is generally (blank).",
-      correctAnswer: ["inconspicuous", "raft or vessel", "low in the water", "difficult to see", "conspicuous"],
-      description: "",
-      fact:
-        "Because these towed objects are so hard to see, the Col Regs give them special lighting and day-shape requirements. See Rule 24(g) for details. <br><a href='/images/3idb3/Q8.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 9,
-      question:
-        "“(blank)” means a (blank) that is a designated area between the (blank) of a traffic separation scheme and the (blank) that is intended for local traffic.",
-      correctAnswer: ["inshore traffic zone", "routing measure", "landward boundary", "adjacent coast", "separation zone"],
-      description: "",
-      fact:
-        "Keeping big ships out of inshore traffic zones reduces the risk of shoreline erosion, groundings, pollution near sensitive marine areas, and collisions with smaller vessels. <br><a href='/images/3idb3/Q9.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 10,
-      question:
-        "“(blank)” means an (blank) release by the Department of (blank) to provide (blank) information.",
-      correctAnswer: ["Navigational Warning", "urgent", "Fisheries and Oceans", "marine", "Transport Canada"],
-      description: "",
-      fact:
-        "Many warnings come from mariners themselves. Ships at sea often report hazards they spot, like a missing buoy or a floating hazard, and the DFO turns those reports into Navigational Warnings for others. <br><a href='/images/3idb3/Q10.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 11,
-      question:
-        "“(blank)” means the (blank) publication by the Department of (blank) to provide (blank) information.",
-      correctAnswer: ["Notice to Mariners", "monthly and annual", "Fisheries and Oceans", "marine", "Transport Canada"],
-      description: "",
-      fact:
-        "Just like software updates fix bugs, Notices to Mariners (NOTMAR) update charts, publications, and navigation information to keep mariners current and safe. <br><a href='/images/3idb3/Q11.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 12,
-      question:
-        "“ODAS” means an ocean data acquisition system that consists of any (blank) on or in the water and is designed to collect, (blank) or transmit (blank) or (blank) relating to the marine environment or the atmosphere or to the uses thereof.",
-      correctAnswer: ["object", "store", "samples", "data", "vessel"],
-      description: "",
-      fact:
-        "They quietly watch the weather 24/7. Many ODAS devices transmit real-time data every few minutes, helping meteorologists track storms long before they reach land. <br><a href='/images/3idb3/Q12.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 13,
-      question: "“(blank)” includes a (blank).",
-      correctAnswer: ["raft", "boom", "ODAS", "composite unit", "buoy"],
-      description: "",
-      fact:
-        "Booms don’t manoeuvre, they just follow. Unlike a vessel, a boom can’t steer or speed up. It simply trails behind its tug, snaking with waves and currents—another reason it fits the “raft” category. <br><a href='/images/3idb3/Q13.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 14,
-      question:
-        "“(blank)” means an area within which there are, at any point, one or two directions of traffic flow and that is delineated on (blank) by separation lines, separation zones, (blank) or dashed tinted lines except that the continuity of such lines or zones may be interrupted where the route (blank), diverges from or crosses another route.",
-      correctAnswer: ["route", "two sides", "natural obstacles", "merges with", "routing system"],
-      description: "",
-      fact:
-        "Routes evolve with traffic. If shipping patterns change or new hazards appear, authorities update route designs—just like modern cities redesign road systems. <br><a href='/images/3idb3/Q14.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 15,
-      question:
-        "“(blank)” means any system of (blank) routes or routing measures which systems may include traffic separation schemes, two-way routes, recommended tracks, areas to be (blank), inshore traffic zones, (blank), precautionary areas and deep water routes.",
-      correctAnswer: ["routing system", "one or more", "avoided", "roundabouts", "route"],
-      description: "",
-      fact:
-        "Routing systems reduce chaos in the world’s busiest waters. These systems are used to prevent ships from playing “guess-the-traffic-pattern.” <br><a href='/images/3idb3/Q15.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 16,
-      question:
-        "“(blank)” means any (blank) designed to manoeuvre (blank) the (blank).",
-      correctAnswer: ["seaplane", "aircraft", "on", "water", "over"],
-      description: "",
-      fact:
-        "As a seaplane accelerates for takeoff, it acts like a speedboat on steroids—lots of spray, lots of wake. That’s why Victoria Harbour gives them their own takeoff and landing zone. <br><a href='/images/3idb3/Q16.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 17,
-      question:
-        "“Separation zone” or “(blank)” means a zone or line (blank) routes in which vessels are proceeding in opposite or nearly opposite directions or separating a (blank) from the adjacent (blank).",
-      correctAnswer: ["separation line", "separating", "route", "inshore traffic zone", "convergent line"],
-      description: "",
-      fact:
-        "On paper and digital charts, separation zones are lightly tinted or hatched, while separation lines appear as bold or dashed boundaries. <br><a href='/images/3idb3/Q17.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 18,
-      question: "“(blank)” means a (blank) within which there is (blank) of (blank).",
-      correctAnswer: ["traffic lane", "route", "one direction", "traffic flow", "diverging traffic"],
-      description: "",
-      fact:
-        "The Col Regs require vessels to cross traffic lanes <strong>at right angles</strong> so other ships can easily judge the crossing vessel’s movements and avoid confusion. <br><a href='/images/3idb3/Q18.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 19,
-      question:
-        "“(blank)” means a (blank) that provides for the separation of (blank) by appropriate means and by the establishment of (blank).",
-      correctAnswer: [
-        "traffic separation scheme (TSS)",
-        "routing measure",
-        "opposing streams of traffic",
-        "traffic lanes",
-        "route"
-      ],
-      description: "",
-      fact:
-        "Some TSSs are designed around underwater hazards. Separation zones may bend or curve to avoid shoals, reefs, or sandbanks. The shape of a TSS always tells a story about the local environment. <br><a href='/images/3idb3/Q19.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 20,
-      question:
-        "“(blank)” means (blank) through the (blank) a (blank) or other fishing apparatus.",
-      correctAnswer: ["trawling", "fishing by dragging", "water", "dredge net", "trolling"],
-      description: "",
-      fact:
-        "There are three main categories of trawling: surface (skimming the top), midwater/pelagic (sweeping the open water), and bottom/benthic (scraping the seabed). All three count as trawling under the Col Regs. <br><a href='/images/3idb3/Q20.jpg'>[Click Here for Image]</a>"
-    }
-  ]
-},
-  {
-    config: {
-      id: "3db1",
-      title: "Definition Builder – Rule 3 – Part I",
-      description: "",
-      themeColor: '#6e6d6a',
-      quizKey: "3db1",
-      startScreenImage: "/images/naval-operations-branch-600.png",
-      studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
+      id: "combined",
+      title: "Signal Flags and Pennants",
+      description: "Test your knowledge of all Signal Flags and Pennants.",
+      themeColor: 'teal',
+      quizKey: "sfp_combined",
+      startScreenImage: "/images/naval_communications_dep_badge.gif",
+      studyGuide: "",
       factHeading: "",
-      category: "Col Regs Interpretation & Rule 3",
-      fillInTheBlank: true,
-      hidden: false
+      category: "Naval Communications",
+      hidden: false,
+      isAdvanced: true
     },
     questions: [
+      // Combined questions from both quizzes
+      // Signal Flags (1-39)
       {
         id: 1,
-        question: "The word “vessel” includes every description of water craft, including (blank), WIG craft and seaplanes, used or capable of being used as a means of (blank) on water. <i>R3(a)</i>",
-        correctAnswer: ["non-displacement craft", "transportation", "amphibious", "taxiing"],
-        description: "",
-        fact: "A WIG craft can travel further on the same fuel and with the same payload as an aircraft and much faster than a ship. This enables WIG craft to fill the gap between low cost, slow sea freight and fast, yet high-cost air freight.<br><a href='/images/3db1/Q1.jpg'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Alfa",
+        description: "Morse Code .-",
+        fact: "Single meaning: 'Divers/Friendly underwater demolition personnel down.'  International meaning: 'Diver down. Keep well clear at slow speed.'",
+        imageUrl: "/images/Alfa.png"
       },
       {
         id: 2,
-        question: "The term “power-driven vessel” means any vessel propelled by (blank). <i>R3(b)</i>",
-        correctAnswer: ["machinery", "sail", "solar-power"],
-        description: "",
-        fact: "A power-driven vessel under 50 metres in length is required to display one masthead light. Displaying a second masthead light, positioned higher and aft of (behind) the first, is optional. <i>R23(a)</i> <br><a href='/images/3db1/Q2.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Bravo",
+        description: "Morse Code -...",
+        fact: "Single meaning: 'Weapons practice. Fuelling or transferring explosives.'  International meaning: 'Taking in, discharging or carrying dangerous goods.'",
+        imageUrl: "/images/Bravo.png"
       },
       {
         id: 3,
-        question: "The term “sailing vessel” means any vessel under sail provided that (blank) machinery, if fitted, (blank) being used. <i>R3(c)</i>",
-        correctAnswer: ["propelling", "is not", "steering", "is"],
-        description: "",
-        fact: "Using your engine only to charge batteries or power onboard systems (without propelling the vessel) still allows the vessel to be classified as a sailing vessel. <br><a href='/images/3db1/Q3.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Charlie",
+        description: "Morse Code -.-.",
+        fact: "Single meaning: 'Affirmative.'  International meaning: 'Yes. (Affirmative)'",
+        imageUrl: "/images/Charlie.png"
       },
       {
         id: 4,
-        question: "The term “vessel engaged in fishing” means any vessel fishing with nets, lines, trawls or other fishing apparatus which restrict (blank), but (blank) a vessel fishing with trolling lines or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
-        correctAnswer: ["manoeuvrability", "does not include", "stability", "does"],
-        description: "",
-        fact: "By day, fishing vessels display two cones with apexes together, signalling restricted manoeuvrability due to fishing gear.<br><a href='/images/3db1/Q4.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Delta",
+        description: "Morse Code -..",
+        fact: "Single meaning: 'Degaussing.'. International meaning: 'Keep clear, I am manoeuvring with difficulty.'",
+        imageUrl: "/images/Delta.png"
       },
       {
         id: 5,
-        question: "The term “vessel engaged in fishing” means any vessel fishing with nets, lines, (blank) or other fishing apparatus which restrict manoeuvrability, but does not include a vessel fishing with (blank) or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
-        correctAnswer: ["trawls", "trolling lines", "fishing floats", "trawling lines"],
-        description: "",
-        fact: "During trawling, large nets, doors, and cables can extend hundreds of metres behind or beside the vessel, making sharp turns slow or impossible without risking gear damage. <br><a href='/images/3db1/Q5.jpeg'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Echo",
+        description: "Morse Code .",
+        fact: "International meaning: 'I am altering my course to Starboard.'",
+        imageUrl: "/images/Echo.png"
       },
       {
         id: 6,
-        question: "The word “seaplane” includes any (blank) designed to manoeuvre on the (blank). <i>R3(e)</i>",
-        correctAnswer: ["aircraft", "water", "hovercraft", "shore"],
-        description: "",
-        fact: "When operating on water at night or in restricted visibility, seaplanes must display navigation lights that allow other vessels to assess their position and movement. <br><a href='/images/3db1/Q6.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Foxtrot",
+        description: "Morse Code ..-.",
+        fact: "Single meaning: 'Flight operations.'  International meaning: 'I am disabled. Communicate with me.'",
+        imageUrl: "/images/Foxtrot.png"
       },
       {
         id: 7,
-        question: "The term vessel “(blank)” means a vessel which through some exceptional circumstance is (blank) as required by these Rules and is therefore unable to keep out of the way of another vessel. <i>R3(f)</i>",
-        correctAnswer: ["not under command (NUC)", "unable to manoeuvre", "restricted in its manoeuvrability", "restricted in its ability to manoeuvre (RAM)"],
-        description: "",
-        fact: "An example of an exceptional circumstance is a steering gear breakdown but only if it prevents the vessel from manoeuvring as required by the Rules to avoid another vessel. <br><a href='/images/3db1/Q7.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Golf",
+        description: "Morse Code --.",
+        fact: "Single meaning: 'Guide.'  International meaning: 'I require a pilot.'",
+        imageUrl: "/images/Golf.png"
       },
       {
         id: 8,
-        question: "The term vessel “restricted in its ability to manoeuvre” means a vessel which from (blank) is restricted in its ability to manoeuvre as required by these Rules and is therefore unable to (blank). <i>R3(g)</i>",
-        correctAnswer: ["the nature of its work", "keep out of the way of another vessel", "some exceptional circumstance", "decrease speed"],
-        description: "",
-        fact: "RAM vessels do not all exhibit the same lights and shapes to identify them. The signals used depend on the nature of the work being carried out. See Rule 27(b) - (g) for details.<br><a href='/images/3db1/Q8.jpg'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Hotel",
+        description: "Morse Code ....",
+        fact: "Single meaning: 'Helicopter operations.'  International meaning: 'I have a pilot onboard.'",
+        imageUrl: "/images/Hotel.png"
       },
       {
         id: 9,
-        question: "The term “vessels restricted in their ability to manoeuvre (RAM)” shall include but not be limited to:<br><br>a vessel engaged in laying, (blank) or picking up a navigation mark, submarine cable or pipeline. <i>R3(g)(i)</i>",
-        correctAnswer: ["servicing", "transporting", "monitoring"],
-        description: "",
-        fact: "When laying or recovering a cable or pipeline, a vessel’s movement is constrained by heavy gear under tension, making course changes slow or unsafe.<br><a href='/images/3db1/Q9.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "India",
+        description: "Morse Code ..",
+        fact: "Single meaning: 'Going alongside in Port/Anchor.'  International meaning: 'Altering my course to Port.'",
+        imageUrl: "/images/India.png"
       },
       {
         id: 10,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a (blank), submarine cable or pipeline. <i>R3(g)(i)</i>",
-        correctAnswer: ["navigation mark", "trawl net", "drainage hose"],
-        description: "",
-        fact: "Cables, pipelines, or marker chains may trail hundreds of metres astern or to the side of the RAM vessel, meaning the danger area is much larger than the vessel itself. <br><a href='/images/3db1/Q10.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Juliett",
+        description: "Morse Code .---",
+        fact: "Single meaning: 'Semaphore message.'  International meaning: 'I am on fire. Dangerous cargo, keep well clear.'",
+        imageUrl: "/images/Juliett.png"
       },
       {
         id: 11,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, (blank) or picking up a (blank), submarine cable or pipeline. <i>R3(g)(i)</i>",
-        correctAnswer: ["servicing", "navigation mark", "dredging", "trawl float"],
-        description: "",
-        fact: "These vessels often operate in high‑traffic areas. Submarine cables, pipelines, and navigation marks are commonly located near ports, channels, and coastal routes, where collision risk is naturally higher.<br><a href='/images/3db1/Q11.jpeg'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Kilo",
+        description: "Morse Code -.-",
+        fact: "Single meaning: 'Personnel working aloft.'  International meaning: 'I wish to communicate with you.'",
+        imageUrl: "/images/Kilo.png"
       },
       {
         id: 12,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), surveying or (blank). <i>R3(g)(ii)</i>",
-        correctAnswer: ["dredging", "underwater operations", "anchoring", "cargo operations"],
-        description: "",
-        fact: "<strong>Dredging</strong> involves removing sediment, sand, rock, or debris from the seabed to maintain or deepen channels, harbours, and waterways. <br><a href='/images/3db1/Q12.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Lima",
+        description: "Morse Code .-..",
+        fact: "Single meaning: 'Radhaz/Hero warning.'  International meaning: 'You should stop your vessel instantly.'",
+        imageUrl: "/images/Lima.png"
       },
       {
         id: 13,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank) or transferring (blank), provisions or cargo while underway. <i>R3(g)(iii)</i>",
-        correctAnswer: ["replenishment", "persons", "fuel monitoring", "mustering persons"],
-        description: "",
-        fact: "When vessels transfer people, fuel, supplies, or cargo while underway, they must hold a steady course and speed relative to each other—severely limiting their ability to manoeuvre independently. <br><a href='/images/3db1/Q13.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Mike",
+        description: "Morse Code --",
+        fact: "Single meaning: 'Medical/Dental Guard Duty ship. Disregard my movements.'  International meaning: 'My vessel is stopped.'",
+        imageUrl: "/images/Mike.png"
       },
       {
         id: 14,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the (blank) or (blank) of aircraft. <i>R3(g)(iv)</i>",
-        correctAnswer: ["launching", "recovery", "refuelling", "maintenance"],
-        description: "",
-        fact: "When launching or recovering aircraft, vessels often must maintain very specific headings and speeds to ensure safe takeoffs and landings, severely limiting manoeuvring options. <br><a href='/images/3db1/Q14.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "November",
+        description: "Morse Code -.",
+        fact: "Single meaning: 'Your movements not understood. Not keeping Visual watch.'  International meaning: 'No. (Negative)'",
+        imageUrl: "/images/November.png"
       },
       {
         id: 15,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank) operations. <i>R3(g)(v)</i>",
-        correctAnswer: ["mineclearance", "minesweeping", "diving", "towing"],
-        description: "",
-        fact: "Mineclearance vessels often must maintain precise tracks and speeds; sudden manoeuvres can trigger mines or disrupt clearance equipment. <br><a href='/images/3db1/Q15.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Oscar",
+        description: "Morse Code ---",
+        fact: "Single and International meaning: 'Man overboard.'",
+        imageUrl: "/images/Oscar.png"
       },
       {
         id: 16,
-        question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) the towing vessel and its tow in their ability to (blank). <i>R3(g)(vi)</i>",
-        correctAnswer: ["severely restricts", "deviate from their course", "slightly affects", "reduce their speed"],
-        description: "",
-        fact: "Not all towing makes a vessel RAM. Only towing operations that severely restrict the towing vessel and its tow from altering course qualify as restricted in their ability to manoeuvre. <br><a href='/images/3db1/Q16.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Papa",
+        description: "Morse Code .--.",
+        fact: "Single meaning: 'General recall. Position indicator.'  International meaning: 'Recall. All persons to repair onboard. Vessel about to sail.'",
+        imageUrl: "/images/Papa.png"
       },
       {
         id: 17,
-        question: "The term vessel “constrained by its draught” means a (blank) that, because of the vessel’s draught in relation to the available depth and (blank) of navigable water, is severely restricted in the vessel’s ability to deviate from the course the vessel is following. <i>R3(h)</i>",
-        correctAnswer: ["power-driven vessel", "width", "any vessel", "speed"],
-        description: "",
-        fact: "A vessel may be extremely large yet not constrained by its draught if sufficient depth and width of water are available. Constrained by draught status depends on available navigable water, not gross tonnage. <br><a href='/images/3db1/Q17.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Quebec",
+        description: "Morse Code --.-",
+        fact: "Single meaning: 'Boat recall - own boats or those addressed.'  International meaning: 'Vessel is healthy. Request free pratique.'",
+        imageUrl: "/images/Quebec.png"
       },
       {
         id: 18,
-        question: "The word “(blank)” means that a vessel is not at anchor, or (blank), or aground. <i>R3(i)</i>",
-        correctAnswer: ["underway", "made fast to the shore", "making way", "heaving to"],
-        description: "",
-        fact: "A vessel does not need to be moving to be considered underway. If it is not anchored, not made fast, and not aground, it is legally underway, even if its engines are stopped.<br><a href='/images/3db1/Q18.jpg'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Romeo",
+        description: "Morse Code .-.",
+        fact: "Single meaning: 'Going alongside for Replenishing/Transfer/Fuelling at sea. Ready Duty ship. MCM Operations.'",
+        imageUrl: "/images/Romeo.png"
       },
       {
         id: 19,
-        question: "The words “length” and “(blank)” of a vessel mean its length overall and (blank) breadth. <i>R3(j)</i>",
-        correctAnswer: ["breadth", "greatest", "clearance", "average"],
-        description: "",
-        fact: "Several Rules change based on vessel length, including navigation lights, shapes, and sound signals. <br><a href='/images/3db1/Q19.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Sierra",
+        description: "Morse Code ...",
+        fact: "Single meaning: 'Flag Hoist Drill signal.'  International meaning: 'My engines are going full speed astern.'",
+        imageUrl: "/images/Sierra.png"
       },
       {
         id: 20,
-        question: "Vessels shall be deemed to be “(blank)” only when one can be observed (blank) from the other. <i>R3(k)</i>",
-        correctAnswer: ["in sight of one another", "visually", "in close proximity to one another", "by Automatic Identification System (AIS)"],
-        description: "",
-        fact: "Two vessels may be clearly detected on radar or AIS but are not considered in sight of one another unless they can actually be seen visually. <br><a href='/images/3db1/Q20.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Tango",
+        description: "Morse Code -",
+        fact: "Single meaning: 'Time indicator.'  International meaning: 'Keep clear of me I am engaged in pair trawling.'",
+        imageUrl: "/images/Tango.png"
       },
       {
         id: 21,
-        question: "The term “restricted visibility” means any condition in which visibility is restricted by fog, (blank), (blank), heavy rainstorms, sandstorms or any other similar causes. <i>R3(l)</i>",
-        correctAnswer: ["mist", "falling snow", "intervening obstructions", "other vessels"],
-        description: "",
-        fact: "Restricted visibility can exist in full daylight if weather or environmental conditions reduce what can be seen visually. <br><a href='/images/3db1/Q21.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Uniform",
+        description: "Morse Code ..-",
+        fact: "Single meaning: 'Anchoring, Mooring & Weighing.'  International meaning: 'You are running into danger.'",
+        imageUrl: "/images/Uniform.png"
       },
       {
         id: 22,
-        question: "The term “(blank)” means a multimodal craft which, in its main operational mode, flies in close proximity to the surface by utilizing (blank). <i>R3(m)</i>",
-        correctAnswer: ["Wing-in-Ground (WIG) craft", "surface-effect action", "air cushion vessel", "propulsion‑induced thrust"],
-        description: "",
-        fact: "WIG craft rely on surface-effect, where air trapped between the wing and the surface increases lift and efficiency, but only within a few metres of the water. <br><a href='/images/3db1/Q22.png'>[Click Here for Image]</a>"
+        question: "What does this represent?",
+        correctAnswer: "Victor",
+        description: "Morse Code ...-",
+        fact: "Single meaning: 'Streaming/Recovering towed sonic devices - not including minesweeping equipment.'  International meaning: 'I require assistance.'",
+        imageUrl: "/images/Victor.png"
       },
+      {
+        id: 23,
+        question: "What does this represent?",
+        correctAnswer: "Whiskey",
+        description: "Morse Code .--",
+        fact: "Single meaning: 'Flag Hoise information addressee.'  International meaning: 'I require medical assistance.'",
+        imageUrl: "/images/Whiskey.png"
+      },
+      {
+        id: 24,
+        question: "What does this represent?",
+        correctAnswer: "Xray",
+        description: "Morse Code -..-",
+        fact: "Single meaning: 'Evolution or Exercise completed. X-ray tack (Signal). Carry out for Exercise the meaning of the signal.'  International meaning: 'Stop carrying out your intentions & watch for my signals.'",
+        imageUrl: "/images/Xray.png"
+      },
+      {
+        id: 25,
+        question: "What does this represent?",
+        correctAnswer: "Yankee",
+        description: "Morse Code -.--",
+        fact: "Single meaning: 'Acknowledge. OTC's Location. Visual Communication Duty Ship.'  International meaning: 'I am dragging my anchor.'",
+        imageUrl: "/images/Yankee.png"
+      },
+      {
+        id: 26,
+        question: "What does this represent?",
+        correctAnswer: "Zulu",
+        description: "Morse Code --..",
+        fact: "International meaning: 'I require a tug.'",
+        imageUrl: "/images/Zulu.png"
+      },
+      {
+        id: 27,
+        question: "What does this represent?",
+        correctAnswer: "One",
+        description: "Morse Code .----",
+        fact: "Single meaning: 'ASW Action Table'",
+        imageUrl: "/images/One.png"
+      },
+      {
+        id: 28,
+        question: "What does this represent?",
+        correctAnswer: "Two",
+        description: "Morse Code ..---",
+        fact: "Single meaning: 'Surface Action Table'",
+        imageUrl: "/images/Two.png"
+      },
+      {
+        id: 29,
+        question: "What does this represent?",
+        correctAnswer: "Three",
+        description: "Morse Code ...--",
+        fact: "Single meaning: 'Boat signal. (Steer away)'",
+        imageUrl: "/images/Three.png"
+      },
+      {
+        id: 30,
+        question: "What does this represent?",
+        correctAnswer: "Four",
+        description: "Morse Code ....-",
+        fact: "Single meaning: 'ASW Exercises.'",
+        imageUrl: "/images/Four.png"
+      },
+      {
+        id: 31,
+        question: "What does this represent?",
+        correctAnswer: "Five",
+        description: "Morse Code .....",
+        fact: "Single meaning: 'Breakdown.'",
+        imageUrl: "/images/Five.png"
+      },
+      {
+        id: 32,
+        question: "What does this represent?",
+        correctAnswer: "Six",
+        description: "Morse Code -....",
+        fact: "Single meaning: 'Act at your discretion.'",
+        imageUrl: "/images/Six.png"
+      },
+      {
+        id: 33,
+        question: "What does this represent?",
+        correctAnswer: "Seven",
+        description: "Morse Code --...",
+        fact: "Single meaning: 'AAW Action Table.'",
+        imageUrl: "/images/Seven.png"
+      },
+      {
+        id: 34,
+        question: "What does this represent?",
+        correctAnswer: "Eight",
+        description: "Morse Code ---..",
+        fact: "Single meaning: 'Boat signal. (Steer towards)'",
+        imageUrl: "/images/Eight.png"
+      },
+      {
+        id: 35,
+        question: "What does this represent?",
+        correctAnswer: "Nine",
+        description: "Morse Code ----.",
+        fact: "Single meaning: 'Torpedo Action Table.'",
+        imageUrl: "/images/Nine.png"
+      },
+      {
+        id: 36,
+        question: "What does this represent?",
+        correctAnswer: "Zero",
+        description: "Morse Code -----",
+        fact: "Single meaning: 'Guard Mail. Military Guard.'.",
+        imageUrl: "/images/Zero.png"
+      },
+      {
+        id: 37,
+        question: "What does this represent?",
+        correctAnswer: "Division",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Division.png"
+      },
+      {
+        id: 38,
+        question: "What does this represent?",
+        correctAnswer: "Port",
+        description: "",
+        fact: "Single meaning: 'Indefinite turn to Port. Out of Routine.'",
+        imageUrl: "/images/Port.png"
+      },
+      {
+        id: 39,
+        question: "What does this represent?",
+        correctAnswer: "Squadron",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Squadron.png"
+      },
+      // Pennants (40-68)
+      {
+        id: 40,
+        question: "What does this represent?",
+        correctAnswer: "Pennant One",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant One.png"
+      },
+      {
+        id: 41,
+        question: "What does this represent?",
+        correctAnswer: "Pennant Two",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Two.png"
+      },
+      {
+        id: 42,
+        question: "What does this represent?",
+        correctAnswer: "Pennant Three",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Three.png"
+      },
+      {
+        id: 43,
+        question: "What does this represent?",
+        correctAnswer: "Pennant Four",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Four.png"
+      },
+      {
+        id: 44,
+        question: "What does this represent?",
+        correctAnswer: "Pennant Five",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Five.png"
+      },
+      {
+        id: 45,
+        question: "What does this represent?",
+        correctAnswer: "Pennant Six",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Six.png"
+      },
+      {
+        id: 46,
+        question: "What does this represent?",
+        correctAnswer: "Pennant Seven",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Seven.png"
+      },
+      {
+        id: 47,
+        question: "What does this represent?",
+        correctAnswer: "Pennant Eight",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Eight.png"
+      },
+      {
+        id: 48,
+        question: "What does this represent?",
+        correctAnswer: "Pennant Nine",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Nine.png"
+      },
+      {
+        id: 49,
+        question: "What does this represent?",
+        correctAnswer: "Pennant Zero",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Pennant Zero.png"
+      },
+      {
+        id: 50,
+        question: "What does this represent?",
+        correctAnswer: "Screen",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Screen.png"
+      },
+      {
+        id: 51,
+        question: "What does this represent?",
+        correctAnswer: "Code",
+        description: "",
+        fact: "Single meaning: 'Acknowledgement. Fractions. Use INTERCO.' It is also known as the Answering Pennant.",
+        imageUrl: "/images/Code Answer.png"
+      },
+      {
+        id: 52,
+        question: "What does this represent?",
+        correctAnswer: "Corpen",
+        description: "",
+        fact: "Single meaning: 'Stop the turn.'",
+        imageUrl: "/images/Corpen.png"
+      },
+      {
+        id: 53,
+        question: "What does this represent?",
+        correctAnswer: "Desig",
+        description: "",
+        fact: "Single meaning: 'Plaint Text. Proceeding to Station/Berth. *Daylight Signalling lantern. Acknowledge DSL.*'",
+        imageUrl: "/images/Desig.png"
+      },
+      {
+        id: 54,
+        question: "What does this represent?",
+        correctAnswer: "Emergency",
+        description: "",
+        fact: "Single meaning: 'Signal(s) flying are to be obeyed as soon as understood.'",
+        imageUrl: "/images/Emergency.png"
+      },
+      {
+        id: 55,
+        question: "What does this represent?",
+        correctAnswer: "Flotilla",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Flotilla.png"
+      },
+      {
+        id: 56,
+        question: "What does this represent?",
+        correctAnswer: "Formation",
+        description: "",
+        fact: "Single meaning: 'Refuse Boat is required.'",
+        imageUrl: "/images/Formation.png"
+      },
+      {
+        id: 57,
+        question: "What does this represent?",
+        correctAnswer: "Interogative",
+        description: "",
+        fact: "Single meaning: 'Signals not understood.'",
+        imageUrl: "/images/Interogative.png"
+      },
+      {
+        id: 58,
+        question: "What does this represent?",
+        correctAnswer: "Negative",
+        description: "",
+        fact: "Single meaning: 'Negative. Flag Hoist Exemp Addressees.'",
+        imageUrl: "/images/Negative.png"
+      },
+      {
+        id: 59,
+        question: "What does this represent?",
+        correctAnswer: "Preparative",
+        description: "",
+        fact: "Single meaning: 'Replenishing (Receiving Vessel). Colours & Sunset. Preparative.'",
+        imageUrl: "/images/Preparative.png"
+      },
+      {
+        id: 60,
+        question: "What does this represent?",
+        correctAnswer: "Speed",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Speed.png"
+      },
+      {
+        id: 61,
+        question: "What does this represent?",
+        correctAnswer: "Starboard",
+        description: "",
+        fact: "Single meaning: 'Indefinite turn to Starboard SCOPA.'",
+        imageUrl: "/images/Starboard.png"
+      },
+      {
+        id: 62,
+        question: "What does this represent?",
+        correctAnswer: "Sub Division",
+        description: "",
+        fact: "",
+        imageUrl: "/images/Sub Division.png"
+      },
+      {
+        id: 63,
+        question: "What does this represent?",
+        correctAnswer: "Turn",
+        description: "",
+        fact: "Single meaning: 'Water barge is required.'",
+        imageUrl: "/images/Turn.png"
+      },
+      {
+        id: 64,
+        question: "What does this represent?",
+        correctAnswer: "First Substitute",
+        description: "",
+        fact: "Single meaning: 'Absentee Indicator - Flag Officer or Sqn Commander.'",
+        imageUrl: "/images/First Substitute.png"
+      },
+      {
+        id: 65,
+        question: "What does this represent?",
+        correctAnswer: "Second Substitute",
+        description: "",
+        fact: "Single meaning: 'Absentee Indicator - Chief of Staff.'",
+        imageUrl: "/images/Second Substitute.png"
+      },
+      {
+        id: 66,
+        question: "What does this represent?",
+        correctAnswer: "Third Substitute",
+        description: "",
+        fact: "Single meaning: 'Absentee Indicator - Commanding Officer/X.O.'",
+        imageUrl: "/images/Third Substitute.png"
+      },
+      {
+        id: 67,
+        question: "What does this represent?",
+        correctAnswer: "Fourth Substitute",
+        description: "",
+        fact: "Single meaning: 'Absentee Indicator - Civil or Military Official.'",
+        imageUrl: "/images/Fourth Substitute.png"
+      },
+      {
+        id: 68,
+        question: "What does this represent?",
+        correctAnswer: "Station",
+        description: "",
+        fact: "Single meaning: 'Take proper or assigned station.'",
+        imageUrl: "/images/Station.png"
+      }
     ]
-  },
-  {
-  config: {
-    id: "3db2",
-    title: "Definition Builder – Rule 3 – Part II",
-    description: "",
-    themeColor: "#6e6d6a",
-    quizKey: "3db2",
-    startScreenImage: "/images/naval-operations-branch-600.png",
-    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-    factHeading: "",
-    category: "Col Regs Interpretation & Rule 3",
-    fillInTheBlank: true,
-    hidden: false,
-  },
-  questions: [
-    {
-      id: 1,
-      question:
-        "The word “(blank)” includes every description of water craft, including non-displacement craft, (blank) and seaplanes, used or capable of being used as a means of (blank) on water. <i>R3(a)</i>",
-      correctAnswer: ["vessel", "WIG craft", "transportation", "power-driven patrolling"],
-      description: "",
-      fact: "Non-displacement craft, such as hovercraft, are classified as vessels under the Rules, despite being supported by an air cushion rather than conventional buoyant displacement. <br><a href='/images/3db2/Q1.jpg'>[Click Here for Image]</a>",
-    },
-    {
-      id: 2,
-      question: "The term “power-driven vessel” means any vessel (blank) by (blank). <i>R3(b)</i>",
-      correctAnswer: ["propelled", "machinery", "stabilized", "generator power", "manual power"],
-      description: "",
-      fact: "A vessel becomes power-driven the moment machinery is used for propulsion. If a sailing vessel starts its engine, even just to manoeuvre, it is considered a power-driven vessel under the Rules. Can you find the day shape on this vessel that lets us know it is also using its propulsion?  <br><a href='/images/3db2/Q2.jpg'>[Click Here for Image]</a>",
-    },
-    {
-      id: 3,
-      question:
-        "The term “(blank)” means any vessel under sail provided that propelling machinery, if (blank), (blank) being used. <i>R3(c)</i>",
-      correctAnswer: ["sailing vessel", "fitted", "is not", "power-driven", "is"],
-      description: "",
-      fact: "At night, a sailing vessel is only required to display sidelights and a sternlight. Once masthead light(s) are switched on, this indicates it’s being propelled by machinery, and its status changes to a power-driven vessel. <br><a href='/images/3db2/Q3.jpg'>[Click Here for Image]</a>",
-    },
-    {
-      id: 4,
-      question:
-        "The term “(blank)” means any vessel fishing with nets, lines, trawls or other (blank) which (blank) manoeuvrability, but does not include a vessel fishing with trolling lines or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
-      correctAnswer: ["vessel engaged in fishing", "fishing apparatus", "restrict", "vessel engaged in dredging", "alters"],
-      description: "",
-      fact: "A “vessel engaged in fishing” is a <strong><i>separate</i></strong> category from a “vessel restricted in its ability to manoeuvre (RAM)”. Each has its own definition and specific light and shape requirements, and each is treated differently under the priority ladder in Rule 18. <br><a href='/images/3db2/Q4.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 5,
-      question:
-        "The term “vessel engaged in fishing” means any vessel fishing with nets, lines, trawls or other fishing apparatus which restrict manoeuvrability, but (blank) a vessel fishing with (blank) or (blank) which do not restrict manoeuvrability. <i>R3(d)</i>",
-      correctAnswer: ["does not include", "trolling lines", "other fishing apparatus", "does include", "trawling lines"],
-      description: "",
-      fact: "A fishing vessel transiting to or from fishing grounds is not considered engaged in fishing and must follow the rules for power‑driven vessels. <br><a href='/images/3db2/Q5.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 6,
-      question: "The word “(blank)” includes any aircraft designed to manoeuvre (blank) the (blank). <i>R3(e)</i>",
-      correctAnswer: ["seaplane", "on", "water", "Wing-in-Ground (WIG) craft", "above"],
-      description: "",
-      fact: "In busy coastal and harbour areas, seaplanes often share confined waterways with sailing vessels, ferries, and vessels engaged in fishing, making clear definitions, proper lighting, and the Rule 18 hierarchy critical for collision avoidance. <br><a href='/images/3db2/Q6.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 7,
-      question:
-        "The term vessel “not under command (NUC)” means a (blank) which through some exceptional (blank) is unable to manoeuvre as required by these Rules and is therefore unable to (blank) of another vessel. <i>R3(f)</i>",
-      correctAnswer: ["vessel", "circumstance", "keep out of the way", "power-driven vessel", "maintain course and speed"],
-      description: "",
-      fact: "An example of an exceptional circumstance is engine failure but only if it prevents the vessel from manoeuvring as required by the Rules to avoid another vessel. <br><a href='/images/3db2/Q7.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 8,
-      question:
-        "The term vessel “(blank)” means a vessel which from the nature of its work is restricted in its ability to (blank) as required by these Rules and is therefore unable to (blank). <i>R3(g)</i>",
-      correctAnswer: ["restricted in its ability to manoeuvre", "manoeuvre", "keep out of the way of another vessel", "not under command", "increase speed"],
-      description: "",
-      fact: "Although RAM vessels may display different lights and shapes depending on their work, they all sound the same signal when in or near an area of restricted visibility. See Rule 35(c) and (d) for details. <br><a href='/images/3db2/Q8.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 9,
-      question:
-        "The term “vessels restricted in their ability to manoeuvre (RAM)” shall include but not be limited to:<br><br>a vessel engaged in (blank), servicing or (blank) a navigation mark, submarine cable or pipeline. <i>R3(g)(i)</i>",
-      correctAnswer: ["laying", "picking up", "towing", "loading"],
-      description: "",
-      fact: "Even with engines running, these vessels may be unable to turn or stop without endangering personnel, equipment or infrastructure, which is why they are classified as restricted in their ability to manoeuvre. <br><a href='/images/3db2/Q9.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 10,
-      question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a navigation mark, (blank) or (blank). <i>R3(g)(i)</i>",
-      correctAnswer: ["submarine cable", "pipeline", "anchor", "fishing gear"],
-      description: "",
-      fact: "RAM lights and shapes tell other vessels that restricted manoeuvrability is due to ongoing work. See Rule 27 for details. <br><a href='/images/3db2/Q10.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 11,
-      question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or (blank) a navigation mark, submarine cable or (blank). <i>R3(g)(i)</i>",
-      correctAnswer: ["picking up", "pipeline", "monitoring", "anchor chain"],
-      description: "",
-      fact: "RAM status ends when the work ends. Once a vessel is no longer engaged in the operation and can manoeuvre as required by the Rules, it must relinquish its RAM status. <br><a href='/images/3db2/Q11.jpg'>[Click Here for Image]</a>",
-    },
-    {
-      id: 12,
-      question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or underwater operations. <i>R3(g)(ii)</i>",
-      correctAnswer: ["dredging", "surveying", "trawling", "patrolling"],
-      description: "",
-      fact: "<strong>Surveying</strong> vessels collect data to map the seabed, locate hazards, plan construction, or update charts using sonar, sensors, or towed instruments. <br><a href='/images/3db2/Q12.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 13,
-      question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in replenishment or (blank) (blank), provisions or cargo while (blank). <i>R3(g)(iii)</i>",
-      correctAnswer: ["transferring", "persons", "underway", "equipment", "anchored"],
-      description: "",
-      fact: "Sudden turns or speed changes during a transfer can part lines, damage equipment, or injure personnel, which is why these vessels are classified as restricted in their ability to manoeuvre. <br><a href='/images/3db2/Q13.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 14,
-      question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the (blank) or recovery of (blank). <i>R3(g)(iv)</i>",
-      correctAnswer: ["launching", "aircraft", "loading", "liferafts"],
-      description: "",
-      fact: "Sudden turns or speed changes during aircraft operations can cause aircraft loss, deck accidents, or serious injury to flight and deck crews, which is why these vessels qualify as RAM. <br><a href='/images/3db2/Q14.jpg'>[Click Here for Image]</a>",
-    },
-    {
-      id: 15,
-      question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in mineclearance (blank). <i>R3(g)(v)</i>",
-      correctAnswer: ["operations", "monitoring", "training", "procedures"],
-      description: "",
-      fact: "Vessels engaged in mineclearance operations have their very own distinct lighting configuration. See Rule 27(f) for details. <br><a href='/images/3db2/Q15.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 16,
-      question:
-        "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) the (blank) and its (blank) in their ability to deviate from their course. <i>R3(g)(vi)</i>",
-      correctAnswer: ["severely restricts", "towing vessel", "tow", "minimally limits", "equipment"],
-      description: "",
-      fact: "Very long tows, heavy structures, or tows with poor steering characteristics may dictate the entire movement of the towing vessel, leaving little or no ability to deviate safely. <br><a href='/images/3db2/Q16.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 17,
-      question:
-        "The term vessel “(blank)” means a power-driven vessel that, because of the vessel’s draught in relation to the available (blank) and width of navigable water, is severely restricted in the vessel’s ability to (blank) the course the vessel is following. <i>R3(h)</i>",
-      correctAnswer: ["constrained by its draught", "depth", "deviate from", "restricted in its ability to manoeuvre", "hold"],
-      description: "",
-      fact: "A vessel may be constrained by its draught in shallow or confined waters but no longer constrained once it reaches deeper, open water. <br><a href='/images/3db2/Q17.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 18,
-      question: "The word “underway” means that a vessel is not (blank), or (blank), or (blank). <i>R3(i)</i>",
-      correctAnswer: ["at anchor", "made fast to the shore", "aground", "station keeping", "adrift"],
-      description: "",
-      fact: "Vessels holding position by engines, drifting while waiting for clearance, or standing by outside a harbour are considered underway. <br><a href='/images/3db2/Q18.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 19,
-      question: "The words “length” and “breadth” of a (blank) mean its length (blank) and (blank) breadth. <i>R3(j)</i>",
-      correctAnswer: ["vessel", "overall", "greatest", "at the waterline", "standard"],
-      description: "",
-      fact: "Breadth is measured at the vessel’s greatest width, and not necessarily at midships. <br><a href='/images/3db2/Q19.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 20,
-      question: "(blank) shall be deemed to be “in sight of one another” only when one can be (blank) visually from (blank). <i>R3(k)</i>",
-      correctAnswer: ["vessels", "observed", "the other", "power-driven vessels", "radar"],
-      description: "",
-      fact: "Being “in sight” changes which collision-avoidance rules apply. Visual contact determines whether vessels follow Rules for vessels in sight (Section II) or restricted-visibility rules (Section III). <br><a href='/images/3db2/Q20.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 21,
-      question:
-        "The term “(blank)” means any condition in which visibility is restricted by (blank), mist, falling snow, heavy rainstorms, sandstorms or (blank). <i>R3(l)</i>",
-      correctAnswer: ["restricted visibility", "fog", "any other similar causes", "heavy sea state", "nighttime conditions"],
-      description: "",
-      fact: "Nighttime alone is not restricted visibility, weather and environmental conditions determine visibility. At nighttime in good visibility, you’ll be able to see the lights of other vessels. <br><a href='/images/3db2/Q21.png'>[Click Here for Image]</a>",
-    },
-    {
-      id: 22,
-      question:
-        "The term “Wing-in-Ground (WIG) craft” means a multimodal craft which, in its main operational mode, (blank) in close proximity to the (blank) by (blank) action. <i>R3(m)</i>",
-      correctAnswer: ["flies", "surface", "surface-effect", "hovers", "air-cushion"],
-      description: "",
-      fact: "WIG craft operate best in sheltered or low-sea-state areas, such as coastal waters, lakes, or inland seas, often shared with conventional vessel traffic. <br><a href='/images/3db2/Q22.png'>[Click Here for Image]</a>",
-    },
-  ]
-},
-{
-  config: {
-    id: "3db3",
-    title: "Definition Builder – Rule 3 – Part III",
-    description: "",
-    themeColor: '#6e6d6a',
-    quizKey: "3db3",
-    startScreenImage: "/images/naval-operations-branch-600.png",
-    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
-    factHeading: "",
-    category: "Col Regs Interpretation & Rule 3",
-    fillInTheBlank: true,
-    hidden: false
-  },
-  questions: [
-    {
-      id: 1,
-      question: "The word “vessel” includes every description of (blank), including non-displacement craft, (blank) craft and (blank), used or capable of being used as a means of (blank) on water. <i>R3(a)</i>",
-      correctAnswer: ["water craft", "WIG", "seaplanes", "transportation", "air"],
-      description: "",
-      fact: "In Canada, coastal and remote regions rely heavily on seaplanes for transportation, making clear vessel definitions especially important in shared waterways. <br><a href='/images/3db3/Q1.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 2,
-      question: "The term “(blank) vessel” means any (blank) propelled by (blank). <i>R3(b)</i>",
-      correctAnswer: ["power-driven", "vessel", "machinery", "sailing", "hydraulics"],
-      description: "",
-      fact: "Whether it’s diesel, gasoline, electric, or hybrid, propulsion by any form of machinery makes a vessel power-driven. <br><a href='/images/3db3/Q2.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 3,
-      question: "The term “(blank) vessel” means any vessel under (blank) provided that propelling (blank), if fitted, (blank) being used. <i>R3(c)</i>",
-      correctAnswer: ["sailing", "sail", "machinery", "is not", "is"],
-      description: "",
-      fact: "Sailing vessels are required to make sound signals in restricted visibility, using different signals than power-driven vessels. <br><a href='/images/3db3/Q3.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 4,
-      question: "The term “vessel engaged in fishing” means any vessel fishing with nets, lines, (blank) or other fishing apparatus which (blank) manoeuvrability, but (blank) a vessel fishing with (blank) or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
-      correctAnswer: ["trawls", "restrict", "does not include", "trolling lines", "fishing"],
-      description: "",
-      fact: "Trolling isn’t included because the trailing lines don’t restrict manoeuvrability; the vessel can still turn, adjust speed, and avoid traffic like any sailing or power-driven vessel. <br><a href='/images/3db3/Q4.jpg'>[Click Here for Image]</a>"
-    },
-    {
-      id: 5,
-      question: "The term “(blank)” means any vessel fishing with (blank) or other fishing apparatus which (blank), (blank) a vessel fishing with trolling lines or other fishing apparatus which do not restrict manoeuvrability. <i>R3(d)</i>",
-      correctAnswer: ["vessel engaged in fishing", "nets, lines, trawls", "restrict manoeuvrability", "but does not include ", "and includes"],
-      description: "",
-      fact: "If a vessel engaged in fishing, other than trawling, has gear extending more than 150 m, an additional light or shape indicates the direction of its gear. <br><a href='/images/3db3/Q5.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 6,
-      question: "The word “(blank)” includes any (blank) designed to manoeuvre (blank) the (blank). <i>R3(e)</i>",
-      correctAnswer: ["seaplane", "aircraft", "on", "water", "over"],
-      description: "",
-      fact: "When manoeuvring on water, a seaplane is subject to the International Collision Regulations just like other vessels, even though it’s an aircraft once airborne. <br><a href='/images/3db3/Q6.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 7,
-      question: "The term vessel “not under command” (NUC) means a vessel which through some (blank) circumstance is (blank) to manoeuvre as required by these (blank) and is therefore unable to keep out of the way of another (blank). <i>R3(f)</i>",
-      correctAnswer: ["exceptional", "unable", "Rules", "vessel", "work"],
-      description: "",
-      fact: "An example of an exceptional circumstance is a sailing vessel with a broken mast, but only if the damage prevents the vessel from manoeuvring as required by the Rules to keep out of the way of another vessel. <br><a href='/images/3db3/Q7.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 8,
-      question: "The term vessel “restricted in its ability to manoeuvre” (RAM) means a vessel which from the (blank) of its (blank) is restricted in its ability to manoeuvre as required by these (blank) and is therefore (blank) to keep out of the way of another vessel. <i>R3(g)</i>",
-      correctAnswer: ["nature", "work", "Rules", "unable", "navigation"],
-      description: "",
-      fact: "Under Rule 18, vessels Restricted in their Ability to Manoeuvre (RAM) and vessels Not Under Command (NUC) share the same highest tier of priority in the hierarchy, as they both have limited ability to keep clear of other vessels. <br><a href='/images/3db3/Q8.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 9,
-      question: "The term “(blank)” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or (blank) a navigation mark, submarine cable or pipeline. <i>R3(g)(i)</i>",
-      correctAnswer: ["vessels restricted in their ability to manoeuvre (RAM)", "laying", "servicing", "picking up", "not under command (NUC)"],
-      description: "",
-      fact: "Navigation marks, such as buoys and beacons are laid, lifted, and maintained by specialized vessels that must hold precise positions, sometimes in strong currents or narrow channels. <br><a href='/images/3db3/Q9.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 10,
-      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in laying, servicing or picking up a (blank), (blank) or (blank). <i>R3(g)(i)</i>",
-      correctAnswer: ["navigation mark", "submarine cable", "pipeline", "mine", "fishing float"],
-      description: "",
-      fact: "By day, these vessels display shapes, warning mariners that manoeuvring may be severely limited. See Rule 27 for details. <br><a href='/images/3db3/Q10.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 11,
-      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or picking up a navigation mark, (blank) or pipeline. <i>R3(g)(i)</i>",
-      correctAnswer: ["laying", "servicing", "submarine cable", "dredging", "nets"],
-      description: "",
-      fact: "This rule also helps protect infrastructure as well as lives. Damaging a cable or pipeline can disrupt power, communications, or fuel supplies far beyond the immediate area and may also cause environmental harm. <br><a href='/images/3db3/Q11.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 12,
-      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank), (blank) or (blank). <i>R3(g)(ii)</i>",
-      correctAnswer: ["dredging", "surveying", "underwater operations", "fishing", "minesweeping"],
-      description: "",
-      fact: "<strong>Underwater operations</strong> include diving, inspection, repair, salvage, or construction work below the surface—often involving divers, remotely operated vehicles (ROVs), or submersible equipment. <br><a href='/images/3db3/Q12.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 13,
-      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in replenishment or transferring (blank), (blank) or (blank) while (blank). <i>R3(g)(iii)</i>",
-      correctAnswer: ["persons", "provisions", "cargo", "underway", "at anchor"],
-      description: "",
-      fact: "While underway replenishment is common in naval vessels, similar transfers also occur in commercial operations, offshore support, and emergency situations. <br><a href='/images/3db3/Q13.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 14,
-      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in the launching or (blank) of (blank). <i>R3(g)(iv)</i>",
-      correctAnswer: ["recovery", "aircraft", "surveying", "landing craft", "servicing"],
-      description: "",
-      fact: "While commonly associated with military vessels, aircraft launch or recovery also occurs from civilian platforms such as research vessels, offshore support vessels, and ships operating helicopters. <br><a href='/images/3db3/Q14.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 15,
-      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in (blank). <i>R3(g)(v)</i>",
-      correctAnswer: ["mineclearance operations", "environmental monitoring", "navigation training", "anchoring procedures"],
-      description: "",
-      fact: "Particular types of mineclearance operations, such as minehunting and minesweeping use influence systems, towed gear, or ROVs (remotely operated vehicles) that prevent sharp turns or speed changes. <br><a href='/images/3db3/Q15.webp'>[Click Here for Image]</a>"
-    },
-    {
-      id: 16,
-      question: "The term “vessels restricted in their ability to manoeuvre” shall include but not be limited to:<br><br>a vessel engaged in a towing operation such as (blank) restricts the (blank) vessel and its tow in their ability to (blank) from their (blank). <i>R3(g)(vi)</i>",
-      correctAnswer: ["severely", "towing", "deviate", "course", "speed"],
-      description: "",
-      fact: "Even with full propulsion available, the combined handling limits of the tug and tow can prevent standard collision-avoidance manoeuvres.  <br><a href='/images/3db3/Q16.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 17,
-      question: "The term vessel “constrained by its draught” means a (blank) vessel that, because of the vessel’s draught in relation to the available (blank) and (blank) of navigable water, is severely restricted in the vessel’s ability to deviate from the (blank) the vessel is following. <i>R3(h)</i>",
-      correctAnswer: ["power-driven", "depth", "width", "course", "any"],
-      description: "",
-      fact: "In the International Rules, vessels constrained by their draught <strong>may</strong> display, but are not required to display, the cylinder or additional red lights. Refer to Rule 28(a). <br><a href='/images/3db3/Q17.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 18,
-      question: "The word “(blank)” means that a vessel is (blank) at anchor, or (blank), or (blank). <i>R3(i)</i>",
-      correctAnswer: ["underway", "not", "made fast to the shore", "aground", "making way"],
-      description: "",
-      fact: "A power-driven vessel’s light configuration changes depending on whether it is underway, at anchor, or aground, this helps other vessels to determine its status. <br><a href='/images/3db3/Q18.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 19,
-      question: "The words “(blank)” and “breadth” of a (blank) mean its length (blank) and greatest (blank). <i>R3(j)</i>",
-      correctAnswer: ["length", "vessel", "overall", "breadth", "from port to starboard"],
-      description: "",
-      fact: "Crossing a length threshold (such as 12 m, 20 m, 50 m, 100 m or 200 m) can trigger additional lights or shapes, or different sound signals. <br><a href='/images/3db3/Q19.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 20,
-      question: "(blank) shall be deemed to be “(blank)” only when one can be observed (blank) from the (blank). <i>R3(k)</i>",
-      correctAnswer: ["vessels", "in sight of one another", "visually", "other", "by radar"],
-      description: "",
-      fact: "If a vessel’s navigation lights can be clearly seen, the vessel is considered in sight, even if the hull itself cannot be seen. <br><a href='/images/3db3/Q20.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 21,
-      question: "The term “restricted visibility” means any condition in which visibility is (blank) by fog, mist, falling snow, (blank), (blank) or (blank). <i>R3(l)</i>",
-      correctAnswer: ["restricted", "heavy rainstorms", "sandstorms", "any other similar causes", "by night"],
-      description: "",
-      fact: "The phrase “any other similar causes” ensures the Rules still apply to conditions not explicitly listed, such as wildfire smoke or volcanic ash. <br><a href='/images/3db3/Q21.png'>[Click Here for Image]</a>"
-    },
-    {
-      id: 22,
-      question: "The term “Wing-in-Ground (WIG) craft” means a (blank) craft which, in its main operational mode, flies (blank) the (blank) by utilizing (blank). <i>R3(m)</i>",
-      correctAnswer: ["multimodal", "in close proximity to", "surface", "surface-effect action", "far away from", "lift"],
-      description: "",
-      fact: "A WIG craft may operate as a displacement vessel at rest, transition through planing, and then enter surface-effect flight, all within navigable waters governed by the Collision Regulations. <br><a href='/images/3db3/Q22.jpg'>[Click Here for Image]</a>"
-    },
-  ]
-},
-  
+  }
 ];
 
-/*
-      {
-        id: 5,
-        question: "Match the sound signal with its correct use.",
-        correctAnswer: [
-                        ["a vessel nearing a bend or an area of a channel or fairway where other vessels may be obscured by an intervening obstruction","/sounds/2_Prolonged_Blast.mp3"],
-                        ["the response from any approaching vessel that may be within hearing around a bend or behind an intervening obstruction","/sounds/2_Prolonged_Blast.mp3"],
-                        ["Distractor #1","/sounds/7_Warning_Wake-Up_Signal_5_short.mp3"],
-                        ["Distractor #2","/sounds/6_Overtaking Narrow Channel Fairway Agreement Signal_V2.m4a"]
-                      ],
-        description: "",
-        fact: ""
-      },
-*/
-
 // =================================================================
-// EXAMPLE OF ADDING A NEW QUIZ
+// HELPER FUNCTION - Get quiz by index or ID
 // =================================================================
-/*
-// Add this to the QUIZ_COLLECTION array:
-{
-  config: {
-    id: "music",
-    title: "Musical Instruments",
-    description: "Test your knowledge of musical instruments",
-    themeColor: 'violet',
-    quizKey: "musical_instruments_quiz",
-    startScreenImage: "/images/music/music-start.jpg",
-    studyGuide: "/images/music/study-guide.jpg",  // Optional study guide image
-    advancedChallenge: false,  // Optional advanced challenge flag
-    hidden: false,  // Optional hidden flag
-    factHeading: "Fun Fact"  // Optional custom heading (defaults to "Did you know?")
-  },
-  questions: [
-    {
-      id: 1,
-      question: "What instrument is this?",
-      correctAnswer: "Grand Piano",
-      description: "A large keyboard instrument",
-      fact: "A modern grand piano has about 230 strings!",
-      imageUrl: "/images/music/grand-piano.jpg",
-      audioUrl: "/audio/music/piano-sound.mp3"  // Optional audio file
-    },
-    // Add more questions...
-  ]
+export function getQuizByIndex(index: number): QuizDefinition | undefined {
+  return QUIZ_COLLECTION[index];
 }
-*/
 
-// =================================================================
-// TIPS FOR CREATING GOOD QUIZZES
-// =================================================================
-// 1. Use a consistent theme for each quiz
-// 2. Choose appropriate theme colors that match the quiz content
-// 3. Organize images in separate folders for each quiz
-// 4. Use high-quality, clear images
-// 5. Keep questions focused and unambiguous
-// 6. Add interesting facts to make the quiz educational
-// 7. Test all image paths before deploying
-// 8. If providing a study guide, ensure it's clear and relevant
-// 9. Use advancedChallenge flag for more difficult quizzes
-// 10. Use hidden flag to temporarily disable quizzes
-// =================================================================
+export function getQuizById(id: string): QuizDefinition | undefined {
+  return QUIZ_COLLECTION.find(quiz => quiz.config.id === id);
+}
+
+// Filter out hidden quizzes for display
+export function getVisibleQuizzes(): QuizDefinition[] {
+  return QUIZ_COLLECTION.filter(quiz => !quiz.config.hidden);
+}

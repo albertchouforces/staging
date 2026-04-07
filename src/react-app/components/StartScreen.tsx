@@ -1,215 +1,177 @@
 import { useState } from 'react';
-import { Globe, NotebookText, ChevronDown } from 'lucide-react';
-import type { QuizStats } from '@/react-app/types';
-import { QuizCard } from '@/react-app/components/QuizCard';
+import { Globe2, ImageOff, Goal, Play } from 'lucide-react';
+import { QuizStats, QuizDefinition } from '@/react-app/types';
+import { HighScoresList } from '@/react-app/components/HighScoresList';
 import { GlobalLeaderboard } from '@/react-app/components/GlobalLeaderboard';
-import { ENABLE_GLOBAL_LEADERBOARD, COLLAPSIBLE_CATEGORIES } from '@/react-app/config/features';
-import { QUIZ_COLLECTION, CATEGORY_ORDER } from '@/react-app/data/quizData';
+import { ENABLE_GLOBAL_LEADERBOARD } from '@/react-app/config/features';
+import { getThemeColor } from '@/react-app/lib/themeColors';
+
+const INITIAL_QUIZ_STATS: QuizStats = {
+  highScore: 0,
+  bestRun: null,
+  highScores: []
+};
 
 interface StartScreenProps {
-  onSelectQuiz: (quizId: string) => void;
-  getStatsForQuiz: (quizName: string) => QuizStats;
-  onResetScores: (quizName: string) => void;
+  onQuizSelect: (quizIndex: number) => void;
+  onResetScores: (quizKey: string) => void;
+  quizzes: QuizDefinition[];
 }
 
 export function StartScreen({ 
-  onSelectQuiz,
-  getStatsForQuiz,
-  onResetScores
+  onQuizSelect,
+  onResetScores,
+  quizzes
 }: StartScreenProps) {
   const [showGlobalLeaderboard, setShowGlobalLeaderboard] = useState(false);
-  const [collapsedCategories, setCollapsedCategories] = useState<Set<string>>(new Set());
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
+  const [imageLoaded, setImageLoaded] = useState<Record<string, boolean>>({});
 
-  const toggleCategory = (category: string) => {
-    setCollapsedCategories(prev => {
-      const next = new Set(prev);
-      if (next.has(category)) {
-        next.delete(category);
-      } else {
-        next.add(category);
-      }
-      return next;
-    });
+  const getQuizStats = (quizKey: string): QuizStats => {
+    const statsKey = `quiz_stats_${quizKey}`;
+    const storedStats = localStorage.getItem(statsKey);
+    if (storedStats) {
+      return JSON.parse(storedStats);
+    }
+    return INITIAL_QUIZ_STATS;
   };
 
-  const handleResetScores = (quizKey: string) => {
-    onResetScores(quizKey);
-    // Add reload as fallback
-    window.location.reload();
-  };
-
-  // Filter out hidden quizzes
-  const visibleQuizzes = QUIZ_COLLECTION.filter(quiz => !quiz.config.hidden);
-  
-  // Group quizzes by category
-  const groupedQuizzes = new Map<string | null, typeof visibleQuizzes>();
-  
-  visibleQuizzes.forEach(quiz => {
-    // Use category field, or fall back to advancedChallenge for backward compatibility
-    const category = quiz.config.category || (quiz.config.advancedChallenge ? 'Advanced Challenges' : null);
+  const QuizCard = ({ 
+    quiz,
+    quizIndex
+  }: {
+    quiz: QuizDefinition;
+    quizIndex: number;
+  }) => {
+    const config = quiz.config;
+    const stats = getQuizStats(config.quizKey);
+    const colors = getThemeColor(config.themeColor);
+    const hasImageError = imageErrors[config.id] || false;
+    const hasImageLoaded = imageLoaded[config.id] || false;
     
-    if (!groupedQuizzes.has(category)) {
-      groupedQuizzes.set(category, []);
-    }
-    groupedQuizzes.get(category)!.push(quiz);
-  });
-  
-  // Determine category display order
-  const allCategories = Array.from(groupedQuizzes.keys()).filter(cat => cat !== null) as string[];
-  const orderedCategories: (string | null)[] = [];
-  
-  // First add uncategorized quizzes (null category)
-  if (groupedQuizzes.has(null)) {
-    orderedCategories.push(null);
-  }
-  
-  // Then add categories in the specified order
-  CATEGORY_ORDER.forEach(cat => {
-    if (allCategories.includes(cat)) {
-      orderedCategories.push(cat);
-    }
-  });
-  
-  // Finally add any remaining categories alphabetically
-  const remainingCategories = allCategories
-    .filter(cat => !CATEGORY_ORDER.includes(cat))
-    .sort();
-  orderedCategories.push(...remainingCategories);
-
-  // Get grid columns based on number of items
-  const getGridColumns = (count: number): string => {
-    switch (count) {
-      case 0:
-        return '';
-      case 1:
-        return 'grid-cols-1';
-      case 2:
-        return 'grid-cols-1 md:grid-cols-2';
-      default:
-        return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
-    }
-  };
-
-  // Get grid width based on number of items
-  const getGridWidth = (count: number): string => {
-    switch (count) {
-      case 0:
-        return '';
-      case 1:
-        return 'max-w-md';
-      case 2:
-        return 'max-w-3xl';
-      default:
-        return 'max-w-6xl';
-    }
-  };
-
-  return (
-    <div className="max-w-6xl w-full mx-auto px-4">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <div className="inline-block bg-white rounded-2xl shadow-xl border border-[#1a365d] px-6 py-4 mb-4">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="p-2 bg-[#1a365d]/10 rounded-xl border border-[#1a365d]">
-              <NotebookText className="text-[#1a365d]" size={28} />
+    return (
+    <div className="bg-white rounded-xl shadow-lg p-6">
+      {/* Image Section - Moved above title */}
+      {config.startScreenImage && (
+        <div className="relative w-full h-48 mb-4 bg-transparent rounded-lg overflow-hidden flex items-center justify-center">
+          {!hasImageLoaded && !hasImageError && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-gray-400">Loading...</div>
             </div>
-            <h1 className="text-3xl font-black text-[#1a365d] tracking-tight">
-              NWO Quiz Collection
-            </h1>
-          </div>
-          <div className="h-1 w-20 bg-[#fbbf24] rounded-full mx-auto mb-2" />
-          <h2 className="text-base text-black font-medium">
-            Choose a quiz to test your knowledge
-          </h2>
-        </div>
-      </div>
-
-      {/* Quiz Sections by Category */}
-      {orderedCategories.map((category, index) => {
-        const categoryQuizzes = groupedQuizzes.get(category) || [];
-        if (categoryQuizzes.length === 0) return null;
-        
-        const categoryKey = category || 'uncategorized';
-        const isCollapsed = COLLAPSIBLE_CATEGORIES && category && collapsedCategories.has(categoryKey);
-        
-        return (
-          <div key={categoryKey}>
-            {/* Category Header - only show for categorized sections */}
-            {category && (
-              <div className="flex items-center gap-4 mb-8">
-                <div className="flex-1 h-px bg-gray-200" />
-                {COLLAPSIBLE_CATEGORIES ? (
-                  <button
-                    onClick={() => toggleCategory(categoryKey)}
-                    className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-blue-50 hover:to-blue-100 border border-gray-300 hover:border-blue-400 rounded-lg text-gray-700 hover:text-blue-700 font-semibold transition-all shadow-sm hover:shadow-md"
-                  >
-                    <span>{category}</span>
-                    <ChevronDown 
-                      size={22} 
-                      className={`transition-transform duration-200 ${isCollapsed ? '-rotate-90' : ''}`}
-                    />
-                  </button>
-                ) : (
-                  <div className="flex items-center gap-2 text-gray-600 font-semibold">
-                    {category}
-                  </div>
-                )}
-                <div className="flex-1 h-px bg-gray-200" />
-              </div>
-            )}
-
-            {/* Quiz Grid */}
-            {!isCollapsed && (
-              <div className="flex justify-center mb-12">
-                <div className={`grid ${getGridColumns(categoryQuizzes.length)} gap-8 w-full ${getGridWidth(categoryQuizzes.length)} mx-auto grid-flow-row auto-rows-fr`}>
-                  {categoryQuizzes.map((quiz) => (
-                    <QuizCard
-                      key={quiz.config.id}
-                      config={quiz.config}
-                      stats={getStatsForQuiz(quiz.config.quizKey)}
-                      onStart={() => onSelectQuiz(quiz.config.id)}
-                      onResetScores={() => handleResetScores(quiz.config.quizKey)}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Global Leaderboard Button - show after uncategorized section */}
-            {ENABLE_GLOBAL_LEADERBOARD && category === null && index === 0 && (
-              <div className="flex justify-center mb-12">
-                <button
-                  onClick={() => setShowGlobalLeaderboard(true)}
-                  className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-600 hover:from-yellow-700 hover:via-amber-600 hover:to-yellow-700 text-white rounded-lg transition-all font-bold shadow-lg hover:shadow-xl hover:scale-105 border border-yellow-700"
-                >
-                  <Globe size={20} className="drop-shadow" />
-                  View Global Leaderboard
-                </button>
-              </div>
-            )}
-          </div>
-        );
-      })}
-      
-      {/* Global Leaderboard Button - fallback if no uncategorized section */}
-      {ENABLE_GLOBAL_LEADERBOARD && !groupedQuizzes.has(null) && visibleQuizzes.length > 0 && (
-        <div className="flex justify-center mb-12">
-          <button
-            onClick={() => setShowGlobalLeaderboard(true)}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-600 hover:from-yellow-700 hover:via-amber-600 hover:to-yellow-700 text-white rounded-lg transition-all font-bold shadow-lg hover:shadow-xl hover:scale-105 border border-yellow-700"
-          >
-            <Globe size={20} className="drop-shadow" />
-            View Global Leaderboard
-          </button>
+          )}
+          {hasImageError ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+              <ImageOff size={32} />
+              <p className="text-sm mt-2">Image not available</p>
+            </div>
+          ) : (
+            <img
+              src={config.startScreenImage}
+              alt={config.title}
+              className={`
+                ${hasImageLoaded ? 'opacity-100' : 'opacity-0'}
+                transition-opacity duration-200
+                w-full h-full
+                object-contain
+                mix-blend-multiply
+              `}
+              style={{
+                maxWidth: '100%',
+                maxHeight: '100%'
+              }}
+              onLoad={() => setImageLoaded(prev => ({ ...prev, [config.id]: true }))}
+              onError={() => setImageErrors(prev => ({ ...prev, [config.id]: true }))}
+            />
+          )}
         </div>
       )}
 
-      {/* Global Leaderboard Modal */}
+      {/* Title Section - Moved below image */}
+      <div className="text-center mb-4">
+        <h2 className="text-2xl font-bold" style={{ color: colors.primary }}>
+          {config.title}
+        </h2>
+      </div>
+
+      <p className="text-gray-600 mb-4 text-center">{config.description}</p>
+
+      <HighScoresList 
+        scores={stats.highScores}
+        onReset={() => onResetScores(config.quizKey)}
+        quizConfig={config}
+      />
+      
+      <button
+        onClick={() => onQuizSelect(quizIndex)}
+        className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2"
+        style={{ backgroundColor: colors.primary }}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.hover}
+        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = colors.primary}
+      >
+        <Play size={20} />
+        Start Quiz
+      </button>
+    </div>
+  );
+  };
+
+  return (
+    <div className="max-w-4xl w-full flex flex-col items-center">
+      <div className="text-center mb-8 w-full">
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <Goal size={32} className="text-purple-800" />
+          <h1 className="text-4xl font-bold text-gray-800">Navy Signal Flags and Pennants</h1>
+        </div>
+        <p className="text-xl text-gray-600">
+          Test your knowledge of signal flags and pennants
+        </p>
+      </div>
+
+      {/* Centered Choose Your Challenge title */}
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 w-full text-center">Choose Your Challenge</h2>
+
+      {/* Regular quizzes in a grid */}
+      {quizzes.filter(q => !q.config.isAdvanced).length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mb-12">
+          {quizzes.map((quiz, index) => 
+            !quiz.config.isAdvanced ? (
+              <QuizCard key={quiz.config.id} quiz={quiz} quizIndex={index} />
+            ) : null
+          )}
+        </div>
+      )}
+
+      {ENABLE_GLOBAL_LEADERBOARD && (
+        <button
+          onClick={() => setShowGlobalLeaderboard(true)}
+          className="flex items-center justify-center gap-2 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors font-semibold shadow-md mb-12"
+        >
+          <Globe2 size={20} />
+          View Global Leaderboard
+        </button>
+      )}
+
+      {/* Advanced quizzes - shown below divider */}
+      {quizzes.filter(q => q.config.isAdvanced).length > 0 && (
+        <>
+          <div className="w-full flex items-center gap-4 mb-8">
+            <div className="flex-grow h-px bg-gray-300"></div>
+            <span className="text-lg font-semibold text-gray-600">Advanced Challenge</span>
+            <div className="flex-grow h-px bg-gray-300"></div>
+          </div>
+
+          {quizzes.map((quiz, index) => 
+            quiz.config.isAdvanced ? (
+              <div key={quiz.config.id} className="w-full max-w-2xl mb-8">
+                <QuizCard quiz={quiz} quizIndex={index} />
+              </div>
+            ) : null
+          )}
+        </>
+      )}
+
       {showGlobalLeaderboard && (
-        <GlobalLeaderboard 
-          onClose={() => setShowGlobalLeaderboard(false)}
-          quizzes={visibleQuizzes}
-        />
+        <GlobalLeaderboard onClose={() => setShowGlobalLeaderboard(false)} />
       )}
     </div>
   );

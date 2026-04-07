@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { HighScoreEntry, QuizConfig } from '@/react-app/types';
-import { saveGlobalScore, getGlobalScores } from '@/react-app/lib/firebase';
-import { Trophy, Loader } from 'lucide-react';
-import { Medal as MedalComponent } from '@/react-app/components/Medal';
+import { saveGlobalScore, getGlobalScores } from '@/react-app/lib/supabase';
+import { Trophy, Loader2, Medal as MedalIcon } from 'lucide-react';
+import { Medal } from '@/react-app/components/Medal';
 import { ENABLE_GLOBAL_LEADERBOARD } from '@/react-app/config/features';
 
 interface UserNameInputProps {
@@ -11,7 +11,7 @@ interface UserNameInputProps {
   currentTime: number;
   highScores: HighScoreEntry[];
   quizConfig: QuizConfig;
-  totalQuestions: number;
+  totalQuestions: number;  // Add this prop to get the total number of questions
 }
 
 export function UserNameInput({ 
@@ -28,8 +28,8 @@ export function UserNameInput({
   const [globalRank, setGlobalRank] = useState<number | null>(null);
   const [isLoadingGlobalRank, setIsLoadingGlobalRank] = useState(false);
 
-  // Get potential global ranking
   useEffect(() => {
+    // Only fetch global rank if the feature is enabled
     if (!ENABLE_GLOBAL_LEADERBOARD) {
       setIsLoadingGlobalRank(false);
       return;
@@ -41,7 +41,6 @@ export function UserNameInput({
         const globalScores = await getGlobalScores(quizConfig.quizKey);
         const position = globalScores.findIndex(score => {
           if (currentScore > score.score) return true;
-          // Always use time for tiebreakers (faster time wins)
           if (currentScore === score.score && currentTime < score.time) return true;
           return false;
         });
@@ -49,7 +48,6 @@ export function UserNameInput({
         setGlobalRank(position === -1 ? globalScores.length + 1 : position + 1);
       } catch (err) {
         console.error('Error checking global rank:', err);
-        setGlobalRank(null);
       } finally {
         setIsLoadingGlobalRank(false);
       }
@@ -61,7 +59,6 @@ export function UserNameInput({
   const calculateLocalRankPosition = (): number | null => {
     const position = highScores.findIndex(score => {
       if (currentScore > score.score) return true;
-      // Always use time for tiebreakers (faster time wins)
       if (currentScore === score.score && currentTime < score.time) return true;
       return false;
     });
@@ -87,7 +84,7 @@ export function UserNameInput({
   const getLocalPositionDisplay = (position: number) => {
     if (position <= 3) {
       return (
-        <MedalComponent 
+        <Medal 
           position={position} 
           color={position === 1 ? 'gold' : position === 2 ? 'silver' : 'bronze'} 
         />
@@ -112,17 +109,21 @@ export function UserNameInput({
     setError(null);
 
     try {
-      // Save the username for future reference
-      localStorage.setItem('last_username', trimmedUserName);
-
       // Update local score through callback
       onSubmit(trimmedUserName);
 
       // Only attempt to save to global database if the feature is enabled
       if (ENABLE_GLOBAL_LEADERBOARD) {
-        // Calculate accuracy based on total questions
+        // Calculate accuracy based on total questions instead of highScores length
         const accuracy = Math.round((currentScore / totalQuestions) * 100);
         
+        console.log('Saving global score...', {
+          user_name: trimmedUserName,
+          score: currentScore,
+          accuracy,
+          time: currentTime,
+        });
+
         const success = await saveGlobalScore({
           user_name: trimmedUserName,
           score: currentScore,
@@ -133,19 +134,21 @@ export function UserNameInput({
 
         if (!success) {
           console.error('Failed to save global score');
-          setError('Failed to save global score. Your local score has been saved.');
+          // Don't show error to user since local save succeeded
         }
       }
     } catch (err) {
       console.error('Error in handleSubmit:', err);
-      setError('An error occurred while saving your score. Your local score has been saved.');
+      // Only show database error if global leaderboard is enabled
+      if (ENABLE_GLOBAL_LEADERBOARD) {
+        setError('An error occurred while saving your score. Your local score has been saved.');
+      }
     } finally {
       setSubmitting(false);
     }
   };
 
   const accentColor = quizConfig.themeColor;
-  const isDisabled = !userName.trim() || submitting;
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-lg max-w-md w-full">
@@ -170,7 +173,7 @@ export function UserNameInput({
             
             {isTopHundredGlobal && (
               <div className="flex items-center gap-2 text-yellow-800">
-                <Trophy size={16} className="text-yellow-600" />
+                <MedalIcon size={16} className="text-yellow-600" />
                 <span>
                   You've ranked {getPositionText(globalRank)} globally!
                 </span>
@@ -191,7 +194,7 @@ export function UserNameInput({
           type="text"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
-          placeholder="Enter your name"
+          placeholder="Enter your name (optional)"
           className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           maxLength={30}
           required
@@ -199,16 +202,12 @@ export function UserNameInput({
         />
         <button
           type="submit"
-          className={`px-6 py-2 ${
-            isDisabled 
-              ? 'bg-gray-300 cursor-not-allowed' 
-              : `bg-${accentColor}-600 hover:bg-${accentColor}-700`
-          } text-white rounded-lg transition-colors flex items-center justify-center gap-2`}
-          disabled={isDisabled}
+          className={`px-6 py-2 bg-${accentColor}-600 hover:bg-${accentColor}-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed`}
+          disabled={!userName.trim() || submitting}
         >
           {submitting ? (
             <>
-              <Loader className="animate-spin" size={16} />
+              <Loader2 className="animate-spin" size={16} />
               Saving Score...
             </>
           ) : (

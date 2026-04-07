@@ -1,156 +1,42 @@
-import { useState, useEffect, useMemo } from 'react';
-import { getGlobalScores, type GlobalScoreEntry } from '@/react-app/lib/firebase';
+import { useState, useEffect } from 'react';
+import { getGlobalScores, type GlobalScoreEntry } from '@/react-app/lib/supabase';
 import { Medal } from '@/react-app/components/Medal';
-import { Loader, Trophy, X, ChevronDown } from 'lucide-react';
-import type { QuizDefinition } from '@/react-app/types';
-import { ENABLE_TIME_TRACKING } from '@/react-app/config/features';
-import { CATEGORY_ORDER } from '@/react-app/data/quizData';
+import { Trophy, Loader2, X, Info } from 'lucide-react';
+import { QUIZ_COLLECTION } from '@/react-app/data/quizData';
+import type { QuizConfig } from '@/react-app/types';
+import { getThemeColor } from '@/react-app/lib/themeColors';
 
 interface GlobalLeaderboardProps {
   onClose: () => void;
-  quizzes: QuizDefinition[];
 }
 
-export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) {
+export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
   const [scores, setScores] = useState<GlobalScoreEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedQuizIndex, setSelectedQuizIndex] = useState<number>(0);
+  const [showTooltip, setShowTooltip] = useState(false);
 
-  // Group quizzes by category and sort according to CATEGORY_ORDER
-  // Quizzes without a category are treated as individual selections
-  const categorizedQuizzes = useMemo(() => {
-    const grouped = new Map<string, QuizDefinition[]>();
-    const uncategorizedQuizzes: QuizDefinition[] = [];
-    
-    quizzes.forEach(quiz => {
-      if (!quiz.config.category) {
-        // Each uncategorized quiz becomes its own "category"
-        uncategorizedQuizzes.push(quiz);
-      } else {
-        const category = quiz.config.category;
-        if (!grouped.has(category)) {
-          grouped.set(category, []);
-        }
-        grouped.get(category)!.push(quiz);
-      }
-    });
-
-    // Sort categories according to CATEGORY_ORDER
-    const sortedCategories = Array.from(grouped.keys()).sort((a, b) => {
-      const indexA = CATEGORY_ORDER.indexOf(a);
-      const indexB = CATEGORY_ORDER.indexOf(b);
-      
-      const orderA = indexA === -1 ? 999 : indexA;
-      const orderB = indexB === -1 ? 999 : indexB;
-      
-      return orderA - orderB;
-    });
-
-    // Build the result array with categorized quizzes first, then uncategorized
-    const result = sortedCategories.map(category => ({
-      category,
-      quizzes: grouped.get(category)!
-    }));
-
-    // Add each uncategorized quiz as its own entry
-    uncategorizedQuizzes.forEach(quiz => {
-      result.push({
-        category: `__single__${quiz.config.quizKey}`, // Use a special marker to identify single quizzes
-        quizzes: [quiz]
-      });
-    });
-
-    return result;
-  }, [quizzes]);
-
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    categorizedQuizzes[0]?.category || ''
-  );
-  const [selectedQuiz, setSelectedQuiz] = useState<string>('');
-
-  // Initialize selectedQuiz when component mounts or category changes
-  useEffect(() => {
-    const categoryData = categorizedQuizzes.find(c => c.category === selectedCategory);
-    if (categoryData && categoryData.quizzes.length > 0) {
-      setSelectedQuiz(categoryData.quizzes[0].config.quizKey);
-    }
-  }, [selectedCategory, categorizedQuizzes]);
-
-  // Get quizzes for the selected category
-  const quizzesInCategory = useMemo(() => {
-    const categoryData = categorizedQuizzes.find(c => c.category === selectedCategory);
-    return categoryData?.quizzes || [];
-  }, [selectedCategory, categorizedQuizzes]);
-
-  // Check if selected category is a single quiz (uncategorized)
-  const isSingleQuizCategory = selectedCategory.startsWith('__single__');
-
-  // Get display name for category button
-  const getCategoryDisplayName = (category: string, quizzes: QuizDefinition[]) => {
-    if (category.startsWith('__single__')) {
-      // For single quiz categories, show the quiz name
-      return getQuizDisplayName(quizzes[0]);
-    }
-    return category;
-  };
-
-  // Helper to check if a quiz title is duplicated
-  const hasDuplicateTitle = (title: string) => {
-    return quizzes.filter(q => q.config.title === title).length > 1;
-  };
-
-  // Get display name for a quiz (title + description if title is duplicated)
-  const getQuizDisplayName = (quiz: QuizDefinition) => {
-    if (hasDuplicateTitle(quiz.config.title)) {
-      return `${quiz.config.title} - ${quiz.config.description}`;
-    }
-    return quiz.config.title;
-  };
-
-  // Map theme color names to actual RGB values for inline styles
-  const getColorValue = (themeColor: string): string => {
-    const colorMap: Record<string, string> = {
-      blue: 'rgb(37, 99, 235)',
-      green: 'rgb(22, 163, 74)',
-      red: 'rgb(220, 38, 38)',
-      purple: 'rgb(147, 51, 234)',
-      orange: 'rgb(234, 88, 12)',
-      pink: 'rgb(219, 39, 119)',
-      sky: 'rgb(14, 165, 233)',
-      cyan: 'rgb(6, 182, 212)',
-      teal: 'rgb(20, 184, 166)',
-      indigo: 'rgb(99, 102, 241)',
-      violet: 'rgb(139, 92, 246)',
-      rose: 'rgb(225, 29, 72)',
-      amber: 'rgb(245, 158, 11)',
-      fuchsia: 'rgb(217, 70, 239)',
-      lime: 'rgb(132, 204, 22)',
-      emerald: 'rgb(16, 185, 129)',
-      grey: 'rgb(75, 85, 99)',
-      yellow: 'rgb(234, 179, 8)'
-    };
-    return colorMap[themeColor] || 'rgb(37, 99, 235)'; // default to blue
-  };
+  const currentQuizConfig = QUIZ_COLLECTION[selectedQuizIndex]?.config || QUIZ_COLLECTION[0].config;
+  const currentThemeColors = getThemeColor(currentQuizConfig.themeColor);
 
   useEffect(() => {
     const fetchScores = async () => {
-      if (!selectedQuiz) return;
-      
       setLoading(true);
       setError(null);
       try {
-        const data = await getGlobalScores(selectedQuiz);
+        const quizKey = currentQuizConfig.quizKey;
+        const data = await getGlobalScores(quizKey);
         setScores(data);
       } catch (err) {
         setError('Failed to load global scores. Please try again later.');
-        console.error('Error fetching global scores:', err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchScores();
-  }, [selectedQuiz]);
+  }, [selectedQuizIndex, currentQuizConfig.quizKey]);
 
   const formatTime = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
@@ -168,16 +54,38 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
     }
   };
 
-  const getSelectedQuizConfig = () => {
-    return quizzes.find(quiz => quiz.config.quizKey === selectedQuiz)?.config;
-  };
-
-  const selectedQuizConfig = getSelectedQuizConfig();
-  const accentColor = selectedQuizConfig?.themeColor || 'blue';
-
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category);
-    // The useEffect will automatically set the first quiz in this category
+  const QuizSelector = ({ 
+    config, 
+    isSelected, 
+    onClick 
+  }: { 
+    config: QuizConfig; 
+    isSelected: boolean; 
+    onClick: () => void;
+  }) => {
+    const colors = getThemeColor(config.themeColor);
+    return (
+      <button
+        onClick={onClick}
+        className="px-4 py-2 rounded-lg font-medium transition-colors"
+        style={{
+          backgroundColor: isSelected ? colors.primary : 'transparent',
+          color: isSelected ? 'white' : colors.primary
+        }}
+        onMouseEnter={(e) => {
+          if (!isSelected) {
+            e.currentTarget.style.backgroundColor = colors.light;
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isSelected) {
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }
+        }}
+      >
+        {config.title}
+      </button>
+    );
   };
 
   return (
@@ -188,6 +96,28 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
             <div className="flex items-center gap-2">
               <Trophy className="text-yellow-500" size={24} />
               <h2 className="text-2xl font-bold text-gray-800">Global Leaderboard</h2>
+              <div className="relative">
+                <button
+                  onClick={() => setShowTooltip(!showTooltip)}
+                  onMouseEnter={() => setShowTooltip(true)}
+                  onMouseLeave={() => setShowTooltip(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="Information about global leaderboard"
+                >
+                  <Info size={20} />
+                </button>
+                {showTooltip && (
+                  <div className="absolute left-0 top-full mt-2 w-80 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3 z-10">
+                    <p className="mb-2">
+                      <strong>How it works:</strong> The global leaderboard shows the top scores from all players worldwide. Scores are ranked first by highest score, then by fastest time.
+                    </p>
+                    <p className="text-gray-300">
+                      Your score will appear here if you submit your name after completing a quiz.
+                    </p>
+                    <div className="absolute -top-2 left-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-gray-800"></div>
+                  </div>
+                )}
+              </div>
             </div>
             <button
               onClick={onClose}
@@ -198,65 +128,22 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
             </button>
           </div>
 
-          {/* Category Selection */}
-          <div className="mb-4">
-            <div className="flex gap-2 flex-wrap">
-              {categorizedQuizzes.map(({ category, quizzes }) => (
-                <button
-                  key={category}
-                  onClick={() => handleCategorySelect(category)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-gray-800 text-white'
-                      : 'text-gray-800 hover:bg-gray-100 border border-gray-300'
-                  }`}
-                >
-                  {getCategoryDisplayName(category, quizzes)}
-                </button>
-              ))}
-            </div>
+          <div className="flex gap-4 flex-wrap">
+            {QUIZ_COLLECTION.map((quiz, index) => (
+              <QuizSelector 
+                key={quiz.config.id}
+                config={quiz.config}
+                isSelected={selectedQuizIndex === index} 
+                onClick={() => setSelectedQuizIndex(index)} 
+              />
+            ))}
           </div>
-
-          {/* Quiz Selection (only show dropdown if category has multiple quizzes and it's not a single quiz category) */}
-          {quizzesInCategory.length > 1 && !isSingleQuizCategory && (
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
-                Select Quiz:
-              </label>
-              <div className="relative w-full">
-                <select
-                  value={selectedQuiz}
-                  onChange={(e) => setSelectedQuiz(e.target.value)}
-                  className="w-full pl-4 pr-9 py-3 rounded-lg border-2 border-gray-300 text-base font-medium appearance-none cursor-pointer hover:border-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all shadow-sm bg-white"
-                  style={{
-                    color: selectedQuizConfig?.themeColor ? getColorValue(selectedQuizConfig.themeColor) : '#374151'
-                  }}
-                >
-                  {quizzesInCategory.map((quiz) => (
-                    <option
-                      key={quiz.config.quizKey}
-                      value={quiz.config.quizKey}
-                      style={{
-                        color: getColorValue(quiz.config.themeColor)
-                      }}
-                    >
-                      {getQuizDisplayName(quiz)}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown 
-                  className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500" 
-                  size={20} 
-                />
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="flex-1 overflow-auto p-6">
           {loading ? (
             <div className="flex items-center justify-center h-full">
-              <Loader className="animate-spin text-gray-500" size={32} />
+              <Loader2 className="animate-spin" style={{ color: currentThemeColors.primary }} size={32} />
             </div>
           ) : error ? (
             <div className="text-center text-red-600 p-4">
@@ -266,11 +153,11 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
             <table className="w-full">
               <thead>
                 <tr className="text-left text-sm text-gray-600">
-                  <th className="pb-2 pl-2">Rank</th>
+                  <th className="pb-2">Rank</th>
                   <th className="pb-2">Name</th>
                   <th className="pb-2">Score</th>
                   <th className="pb-2">Accuracy</th>
-                  {ENABLE_TIME_TRACKING && <th className="pb-2">Time</th>}
+                  <th className="pb-2">Time</th>
                   <th className="pb-2">Date</th>
                 </tr>
               </thead>
@@ -278,24 +165,19 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
                 {scores.map((score, index) => (
                   <tr 
                     key={`${score.user_name}-${index}`} 
-                    className="border-t border-gray-100 transition-colors hover:shadow-sm cursor-pointer"
-                    style={{
-                      '--hover-bg': `${getColorValue(accentColor)}10`
-                    } as React.CSSProperties}
+                    className="border-t border-gray-100 transition-colors"
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = `${getColorValue(accentColor)}10`;
+                      e.currentTarget.style.backgroundColor = currentThemeColors.light;
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '';
+                      e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
-                    <td className="py-2 pl-2">{getPositionDisplay(index)}</td>
+                    <td className="py-2">{getPositionDisplay(index)}</td>
                     <td className="py-2 font-medium">{score.user_name}</td>
                     <td className="py-2">{score.score}</td>
                     <td className="py-2">{score.accuracy}%</td>
-                    {ENABLE_TIME_TRACKING && (
-                      <td className="py-2 font-mono">{formatTime(score.time)}</td>
-                    )}
+                    <td className="py-2 font-mono">{formatTime(score.time)}</td>
                     <td className="py-2 text-gray-500">
                       {new Date(score.date).toLocaleDateString()}
                     </td>
@@ -304,25 +186,8 @@ export function GlobalLeaderboard({ onClose, quizzes }: GlobalLeaderboardProps) 
               </tbody>
             </table>
           ) : (
-            <div className="h-full flex flex-col items-center justify-center text-center p-8">
-              <div 
-                className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                style={{ backgroundColor: `${getColorValue(accentColor)}10` }}
-              >
-                <Trophy style={{ color: getColorValue(accentColor) }} size={32} />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                Be the First Champion!
-              </h3>
-              <p className="text-gray-600 max-w-md">
-                No scores have been recorded yet for this quiz. Complete the challenge and claim your spot at the top of the leaderboard!
-              </p>
-              <div 
-                className="mt-6 text-sm font-medium"
-                style={{ color: getColorValue(accentColor) }}
-              >
-                Your score could be the first one here
-              </div>
+            <div className="text-center text-gray-500 p-4">
+              No scores recorded yet for this quiz
             </div>
           )}
         </div>
