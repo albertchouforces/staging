@@ -1,5 +1,5 @@
 import { Trash2, Medal as MedalIcon, Info } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Medal } from '@/react-app/components/Medal';
 import { HighScoreEntry, QuizConfig } from '@/react-app/types';
 import { getThemeColor } from '@/react-app/lib/themeColors';
@@ -22,6 +22,26 @@ export function HighScoresList({
   const accentColor = quizConfig.themeColor;
   const colors = getThemeColor(accentColor);
   const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleTooltipToggle = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowTooltip(prev => !prev);
+  }, []);
+
+  const handleTooltipMouseEnter = useCallback(() => {
+    setShowTooltip(true);
+  }, []);
+
+  const handleTooltipMouseLeave = useCallback(() => {
+    setShowTooltip(false);
+  }, []);
+
+  const handleReset = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onReset();
+  }, [onReset]);
 
   const formatTime = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
@@ -51,9 +71,10 @@ export function HighScoresList({
           {title}
           <div className="relative">
             <button
-              onClick={() => setShowTooltip(!showTooltip)}
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
+              onClick={handleTooltipToggle}
+              onMouseEnter={handleTooltipMouseEnter}
+              onMouseLeave={handleTooltipMouseLeave}
+              type="button"
               className="text-gray-400 hover:text-gray-600 transition-colors"
               aria-label="Information about local leaderboard"
             >
@@ -73,7 +94,8 @@ export function HighScoresList({
           </div>
         </h4>
         <button
-          onClick={onReset}
+          onClick={handleReset}
+          type="button"
           className="flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium transition-colors hover:opacity-80"
           style={{ color: colors.primary, backgroundColor: 'transparent' }}
           title="Reset Top Scores"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getGlobalScores, type GlobalScoreEntry } from '@/react-app/lib/supabase';
 import { Medal } from '@/react-app/components/Medal';
 import { Trophy, Loader2, X, Info } from 'lucide-react';
@@ -16,6 +16,26 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
   const [error, setError] = useState<string | null>(null);
   const [selectedQuizIndex, setSelectedQuizIndex] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleTooltipToggle = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowTooltip(prev => !prev);
+  }, []);
+
+  const handleTooltipMouseEnter = useCallback(() => {
+    setShowTooltip(true);
+  }, []);
+
+  const handleTooltipMouseLeave = useCallback(() => {
+    setShowTooltip(false);
+  }, []);
+
+  const handleClose = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClose();
+  }, [onClose]);
 
   const currentQuizConfig = QUIZ_COLLECTION[selectedQuizIndex]?.config || QUIZ_COLLECTION[0].config;
   const currentThemeColors = getThemeColor(currentQuizConfig.themeColor);
@@ -64,9 +84,17 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
     onClick: () => void;
   }) => {
     const colors = getThemeColor(config.themeColor);
+    
+    const handleClick = useCallback((e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick();
+    }, [onClick]);
+    
     return (
       <button
-        onClick={onClick}
+        onClick={handleClick}
+        type="button"
         className="px-4 py-2 rounded-lg font-medium transition-colors hover:opacity-90"
         style={{
           backgroundColor: isSelected ? colors.primary : 'transparent',
@@ -88,9 +116,10 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
               <h2 className="text-2xl font-bold text-gray-800">Global Leaderboard</h2>
               <div className="relative">
                 <button
-                  onClick={() => setShowTooltip(!showTooltip)}
-                  onMouseEnter={() => setShowTooltip(true)}
-                  onMouseLeave={() => setShowTooltip(false)}
+                  onClick={handleTooltipToggle}
+                  onMouseEnter={handleTooltipMouseEnter}
+                  onMouseLeave={handleTooltipMouseLeave}
+                  type="button"
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                   aria-label="Information about global leaderboard"
                 >
@@ -110,7 +139,8 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
               </div>
             </div>
             <button
-              onClick={onClose}
+              onClick={handleClose}
+              type="button"
               className="h-10 w-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
               aria-label="Close leaderboard"
             >

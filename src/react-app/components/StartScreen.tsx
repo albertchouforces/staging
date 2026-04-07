@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Globe2, ImageOff, Goal, Play } from 'lucide-react';
 import { QuizStats, QuizDefinition } from '@/react-app/types';
 import { HighScoresList } from '@/react-app/components/HighScoresList';
@@ -48,6 +48,12 @@ export function StartScreen({
     const colors = getThemeColor(config.themeColor);
     const hasImageError = imageErrors[config.id] || false;
     const hasImageLoaded = imageLoaded[config.id] || false;
+
+    const handleStartClick = useCallback((e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onQuizSelect(quizIndex);
+    }, [quizIndex]);
     
     return (
     <div className="bg-white rounded-xl shadow-lg p-6">
@@ -102,7 +108,8 @@ export function StartScreen({
       />
       
       <button
-        onClick={() => onQuizSelect(quizIndex)}
+        onClick={handleStartClick}
+        type="button"
         className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2 hover:opacity-90 active:opacity-80"
         style={{ backgroundColor: colors.primary }}
       >

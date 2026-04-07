@@ -3,7 +3,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxRuntime: 'automatic',
+      babel: {
+        plugins: []
+      }
+    })
+  ],
   base: "/",
   publicDir: "public",
   server: {
@@ -11,7 +18,7 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 5000,
-    outDir: "dist",
+    outDir: "dist-pages",
     emptyOutDir: true,
     rollupOptions: {
       output: {
