@@ -67,7 +67,10 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
     
     return (
       <button
-        onClick={onClick}
+        onPointerDown={(e) => {
+          e.preventDefault();
+          onClick();
+        }}
         type="button"
         className="px-4 py-2 rounded-lg font-medium transition-all hover:brightness-110"
         style={{
