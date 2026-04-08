@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Globe2, ImageOff, Goal, Play } from 'lucide-react';
 import { QuizStats, QuizDefinition } from '@/react-app/types';
 import { HighScoresList } from '@/react-app/components/HighScoresList';
@@ -48,11 +48,21 @@ export function StartScreen({
     const colors = getThemeColor(config.themeColor);
     const hasImageError = imageErrors[config.id] || false;
     const hasImageLoaded = imageLoaded[config.id] || false;
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
-    const handleStartClick = useCallback((e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onQuizSelect(quizIndex);
+    // Use native event listener to bypass React's synthetic event system
+    useEffect(() => {
+      const button = buttonRef.current;
+      if (!button) return;
+      
+      const handleClick = (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onQuizSelect(quizIndex);
+      };
+      
+      button.addEventListener('click', handleClick);
+      return () => button.removeEventListener('click', handleClick);
     }, [quizIndex]);
     
     return (
@@ -108,9 +118,9 @@ export function StartScreen({
       />
       
       <button
-        onClick={handleStartClick}
+        ref={buttonRef}
         type="button"
-        className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2 hover:opacity-90 active:opacity-80"
+        className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-lg active:brightness-95 cursor-pointer"
         style={{ backgroundColor: colors.primary }}
       >
         <Play size={20} />
