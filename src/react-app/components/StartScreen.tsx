@@ -103,10 +103,7 @@ export function StartScreen({
       />
       
       <button
-        onPointerDown={(e) => {
-          e.preventDefault();
-          onQuizSelect(quizIndex);
-        }}
+        onClick={() => onQuizSelect(quizIndex)}
         type="button"
         className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-lg active:brightness-95"
         style={{ 
