@@ -56,8 +56,6 @@ export function HighScoresList({
                 e.stopPropagation();
                 setShowTooltip(prev => !prev);
               }}
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
               type="button"
               className="text-gray-400 hover:text-gray-600 transition-colors"
               style={{ 
