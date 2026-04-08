@@ -1,5 +1,5 @@
 import { Trash2, Medal as MedalIcon, Info } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { Medal } from '@/react-app/components/Medal';
 import { HighScoreEntry, QuizConfig } from '@/react-app/types';
 import { getThemeColor } from '@/react-app/lib/themeColors';
@@ -22,48 +22,6 @@ export function HighScoresList({
   const accentColor = quizConfig.themeColor;
   const colors = getThemeColor(accentColor);
   const [showTooltip, setShowTooltip] = useState(false);
-  const tooltipButtonRef = useRef<HTMLButtonElement>(null);
-  const resetButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Native event listeners for tooltip button
-  useEffect(() => {
-    const button = tooltipButtonRef.current;
-    if (!button) return;
-    
-    const handleClick = (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setShowTooltip(prev => !prev);
-    };
-    
-    const handleMouseEnter = () => setShowTooltip(true);
-    const handleMouseLeave = () => setShowTooltip(false);
-    
-    button.addEventListener('click', handleClick);
-    button.addEventListener('mouseenter', handleMouseEnter);
-    button.addEventListener('mouseleave', handleMouseLeave);
-    
-    return () => {
-      button.removeEventListener('click', handleClick);
-      button.removeEventListener('mouseenter', handleMouseEnter);
-      button.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, []);
-
-  // Native event listener for reset button
-  useEffect(() => {
-    const button = resetButtonRef.current;
-    if (!button) return;
-    
-    const handleClick = (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onReset();
-    };
-    
-    button.addEventListener('click', handleClick);
-    return () => button.removeEventListener('click', handleClick);
-  }, [onReset]);
 
   const formatTime = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
@@ -93,9 +51,12 @@ export function HighScoresList({
           {title}
           <div className="relative">
             <button
-              ref={tooltipButtonRef}
+              onClick={() => setShowTooltip(prev => !prev)}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
               type="button"
               className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+              style={{ pointerEvents: 'auto' }}
               aria-label="Information about local leaderboard"
             >
               <Info size={18} />
@@ -114,10 +75,10 @@ export function HighScoresList({
           </div>
         </h4>
         <button
-          ref={resetButtonRef}
+          onClick={onReset}
           type="button"
           className="flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium transition-all cursor-pointer hover:bg-gray-100 active:bg-gray-200"
-          style={{ color: colors.primary }}
+          style={{ color: colors.primary, pointerEvents: 'auto' }}
           title="Reset Top Scores"
         >
           <Trash2 size={16} />

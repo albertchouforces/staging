@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { Globe2, ImageOff, Goal, Play } from 'lucide-react';
 import { QuizStats, QuizDefinition } from '@/react-app/types';
 import { HighScoresList } from '@/react-app/components/HighScoresList';
@@ -48,22 +48,6 @@ export function StartScreen({
     const colors = getThemeColor(config.themeColor);
     const hasImageError = imageErrors[config.id] || false;
     const hasImageLoaded = imageLoaded[config.id] || false;
-    const buttonRef = useRef<HTMLButtonElement>(null);
-
-    // Use native event listener to bypass React's synthetic event system
-    useEffect(() => {
-      const button = buttonRef.current;
-      if (!button) return;
-      
-      const handleClick = (e: MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        onQuizSelect(quizIndex);
-      };
-      
-      button.addEventListener('click', handleClick);
-      return () => button.removeEventListener('click', handleClick);
-    }, [quizIndex]);
     
     return (
     <div className="bg-white rounded-xl shadow-lg p-6">
@@ -118,10 +102,10 @@ export function StartScreen({
       />
       
       <button
-        ref={buttonRef}
+        onClick={() => onQuizSelect(quizIndex)}
         type="button"
         className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-lg active:brightness-95 cursor-pointer"
-        style={{ backgroundColor: colors.primary }}
+        style={{ backgroundColor: colors.primary, pointerEvents: 'auto' }}
       >
         <Play size={20} />
         Start Quiz
