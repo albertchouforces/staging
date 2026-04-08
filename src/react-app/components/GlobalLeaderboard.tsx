@@ -73,8 +73,7 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
         style={{
           backgroundColor: isSelected ? colors.primary : 'transparent',
           color: isSelected ? 'white' : colors.primary,
-          border: isSelected ? 'none' : `1px solid ${colors.primary}`,
-          pointerEvents: 'auto'
+          border: isSelected ? 'none' : `1px solid ${colors.primary}`
         }}
       >
         {config.title}
@@ -97,7 +96,6 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
                   onMouseLeave={() => setShowTooltip(false)}
                   type="button"
                   className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-                  style={{ pointerEvents: 'auto' }}
                   aria-label="Information about global leaderboard"
                 >
                   <Info size={20} />
@@ -119,7 +117,6 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
               onClick={onClose}
               type="button"
               className="h-10 w-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
-              style={{ pointerEvents: 'auto' }}
               aria-label="Close leaderboard"
             >
               <X size={28} className="text-gray-600 hover:text-gray-800" />

@@ -5,3 +5,30 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
+
+/* Ensure all interactive elements are clickable on all devices */
+button,
+a,
+[role="button"],
+input,
+select,
+textarea {
+  pointer-events: auto !important;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+select,
+textarea {
+  cursor: text;
+}
+
+/* Ensure hover states work on devices with hover capability */
+@media (hover: hover) and (pointer: fine) {
+  button:hover,
+  a:hover,
+  [role="button"]:hover {
+    cursor: pointer;
+  }
+}
