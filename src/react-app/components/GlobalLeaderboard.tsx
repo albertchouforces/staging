@@ -67,7 +67,7 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
     
     return (
       <button
-        onPointerDown={onClick}
+        onClick={onClick}
         type="button"
         className="px-4 py-2 rounded-lg font-medium transition-all hover:brightness-110"
         style={{
@@ -75,7 +75,9 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
           color: isSelected ? 'white' : colors.primary,
           border: isSelected ? 'none' : `1px solid ${colors.primary}`,
           position: 'relative',
-          zIndex: 10
+          zIndex: 10,
+          userSelect: 'none',
+          WebkitUserSelect: 'none'
         }}
       >
         {config.title}

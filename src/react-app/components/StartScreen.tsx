@@ -103,14 +103,15 @@ export function StartScreen({
       />
       
       <button
-        onPointerDown={() => onQuizSelect(quizIndex)}
+        onClick={() => onQuizSelect(quizIndex)}
         type="button"
         className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-lg active:brightness-95"
         style={{ 
           backgroundColor: colors.primary,
-          touchAction: 'manipulation',
           position: 'relative',
-          zIndex: 10
+          zIndex: 10,
+          userSelect: 'none',
+          WebkitUserSelect: 'none'
         }}
       >
         <Play size={20} />
