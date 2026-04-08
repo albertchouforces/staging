@@ -67,23 +67,12 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
     
     return (
       <button
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          onClick();
-        }}
-        type="button"
+        onClick={onClick}
         className="px-4 py-2 rounded-lg font-medium transition-all hover:brightness-110"
         style={{
           backgroundColor: isSelected ? colors.primary : 'transparent',
           color: isSelected ? 'white' : colors.primary,
-          border: isSelected ? 'none' : `1px solid ${colors.primary}`,
-          cursor: 'pointer',
-          touchAction: 'manipulation',
-          userSelect: 'none',
-          pointerEvents: 'auto',
-          position: 'relative',
-          zIndex: 1
+          border: isSelected ? 'none' : `1px solid ${colors.primary}`
         }}
       >
         {config.title}
@@ -101,21 +90,10 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
               <h2 className="text-2xl font-bold text-gray-800">Global Leaderboard</h2>
               <div className="relative">
                 <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowTooltip(prev => !prev);
-                  }}
+                  onClick={() => setShowTooltip(prev => !prev)}
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
-                  type="button"
                   className="text-gray-400 hover:text-gray-600 transition-colors"
-                  style={{ 
-                    cursor: 'pointer',
-                    pointerEvents: 'auto',
-                    position: 'relative',
-                    zIndex: 1
-                  }}
                   aria-label="Information about global leaderboard"
                 >
                   <Info size={20} />
@@ -134,21 +112,8 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
               </div>
             </div>
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onClose();
-              }}
-              type="button"
+              onClick={onClose}
               className="h-10 w-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
-              style={{ 
-                cursor: 'pointer',
-                touchAction: 'manipulation',
-                userSelect: 'none',
-                pointerEvents: 'auto',
-                position: 'relative',
-                zIndex: 1
-              }}
               aria-label="Close leaderboard"
             >
               <X size={28} className="text-gray-600 hover:text-gray-800" />
