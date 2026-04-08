@@ -89,16 +89,14 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
             <div className="flex items-center gap-2">
               <Trophy className="text-yellow-500" size={24} />
               <h2 className="text-2xl font-bold text-gray-800">Global Leaderboard</h2>
-              <div className="relative">
-                <button
-                  onClick={() => setShowTooltip(prev => !prev)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                  aria-label="Information about global leaderboard"
-                >
-                  <Info size={20} />
-                </button>
+              <button
+                onClick={() => setShowTooltip(prev => !prev)}
+                className="relative text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label="Information about global leaderboard"
+              >
+                <Info size={20} />
                 {showTooltip && (
-                  <div className="absolute left-0 top-full mt-2 w-80 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3 z-10">
+                  <div className="absolute left-0 top-full mt-2 w-80 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3 pointer-events-none">
                     <p className="mb-2">
                       <strong>How it works:</strong> The global leaderboard shows the top scores from all players worldwide. Scores are ranked first by highest score, then by fastest time.
                     </p>
@@ -108,7 +106,7 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
                     <div className="absolute -top-2 left-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-gray-800"></div>
                   </div>
                 )}
-              </div>
+              </button>
             </div>
             <button
               onClick={onClose}

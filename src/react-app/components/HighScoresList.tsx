@@ -49,20 +49,15 @@ export function HighScoresList({
         <h4 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
           <MedalIcon size={20} style={{ color: colors.primary }} />
           {title}
-          <div className="relative">
-            <button
-              onClick={() => setShowTooltip(prev => !prev)}
-              type="button"
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-              aria-label="Information about local leaderboard"
-            >
-              <Info size={18} />
-            </button>
+          <button
+            onClick={() => setShowTooltip(prev => !prev)}
+            type="button"
+            className="relative text-gray-400 hover:text-gray-600 transition-colors"
+            aria-label="Information about local leaderboard"
+          >
+            <Info size={18} />
             {showTooltip && (
-              <div 
-                className="absolute left-0 bottom-full mb-2 w-72 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3"
-                style={{ zIndex: 9999 }}
-              >
+              <div className="absolute left-0 bottom-full mb-2 w-72 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3 pointer-events-none">
                 <p className="mb-2">
                   <strong>How it works:</strong> Your scores are saved locally in your browser. The top 5 scores are displayed here.
                 </p>
@@ -72,12 +67,12 @@ export function HighScoresList({
                 <div className="absolute -bottom-2 left-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-gray-800"></div>
               </div>
             )}
-          </div>
+          </button>
         </h4>
         <button
           onClick={onReset}
           type="button"
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all hover:bg-gray-200 active:bg-gray-300"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-gray-200 active:bg-gray-300"
           style={{ color: colors.primary }}
           title="Reset Top Scores"
         >
