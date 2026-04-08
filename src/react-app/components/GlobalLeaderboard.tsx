@@ -67,7 +67,11 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
     
     return (
       <button
-        onClick={onClick}
+        onPointerDown={(e) => {
+          e.preventDefault();
+          onClick();
+        }}
+        type="button"
         className="px-4 py-2 rounded-lg font-medium transition-all hover:brightness-110"
         style={{
           backgroundColor: isSelected ? colors.primary : 'transparent',
@@ -91,8 +95,6 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
               <div className="relative">
                 <button
                   onClick={() => setShowTooltip(prev => !prev)}
-                  onMouseEnter={() => setShowTooltip(true)}
-                  onMouseLeave={() => setShowTooltip(false)}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                   aria-label="Information about global leaderboard"
                 >

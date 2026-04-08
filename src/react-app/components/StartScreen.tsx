@@ -50,17 +50,17 @@ export function StartScreen({
     const hasImageLoaded = imageLoaded[config.id] || false;
     
     return (
-    <div className="bg-white rounded-xl shadow-lg p-6">
+    <div className="bg-white rounded-xl shadow-lg p-6" style={{ position: 'relative' }}>
       {/* Image Section - Moved above title */}
       {config.startScreenImage && (
-        <div className="relative w-full h-48 mb-4 bg-transparent rounded-lg overflow-hidden flex items-center justify-center">
+        <div className="relative w-full h-48 mb-4 bg-transparent rounded-lg overflow-hidden flex items-center justify-center" style={{ pointerEvents: 'none' }}>
           {!hasImageLoaded && !hasImageError && (
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center" style={{ pointerEvents: 'none' }}>
               <div className="text-gray-400">Loading...</div>
             </div>
           )}
           {hasImageError ? (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400" style={{ pointerEvents: 'none' }}>
               <ImageOff size={32} />
               <p className="text-sm mt-2">Image not available</p>
             </div>
@@ -77,7 +77,8 @@ export function StartScreen({
               `}
               style={{
                 maxWidth: '100%',
-                maxHeight: '100%'
+                maxHeight: '100%',
+                pointerEvents: 'none'
               }}
               onLoad={() => setImageLoaded(prev => ({ ...prev, [config.id]: true }))}
               onError={() => setImageErrors(prev => ({ ...prev, [config.id]: true }))}
@@ -102,10 +103,18 @@ export function StartScreen({
       />
       
       <button
-        onClick={() => onQuizSelect(quizIndex)}
+        onPointerDown={(e) => {
+          e.preventDefault();
+          onQuizSelect(quizIndex);
+        }}
+        type="button"
         className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-lg active:brightness-95"
         style={{ 
-          backgroundColor: colors.primary
+          backgroundColor: colors.primary,
+          touchAction: 'manipulation',
+          position: 'relative',
+          zIndex: 10,
+          pointerEvents: 'auto'
         }}
       >
         <Play size={20} />

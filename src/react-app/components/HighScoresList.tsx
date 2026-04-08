@@ -44,7 +44,7 @@ export function HighScoresList({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full" style={{ position: 'relative', zIndex: 1 }}>
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
           <MedalIcon size={20} style={{ color: colors.primary }} />
@@ -52,8 +52,6 @@ export function HighScoresList({
           <div className="relative">
             <button
               onClick={() => setShowTooltip(prev => !prev)}
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
               className="text-gray-400 hover:text-gray-600 transition-colors"
               aria-label="Information about local leaderboard"
             >
@@ -73,10 +71,17 @@ export function HighScoresList({
           </div>
         </h4>
         <button
-          onClick={() => onReset()}
+          onPointerDown={(e) => {
+            e.preventDefault();
+            onReset();
+          }}
+          type="button"
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all hover:bg-gray-200 active:bg-gray-300"
           style={{ 
-            color: colors.primary
+            color: colors.primary,
+            position: 'relative',
+            zIndex: 10,
+            pointerEvents: 'auto'
           }}
           title="Reset Top Scores"
         >
