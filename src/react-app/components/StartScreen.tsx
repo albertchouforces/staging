@@ -108,7 +108,9 @@ export function StartScreen({
         className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-lg active:brightness-95"
         style={{ 
           backgroundColor: colors.primary,
-          touchAction: 'manipulation'
+          touchAction: 'manipulation',
+          position: 'relative',
+          zIndex: 10
         }}
       >
         <Play size={20} />

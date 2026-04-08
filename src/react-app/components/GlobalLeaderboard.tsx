@@ -73,7 +73,9 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
         style={{
           backgroundColor: isSelected ? colors.primary : 'transparent',
           color: isSelected ? 'white' : colors.primary,
-          border: isSelected ? 'none' : `1px solid ${colors.primary}`
+          border: isSelected ? 'none' : `1px solid ${colors.primary}`,
+          position: 'relative',
+          zIndex: 10
         }}
       >
         {config.title}

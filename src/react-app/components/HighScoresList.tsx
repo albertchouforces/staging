@@ -73,7 +73,11 @@ export function HighScoresList({
           onClick={onReset}
           type="button"
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-gray-200 active:bg-gray-300"
-          style={{ color: colors.primary }}
+          style={{ 
+            color: colors.primary,
+            position: 'relative',
+            zIndex: 10
+          }}
           title="Reset Top Scores"
         >
           <Trash2 size={16} />
