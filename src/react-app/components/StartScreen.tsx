@@ -102,10 +102,19 @@ export function StartScreen({
       />
       
       <button
-        onClick={() => onQuizSelect(quizIndex)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onQuizSelect(quizIndex);
+        }}
         type="button"
-        className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-lg active:brightness-95 cursor-pointer"
-        style={{ backgroundColor: colors.primary }}
+        className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-lg active:brightness-95"
+        style={{ 
+          backgroundColor: colors.primary,
+          cursor: 'pointer',
+          touchAction: 'manipulation',
+          userSelect: 'none'
+        }}
       >
         <Play size={20} />
         Start Quiz
