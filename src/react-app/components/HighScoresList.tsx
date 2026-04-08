@@ -51,19 +51,10 @@ export function HighScoresList({
           {title}
           <div className="relative">
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowTooltip(prev => !prev);
-              }}
-              type="button"
+              onClick={() => setShowTooltip(prev => !prev)}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
               className="text-gray-400 hover:text-gray-600 transition-colors"
-              style={{ 
-                cursor: 'pointer',
-                pointerEvents: 'auto',
-                position: 'relative',
-                zIndex: 1
-              }}
               aria-label="Information about local leaderboard"
             >
               <Info size={18} />
@@ -82,21 +73,10 @@ export function HighScoresList({
           </div>
         </h4>
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onReset();
-          }}
-          type="button"
+          onClick={() => onReset()}
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all hover:bg-gray-200 active:bg-gray-300"
           style={{ 
-            color: colors.primary,
-            cursor: 'pointer',
-            touchAction: 'manipulation',
-            userSelect: 'none',
-            pointerEvents: 'auto',
-            position: 'relative',
-            zIndex: 1
+            color: colors.primary
           }}
           title="Reset Top Scores"
         >
