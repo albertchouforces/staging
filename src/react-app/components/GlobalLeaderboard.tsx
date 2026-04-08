@@ -100,7 +100,7 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
               >
                 <Info size={20} />
                 {showTooltip && (
-                  <div className="absolute left-0 top-full mt-2 w-80 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3 pointer-events-none">
+                  <div className="absolute left-0 top-full mt-2 w-80 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3 pointer-events-none z-50">
                     <p className="mb-2">
                       <strong>How it works:</strong> The global leaderboard shows the top scores from all players worldwide. Scores are ranked first by highest score, then by fastest time.
                     </p>

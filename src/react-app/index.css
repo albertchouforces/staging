@@ -13,18 +13,15 @@
 button,
 a,
 [role="button"] {
-  cursor: pointer !important;
-  pointer-events: auto !important;
+  cursor: pointer;
 }
 
 button:disabled {
-  cursor: not-allowed !important;
-  pointer-events: auto !important;
+  cursor: not-allowed;
 }
 
 input,
 select,
 textarea {
   cursor: text;
-  pointer-events: auto !important;
 }
