@@ -70,7 +70,7 @@ export function HighScoresList({
           </button>
         </h4>
         <button
-          onClick={onReset}
+          onPointerDown={onReset}
           type="button"
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-gray-200 active:bg-gray-300"
           style={{ 
