@@ -111,7 +111,9 @@ export function StartScreen({
           position: 'relative',
           zIndex: 10,
           userSelect: 'none',
-          WebkitUserSelect: 'none'
+          WebkitUserSelect: 'none',
+          pointerEvents: 'auto',
+          cursor: 'pointer'
         }}
       >
         <Play size={20} />

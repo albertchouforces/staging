@@ -78,7 +78,9 @@ export function HighScoresList({
             position: 'relative',
             zIndex: 10,
             userSelect: 'none',
-            WebkitUserSelect: 'none'
+            WebkitUserSelect: 'none',
+            pointerEvents: 'auto',
+            cursor: 'pointer'
           }}
           title="Reset Top Scores"
         >

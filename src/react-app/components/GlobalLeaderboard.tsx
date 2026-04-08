@@ -77,7 +77,9 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
           position: 'relative',
           zIndex: 10,
           userSelect: 'none',
-          WebkitUserSelect: 'none'
+          WebkitUserSelect: 'none',
+          pointerEvents: 'auto',
+          cursor: 'pointer'
         }}
       >
         {config.title}
