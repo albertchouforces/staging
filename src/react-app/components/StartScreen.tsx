@@ -113,7 +113,10 @@ export function StartScreen({
           backgroundColor: colors.primary,
           cursor: 'pointer',
           touchAction: 'manipulation',
-          userSelect: 'none'
+          userSelect: 'none',
+          pointerEvents: 'auto',
+          position: 'relative',
+          zIndex: 1
         }}
       >
         <Play size={20} />

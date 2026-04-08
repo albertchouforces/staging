@@ -80,7 +80,10 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
           border: isSelected ? 'none' : `1px solid ${colors.primary}`,
           cursor: 'pointer',
           touchAction: 'manipulation',
-          userSelect: 'none'
+          userSelect: 'none',
+          pointerEvents: 'auto',
+          position: 'relative',
+          zIndex: 1
         }}
       >
         {config.title}
@@ -107,7 +110,12 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
                   onMouseLeave={() => setShowTooltip(false)}
                   type="button"
                   className="text-gray-400 hover:text-gray-600 transition-colors"
-                  style={{ cursor: 'pointer' }}
+                  style={{ 
+                    cursor: 'pointer',
+                    pointerEvents: 'auto',
+                    position: 'relative',
+                    zIndex: 1
+                  }}
                   aria-label="Information about global leaderboard"
                 >
                   <Info size={20} />
@@ -136,7 +144,10 @@ export function GlobalLeaderboard({ onClose }: GlobalLeaderboardProps) {
               style={{ 
                 cursor: 'pointer',
                 touchAction: 'manipulation',
-                userSelect: 'none'
+                userSelect: 'none',
+                pointerEvents: 'auto',
+                position: 'relative',
+                zIndex: 1
               }}
               aria-label="Close leaderboard"
             >

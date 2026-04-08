@@ -60,7 +60,12 @@ export function HighScoresList({
               onMouseLeave={() => setShowTooltip(false)}
               type="button"
               className="text-gray-400 hover:text-gray-600 transition-colors"
-              style={{ cursor: 'pointer' }}
+              style={{ 
+                cursor: 'pointer',
+                pointerEvents: 'auto',
+                position: 'relative',
+                zIndex: 1
+              }}
               aria-label="Information about local leaderboard"
             >
               <Info size={18} />
@@ -90,7 +95,10 @@ export function HighScoresList({
             color: colors.primary,
             cursor: 'pointer',
             touchAction: 'manipulation',
-            userSelect: 'none'
+            userSelect: 'none',
+            pointerEvents: 'auto',
+            position: 'relative',
+            zIndex: 1
           }}
           title="Reset Top Scores"
         >
