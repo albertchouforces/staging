@@ -44,7 +44,7 @@ export function HighScoresList({
   };
 
   return (
-    <div className="w-full" style={{ position: 'relative', zIndex: 1 }}>
+    <div className="w-full" style={{ position: 'relative', zIndex: 100 }}>
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
           <MedalIcon size={20} style={{ color: colors.primary }} />
@@ -52,13 +52,19 @@ export function HighScoresList({
           <div className="relative">
             <button
               onClick={() => setShowTooltip(prev => !prev)}
+              type="button"
               className="text-gray-400 hover:text-gray-600 transition-colors"
+              style={{
+                position: 'relative',
+                zIndex: 10,
+                pointerEvents: 'auto'
+              }}
               aria-label="Information about local leaderboard"
             >
               <Info size={18} />
             </button>
             {showTooltip && (
-              <div className="absolute left-0 top-full mt-2 w-72 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3 z-10">
+              <div className="absolute left-0 top-full mt-2 w-72 bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3" style={{ zIndex: 9999 }}>
                 <p className="mb-2">
                   <strong>How it works:</strong> Your scores are saved locally in your browser. The top 5 scores are displayed here.
                 </p>
