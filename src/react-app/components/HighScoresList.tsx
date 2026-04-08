@@ -71,10 +71,7 @@ export function HighScoresList({
           </div>
         </h4>
         <button
-          onPointerDown={(e) => {
-            e.preventDefault();
-            onReset();
-          }}
+          onClick={onReset}
           type="button"
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all hover:bg-gray-200 active:bg-gray-300"
           style={{ 
