@@ -50,7 +50,7 @@ export function StartScreen({
     const hasImageLoaded = imageLoaded[config.id] || false;
     
     return (
-    <div className="bg-white rounded-xl shadow-lg p-6" style={{ position: 'relative' }}>
+    <div className="bg-white rounded-xl shadow-lg p-6">
       {/* Image Section - Moved above title */}
       {config.startScreenImage && (
         <div className="relative w-full h-48 mb-4 bg-transparent rounded-lg overflow-hidden flex items-center justify-center" style={{ pointerEvents: 'none' }}>
@@ -108,10 +108,7 @@ export function StartScreen({
         className="w-full mt-4 px-6 py-3 text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-lg active:brightness-95"
         style={{ 
           backgroundColor: colors.primary,
-          touchAction: 'manipulation',
-          position: 'relative',
-          zIndex: 10,
-          pointerEvents: 'auto'
+          touchAction: 'manipulation'
         }}
       >
         <Play size={20} />
