@@ -5,6 +5,7 @@ A flexible and customizable quiz template for creating image-based multiple choi
 ## Features
 
 - Interactive quiz with visual questions
+- Optional audio playback for questions
 - Multiple choice answers
 - Immediate feedback
 - Real-time timer with pause functionality
@@ -32,13 +33,22 @@ npm run dev
 ## Creating Your Own Quiz
 
 1. Place your question images in the `public/images` folder
-2. Edit `src/data/templateQuiz.ts`:
-   - Customize the `QUIZ_CONFIG`
+2. (Optional) Place audio files in the `public/audio` folder for questions that need sound
+3. Edit `src/react-app/data/quizData.ts`:
+   - Customize the quiz configuration
    - Add your questions following the template format
-3. Test your quiz locally
-4. Deploy to your preferred hosting platform
+   - Add optional `audioUrl` field to questions that need audio playback
+4. Test your quiz locally
+5. Deploy to your preferred hosting platform
 
-See `src/data/templateQuiz.ts` for detailed instructions and examples.
+See `src/react-app/data/quizData.ts` for detailed instructions and examples.
+
+### Supported Audio Formats
+- MP3 (.mp3)
+- WAV (.wav)
+- OGG (.ogg)
+- M4A (.m4a)
+- AAC (.aac)
 
 ## Project Structure
 

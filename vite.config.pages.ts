@@ -2,17 +2,9 @@ import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+// Cloudflare Pages-specific Vite configuration
 export default defineConfig({
-  plugins: [
-    react({
-      jsxRuntime: 'automatic',
-      babel: {
-        plugins: []
-      }
-    })
-  ],
-  base: "/",
-  publicDir: "public",
+  plugins: [react()],
   server: {
     allowedHosts: true,
   },
@@ -31,4 +23,6 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // Cloudflare Pages compatibility
+  base: "/",
 });

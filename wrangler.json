@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "0199c640-2f92-76b5-8fd8-38ce206796ad",
+  "name": "019d7307-9626-7f40-b67e-46b826007a90",
   "main": "./src/worker/index.ts",
   "compatibility_date": "2025-06-17",
   "compatibility_flags": ["nodejs_compat"],
@@ -14,14 +14,24 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "0199c640-2f92-76b5-8fd8-38ce206796ad",
-      "database_id": "0199c640-2f92-76b5-8fd8-38ce206796ad"
+      "database_name": "019d7307-9626-7f40-b67e-46b826007a90",
+      "database_id": "019d7307-9626-7f40-b67e-46b826007a90"
     }
   ],
-  "r2_buckets": [
-    {
-      "binding": "R2_BUCKET",
-      "bucket_name": "0199c640-2f92-76b5-8fd8-38ce206796ad"
-    }
-  ]
-}
+	  "r2_buckets": [
+	    {
+	      "binding": "R2_BUCKET",
+	      "bucket_name": "019d7307-9626-7f40-b67e-46b826007a90"
+	    }
+	  ],
+	  "services": [
+	    {
+	      "binding": "EMAILS",
+	      "service": "emails-service",
+	      "entrypoint": "EmailService",
+	      "props": {
+	        "appId": "019d7307-9626-7f40-b67e-46b826007a90"
+	      }
+	    }
+	  ]
+	}
