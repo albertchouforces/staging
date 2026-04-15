@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef, MouseEvent } from 'react';
 import type { QuestionData, QuizConfig } from '@/react-app/types';
 import { parseBlankQuestion, shuffleArray } from '@/react-app/lib/utils';
-import { BookOpen, Info, X, ImageOff } from 'lucide-react';
+import { BookOpen, Info, X } from 'lucide-react';
 import { AudioPlayer } from '@/react-app/components/AudioPlayer';
 
 interface FillInTheBlankCardProps {
@@ -34,8 +34,6 @@ export function FillInTheBlankCard({
   const [showInfo, setShowInfo] = useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState('');
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const infoBoxRef = useRef<HTMLDivElement>(null);
 
@@ -133,8 +131,6 @@ export function FillInTheBlankCard({
     
     setCurrentBlankIndex(null);
     setShowResult(false);
-    setImageLoaded(false);
-    setImageError(false);
   }, [question.id, blankCount, correctAnswers, distractors]);
 
   // Scroll card into view when question changes
@@ -277,11 +273,6 @@ export function FillInTheBlankCard({
   const correctCount = blanks.filter(b => b.correct).length;
   const totalBlanks = blanks.length;
 
-  const handleImageError = useCallback(() => {
-    setImageError(true);
-    setImageLoaded(true);
-  }, []);
-
   const handleFactClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
     if (target.tagName === 'A') {
@@ -343,35 +334,6 @@ export function FillInTheBlankCard({
               <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
             </div>
             
-            {/* Image Container */}
-            <div className="flex flex-col items-center mb-4">
-              {question.imageUrl && question.imageUrl.trim() !== '' && (
-                <div className="w-full aspect-[16/9] relative rounded-lg overflow-hidden bg-transparent mb-4">
-                  {!imageLoaded && !imageError && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
-                      <div className="text-gray-400 text-center px-4">
-                        <div className="text-sm font-medium mb-1">Loading Image</div>
-                      </div>
-                    </div>
-                  )}
-                  {imageError ? (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 text-gray-400">
-                      <ImageOff size={32} />
-                      <p className="text-sm mt-2">Image not available</p>
-                    </div>
-                  ) : (
-                    <img
-                      src={question.imageUrl}
-                      alt="Question"
-                      className={`w-full h-full object-contain ${imageLoaded ? 'block' : 'hidden'}`}
-                      onLoad={() => setImageLoaded(true)}
-                      onError={handleImageError}
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-            
             {/* Fill in the blank indicator */}
             <div className="text-center mb-4 relative">
               <span className="inline-flex items-center gap-2 px-4 py-2 text-sm text-purple-700 font-bold bg-purple-50 border-2 border-purple-400 rounded-full shadow-md">
@@ -428,32 +390,29 @@ export function FillInTheBlankCard({
             </div>
           </div>
           
-          <div className="flex flex-col items-center mb-4">
+          {/* Audio Players */}
+          {audioGroups.length > 0 && (
+            <div className="mb-4 flex flex-col items-center gap-3">
+              {audioGroups.map((audioGroup, index) => (
+                <div key={`q${question.id}-audio-${index}`} className="flex flex-col items-center gap-3 w-full">
+                  <AudioPlayer 
+                    key={`q${question.id}-audio-player-${index}`}
+                    audioFiles={audioGroup.files} 
+                    loopCount={audioLoopCount}
+                    label={audioGroup.label}
+                    colorScheme="blue"
+                  />
+                  {index < audioGroups.length - 1 && (
+                    <div className="w-full max-w-xs border-t border-gray-300"></div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
           
-            {/* Audio Players */}
-            {audioGroups.length > 0 && (
-              <div className="mb-4 flex flex-col items-center gap-3">
-                {audioGroups.map((audioGroup, index) => (
-                  <div key={`q${question.id}-audio-${index}`} className="flex flex-col items-center gap-3 w-full">
-                    <AudioPlayer 
-                      key={`q${question.id}-audio-player-${index}`}
-                      audioFiles={audioGroup.files} 
-                      loopCount={audioLoopCount}
-                      label={audioGroup.label}
-                      colorScheme="blue"
-                    />
-                    {index < audioGroups.length - 1 && (
-                      <div className="w-full max-w-xs border-t border-gray-300"></div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-            
-            {question.description && question.description.trim() !== '' && (
-              <div className="text-lg text-gray-600 italic text-center max-w-xl [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.description }} />
-            )}
-          </div>
+          {question.description && question.description.trim() !== '' && (
+            <div className="text-lg text-gray-600 italic text-center max-w-xl mx-auto [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.description }} />
+          )}
         </div>
 
         {/* Options Section */}

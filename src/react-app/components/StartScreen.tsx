@@ -114,7 +114,7 @@ export function StartScreen({
               <NotebookText className="text-[#1a365d]" size={28} />
             </div>
             <h1 className="text-3xl font-black text-[#1a365d] tracking-tight">
-              Formation Safety and Environment
+              NWO Quiz Collection
             </h1>
           </div>
           <div className="h-1 w-20 bg-[#fbbf24] rounded-full mx-auto mb-2" />

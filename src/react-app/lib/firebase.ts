@@ -96,38 +96,24 @@ service cloud.firestore {
 //   service: string (quiz identifier)
 // }
 //
-// 8. USING CLOUDFLARE SECRETS (RECOMMENDED FOR PRODUCTION)
-// -------------------------------------------------
-// To use CloudFlare's secret management system instead of hardcoded values:
+// 8. ENVIRONMENT VARIABLES (OPTIONAL)
+// --------------------------------
+// The app automatically checks for VITE_ environment variables/secrets from Cloudflare
+// and falls back to the hardcoded values if they're not set.
 //
-// a. In your Mocha app, click the dropdown menu by the app name (top left)
-// b. Select "Settings"
-// c. Go to the "Secrets" tab
-// d. Add the following secrets (click "Add Secret" for each):
+// To use environment variables instead of hardcoded values:
+// a. In Mocha, go to Settings > Secrets
+// b. Create secrets with these exact names:
+//   VITE_FIREBASE_API_KEY=your_api_key
+//   VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+//   VITE_FIREBASE_PROJECT_ID=your_project_id
+//   VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+//   VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+//   VITE_FIREBASE_APP_ID=your_app_id
 //
-//    Secret Name: VITE_FIREBASE_API_KEY
-//    Secret Value: [your Firebase API key]
-//
-//    Secret Name: VITE_FIREBASE_AUTH_DOMAIN
-//    Secret Value: [your Firebase auth domain]
-//
-//    Secret Name: VITE_FIREBASE_PROJECT_ID
-//    Secret Value: [your Firebase project ID]
-//
-//    Secret Name: VITE_FIREBASE_STORAGE_BUCKET
-//    Secret Value: [your Firebase storage bucket]
-//
-//    Secret Name: VITE_FIREBASE_MESSAGING_SENDER_ID
-//    Secret Value: [your Firebase messaging sender ID]
-//
-//    Secret Name: VITE_FIREBASE_APP_ID
-//    Secret Value: [your Firebase app ID]
-//
-// Note: All secret names MUST start with "VITE_" to be accessible in the frontend.
-//
-// Once these secrets are set, the app will automatically use them instead of
-// the hardcoded fallback values below. The hardcoded values will only be used
-// if the secrets are not configured.
+// The firebaseConfig automatically uses these if available, otherwise uses hardcoded values.
+// This is useful for keeping sensitive config out of your code or using different
+// Firebase projects for dev vs production
 //
 // =================================================================
 
@@ -136,7 +122,7 @@ import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs
 import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
 
 // Firebase configuration
-// Checks for Mocha secrets first, falls back to hardcoded values if not set
+// Checks for Cloudflare VITE_ secrets first, then falls back to hardcoded values
 export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",

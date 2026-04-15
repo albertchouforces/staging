@@ -357,35 +357,6 @@ export function FlashCard({
             {question.description && question.description.trim() !== '' && (
               <div className="text-lg text-gray-600 italic text-center max-w-xl mx-auto [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.description }} />
             )}
-            
-            {/* Image Container for Matching Questions */}
-            {question.imageUrl && question.imageUrl.trim() !== '' && (
-              <div className="flex flex-col items-center mt-4">
-                <div className="w-full aspect-[16/9] relative rounded-lg overflow-hidden bg-transparent">
-                  {!imageLoaded && !imageError && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
-                      <div className="text-gray-400 text-center px-4">
-                        <div className="text-sm font-medium mb-1">Loading Image</div>
-                      </div>
-                    </div>
-                  )}
-                  {imageError ? (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 text-gray-400">
-                      <ImageOff size={32} />
-                      <p className="text-sm mt-2">Image not available</p>
-                    </div>
-                  ) : (
-                    <img
-                      src={question.imageUrl}
-                      alt="Question"
-                      className={`w-full h-full object-contain ${imageLoaded ? 'block' : 'hidden'}`}
-                      onLoad={() => setImageLoaded(true)}
-                      onError={handleImageError}
-                    />
-                  )}
-                </div>
-              </div>
-            )}
             </div>
 
             {/* Matching Section */}
@@ -428,8 +399,6 @@ export function FlashCard({
             <MatchingCard 
               key={question.id}
               pairs={question.correctAnswer as any}
-              sortLeft={question.sortLeft}
-              sortRight={question.sortRight}
               onComplete={(correct) => {
                 setShowResult(true);
                 onAnswer(correct);
