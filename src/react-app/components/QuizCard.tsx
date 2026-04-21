@@ -417,15 +417,17 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
 
           {/* Bottom section that stays at the bottom */}
           <div className="mt-auto">
-            <div className="mb-6">
-              <HighScoresList
-                scores={stats.highScores}
-                onReset={handleReset}
-                title="Local Top Scores"
-                headerBackground={false}
-                quizConfig={config}
-              />
-            </div>
+            {!config.disableLeaderboards && (
+              <div className="mb-6">
+                <HighScoresList
+                  scores={stats.highScores}
+                  onReset={handleReset}
+                  title="Local Top Scores"
+                  headerBackground={false}
+                  quizConfig={config}
+                />
+              </div>
+            )}
 
             <button
               onClick={onStart}

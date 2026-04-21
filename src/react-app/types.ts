@@ -1,6 +1,17 @@
 // Type for match pair items - can be text, image URL, audio URL, array of audio URLs, or nested array for OR audio
 export type MatchItem = string | string[] | string[][] | { type: 'text' | 'image' | 'audio'; value: string | string[] };
 
+// Interface for image hotspot regions
+export interface Hotspot {
+  id: number;
+  label: string; // Display label (A, B, C, etc.)
+  x: number; // X position in pixels (based on original image dimensions)
+  y: number; // Y position in pixels (based on original image dimensions)
+  width?: number; // Optional width in pixels (if not provided, auto-sizes to fit label)
+  height?: number; // Optional height in pixels (if not provided, auto-sizes to fit label)
+  correctAnswer: string; // The correct answer for this hotspot
+}
+
 export interface QuestionData {
   id: number;
   question: string;   // The question to display
@@ -14,6 +25,10 @@ export interface QuestionData {
   factAudioUrl?: string | string[] | string[][];  // Optional fact audio - single file, array of files (play sequentially), or array of arrays (multiple playback options)
   factAudioLoopCount?: number; // Optional number of times to loop fact audio sequence (default: 1, plays once)
   fillInTheBlank?: boolean; // Optional per-question fill-in-the-blank mode (overrides quiz-level setting for this question)
+  sortLeft?: boolean; // Optional flag to sort left column alphabetically in matching questions (overrides randomization)
+  sortRight?: boolean; // Optional flag to sort right column alphabetically in matching questions (overrides randomization)
+  hotspots?: Hotspot[]; // Optional array of hotspots for image hotspot questions
+  factHeading?: string; // Optional fact heading (used in composite quizzes to preserve source quiz's heading)
 }
 
 export interface HighScoreEntry {
@@ -50,6 +65,10 @@ export interface QuizConfig {
   hidden?: boolean;    // Optional flag to hide the quiz from display
   factHeading?: string; // Optional custom heading for facts section (defaults to "Did you know?")
   fillInTheBlank?: boolean; // Enable fill-in-the-blank mode where (blank) in question text becomes interactive
+  startQuestion?: number; // Optional question ID to force as the first question (useful for testing specific questions)
+  sourceQuizIds?: string[]; // Optional array of quiz IDs to pool questions from (creates composite quiz)
+  questionCount?: number; // Optional total number of questions to include from source quizzes (evenly distributed)
+  disableLeaderboards?: boolean; // Optional flag to disable both local and global leaderboards for this quiz
 }
 
 export interface QuizDefinition {

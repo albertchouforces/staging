@@ -71,16 +71,18 @@ export function ScoreDisplay({
           <span className="text-gray-600">Accuracy: </span>
           <span style={{ color: colorValue }}>{percentage}%</span>
         </div>
-        <div className="bg-white px-4 py-2 rounded-lg shadow-sm flex items-center gap-2">
-          <Trophy size={16} style={{ color: colorValue }} />
-          <span className="text-gray-600">Best: </span>
-          <span style={{ color: colorValue }}>
-            {highScore}
-            {bestRun && ` (${bestRun.accuracy}%)`}
-          </span>
-        </div>
+        {!quizConfig.disableLeaderboards && (
+          <div className="bg-white px-4 py-2 rounded-lg shadow-sm flex items-center gap-2">
+            <Trophy size={16} style={{ color: colorValue }} />
+            <span className="text-gray-600">Best: </span>
+            <span style={{ color: colorValue }}>
+              {highScore}
+              {bestRun && ` (${bestRun.accuracy}%)`}
+            </span>
+          </div>
+        )}
         {ENABLE_TIME_TRACKING && <Timer time={currentTime} accentColor={accentColor} />}
-        {ENABLE_TIME_TRACKING && bestRun && (
+        {ENABLE_TIME_TRACKING && !quizConfig.disableLeaderboards && bestRun && (
           <div className="bg-white px-4 py-2 rounded-lg shadow-sm flex items-center gap-2">
             <Clock size={16} style={{ color: colorValue }} />
             <span className="text-gray-600">Best: </span>
@@ -102,10 +104,10 @@ export function ScoreDisplay({
           <p className="text-gray-600 mb-4">
             You correctly identified {correct} out of {total} questions.
           </p>
-          {correct > highScore && (
+          {!quizConfig.disableLeaderboards && correct > highScore && (
             <p className="font-semibold mb-4" style={{ color: colorValue }}>New High Score!</p>
           )}
-          {ENABLE_TIME_TRACKING && bestRun && (
+          {!quizConfig.disableLeaderboards && ENABLE_TIME_TRACKING && bestRun && (
             correct >= bestRun.score && currentTime < bestRun.time ? (
               <p className="font-semibold mb-4" style={{ color: colorValue }}>New Best Time!</p>
             ) : null

@@ -208,7 +208,7 @@ export function StartScreen({
       {showGlobalLeaderboard && (
         <GlobalLeaderboard 
           onClose={() => setShowGlobalLeaderboard(false)}
-          quizzes={visibleQuizzes}
+          quizzes={visibleQuizzes.filter(quiz => !quiz.config.disableLeaderboards)}
         />
       )}
     </div>

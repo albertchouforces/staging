@@ -4,6 +4,7 @@ import { getCorrectAnswers, isMultiSelect, isMatchingQuestion } from '@/react-ap
 import { BookOpen, Check, ImageOff, X, Info } from 'lucide-react';
 import { AudioPlayer } from '@/react-app/components/AudioPlayer';
 import { MatchingCard } from '@/react-app/components/MatchingCard';
+import { ImageHotspotCard } from '@/react-app/components/ImageHotspotCard';
 
 interface FlashCardProps {
   question: QuestionData;
@@ -35,6 +36,7 @@ export function FlashCard({
   const [modalImageUrl, setModalImageUrl] = useState('');
   const isMultiSelectQuestion = isMultiSelect(question.correctAnswer);
   const isMatchQuestion = isMatchingQuestion(question.correctAnswer);
+  const isHotspotQuestion = question.hotspots && question.hotspots.length > 0;
   const cardRef = useRef<HTMLDivElement>(null);
   const multiSelectInfoBoxRef = useRef<HTMLDivElement>(null);
   const matchingInfoBoxRef = useRef<HTMLDivElement>(null);
@@ -309,6 +311,142 @@ export function FlashCard({
     return "bg-gray-100";
   }, [showResult, question.correctAnswer, selectedAnswers, isMultiSelectQuestion]);
 
+  // Handle image hotspot questions separately
+  if (isHotspotQuestion && question.hotspots && question.answerPool) {
+    return (
+      <>
+        {/* Image Modal */}
+        {isImageModalOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setIsImageModalOpen(false)}
+          >
+            <div 
+              className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setIsImageModalOpen(false)}
+                className="absolute top-4 right-4 z-10 h-10 w-10 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors shadow-lg"
+                aria-label="Close"
+              >
+                <X size={28} className="text-gray-600 hover:text-gray-800" />
+              </button>
+              <div className="p-6 flex items-center justify-center bg-gray-50 min-h-[400px]">
+                <img
+                  src={modalImageUrl}
+                  alt="Fact"
+                  className="max-w-full max-h-[calc(90vh-3rem)] object-contain rounded-lg shadow-sm"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <div ref={cardRef} className="w-full max-w-4xl bg-white rounded-xl shadow-lg">
+          <div className="flex flex-col w-full">
+            {/* Question Section */}
+            <div className="p-6 border-b border-gray-100">
+              <div className="mb-4">
+                <div className="flex justify-end mb-3">
+                  <span className="text-sm text-gray-500">Question {questionNumber} of {totalQuestions}</span>
+                </div>
+                <h3 
+                  className="text-xl font-semibold text-gray-800 text-center mb-4 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1 [&_i]:italic"
+                  dangerouslySetInnerHTML={{ __html: question.question }}
+                />
+              </div>
+              {question.description && question.description.trim() !== '' && (
+                <div className="text-lg text-gray-600 italic text-center max-w-xl mx-auto mb-4 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.description }} />
+              )}
+            </div>
+
+            {/* Hotspot Section */}
+            <div className="w-full p-6 border-b border-gray-100">
+              <ImageHotspotCard
+                key={question.id}
+                imageUrl={question.imageUrl || ''}
+                hotspots={question.hotspots}
+                answerPool={question.answerPool}
+                onComplete={(correct) => {
+                  setShowResult(true);
+                  onAnswer(correct);
+                }}
+              />
+            </div>
+
+            {/* Result Section for Hotspot */}
+            {showResult && (
+              <div className="w-full p-6 flex flex-col gap-6">
+                <div className={`p-4 rounded-lg border max-w-xl mx-auto w-full ${
+                  question.hotspots?.every(h => question.answerPool?.includes(h.correctAnswer))
+                    ? 'bg-green-50 border-green-200'
+                    : 'bg-yellow-50 border-yellow-200'
+                }`}>
+                  <p className={`text-sm font-medium ${
+                    question.hotspots?.every(h => question.answerPool?.includes(h.correctAnswer))
+                      ? 'text-green-800'
+                      : 'text-yellow-800'
+                  }`}>
+                    {question.hotspots?.every(h => question.answerPool?.includes(h.correctAnswer))
+                      ? 'Perfect! All hotspots labeled correctly.'
+                      : 'Review the correct answers above.'}
+                  </p>
+                </div>
+                
+                <div className="flex justify-center w-full">
+                  <button
+                    onClick={onNext}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    {questionNumber === totalQuestions ? 'Finish Quiz' : 'Next Question'}
+                  </button>
+                </div>
+
+                {/* Show fact section if there's a fact text or fact audio */}
+                {(question.fact || factAudioGroups.length > 0) && (
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 max-w-xl mx-auto">
+                    <div className="flex items-center gap-2 text-blue-800 mb-2">
+                      <BookOpen size={20} />
+                      <span className="font-semibold">{question.factHeading || quizConfig.factHeading || 'Did you know?'}</span>
+                    </div>
+                    {question.fact && (
+                      <div 
+                        className="text-blue-900 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1 [&_a]:text-blue-600 [&_a]:underline [&_a:hover]:text-blue-800 [&_a]:cursor-pointer" 
+                        dangerouslySetInnerHTML={{ __html: question.fact }}
+                        onClick={handleFactClick}
+                      />
+                    )}
+                    
+                    {/* Fact Audio Players */}
+                    {factAudioGroups.length > 0 && (
+                      <div className={`${question.fact ? 'mt-4' : ''} flex flex-col items-center gap-3 w-full`}>
+                        {factAudioGroups.map((factAudioGroup, index) => (
+                          <div key={`q${question.id}-fact-${index}`} className="flex flex-col items-center gap-3 w-full">
+                            <AudioPlayer 
+                              key={`q${question.id}-fact-player-${index}`}
+                              audioFiles={factAudioGroup.files} 
+                              loopCount={factAudioLoopCount}
+                              label={factAudioGroup.label}
+                              colorScheme="blue"
+                            />
+                            {index < factAudioGroups.length - 1 && (
+                              <div className="w-full max-w-xs border-t border-blue-300"></div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  }
+
   // Handle matching questions separately
   if (isMatchQuestion) {
     return (
@@ -357,6 +495,35 @@ export function FlashCard({
             {question.description && question.description.trim() !== '' && (
               <div className="text-lg text-gray-600 italic text-center max-w-xl mx-auto [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2 [&_li]:mb-1" dangerouslySetInnerHTML={{ __html: question.description }} />
             )}
+            
+            {/* Image Container for Matching Questions */}
+            {question.imageUrl && question.imageUrl.trim() !== '' && (
+              <div className="flex flex-col items-center mt-4">
+                <div className="w-full aspect-[16/9] relative rounded-lg overflow-hidden bg-transparent">
+                  {!imageLoaded && !imageError && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
+                      <div className="text-gray-400 text-center px-4">
+                        <div className="text-sm font-medium mb-1">Loading Image</div>
+                      </div>
+                    </div>
+                  )}
+                  {imageError ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 text-gray-400">
+                      <ImageOff size={32} />
+                      <p className="text-sm mt-2">Image not available</p>
+                    </div>
+                  ) : (
+                    <img
+                      src={question.imageUrl}
+                      alt="Question"
+                      className={`w-full h-full object-contain ${imageLoaded ? 'block' : 'hidden'}`}
+                      onLoad={() => setImageLoaded(true)}
+                      onError={handleImageError}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
             </div>
 
             {/* Matching Section */}
@@ -399,6 +566,8 @@ export function FlashCard({
             <MatchingCard 
               key={question.id}
               pairs={question.correctAnswer as any}
+              sortLeft={question.sortLeft}
+              sortRight={question.sortRight}
               onComplete={(correct) => {
                 setShowResult(true);
                 onAnswer(correct);
@@ -429,7 +598,7 @@ export function FlashCard({
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 max-w-xl mx-auto">
                   <div className="flex items-center gap-2 text-blue-800 mb-2">
                     <BookOpen size={20} />
-                    <span className="font-semibold">{quizConfig.factHeading || 'Did you know?'}</span>
+                    <span className="font-semibold">{question.factHeading || quizConfig.factHeading || 'Did you know?'}</span>
                   </div>
                   {question.fact && (
                     <div 
@@ -713,7 +882,7 @@ export function FlashCard({
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 max-w-xl mx-auto">
                 <div className="flex items-center gap-2 text-blue-800 mb-2">
                   <BookOpen size={20} />
-                  <span className="font-semibold">{quizConfig.factHeading || 'Did you know?'}</span>
+                  <span className="font-semibold">{question.factHeading || quizConfig.factHeading || 'Did you know?'}</span>
                 </div>
                 {question.fact && (
                   <div 

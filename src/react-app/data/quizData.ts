@@ -42,6 +42,9 @@
 //         - Quizzes without a category appear first, before any categorized sections
 //      * hidden: Optional boolean to hide the quiz from display
 //      * factHeading: Optional custom heading for the fact section (defaults to "Did you know?")
+//      * sourceQuizIds: Optional array of quiz IDs to create a composite quiz (pulls questions from multiple quizzes)
+//      * questionCount: Optional number of questions to include from source quizzes (evenly distributed)
+//      * disableLeaderboards: Optional boolean to disable both local and global leaderboards for this quiz
 //      * questions: Array of questions following the QuestionData format
 //
 // 3. QUESTION FORMAT:
@@ -238,6 +241,7 @@ export const CATEGORY_ORDER: string[] = [
   'Col Regs Rules 23-31',
   'Col Regs Rules 32-34',
   'Col Regs Rule 35',
+  'Col Regs Compliance',
   'Advanced Challenges'
   // Add more categories here in the desired order
 ];
@@ -4197,6 +4201,25 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     },
   ]
 },
+{
+  config: {
+    id: "32to34sounds_35si",
+    title: "Mixed Challenge Quiz",
+    description: "Sound Signals Challenge – Rules 32-34: Identify the Sound Signals, Sound Signals Challenge – Rule 35: Identify the Sound Signals, and Intervals",
+    category: "Col Regs Compliance",
+    themeColor: 'purple',
+    startScreenImage: "/images/naval-operations-branch-600.png",
+    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
+    disableLeaderboards: true,
+    quizKey: "32to34sounds_35si",
+    sourceQuizIds: ["32to34sounds", "35si"],  // Array of quiz IDs to pull from
+    questionCount: 20,  // Optional: total questions to include (evenly distributed)
+    // If quiz1 has 10 questions and quiz2 has 5 questions:
+    // - With questionCount: 6, it will pull 3 random questions from each quiz
+    // - Without questionCount, it will include ALL questions from both quizzes
+  },
+  questions: []  // Leave empty when using sourceQuizIds - questions are pulled automatically
+}
   
 ];
 
@@ -4245,6 +4268,44 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     },
     // Add more questions...
   ]
+}
+*/
+
+// =================================================================
+// EXAMPLE OF CREATING A COMPOSITE QUIZ FROM MULTIPLE QUIZZES
+// =================================================================
+/*
+// Composite quizzes pull questions from multiple existing quizzes.
+// You can specify how many questions to include with even distribution across source quizzes.
+//
+// Example: Create a mixed quiz that pulls from quiz1 and quiz2
+{
+  config: {
+    id: "mixed_challenge",
+    title: "Mixed Challenge Quiz",
+    description: "Questions from multiple topics",
+    themeColor: 'purple',
+    quizKey: "mixed_challenge_quiz",
+    sourceQuizIds: ["quiz1", "quiz2"],  // Array of quiz IDs to pull from
+    questionCount: 6,  // Optional: total questions to include (evenly distributed)
+    // If quiz1 has 10 questions and quiz2 has 5 questions:
+    // - With questionCount: 6, it will pull 3 random questions from each quiz
+    // - Without questionCount, it will include ALL questions from both quizzes
+  },
+  questions: []  // Leave empty when using sourceQuizIds - questions are pulled automatically
+}
+
+// Example without questionCount (includes all questions from sources):
+{
+  config: {
+    id: "everything",
+    title: "Complete Collection",
+    description: "All questions from all quizzes",
+    themeColor: 'blue',
+    quizKey: "everything_quiz",
+    sourceQuizIds: ["quiz1", "quiz2", "quiz3"],  // Pulls ALL questions from these quizzes
+  },
+  questions: []  // Leave empty - will include all questions from source quizzes
 }
 */
 

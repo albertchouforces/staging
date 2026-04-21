@@ -163,8 +163,60 @@ function App() {
     setLastPauseTime(null);
     setAccumulatedTime(0);
     
+    // Check if this is a composite quiz (pools questions from other quizzes)
+    let questionsToUse: QuestionData[] = quiz.questions;
+    
+    if (quiz.config.sourceQuizIds && quiz.config.sourceQuizIds.length > 0) {
+      // This is a composite quiz - pool questions from source quizzes
+      const sourceQuizzes = quiz.config.sourceQuizIds
+        .map(id => QUIZ_COLLECTION.find(q => q.config.id === id))
+        .filter((q): q is typeof QUIZ_COLLECTION[0] => q !== undefined);
+      
+      if (sourceQuizzes.length > 0) {
+        if (quiz.config.questionCount !== undefined && quiz.config.questionCount > 0) {
+          // Even distribution mode: take equal amounts from each source quiz
+          const questionsPerQuiz = Math.ceil(quiz.config.questionCount / sourceQuizzes.length);
+          const pooledQuestions: QuestionData[] = [];
+          
+          sourceQuizzes.forEach(sourceQuiz => {
+            const shuffledSource = shuffleArray([...sourceQuiz.questions]);
+            const questionsWithFactHeading = shuffledSource.slice(0, questionsPerQuiz).map(q => ({
+              ...q,
+              factHeading: sourceQuiz.config.factHeading
+            }));
+            pooledQuestions.push(...questionsWithFactHeading);
+          });
+          
+          // Shuffle the pooled questions and trim to exact count
+          questionsToUse = shuffleArray(pooledQuestions).slice(0, quiz.config.questionCount);
+        } else {
+          // No question count specified - use all questions from all source quizzes
+          const allQuestions: QuestionData[] = [];
+          sourceQuizzes.forEach(sourceQuiz => {
+            const questionsWithFactHeading = sourceQuiz.questions.map(q => ({
+              ...q,
+              factHeading: sourceQuiz.config.factHeading
+            }));
+            allQuestions.push(...questionsWithFactHeading);
+          });
+          questionsToUse = allQuestions;
+        }
+      }
+    }
+    
     // Randomize questions order
-    setRandomizedQuestions(shuffleArray(quiz.questions));
+    let shuffled = shuffleArray(questionsToUse);
+    
+    // If startQuestion is specified, move that question to the front
+    if (quiz.config.startQuestion !== undefined) {
+      const startQuestionIndex = shuffled.findIndex(q => q.id === quiz.config.startQuestion);
+      if (startQuestionIndex > 0) {
+        const startQuestion = shuffled[startQuestionIndex];
+        shuffled = [startQuestion, ...shuffled.slice(0, startQuestionIndex), ...shuffled.slice(startQuestionIndex + 1)];
+      }
+    }
+    
+    setRandomizedQuestions(shuffled);
   };
 
   const handleAnswer = (correct: boolean | number) => {
@@ -191,6 +243,7 @@ function App() {
     if (currentQuestionIndex < randomizedQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
+      // Always show the quiz complete screen
       setGameState('entering-name');
     }
   };
@@ -217,8 +270,59 @@ function App() {
     // Increment session key to force component remount
     setQuizSessionKey(prev => prev + 1);
     
+    // Check if this is a composite quiz (pools questions from other quizzes)
+    let questionsToUse: QuestionData[] = selectedQuiz.questions;
+    
+    if (selectedQuiz.config.sourceQuizIds && selectedQuiz.config.sourceQuizIds.length > 0) {
+      // This is a composite quiz - pool questions from source quizzes
+      const sourceQuizzes = selectedQuiz.config.sourceQuizIds
+        .map(id => QUIZ_COLLECTION.find(q => q.config.id === id))
+        .filter((q): q is typeof QUIZ_COLLECTION[0] => q !== undefined);
+      
+      if (sourceQuizzes.length > 0) {
+        if (selectedQuiz.config.questionCount !== undefined && selectedQuiz.config.questionCount > 0) {
+          // Even distribution mode: take equal amounts from each source quiz
+          const questionsPerQuiz = Math.ceil(selectedQuiz.config.questionCount / sourceQuizzes.length);
+          const pooledQuestions: QuestionData[] = [];
+          
+          sourceQuizzes.forEach(sourceQuiz => {
+            const shuffledSource = shuffleArray([...sourceQuiz.questions]);
+            const questionsWithFactHeading = shuffledSource.slice(0, questionsPerQuiz).map(q => ({
+              ...q,
+              factHeading: sourceQuiz.config.factHeading
+            }));
+            pooledQuestions.push(...questionsWithFactHeading);
+          });
+          
+          // Shuffle the pooled questions and trim to exact count
+          questionsToUse = shuffleArray(pooledQuestions).slice(0, selectedQuiz.config.questionCount);
+        } else {
+          // No question count specified - use all questions from all source quizzes
+          const allQuestions: QuestionData[] = [];
+          sourceQuizzes.forEach(sourceQuiz => {
+            const questionsWithFactHeading = sourceQuiz.questions.map(q => ({
+              ...q,
+              factHeading: sourceQuiz.config.factHeading
+            }));
+            allQuestions.push(...questionsWithFactHeading);
+          });
+          questionsToUse = allQuestions;
+        }
+      }
+    }
+    
     // Re-randomize questions to create a fresh quiz
-    const shuffled = shuffleArray(selectedQuiz.questions);
+    let shuffled = shuffleArray(questionsToUse);
+    
+    // If startQuestion is specified, move that question to the front
+    if (selectedQuiz.config.startQuestion !== undefined) {
+      const startQuestionIndex = shuffled.findIndex(q => q.id === selectedQuiz.config.startQuestion);
+      if (startQuestionIndex > 0) {
+        const startQuestion = shuffled[startQuestionIndex];
+        shuffled = [startQuestion, ...shuffled.slice(0, startQuestionIndex), ...shuffled.slice(startQuestionIndex + 1)];
+      }
+    }
+    
     setRandomizedQuestions(shuffled);
   };
 
@@ -339,14 +443,16 @@ function App() {
                     bestRun={getStatsForQuiz(selectedQuiz.config.quizKey).bestRun}
                     quizConfig={selectedQuiz.config}
                   />
-                  <UserNameInput 
-                    onSubmit={handleUserNameSubmit}
-                    currentScore={correctAnswers}
-                    currentTime={currentTime}
-                    highScores={getStatsForQuiz(selectedQuiz.config.quizKey).highScores}
-                    quizConfig={selectedQuiz.config}
-                    totalQuestions={randomizedQuestions.length}
-                  />
+                  {!selectedQuiz.config.disableLeaderboards && (
+                    <UserNameInput 
+                      onSubmit={handleUserNameSubmit}
+                      currentScore={correctAnswers}
+                      currentTime={currentTime}
+                      highScores={getStatsForQuiz(selectedQuiz.config.quizKey).highScores}
+                      quizConfig={selectedQuiz.config}
+                      totalQuestions={randomizedQuestions.length}
+                    />
+                  )}
                 </div>
               )}
             </>

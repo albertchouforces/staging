@@ -6,6 +6,8 @@ import { AudioPlayer } from '@/react-app/components/AudioPlayer';
 
 interface MatchingCardProps {
   pairs: [MatchItem, MatchItem][] | [MatchItem, MatchItem, MatchItem][];
+  sortLeft?: boolean;
+  sortRight?: boolean;
   onComplete: (correct: boolean) => void;
 }
 
@@ -19,7 +21,7 @@ interface ParsedItem {
   label?: string; // Optional label for audio items
 }
 
-export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
+export function MatchingCard({ pairs, sortLeft, sortRight, onComplete }: MatchingCardProps) {
   // Parse and create unique IDs for items
   const { leftItems, rightItems, correctMatches } = useMemo(() => {
     const parseItem = (item: MatchItem, side: 'left' | 'right', index: number): ParsedItem => {
@@ -99,7 +101,7 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
     };
 
     // Handle left column - check for OR format
-    const left = shuffleArray(pairs.map((pair, i) => {
+    const leftParsed = pairs.map((pair, i) => {
       const firstElement = pair[0];
       
       // Check if it's an array of arrays (nested structure for OR)
@@ -110,10 +112,20 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
         // Regular item
         return parseItem(firstElement, 'left', i);
       }
-    }));
+    });
+    
+    // Sort or shuffle left column based on sortLeft flag
+    const left = sortLeft 
+      ? [...leftParsed].sort((a, b) => {
+          // Extract text for comparison
+          const aText = a.type === 'text' ? (a.value as string).replace(/<[^>]*>/g, '').toLowerCase() : '';
+          const bText = b.type === 'text' ? (b.value as string).replace(/<[^>]*>/g, '').toLowerCase() : '';
+          return aText.localeCompare(bText);
+        })
+      : shuffleArray(leftParsed);
     
     // Handle right column - check for OR format
-    const right = shuffleArray(shuffleArray(pairs.map((p, i) => {
+    const rightParsed = pairs.map((p, i) => {
       const secondElement = p[1];
       
       // Check if it's an array of arrays (nested structure for OR)
@@ -124,7 +136,17 @@ export function MatchingCard({ pairs, onComplete }: MatchingCardProps) {
         // Regular pair
         return parseItem(secondElement, 'right', i);
       }
-    })));
+    });
+    
+    // Sort or shuffle right column based on sortRight flag
+    const right = sortRight
+      ? [...rightParsed].sort((a, b) => {
+          // Extract text for comparison
+          const aText = a.type === 'text' ? (a.value as string).replace(/<[^>]*>/g, '').toLowerCase() : '';
+          const bText = b.type === 'text' ? (b.value as string).replace(/<[^>]*>/g, '').toLowerCase() : '';
+          return aText.localeCompare(bText);
+        })
+      : shuffleArray(shuffleArray(rightParsed));
     
     // Create mapping of correct matches (left ID -> right ID)
     const matches: Record<string, string> = {};
