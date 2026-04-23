@@ -241,7 +241,7 @@ export const CATEGORY_ORDER: string[] = [
   'Col Regs Rules 23-31',
   'Col Regs Rules 32-34',
   'Col Regs Rule 35',
-  'Col Regs Compliance',
+  'Col Regs Rules 32-35',
   'Advanced Challenges'
   // Add more categories here in the desired order
 ];
@@ -4204,9 +4204,9 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
 {
   config: {
     id: "32to34sounds_35si",
-    title: "Mixed Challenge Quiz",
-    description: "Sound Signals Challenge – Rules 32-34: Identify the Sound Signals, Sound Signals Challenge – Rule 35: Identify the Sound Signals, and Intervals",
-    category: "Col Regs Compliance",
+    title: "Sound Signals Challenge – Rules 32-35: Identify the Sound Signals",
+    description: "",
+    category: "Col Regs Rules 32-35",
     themeColor: 'purple',
     startScreenImage: "/images/naval-operations-branch-600.png",
     studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
