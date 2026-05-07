@@ -4219,8 +4219,26 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     // - Without questionCount, it will include ALL questions from both quizzes
   },
   questions: []  // Leave empty when using sourceQuizIds - questions are pulled automatically
-}
-  
+},
+{
+  config: {
+    id: "32to34auditory_35auditory",
+    title: "Sound Signals Challenge – Rules 32-35: Auditory",
+    description: "",
+    category: "Col Regs Rules 32-35",
+    themeColor: 'purple',
+    startScreenImage: "/images/naval-operations-branch-600.png",
+    studyGuide: "https://laws-lois.justice.gc.ca/eng/regulations/c.r.c.,_c._1416/FullText.html",
+    disableLeaderboards: true,
+    quizKey: "32to34auditory_35auditory",
+    sourceQuizIds: ["32to34auditory", "35auditory"],  // Array of quiz IDs to pull from
+    questionCount: 15,  // Optional: total questions to include (evenly distributed)
+    // If quiz1 has 10 questions and quiz2 has 5 questions:
+    // - With questionCount: 6, it will pull 3 random questions from each quiz
+    // - Without questionCount, it will include ALL questions from both quizzes
+  },
+  questions: []  // Leave empty when using sourceQuizIds - questions are pulled automatically
+},  
 ];
 
 /*
