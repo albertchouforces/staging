@@ -17,15 +17,21 @@ interface ImageScale {
   offsetY: number;
 }
 
+interface AnswerOption {
+  id: number;
+  text: string;
+}
+
 export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }: ImageHotspotCardProps) {
   const [selectedHotspot, setSelectedHotspot] = useState<number | null>(null);
-  const [filledHotspots, setFilledHotspots] = useState<Map<number, string>>(new Map());
-  const [usedAnswers, setUsedAnswers] = useState<Set<string>>(new Set());
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null); // Track "picked up" answer (desktop only)
+  const [filledHotspots, setFilledHotspots] = useState<Map<number, number>>(new Map());
+  const [usedAnswerIds, setUsedAnswerIds] = useState<Set<number>>(new Set()); // Track which answer IDs have been used
   const [showResult, setShowResult] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [shuffledAnswers] = useState(() => {
-    // Extract all correct answers from hotspots
+  const [shuffledAnswers] = useState<AnswerOption[]>(() => {
+    // Extract all correct answers from hotspots (including duplicates)
     const correctAnswers = hotspots.map(h => h.correctAnswer);
     
     // If answerPool is provided and not empty (filter out empty strings), use it as distractors
@@ -33,15 +39,21 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
       ? answerPool.filter(a => a.trim() !== '')
       : [];
     
-    // Combine correct answers with distractors, removing duplicates
+    // Combine correct answers with distractors
+    // Keep all instances of correct answers (duplicates included)
     const allAnswers = [...correctAnswers];
+    
+    // Add distractors that aren't already in correct answers
     distractors.forEach(distractor => {
-      if (!allAnswers.includes(distractor)) {
+      if (!correctAnswers.includes(distractor)) {
         allAnswers.push(distractor);
       }
     });
     
-    return shuffleArray(allAnswers);
+    // Convert to objects with unique IDs
+    const answersWithIds = allAnswers.map((text, index) => ({ id: index, text }));
+    
+    return shuffleArray(answersWithIds);
   });
   const [imageScale, setImageScale] = useState<ImageScale>({ scaleX: 1, scaleY: 1, offsetX: 0, offsetY: 0 });
   const [showInfo, setShowInfo] = useState(false);
@@ -50,10 +62,10 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
   const containerRef = useRef<HTMLDivElement>(null);
   const infoBoxRef = useRef<HTMLDivElement>(null);
 
-  // Detect mobile/tablet view
+  // Detect mobile/tablet view based on viewport width
   useEffect(() => {
     const checkMobileView = () => {
-      setIsMobileView(window.innerWidth < 1024); // Use mobile view for tablets and below
+      setIsMobileView(window.innerWidth < 1024);
     };
     
     checkMobileView();
@@ -121,97 +133,105 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
       setShowResult(true);
       
       // Check if all answers are correct
-      const allCorrect = hotspots.every(hotspot => 
-        filledHotspots.get(hotspot.id) === hotspot.correctAnswer
-      );
+      const allCorrect = hotspots.every(hotspot => {
+        const answerId = filledHotspots.get(hotspot.id);
+        if (answerId === undefined) return false;
+        const answerText = shuffledAnswers.find(a => a.id === answerId)?.text;
+        return answerText === hotspot.correctAnswer;
+      });
       
       onComplete(allCorrect);
     }
-  }, [filledHotspots, hotspots, showResult, onComplete]);
+  }, [filledHotspots, hotspots, showResult, onComplete, shuffledAnswers]);
 
   const handleHotspotClick = useCallback((hotspotId: number) => {
     if (showResult) return;
     
-    // If clicking a filled hotspot, remove its answer and return it to the pool
+    // If clicking a filled hotspot
     if (filledHotspots.has(hotspotId)) {
-      const answer = filledHotspots.get(hotspotId);
-      if (answer) {
+      const currentAnswerId = filledHotspots.get(hotspotId);
+      
+      // If we have a selected answer (desktop), replace the hotspot's answer
+      if (!isMobileView && selectedAnswer !== null && currentAnswerId !== undefined) {
+        // Return the current answer to the pool
+        setUsedAnswerIds(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(currentAnswerId);
+          newSet.add(selectedAnswer);
+          return newSet;
+        });
+        // Replace with the selected answer
+        setFilledHotspots(prev => new Map(prev).set(hotspotId, selectedAnswer));
+        setSelectedAnswer(null);
+        return;
+      }
+      
+      // Otherwise, remove the answer and return it to the pool
+      if (currentAnswerId !== undefined) {
         setFilledHotspots(prev => {
           const newMap = new Map(prev);
           newMap.delete(hotspotId);
           return newMap;
         });
-        setUsedAnswers(prev => {
+        setUsedAnswerIds(prev => {
           const newSet = new Set(prev);
-          newSet.delete(answer);
+          newSet.delete(currentAnswerId);
           return newSet;
         });
         setSelectedHotspot(hotspotId);
+        setSelectedAnswer(null);
       }
       return;
     }
     
-    setSelectedHotspot(prev => prev === hotspotId ? null : hotspotId);
-  }, [showResult, filledHotspots]);
-
-  const handleAnswerClick = useCallback((answer: string) => {
-    if (showResult || selectedHotspot === null || usedAnswers.has(answer)) return;
+    // Desktop only: If an answer is already selected, place it on this hotspot
+    if (!isMobileView && selectedAnswer !== null) {
+      setFilledHotspots(prev => new Map(prev).set(hotspotId, selectedAnswer));
+      setUsedAnswerIds(prev => new Set(prev).add(selectedAnswer));
+      setSelectedAnswer(null);
+      return;
+    }
     
-    setFilledHotspots(prev => new Map(prev).set(selectedHotspot, answer));
-    setUsedAnswers(prev => new Set(prev).add(answer));
-    setSelectedHotspot(null);
-  }, [showResult, selectedHotspot, usedAnswers]);
+    setSelectedHotspot(prev => prev === hotspotId ? null : hotspotId);
+  }, [showResult, filledHotspots, isMobileView, selectedAnswer]);
+
+  const handleAnswerClick = useCallback((answerId: number) => {
+    if (showResult) return;
+    
+    // Check if this answer ID has already been used
+    if (usedAnswerIds.has(answerId)) return;
+    
+    // Desktop only: If no hotspot is selected, "pick up" the answer
+    if (!isMobileView && selectedHotspot === null) {
+      setSelectedAnswer(prev => prev === answerId ? null : answerId);
+      return;
+    }
+    
+    // Mobile or hotspot already selected: place the answer
+    if (selectedHotspot !== null) {
+      setFilledHotspots(prev => new Map(prev).set(selectedHotspot, answerId));
+      setUsedAnswerIds(prev => new Set(prev).add(answerId));
+      setSelectedHotspot(null);
+      setSelectedAnswer(null); // Clear any held answer
+    }
+  }, [showResult, selectedHotspot, usedAnswerIds, isMobileView]);
 
   const isHotspotCorrect = useCallback((hotspotId: number): boolean | null => {
     if (!showResult) return null;
-    const filledAnswer = filledHotspots.get(hotspotId);
-    if (!filledAnswer) return null;
+    const answerId = filledHotspots.get(hotspotId);
+    if (answerId === undefined) return null;
+    const answerText = shuffledAnswers.find(a => a.id === answerId)?.text;
+    if (!answerText) return null;
     const hotspot = hotspots.find(h => h.id === hotspotId);
-    return hotspot ? filledAnswer === hotspot.correctAnswer : null;
-  }, [showResult, filledHotspots, hotspots]);
+    return hotspot ? answerText === hotspot.correctAnswer : null;
+  }, [showResult, filledHotspots, hotspots, shuffledAnswers]);
 
   // Render mobile view
   if (isMobileView) {
     return (
-      <div className="w-full">
-        {/* Instruction with Info Icon */}
-        <div className="text-center mb-4 relative">
-          <span className="inline-flex items-center gap-2 px-3 py-2 text-xs text-blue-700 font-bold bg-blue-50 border-2 border-blue-400 rounded-full shadow-md">
-            TAP A LABEL, THEN SELECT ANSWER
-            <button
-              onClick={() => setShowInfo(!showInfo)}
-              className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
-              aria-label="Help"
-            >
-              <Info size={14} />
-            </button>
-          </span>
-          
-          {/* Info Box */}
-          {showInfo && (
-            <div ref={infoBoxRef} className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-72 bg-white border-2 border-blue-400 rounded-lg shadow-xl p-4 z-10">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-semibold text-blue-800 text-sm">How to play:</h3>
-                <button
-                  onClick={() => setShowInfo(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                  aria-label="Close"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-              <ol className="text-xs text-gray-700 space-y-2 list-decimal list-inside">
-                <li>Tap a hotspot label below the image</li>
-                <li>Select the correct answer from the options</li>
-                <li>Tap a filled label to change your answer</li>
-                <li>Once all labels are filled, answers will be checked!</li>
-              </ol>
-            </div>
-          )}
-        </div>
-
+      <div className="w-screen -mx-6">
         {/* Image with visual markers */}
-        <div ref={containerRef} className="w-full aspect-[16/9] relative rounded-lg overflow-hidden bg-gray-50 mb-4">
+        <div ref={containerRef} className="w-full relative overflow-hidden bg-gray-50 mb-4">
           {!imageLoaded && !imageError && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
               <div className="text-gray-400 text-center px-4">
@@ -230,22 +250,23 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
                 ref={imageRef}
                 src={imageUrl}
                 alt="Question"
-                className={`w-full h-full object-contain ${imageLoaded ? 'block' : 'hidden'}`}
+                className={`w-full h-auto ${imageLoaded ? 'block' : 'hidden'}`}
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
               />
               
               {/* Visual indicators for hotspot locations */}
-              {imageLoaded && hotspots.map(hotspot => {
+              {imageLoaded && hotspots.map((hotspot, index) => {
                 const isFilled = filledHotspots.has(hotspot.id);
                 const isSelected = selectedHotspot === hotspot.id;
                 const isCorrect = isHotspotCorrect(hotspot.id);
+                const displayLabel = hotspot.label || (isMobileView ? (index + 1).toString() : '');
                 
                 let bgColor = 'bg-blue-500/40';
                 let borderColor = 'border-blue-600';
                 
                 if (isSelected) {
-                  bgColor = 'bg-yellow-500/60';
+                  bgColor = 'bg-yellow-400/90';
                   borderColor = 'border-yellow-600';
                 }
                 
@@ -272,7 +293,7 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
                       transform: 'translate(-50%, -50%)',
                     }}
                   >
-                    <span className="text-xs font-bold text-white drop-shadow">{hotspot.label}</span>
+                    {displayLabel && <span className={`text-xs font-bold drop-shadow ${isSelected ? 'text-gray-900' : 'text-white'}`}>{displayLabel}</span>}
                   </div>
                 );
               })}
@@ -281,20 +302,24 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
         </div>
 
         {/* Hotspot Labels List */}
-        <div className="space-y-2 mb-4">
+        <div className="space-y-2 mb-4 px-4 sm:px-6">
           <h4 className="text-sm font-semibold text-gray-700 mb-2">Select a hotspot:</h4>
-          {hotspots.map(hotspot => {
+          {hotspots.map((hotspot, index) => {
             const isFilled = filledHotspots.has(hotspot.id);
             const isSelected = selectedHotspot === hotspot.id;
             const isCorrect = isHotspotCorrect(hotspot.id);
+            const displayLabel = hotspot.label || (isMobileView ? (index + 1).toString() : '');
             
             let bgColor = 'bg-white';
             let borderColor = 'border-gray-300';
             let textColor = 'text-gray-800';
+            let borderWidth = isMobileView && isFilled && !showResult ? 'border-[3px]' : 'border-2';
             
             if (isSelected) {
-              bgColor = 'bg-yellow-50';
-              borderColor = 'border-yellow-500';
+              bgColor = 'bg-yellow-100';
+              borderColor = 'border-yellow-500 ring-2 ring-yellow-300';
+            } else if (isMobileView && isFilled && !showResult) {
+              borderColor = 'border-black';
             }
             
             if (showResult && isFilled) {
@@ -314,15 +339,17 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
                 key={hotspot.id}
                 onClick={() => handleHotspotClick(hotspot.id)}
                 disabled={showResult}
-                className={`w-full p-4 rounded-lg border-2 ${borderColor} ${bgColor} transition-all ${!showResult ? 'cursor-pointer active:scale-98' : 'cursor-default'}`}
+                className={`w-full p-4 rounded-lg ${borderWidth} ${borderColor} ${bgColor} transition-all ${!showResult ? 'cursor-pointer active:scale-98' : 'cursor-default'}`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm">
-                      {hotspot.label}
-                    </span>
+                    {displayLabel && (
+                      <span className="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm">
+                        {displayLabel}
+                      </span>
+                    )}
                     <span className={`font-medium ${textColor}`}>
-                      {isFilled ? filledHotspots.get(hotspot.id) : 'Select answer...'}
+                      {isFilled ? shuffledAnswers.find(a => a.id === filledHotspots.get(hotspot.id))?.text : 'Select answer...'}
                     </span>
                   </div>
                   {showResult && isFilled && !isCorrect && (
@@ -348,7 +375,11 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <h3 className="font-semibold text-gray-900">
-                  Select answer for {hotspots.find(h => h.id === selectedHotspot)?.label}
+                  Select answer for {(() => {
+                    const hotspotIndex = hotspots.findIndex(h => h.id === selectedHotspot);
+                    const hotspot = hotspots[hotspotIndex];
+                    return hotspot?.label || (isMobileView ? (hotspotIndex + 1).toString() : '');
+                  })()}
                 </h3>
                 <button
                   onClick={() => setSelectedHotspot(null)}
@@ -361,13 +392,13 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
               
               {/* Answer Options */}
               <div className="overflow-y-auto p-4 space-y-2">
-                {shuffledAnswers.map((answer, index) => {
-                  const isUsed = usedAnswers.has(answer);
+                {shuffledAnswers.map((answerOption) => {
+                  const isUsed = usedAnswerIds.has(answerOption.id);
                   
                   return (
                     <button
-                      key={index}
-                      onClick={() => handleAnswerClick(answer)}
+                      key={answerOption.id}
+                      onClick={() => handleAnswerClick(answerOption.id)}
                       disabled={isUsed}
                       className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
                         isUsed
@@ -375,7 +406,7 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
                           : 'bg-white text-gray-800 border-gray-300 hover:border-blue-500 hover:bg-blue-50 cursor-pointer active:scale-[0.98]'
                       }`}
                     >
-                      <div className="font-medium">{answer}</div>
+                      <div className="font-medium">{answerOption.text}</div>
                     </button>
                   );
                 })}
@@ -393,7 +424,7 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
       {/* Instruction with Info Icon */}
       <div className="text-center mb-4 relative">
         <span className="inline-flex items-center gap-2 px-4 py-2 text-sm text-blue-700 font-bold bg-blue-50 border-2 border-blue-400 rounded-full shadow-md">
-          CLICK A HOTSPOT, THEN SELECT THE CORRECT ANSWER
+          CLICK A HOTSPOT OR ANSWER TO BEGIN
           <button
             onClick={() => setShowInfo(!showInfo)}
             className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
@@ -417,10 +448,10 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
               </button>
             </div>
             <ol className="text-xs text-gray-700 space-y-2 list-decimal list-inside">
-              <li>Click on a labeled hotspot (A, B, C, etc.) on the image</li>
-              <li>Select the correct answer from the pool below</li>
+              <li>Click a hotspot (A, B, C, etc.) then pick an answer, OR</li>
+              <li>Click an answer first to pick it up, then click a hotspot to place it</li>
               <li>The hotspot label will be replaced by your answer</li>
-              <li>Click a filled hotspot to change your answer</li>
+              <li>Click a filled hotspot to remove and change your answer</li>
               <li>Once all hotspots are filled, your answers will be checked!</li>
             </ol>
           </div>
@@ -468,8 +499,8 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
                 }
                 
                 if (isSelected) {
-                  bgColor = 'bg-yellow-500/40';
-                  borderColor = 'border-yellow-600';
+                  bgColor = 'bg-yellow-300 shadow-lg';
+                  borderColor = 'border-yellow-600 ring-2 ring-yellow-400';
                 }
                 
                 if (showResult && isFilled) {
@@ -517,11 +548,11 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
                             ? (isCorrect ? 'text-green-800' : 'text-red-800')
                             : 'text-gray-800'
                         }`}>
-                          {filledHotspots.get(hotspot.id)}
+                          {shuffledAnswers.find(a => a.id === filledHotspots.get(hotspot.id))?.text}
                         </div>
                       ) : (
                         // Show the label when empty
-                        <div className={`text-lg font-bold ${isSelected ? 'text-yellow-800' : 'text-blue-800'}`}>
+                        <div className={`text-lg font-bold ${isSelected ? 'text-gray-900' : 'text-blue-800'}`}>
                           {hotspot.label}
                         </div>
                       )}
@@ -544,23 +575,44 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
 
       {/* Answer Pool */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-700 mb-3 text-center">Answer Pool</h4>
+        {selectedHotspot !== null && !showResult && (
+          <div className="text-center mb-3">
+            <span className="text-sm text-blue-700 font-medium">
+              {(() => {
+                const hotspotIndex = hotspots.findIndex(h => h.id === selectedHotspot);
+                const hotspot = hotspots[hotspotIndex];
+                const label = hotspot?.label || (isMobileView ? (hotspotIndex + 1).toString() : null);
+                return label ? `Select an answer for hotspot ${label}` : 'Select an answer for the selected hotspot';
+              })()}
+            </span>
+          </div>
+        )}
+        {selectedAnswer !== null && !showResult && (
+          <div className="text-center mb-3">
+            <span className="text-sm text-green-700 font-medium">
+              Click a hotspot to place "{shuffledAnswers.find(a => a.id === selectedAnswer)?.text}"
+            </span>
+          </div>
+        )}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {shuffledAnswers.map((answer, index) => {
-            const isUsed = usedAnswers.has(answer);
+          {shuffledAnswers.map((answerOption) => {
+            const isUsed = usedAnswerIds.has(answerOption.id);
+            const isHeld = selectedAnswer === answerOption.id;
             
             return (
               <button
-                key={index}
-                onClick={() => handleAnswerClick(answer)}
+                key={answerOption.id}
+                onClick={() => handleAnswerClick(answerOption.id)}
                 disabled={isUsed || showResult}
                 className={`p-3 rounded-lg border-2 transition-all ${
                   isUsed
                     ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed opacity-50'
+                    : isHeld
+                    ? 'bg-green-100 text-green-900 border-green-500 ring-4 ring-green-300 cursor-pointer scale-105 shadow-lg'
                     : 'bg-white text-gray-800 border-gray-300 hover:border-blue-500 hover:bg-blue-50 cursor-pointer'
                 }`}
               >
-                <div className="text-sm font-medium text-center">{answer}</div>
+                <div className="text-sm font-medium text-center">{answerOption.text}</div>
               </button>
             );
           })}
@@ -568,12 +620,18 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
       </div>
 
       {/* Show correct answers if wrong */}
-      {showResult && hotspots.some(h => filledHotspots.get(h.id) !== h.correctAnswer) && (
+      {showResult && hotspots.some(h => {
+        const answerId = filledHotspots.get(h.id);
+        if (answerId === undefined) return true;
+        const answerText = shuffledAnswers.find(a => a.id === answerId)?.text;
+        return answerText !== h.correctAnswer;
+      }) && (
         <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <h4 className="text-sm font-semibold text-yellow-800 mb-2">Correct Answers:</h4>
           <div className="space-y-1">
             {hotspots.map(hotspot => {
-              const userAnswer = filledHotspots.get(hotspot.id);
+              const answerId = filledHotspots.get(hotspot.id);
+              const userAnswer = answerId !== undefined ? shuffledAnswers.find(a => a.id === answerId)?.text : undefined;
               const isCorrect = userAnswer === hotspot.correctAnswer;
               
               if (isCorrect) return null;

@@ -4205,7 +4205,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   config: {
     id: "32to34sounds_35si",
     title: "Sound Signals Challenge – Rules 32-35: Identify the Sound Signals",
-    description: "",
+    description: "Test your knowledge with a new, randomized 20‑question quiz each time you launch the app, selected from a pool of 41 questions covering Rules 32-35.",
     category: "Col Regs Rules 32-35",
     themeColor: 'purple',
     startScreenImage: "/images/naval-operations-branch-600.png",
