@@ -4232,7 +4232,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     disableLeaderboards: true,
     quizKey: "32to34auditory_35auditory",
     sourceQuizIds: ["32to34auditory", "35auditory"],  // Array of quiz IDs to pull from
-    questionCount: 15,  // Optional: total questions to include (evenly distributed)
+    questionCount: 10,  // Optional: total questions to include (evenly distributed)
     // If quiz1 has 10 questions and quiz2 has 5 questions:
     // - With questionCount: 6, it will pull 3 random questions from each quiz
     // - Without questionCount, it will include ALL questions from both quizzes
