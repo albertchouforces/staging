@@ -4223,8 +4223,8 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
 {
   config: {
     id: "32to34auditory_35auditory",
-    title: "Sound Signals Challenge – Rules 32-35: Auditory",
-    description: "",
+    title: "Auditory Recognition Challenge – Rules 32-35",
+    description: "Test your knowledge with a new, randomized 10‑question quiz each time you launch the app, selected from a pool of 15 questions covering Rules 32-35.",
     category: "Col Regs Rules 32-35",
     themeColor: 'purple',
     startScreenImage: "/images/naval-operations-branch-600.png",
