@@ -4224,7 +4224,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   config: {
     id: "32to34auditory_35auditory",
     title: "Auditory Recognition Challenge – Rules 32-35",
-    description: "Test your knowledge with a new, randomized 10‑question quiz each time you launch the app, selected from a pool of 15 questions covering Rules 32-35.",
+    description: "Test your knowledge with a new, randomized 7‑question quiz each time you launch the app, selected from a pool of 15 questions covering Rules 32-35.",
     category: "Col Regs Rules 32-35",
     themeColor: 'purple',
     startScreenImage: "/images/naval-operations-branch-600.png",
@@ -4232,7 +4232,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     disableLeaderboards: true,
     quizKey: "32to34auditory_35auditory",
     sourceQuizIds: ["32to34auditory", "35auditory"],  // Array of quiz IDs to pull from
-    questionCount: 10,  // Optional: total questions to include (evenly distributed)
+    questionCount: 7,  // Optional: total questions to include (evenly distributed)
     // If quiz1 has 10 questions and quiz2 has 5 questions:
     // - With questionCount: 6, it will pull 3 random questions from each quiz
     // - Without questionCount, it will include ALL questions from both quizzes
