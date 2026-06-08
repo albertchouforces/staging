@@ -269,7 +269,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     answerPool: ["Power-driven vessel (including a composite unit)", "Vessel pushing ahead another vessel", "Vessel engaged in towing", "Vessel engaged in pilotage duties"],
     description: "23(a); 24(a), (b)",
     fact: "A <strong>composite</strong> unit is a pushing vessel and another vessel pushed ahead, that are rigidly connected. Together, they count as one and display the same lights as a power-driven vessel of their <strong>combined length</strong>. Rule 24(b)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
+    imageUrl: "/images/Q1.jpg"  // Place image in public/images/
     },
     {
     id: 2,
@@ -281,7 +281,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Power-driven vessel"],
     description: "26(c)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
+    imageUrl: "/images/Q2.jpg"  // Place image in public/images/
     },
     {
     id: 3,
@@ -292,7 +292,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel not under command", "Vessel restricted in its ability to manoeuvre; obstruction on its port side"],
     description: "26(b), (d); Annex II, 2(a)(iii)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
+    imageUrl: "/images/Q3.jpg"  // Place image in public/images/
     },
     {
     id: 4,
@@ -304,7 +304,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel engaged in towing"],
     description: "23(b), (a)",
     fact: "Air-cushion vessels, like hovercraft, don’t move through the water like regular vessels—they hover above it! In this mode, they turn very differently and can reach speeds of over <strong>70 knots</strong>. To tell them apart from normal power-driven vessels, look for the <strong>yellow flashing light</strong>—it signals the vessel is in non-displacement (hover) mode.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
+    imageUrl: "/images/Q4.jpg"  // Place image in public/images/
     },
     {
     id: 5,
@@ -316,7 +316,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel aground"],
     description: "28(a); 23(a)",
     fact: "A vessel’s <strong>draught</strong> is the depth of its <strong>keel</strong> (the bottom of the ship) below the waterline at any point along the <strong>hull</strong> (the main body of the ship).",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
+    imageUrl: "/images/Q5.jpg"  // Place image in public/images/
     },
     {
     id: 6,
@@ -328,7 +328,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel engaged in towing alongside"],
     description: "24(a), (g); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -340,7 +340,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessels engaged in mineclearance operations"],
     description: "26(b), (d); Annex II, 2(a)(i)",
     fact: "Sometimes trawlers fish together using a single net—this is called <strong>pair trawling</strong>. At night, each vessel shines a searchlight forward toward the other vessel to warn others: <strong>don’t pass between them!</strong> Annex II, 2(b)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
+    imageUrl: "/images/Q7.jpg"  // Place image in public/images/
     },
     {
     id: 8,
@@ -352,7 +352,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel engaged in towing alongside"],
     description: "24(a), (g); 23(a)",
     fact: "If a partially submerged vessel or object is <strong>over 100 m long</strong>, it must have extra all-round white lights so that the gap between them is <strong>no more than 100 m</strong>. Rule 24(g)(iii)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
+    imageUrl: "/images/Q8.jpg"  // Place image in public/images/
     },
     {
     id: 9,
@@ -364,7 +364,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel engaged in trawling"],
     description: "27(f)",
     fact: "These vessels must show <strong>three all-round green lights</strong>, in addition to the usual lights for a power-driven vessel (Rule 23) or for a vessel at anchor (Rule 30).",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
+    imageUrl: "/images/Q9.jpg"  // Place image in public/images/
     },
     {
     id: 10,
@@ -376,7 +376,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel engaged in pilotage duties"],
     description: "30(d), (a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
+    imageUrl: "/images/Q10.jpg"  // Place image in public/images/
     },
     {
     id: 11,
@@ -388,7 +388,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Power-driven vessel less than 12 m"],
     description: "25(a), (d)(ii)",
     fact: "A sailing vessel under sail only shows sidelights and a sternlight—but no masthead light! If it’s using its engine as well, it adds a masthead light and is considered a power-driven vessel. Rule 3(b), Rule 23(a)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
+    imageUrl: "/images/Q11.jpg"  // Place image in public/images/
     },
     {
     id: 12,
@@ -400,7 +400,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Air cushion vessel in non-displacement mode"],
     description: "23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
+    imageUrl: "/images/Q12.jpg"  // Place image in public/images/
     },
     {
     id: 13,
@@ -412,7 +412,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel restricted in its ability to manoeuvre"],
     description: "24(a), (d), (e); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
+    imageUrl: "/images/Q13.jpg"  // Place image in public/images/
     },
     {
     id: 14,
@@ -424,7 +424,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessels engaged in pilotage duties"],
     description: "26(b), (d); Annex II, 2(a)(ii)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
+    imageUrl: "/images/Q14.jpg"  // Place image in public/images/
     },
     {
     id: 15,
@@ -436,7 +436,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel restricted in its ability to manoeuvre"],
     description: "27(a)",
     fact: "Under Rule 18, vessels Not Under Command (NUC) and vessels Restricted in their Ability to Manoeuvre (RAM) rank highest in the hierarchy because they can’t easily keep clear of others.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
+    imageUrl: "/images/Q15.jpg"  // Place image in public/images/
     },
     {
     id: 16,
@@ -448,7 +448,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel constrained by its draught"],
     description: "27(b)",
     fact: "Under Rule 18, vessels Restricted in their Ability to Manoeuvre (RAM) and vessels Not Under Command (NUC) share the same top level in the hierarchy—because both have limited ability to keep clear of others.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
+    imageUrl: "/images/Q16.jpg"  // Place image in public/images/
     },
     {
     id: 17,
@@ -460,7 +460,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Power-driven vessel less than 12 m"],
     description: "25(a)",
     fact: "Small sailing vessels under 20 m can combine their sidelights and sternlight into one lantern at or near the top of the mast. Rule 25(b)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
+    imageUrl: "/images/Q17.jpg"  // Place image in public/images/
     },
     {
     id: 18,
@@ -472,7 +472,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel towing alongside"],
     description: "24(c), (d), (f)(i); 23(a)",
     fact: "A vessel pushed ahead must show sidelights, but no sternlight is required. Rule 24(f)(i)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
+    imageUrl: "/images/Q18.jpg"  // Place image in public/images/
     },
     {
     id: 19,
@@ -484,7 +484,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel restricted in its ability to manoeuvre"],
     description: "26(c), (d); Annex II, 3",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
+    imageUrl: "/images/Q19.jpg"  // Place image in public/images/
     },
     {
     id: 20,
@@ -496,7 +496,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel at anchor"],
     description: "24(a), (d), (e); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
+    imageUrl: "/images/Q20.jpg"  // Place image in public/images/
     },
     {
     id: 21,
@@ -508,7 +508,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Power-driven vessel"],
     description: "26(b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -520,7 +520,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel pushing ahead"],
     description: "29(a)",
     fact: "Many pilot vessels worldwide have “Pilot” painted on their sides for easy identification.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/Q22.jpg"  // Place image in public/images/
     }
 
   ]
@@ -550,7 +550,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
+    imageUrl: "/images/Q1.jpg"  // Place image in public/images/
     },
     {
     id: 2,
@@ -563,7 +563,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(b), (e)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
+    imageUrl: "/images/Q2.jpg"  // Place image in public/images/
     },
     {
     id: 3,
@@ -576,7 +576,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "26(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
+    imageUrl: "/images/Q3.jpg"  // Place image in public/images/
     },
     {
     id: 4,
@@ -589,7 +589,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
+    imageUrl: "/images/Q4.jpg"  // Place image in public/images/
     },
     {
     id: 5,
@@ -602,7 +602,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
+    imageUrl: "/images/Q5.jpg"  // Place image in public/images/
     },
     {
     id: 6,
@@ -615,7 +615,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -628,7 +628,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "26(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
+    imageUrl: "/images/Q7.jpg"  // Place image in public/images/
     },
     {
     id: 8,
@@ -641,7 +641,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
+    imageUrl: "/images/Q8.jpg"  // Place image in public/images/
     },
     {
     id: 9,
@@ -654,7 +654,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
+    imageUrl: "/images/Q9.jpg"  // Place image in public/images/
     },
     {
     id: 10,
@@ -667,7 +667,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "30(d), (a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
+    imageUrl: "/images/Q10.jpg"  // Place image in public/images/
     },
     {
     id: 11,
@@ -680,7 +680,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
+    imageUrl: "/images/Q11.jpg"  // Place image in public/images/
     },
     {
     id: 12,
@@ -693,7 +693,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
+    imageUrl: "/images/Q12.jpg"  // Place image in public/images/
     },
     {
     id: 13,
@@ -706,7 +706,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
+    imageUrl: "/images/Q13.jpg"  // Place image in public/images/
     },
     {
     id: 14,
@@ -719,7 +719,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "26(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
+    imageUrl: "/images/Q14.jpg"  // Place image in public/images/
     },
     {
     id: 15,
@@ -732,7 +732,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "27(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
+    imageUrl: "/images/Q15.jpg"  // Place image in public/images/
     },
     {
     id: 16,
@@ -745,7 +745,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "27(b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
+    imageUrl: "/images/Q16.jpg"  // Place image in public/images/
     },
     {
     id: 17,
@@ -758,7 +758,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
+    imageUrl: "/images/Q17.jpg"  // Place image in public/images/
     },
     {
     id: 18,
@@ -771,7 +771,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
+    imageUrl: "/images/Q18.jpg"  // Place image in public/images/
     },
     {
     id: 19,
@@ -784,7 +784,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
+    imageUrl: "/images/Q19.jpg"  // Place image in public/images/
     },
     {
     id: 20,
@@ -797,7 +797,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
+    imageUrl: "/images/Q20.jpg"  // Place image in public/images/
     },
     {
     id: 21,
@@ -810,7 +810,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -823,7 +823,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/Q22.jpg"  // Place image in public/images/
     }
   ]
   },
@@ -851,7 +851,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "May be 50 m or greater, if it is a vessel engaged in towing (where the length of the overall tow does not exceed 200 m)"],
     description: "23(a); 24(a), (d)",
     fact: "From a head-on aspect, you might not be able to tell whether you’re looking at a <strong>power-driven vessel that may be more than 50 m long</strong> or a <strong>vessel engaged in towing under 50 m</strong>. Their lights can look the same!",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
+    imageUrl: "/images/Q1.jpg"  // Place image in public/images/
     },
     {
     id: 2,
@@ -863,7 +863,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "26(c)",
     fact: "The number and position of masthead lights help indicate the length of a vessel.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
+    imageUrl: "/images/Q2.jpg"  // Place image in public/images/
     },
     {
     id: 3,
@@ -875,7 +875,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "26(b); Annex II, 2(a), (c)",
     fact: "Trawlers 20 m or longer must show signals for shooting nets, hauling nets, or when nets are fast on an obstruction when fishing near other vessels engaged in fishing. Smaller trawlers may use these signals too. Annex II, 2(a), (c)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
+    imageUrl: "/images/Q3.jpg"  // Place image in public/images/
     },
     {
     id: 4,
@@ -887,7 +887,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "23(b), (a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
+    imageUrl: "/images/Q4.jpg"  // Place image in public/images/
     },
     {
     id: 5,
@@ -899,7 +899,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "28(a); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
+    imageUrl: "/images/Q5.jpg"  // Place image in public/images/
     },
     {
     id: 6,
@@ -911,7 +911,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Towing vessel may be 50 m or greater; overall tow is greater than 200 m; inconspicuous vessel/object is greater than 100 m"],
     description: "24(a), (d), (g)(iii); 23(a)",
     fact: "We can also tell that this inconspicuous vessel/object is less than 25 m wide because we don’t see two extra all-round white lights (which is required when the breadth is 25 m or more). Rule 24(g)(i)(ii)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -923,7 +923,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "26(b); Annex II, 2(a), (c)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
+    imageUrl: "/images/Q7.jpg"  // Place image in public/images/
     },
     {
     id: 8,
@@ -935,7 +935,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Towing vessel may be 50 m or greater; overall tow is greater than 200 m; inconspicuous vessel/object is greater than 100 m"],
     description: "24(a), (d), (g)(iii); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
+    imageUrl: "/images/Q8.jpg"  // Place image in public/images/
     },
     {
     id: 9,
@@ -947,7 +947,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "27(f); 23(a)",
     fact: "Three all-round green lights mean it’s <strong>dangerous to approach within 1,000 m</strong> of a mineclearance vessel. Rule 27(f)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
+    imageUrl: "/images/Q9.jpg"  // Place image in public/images/
     },
     {
     id: 10,
@@ -959,7 +959,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "30(d), (a) ",
     fact: "Vessels aground <strong>don’t use deck-illuminating lights</strong>—those are reserved for vessels at anchor. Rule 30(d), (c)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
+    imageUrl: "/images/Q10.jpg"  // Place image in public/images/
     },
     {
     id: 11,
@@ -971,7 +971,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "25(a), (b), (d)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
+    imageUrl: "/images/Q11.jpg"  // Place image in public/images/
     },
     {
     id: 12,
@@ -983,7 +983,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "23(a)",
     fact: "Two masthead lights on a power-driven vessel may indicate it is 50 meters or longer—but not always. Vessels under 50 meters may also display a second masthead light, it’s optional for them. Rule 23(a)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
+    imageUrl: "/images/Q12.jpg"  // Place image in public/images/
     },
     {
     id: 13,
@@ -995,7 +995,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Towing vessel may be 50 m or greater; overall tow is greater than 200 m; vessels/objects being towed is greater than 100 m"],
     description: "24(a), (d), (e); 23(a)",
     fact: "Tow length is measured from the towing vessel’s bow to the stern of the last vessel or object being towed. If it’s over 200 m, the towing vessel must show <strong>three masthead lights in a vertical line</strong>. Rule 24(a)(i)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
+    imageUrl: "/images/Q13.jpg"  // Place image in public/images/
     },
     {
     id: 14,
@@ -1007,7 +1007,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "26(b); Annex II, 2(a), (c)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
+    imageUrl: "/images/Q14.jpg"  // Place image in public/images/
     },
     {
     id: 15,
@@ -1019,7 +1019,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "27(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
+    imageUrl: "/images/Q15.jpg"  // Place image in public/images/
     },
     {
     id: 16,
@@ -1031,7 +1031,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "27(b)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
+    imageUrl: "/images/Q16.jpg"  // Place image in public/images/
     },
     {
     id: 17,
@@ -1043,7 +1043,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "25(b)",
     fact: "Sailing vessels under 20 m may display a combined sidelights-and-sternlight lantern at or near the masthead for maximum visibility. Rule 25(b), (a)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
+    imageUrl: "/images/Q17.jpg"  // Place image in public/images/
     },
     {
     id: 18,
@@ -1055,7 +1055,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Pushing vessel may be 50 m or greater; pushed vessel is greater than 100 m"],
     description: "24(c), (d), (f)(i); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
+    imageUrl: "/images/Q18.jpg"  // Place image in public/images/
     },
     {
     id: 19,
@@ -1067,7 +1067,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "26(c); Annex II, 3",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
+    imageUrl: "/images/Q19.jpg"  // Place image in public/images/
     },
     {
     id: 20,
@@ -1079,7 +1079,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Towing vessel may be 50 m or greater; overall tow is greater than 200 m; vessel/object being towed is greater than 100 m"],
     description: "24(a), (d), (e); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
+    imageUrl: "/images/Q20.jpg"  // Place image in public/images/
     },
     {
     id: 21,
@@ -1096,7 +1096,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     <li>If you see <strong>none</strong>, it’s <strong>under 50 m</strong>.</li>
     </ul>
     Rule 26(b)(ii)`,
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -1108,7 +1108,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "29(a)",
     fact: "When a pilot vessel is on duty, it doesn’t display masthead lights, making its length a mystery!",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/Q22.jpg"  // Place image in public/images/
     }
   ]
   },
@@ -1136,7 +1136,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "23(a); Title of Rule 23",
     fact: "For power-driven vessels, their lights only tell you that they are underway—not whether they are making way or not making way. A handy reminder: the rule is called <strong>Power-driven Vessels Underway</strong>. Rule 23",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
+    imageUrl: "/images/Q1.jpg"  // Place image in public/images/
     },
     {
     id: 2,
@@ -1148,7 +1148,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "26(c)(iii)",
     fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way. Rule 26(b), (c)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
+    imageUrl: "/images/Q2.jpg"  // Place image in public/images/
     },
     {
     id: 3,
@@ -1160,7 +1160,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "26(a); 26(b)(iii)",
     fact: "Vessels engaged in fishing don’t follow the usual anchor light rule! Even when anchored, they keep the <strong>special lights and shapes for fishing</strong> (Rule 26), not the standard anchor lights and ball (Rule 30). This helps other vessels know they’re still engaged in fishing.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
+    imageUrl: "/images/Q3.jpg"  // Place image in public/images/
     },
     {
     id: 4,
@@ -1172,7 +1172,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "23(b), (a)",
     fact: "An air-cushion vessel falls under the category of power-driven vessel. The lights of a power-driven vessel only tell you that they are underway—not whether they are making way or not making way. A handy reminder: the rule is called <strong>Power-driven Vessels Underway</strong> (Rule 23). ",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
+    imageUrl: "/images/Q4.jpg"  // Place image in public/images/
     },
     {
     id: 5,
@@ -1184,7 +1184,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "28(b); 23(a)",
     fact: "A vessel constrained by its draught is, by definition, always a power‑driven vessel. And remember: the lights of a power‑driven vessel only show that it’s underway—not whether it’s making way or not. Rule 3(h)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
+    imageUrl: "/images/Q5.jpg"  // Place image in public/images/
     },
     {
     id: 6,
@@ -1196,7 +1196,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "24(a), (d); 23(a)",
     fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -1208,7 +1208,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "26(a), (b)(iii)",
     fact: "Vessels engaged in fishing don’t follow the usual anchor light rule! Even when anchored, they keep the <strong>special lights and shapes for fishing</strong> (Rule 26), not the standard anchor lights and ball (Rule 30). This helps other vessels know they’re still engaged in fishing.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
+    imageUrl: "/images/Q7.jpg"  // Place image in public/images/
     },
     {
     id: 8,
@@ -1220,7 +1220,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "24(a), (d); 23(a)",
     fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
+    imageUrl: "/images/Q8.jpg"  // Place image in public/images/
     },
     {
     id: 9,
@@ -1232,7 +1232,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "27(f); 23(a); Title of Rule 23",
     fact: "Rule 27(f), which applies to vessels engaged in mineclearance operations, sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that mineclearance vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
+    imageUrl: "/images/Q9.jpg"  // Place image in public/images/
     },
     {
     id: 10,
@@ -1244,7 +1244,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "30(d)",
     fact: "Under Rule 3(i), a vessel aground cannot be regarded as “underway”.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
+    imageUrl: "/images/Q10.jpg"  // Place image in public/images/
     },
     {
     id: 11,
@@ -1256,7 +1256,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "25(a), Title of Rule 25",
     fact: "The lights of a sailing vessel or a vessel under oars only tells you that they are underway—not whether they are making way or not making way. A handy reminder: the rule is called <strong>Sailing Vessels Underway and Vessels Under Oars</strong> (Rule 25).",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
+    imageUrl: "/images/Q11.jpg"  // Place image in public/images/
     },
     {
     id: 12,
@@ -1268,7 +1268,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "23(a), Title of Rule 23",
     fact: "Some vessels indicate their making-way status by turning off their sidelights and sternlight when not making way. Power-driven vessels don’t do this because turning off these lights would make them invisible from astern and prevent other vessels from determining their aspect from any angle, which is critical for applying the correct Rules in a risk of collision situation.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
+    imageUrl: "/images/Q12.jpg"  // Place image in public/images/
     },
     {
     id: 13,
@@ -1280,7 +1280,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Aground"],
     description: "24(a), (d); 23(a); Title of Rule 23",
     fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way. ",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
+    imageUrl: "/images/Q13.jpg"  // Place image in public/images/
     },
     {
     id: 14,
@@ -1292,7 +1292,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "26(a), (b)(iii)",
     fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
+    imageUrl: "/images/Q14.jpg"  // Place image in public/images/
     },
     {
     id: 15,
@@ -1304,7 +1304,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "27(a)(iii)",
     fact: "When a vessel not under command is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are off, it’s telling you it’s not making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
+    imageUrl: "/images/Q15.jpg"  // Place image in public/images/
     },
     {
     id: 16,
@@ -1316,7 +1316,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "27(b)(iii)",
     fact: "When a RAM vessel is underway and turns off its masthead light(s), sidelights, and sternlight while still displaying the all‑round red‑over‑white‑over‑red lights, it’s telling you it’s not making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
+    imageUrl: "/images/Q16.jpg"  // Place image in public/images/
     },
     {
     id: 17,
@@ -1328,7 +1328,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "25(a), Title of Rule 25",
     fact: "Some vessels indicate their making-way status by turning off their sidelights and sternlight when not making way. Sailing vessels don’t do this because turning off these lights would make them invisible at night!",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
+    imageUrl: "/images/Q17.jpg"  // Place image in public/images/
     },
     {
     id: 18,
@@ -1340,7 +1340,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Aground"],
     description: "24(c), (d); 23(a); Title of Rule 23",
     fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
+    imageUrl: "/images/Q18.jpg"  // Place image in public/images/
     },
     {
     id: 19,
@@ -1352,7 +1352,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "26(c)(iii)",
     fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
+    imageUrl: "/images/Q19.jpg"  // Place image in public/images/
     },
     {
     id: 20,
@@ -1364,7 +1364,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Aground"],
     description: "24(a), (d); 23(a); Title of Rule 23",
     fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
+    imageUrl: "/images/Q20.jpg"  // Place image in public/images/
     },
     {
     id: 21,
@@ -1376,7 +1376,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "26(b)(iii)",
     fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -1388,7 +1388,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "29(a)(ii)",
     fact: "The lights of a vessel engaged in pilotage duties only tell you that they are underway—not whether they are making way or not making way.",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/Q22.jpg"  // Place image in public/images/
     }
   ]
   },
@@ -1416,7 +1416,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Composite unit; head-on aspect; less than 50 m in length"],
     description: "23(a)",
     fact: "Two masthead lights don’t always mean a vessel is 50 m or longer. Smaller vessels can have two—but it’s rare because the second light must be at least <strong>4.5 m higher</strong> than the first, and most small vessels simply don’t have the structure for that. Annex II, 2(a)(ii)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q1.png"  // Place image in public/images/
+    imageUrl: "/images/Q1.jpg"  // Place image in public/images/
     },
     {
     id: 2,
@@ -1428,7 +1428,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Power-driven vessel; head-on aspect; less than 50 m in length; underway"],
     description: "26(c)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q2.png"  // Place image in public/images/
+    imageUrl: "/images/Q2.jpg"  // Place image in public/images/
     },
     {
     id: 3,
@@ -1440,7 +1440,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel restricted in its ability to manoeuvre; safe to pass on its starboard side; head-on aspect; underway and making way"],
     description: "26(b), (d); Annex II, 2(a)(iii)",
     fact: "If you knew you were looking at the <strong>bow</strong> of a trawler, the missing masthead light would tell you the vessel is <strong>under 50 m</strong>. But if you don’t know which aspect you’re seeing, its length remains a mystery! Rule 26(b)(ii)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q3.png"  // Place image in public/images/
+    imageUrl: "/images/Q3.jpg"  // Place image in public/images/
     },
     {
     id: 4,
@@ -1452,7 +1452,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel engaged in towing; stern aspect; underway and making way"],
     description: "23(b), (a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q4.png"  // Place image in public/images/
+    imageUrl: "/images/Q4.jpg"  // Place image in public/images/
     },
     {
     id: 5,
@@ -1464,7 +1464,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel aground; starboard aspect; may be 50 m or greater in length; not underway"],
     description: "28(a); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q5.png"  // Place image in public/images/
+    imageUrl: "/images/Q5.jpg"  // Place image in public/images/
     },
     {
     id: 6,
@@ -1476,7 +1476,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel at anchor; stern aspect; may be 100 m or greater in length"],
     description: "24(a), (d), (g)(iii); 23(a)",
     fact: "During the day, inconspicuous vessels or objects can be hard to spot until you’re very close. That’s why they are always required to display a diamond shape near the end—it helps you see them from farther away.  Rule 24(g)(iv)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -1488,7 +1488,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessels engaged in mineclearance operations; stern aspect; underway"],
     description: "Rule 26(b), (d); Annex II, 2(a)(i)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q7.png"  // Place image in public/images/
+    imageUrl: "/images/Q7.jpg"  // Place image in public/images/
     },
     {
     id: 8,
@@ -1500,7 +1500,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel at anchor; stern aspect; may be 100 m or greater in length"],
     description: "24(a), (d), (g)(iii); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q8.png"  // Place image in public/images/
+    imageUrl: "/images/Q8.jpg"  // Place image in public/images/
     },
     {
     id: 9,
@@ -1512,7 +1512,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel engaged in trawling; port aspect; may be greater than 50 m in length; underway and making way"],
     description: "27(f); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q9.png"  // Place image in public/images/
+    imageUrl: "/images/Q9.jpg"  // Place image in public/images/
     },
     {
     id: 10,
@@ -1524,7 +1524,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel engaged in pilotage duties; starboard aspect; may be 50 m or greater in length"],
     description: "30(d), (a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q10.png"  // Place image in public/images/
+    imageUrl: "/images/Q10.jpg"  // Place image in public/images/
     },
     {
     id: 11,
@@ -1536,7 +1536,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Power-driven vessel; port aspect; less than 12 m in length; underway"],
     description: "25(a), (d)(ii)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q11.png"  // Place image in public/images/
+    imageUrl: "/images/Q11.jpg"  // Place image in public/images/
     },
     {
     id: 12,
@@ -1548,7 +1548,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Air cushion vessel in non-displacement mode; port aspect; underway but not making way"],
     description: "23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q12.png"  // Place image in public/images/
+    imageUrl: "/images/Q12.jpg"  // Place image in public/images/
     },
     {
     id: 13,
@@ -1560,7 +1560,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel restricted in its ability to manoeuvre; port aspect; may be greater than 50 m in length; underway and making way"],
     description: "24(a), (d), (e); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q13.png"  // Place image in public/images/
+    imageUrl: "/images/Q13.jpg"  // Place image in public/images/
     },
     {
     id: 14,
@@ -1572,7 +1572,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessels engaged in pilotage duties; stern aspect; underway"],
     description: "Rule 26(b), (d); Annex II, 2(a)(ii)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q14.png"  // Place image in public/images/
+    imageUrl: "/images/Q14.jpg"  // Place image in public/images/
     },
     {
     id: 15,
@@ -1584,7 +1584,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel restricted in its ability to manoeuvre; underway and making way"],
     description: "Rule 27(a)",
     fact: "Vessels Not Under Command (NUC) aren’t the same as vessels Restricted in their Ability to Manoeuvre (RAM). NUC vessels are limited in their manoeuvrability due to exceptional circumstances—like a steering gear breakdown. Rule 3(f)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q15.png"  // Place image in public/images/
+    imageUrl: "/images/Q15.jpg"  // Place image in public/images/
     },
     {
     id: 16,
@@ -1596,7 +1596,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel constrained by its draught; underway"],
     description: "Rule 27(b)",
     fact: "Vessels Restricted in their Ability to Manoeuvre (RAM) aren’t the same as vessels Not Under Command (NUC). RAM vessels are limited in their manoeuvrability because of their work—like diving operations, laying submarine cables, or doing underwater surveys. Rule 3(g)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q16.png"  // Place image in public/images/
+    imageUrl: "/images/Q16.jpg"  // Place image in public/images/
     },
     {
     id: 17,
@@ -1608,7 +1608,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel that is not identified in the Rules"],
     description: "25(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q17.png"  // Place image in public/images/
+    imageUrl: "/images/Q17.jpg"  // Place image in public/images/
     },
     {
     id: 18,
@@ -1620,7 +1620,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel towing alongside; head-on aspect; towing vessel may be greater than 50 m in length; underway but not making way"],
     description: "24(c), (d), (f)(i); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q18.png"  // Place image in public/images/
+    imageUrl: "/images/Q18.jpg"  // Place image in public/images/
     },
     {
     id: 19,
@@ -1632,7 +1632,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel restricted in its ability to manoeuvre; at anchor"],
     description: "26(c), (d); Annex II, 3",
     fact: "When you see two yellow lights flashing alternately every second, it signals that a purse seiner is hampered by its gear. Annex II, 3",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q19.png"  // Place image in public/images/
+    imageUrl: "/images/Q19.jpg"  // Place image in public/images/
     },
     {
     id: 20,
@@ -1644,7 +1644,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel at anchor; starboard aspect; may be greater than 50 m in length"],
     description: "24(a), (d), (e); 23(a)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q20.png"  // Place image in public/images/
+    imageUrl: "/images/Q20.jpg"  // Place image in public/images/
     },
     {
     id: 21,
@@ -1656,7 +1656,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Power-driven vessel; head-on aspect; less than 50 m in length; underway"],
     description: "26(c)",
     fact: "",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -1668,7 +1668,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel pushing ahead; starboard aspect; may be 50 m or greater in length; underway"],
     description: "29(a)",
     fact: "Off duty, a pilot vessel follows the same lighting rules as other vessels of its length. E.g., a power-driven one would turn off its all-round white-over-red lights, turn on its masthead light(s), and keep its sidelights and sternlight on. Rule 29(b), Rule 23(a)",
-    imageUrl: "https://raw.githubusercontent.com/albertchouforces/sample/refs/heads/main/images/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/Q22.jpg"  // Place image in public/images/
     }
   ]
   },
