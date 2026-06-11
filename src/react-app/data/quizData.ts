@@ -328,7 +328,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel engaged in towing alongside"],
     description: "24(a), (g); 23(a)",
     fact: "",
-    imageUrl: "/images/23to31vessel/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -508,7 +508,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Power-driven vessel"],
     description: "26(b)",
     fact: "",
-    imageUrl: "/images/23to31vessel/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -520,7 +520,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel pushing ahead"],
     description: "29(a)",
     fact: "Many pilot vessels worldwide have “Pilot” painted on their sides for easy identification.",
-    imageUrl: "/images/23to31vessel/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q22.jpg"  // Place image in public/images/
     }
 
   ]
@@ -615,7 +615,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(a), (b)",
     fact: "",
-    imageUrl: "/images/23to31vessel/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -810,7 +810,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(b)",
     fact: "",
-    imageUrl: "/images/23to31vessel/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -823,7 +823,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "21(b)",
     fact: "",
-    imageUrl: "/images/23to31vessel/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q22.jpg"  // Place image in public/images/
     }
   ]
   },
@@ -911,7 +911,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Towing vessel may be 50 m or greater; overall tow is greater than 200 m; inconspicuous vessel/object is greater than 100 m"],
     description: "24(a), (d), (g)(iii); 23(a)",
     fact: "We can also tell that this inconspicuous vessel/object is less than 25 m wide because we don’t see two extra all-round white lights (which is required when the breadth is 25 m or more). Rule 24(g)(i)(ii)",
-    imageUrl: "/images/23to31vessel/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -1096,7 +1096,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     <li>If you see <strong>none</strong>, it’s <strong>under 50 m</strong>.</li>
     </ul>
     Rule 26(b)(ii)`,
-    imageUrl: "/images/23to31vessel/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -1108,7 +1108,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Unknown"],
     description: "29(a)",
     fact: "When a pilot vessel is on duty, it doesn’t display masthead lights, making its length a mystery!",
-    imageUrl: "/images/23to31vessel/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q22.jpg"  // Place image in public/images/
     }
   ]
   },
@@ -1196,7 +1196,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "24(a), (d); 23(a)",
     fact: "Rule 24 (Towing and Pushing) sends us back to Rule 23 (Power-driven Vessels Underway). Together, they show that towing or pushing vessels display lights that only indicate they are underway—not whether they’re making way.",
-    imageUrl: "/images/23to31vessel/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -1376,7 +1376,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "26(b)(iii)",
     fact: "When a vessel engaged in fishing is underway, you can tell if it’s making way or not making way based on its lights. If its sidelights and sternlight are on, it’s telling you it’s making way.",
-    imageUrl: "/images/23to31vessel/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -1388,7 +1388,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "At anchor"],
     description: "29(a)(ii)",
     fact: "The lights of a vessel engaged in pilotage duties only tell you that they are underway—not whether they are making way or not making way.",
-    imageUrl: "/images/23to31vessel/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q22.jpg"  // Place image in public/images/
     }
   ]
   },
@@ -1476,7 +1476,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel at anchor; stern aspect; may be 100 m or greater in length"],
     description: "24(a), (d), (g)(iii); 23(a)",
     fact: "During the day, inconspicuous vessels or objects can be hard to spot until you’re very close. That’s why they are always required to display a diamond shape near the end—it helps you see them from farther away.  Rule 24(g)(iv)",
-    imageUrl: "/images/23to31vessel/Q6.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q6.jpg"  // Place image in public/images/
     },
     {
     id: 7,
@@ -1656,7 +1656,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Power-driven vessel; head-on aspect; less than 50 m in length; underway"],
     description: "26(c)",
     fact: "",
-    imageUrl: "/images/23to31vessel/Q21.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q21.jpg"  // Place image in public/images/
     },
     {
     id: 22,
@@ -1668,7 +1668,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Vessel pushing ahead; starboard aspect; may be 50 m or greater in length; underway"],
     description: "29(a)",
     fact: "Off duty, a pilot vessel follows the same lighting rules as other vessels of its length. E.g., a power-driven one would turn off its all-round white-over-red lights, turn on its masthead light(s), and keep its sidelights and sternlight on. Rule 29(b), Rule 23(a)",
-    imageUrl: "/images/23to31vessel/Q22.png"  // Place image in public/images/
+    imageUrl: "/images/23to31vessel/Q22.jpg"  // Place image in public/images/
     }
   ]
   },
