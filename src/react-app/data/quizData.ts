@@ -903,7 +903,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     },
     {
     id: 6,
-    question: "What is the length of this vessel?",
+    question: "The length of the:",
     correctAnswer: ["Towing vessel is less than 50 m; overall tow is 200 m or less; inconspicuous vessel/object is 100 m or less"],
     answerPool: ["Towing vessel is less than 50 m; overall tow is 200 m or less; inconspicuous vessel/object is 100 m or less",
       "Towing vessel may be 50 m or greater; overall tow is 200 m or less; inconspicuous vessel/object is greater than 100 m",
@@ -927,7 +927,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     },
     {
     id: 8,
-    question: "What is the length of this vessel?",
+    question: "The length of the:",
     correctAnswer: ["Towing vessel is less than 50 m; overall tow is 200 m or less; inconspicuous vessel/object is greater than 100 m"],
     answerPool: ["Towing vessel is less than 50 m; overall tow is 200 m or less; inconspicuous vessel/object is greater than 100 m",
       "Towing vessel may be 50 m or greater; overall tow is 200 m or less; inconspicuous vessel/object is greater than 100 m",
@@ -987,7 +987,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     },
     {
     id: 13,
-    question: "What is the length of this vessel?",
+    question: "The length of the:",
     correctAnswer: ["Towing vessel is less than 50 m; overall tow is greater than 200 m; vessels/objects being towed is unknown"],
     answerPool: ["Towing vessel is less than 50 m; overall tow is greater than 200 m; vessels/objects being towed is unknown",
       "Towing vessel may be 50 m or greater; overall tow is 200 m or less; vessels/objects being towed is unknown",
@@ -1047,7 +1047,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     },
     {
     id: 18,
-    question: "What is the length of this vessel?",
+    question: "The length of the:",
     correctAnswer: ["Pushing vessel is less than 50 m; pushed vessel is unknown"],
     answerPool: ["Pushing vessel is less than 50 m; pushed vessel is unknown",
       "Pushing vessel may be 50 m or greater; pushed vessel is unknown",
@@ -1071,7 +1071,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     },
     {
     id: 20,
-    question: "What is the length of this vessel?",
+    question: "The length of the:",
     correctAnswer: ["Towing vessel is less than 50 m; overall tow is 200 m or less; vessel/object being towed is unknown"],
     answerPool: ["Towing vessel is less than 50 m; overall tow is 200 m or less; vessel/object being towed is unknown",
       "Towing vessel may be 50 m or greater; overall tow is 200 m or less; vessel/object being towed is unknown",
