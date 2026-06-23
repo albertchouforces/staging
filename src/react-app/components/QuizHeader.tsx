@@ -3,9 +3,10 @@ import { QuizConfig } from '@/react-app/types';
 
 interface QuizHeaderProps {
   quizConfig: QuizConfig;
+  onGoHome: () => void;
 }
 
-export function QuizHeader({ quizConfig }: QuizHeaderProps) {
+export function QuizHeader({ quizConfig, onGoHome }: QuizHeaderProps) {
   const accentColor = quizConfig.themeColor;
   
   // Convert named colors to appropriate values, pass through hex colors
@@ -40,15 +41,37 @@ export function QuizHeader({ quizConfig }: QuizHeaderProps) {
   };
   
   const colorValue = getColorValue(accentColor);
+  const iconBackground = `${colorValue}1A`;
   
   return (
-    <div className="w-full bg-white shadow-sm mb-8">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-center gap-3">
-          <BookOpen style={{ color: colorValue }} size={24} />
-          <h1 className="text-2xl font-bold" style={{ color: colorValue }}>
-            {quizConfig.title}
-          </h1>
+    <div className="max-w-6xl w-full mx-auto px-4 pt-8">
+      <div className="mb-8 border-b border-[#1a365d]/20 pb-4">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="flex items-center gap-3">
+            <div
+              className="p-2 rounded-xl border"
+              style={{ borderColor: colorValue, backgroundColor: iconBackground }}
+            >
+              <BookOpen style={{ color: colorValue }} size={24} />
+            </div>
+            <div>
+              <h1 className="text-2xl font-black tracking-tight text-left text-[#1a365d]">
+                {quizConfig.title}
+              </h1>
+              <p className="text-sm text-gray-600">
+                {quizConfig.description || 'Quiz in progress'}
+              </p>
+            </div>
+          </div>
+
+          <nav className="flex items-center gap-2">
+            <button
+              onClick={onGoHome}
+              className="px-4 py-2 rounded-lg font-semibold transition-colors bg-[#1a365d] text-white hover:bg-[#244a7d]"
+            >
+              Home
+            </button>
+          </nav>
         </div>
       </div>
     </div>

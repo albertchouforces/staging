@@ -382,7 +382,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {gameState !== 'selection' && selectedQuiz && (
-        <QuizHeader quizConfig={selectedQuiz.config} />
+      <QuizHeader quizConfig={selectedQuiz.config} onGoHome={handleRestart} />
       )}
       <div className="flex-1 py-8">
         <div className="container mx-auto flex flex-col items-center gap-8">
