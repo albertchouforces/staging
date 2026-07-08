@@ -115,8 +115,8 @@ export function HighScoresList({
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-3">
-        <h4 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-          <MedalIcon size={20} style={{ color: colorValue }} />
+        <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
+          <MedalIcon size={16} style={{ color: colorValue }} />
           {title}
         </h4>
         <button

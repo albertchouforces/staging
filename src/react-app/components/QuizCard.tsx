@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { BookOpen, Download, ExternalLink, FileText, ImageOff, Play } from 'lucide-react';
+import { BookOpen, Download, ExternalLink, FileText, ImageOff, Play, X } from 'lucide-react';
 import type { QuizConfig, QuizStats } from '@/react-app/types';
 import { HighScoresList } from '@/react-app/components/HighScoresList';
 
@@ -15,6 +15,8 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
   const [imageLoaded, setImageLoaded] = useState(false);
   const [showStudyGuide, setShowStudyGuide] = useState(false);
   const [studyGuideType, setStudyGuideType] = useState<'image' | 'pdf' | 'web' | 'other'>('image');
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState('');
 
   // Helper to check if a string is a hex color
   const isHexColor = useCallback((color: string): boolean => {
@@ -354,56 +356,76 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
-        {/* Quiz Image with transparent background */}
-        {config.startScreenImage && config.startScreenImage.trim() !== '' && (
-          <div className="w-full h-32 relative bg-transparent flex items-center justify-center">
-            {!imageLoaded && !imageError && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-gray-400 text-center">
-                  <div className="text-sm font-medium">Loading Image</div>
-                </div>
-              </div>
-            )}
-            {imageError ? (
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-                <ImageOff size={32} />
-                <p className="text-sm mt-2">Preview not available</p>
-              </div>
-            ) : (
-              <div className="w-full h-full flex items-center justify-center p-4 bg-transparent">
-                <img
-                  src={config.startScreenImage}
-                  alt={config.title}
-                  className={`max-w-full max-h-full object-contain ${imageLoaded ? 'block' : 'hidden'}`}
-                  onLoad={() => setImageLoaded(true)}
-                  onError={handleImageError}
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Quiz Content - Using flex with flex-grow to push bottom content down */}
-        <div className="px-6 pb-6 pt-2 flex flex-col flex-grow">
-          {/* Top section that can grow/shrink */}
-          <div className="flex-grow">
-            <h3 
-              className={`text-xl font-bold mb-2 text-center ${colors.title}`}
-              style={colors.isHex ? { color: colors.hexColor } : undefined}
+      {/* Image Modal */}
+      {isImageModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setIsImageModalOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsImageModalOpen(false)}
+              className="absolute top-4 right-4 z-10 h-10 w-10 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors shadow-lg"
+              aria-label="Close"
             >
-              {config.title}
-            </h3>
-            <p className="text-gray-600 mb-4 text-center">
-              {config.description}
-            </p>
+              <X size={28} className="text-gray-600 hover:text-gray-800" />
+            </button>
+            <div className="p-6 flex items-center justify-center bg-gray-50 min-h-[400px]">
+              <img
+                src={modalImageUrl}
+                alt="Enlarged quiz image"
+                className="max-w-full max-h-[calc(90vh-3rem)] object-contain rounded-lg shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
-            {/* Study Guide Button */}
-            {config.studyGuide && config.studyGuide.trim() !== "" && (
-              <div className="mb-6 flex justify-center">
+      <div className="mx-auto w-full max-w-none bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-full md:max-w-[320px]">
+        <div className="p-4 md:hidden">
+          <div className="mb-4 flex items-start gap-3">
+            {config.startScreenImage && config.startScreenImage.trim() !== '' && (
+              <div className="h-20 w-20 shrink-0 relative bg-transparent flex items-center justify-center">
+                {!imageLoaded && !imageError && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-gray-400 text-center text-xs">Loading</div>
+                  </div>
+                )}
+                {imageError ? (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                    <ImageOff size={24} />
+                  </div>
+                ) : (
+                  <img
+                    src={config.startScreenImage}
+                    alt={config.title}
+                    className={`max-w-full max-h-full object-contain cursor-pointer ${imageLoaded ? 'block' : 'hidden'}`}
+                    onClick={() => {
+                      setModalImageUrl(config.startScreenImage || '');
+                      setIsImageModalOpen(true);
+                    }}
+                    onLoad={() => setImageLoaded(true)}
+                    onError={handleImageError}
+                  />
+                )}
+              </div>
+            )}
+
+            <div className="min-w-0 flex-1">
+              <h3
+                className={`mb-3 text-left text-2xl font-semibold leading-tight ${colors.title}`}
+                style={colors.isHex ? { color: colors.hexColor } : undefined}
+              >
+                {config.title}
+              </h3>
+
+              {config.studyGuide && config.studyGuide.trim() !== "" && (
                 <button
                   onClick={handleStudyGuideClick}
-                  className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${colors.studyGuideText} ${colors.studyGuideHover}`}
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-1 py-1 text-base font-medium transition-colors ${colors.studyGuideText} ${colors.studyGuideHover}`}
                   style={colors.isHex && colors.hexColor ? { color: colors.hexColor } : undefined}
                   onMouseEnter={(e) => colors.isHex && colors.hexColorLight && (e.currentTarget.style.backgroundColor = colors.hexColorLight)}
                   onMouseLeave={(e) => colors.isHex && (e.currentTarget.style.backgroundColor = 'transparent')}
@@ -411,34 +433,124 @@ export function QuizCard({ config, stats, onStart, onResetScores }: QuizCardProp
                   {studyGuideButton.icon}
                   {studyGuideButton.text}
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
-          {/* Bottom section that stays at the bottom */}
-          <div className="mt-auto">
-            {!config.disableLeaderboards && (
-              <div className="mb-6">
-                <HighScoresList
-                  scores={stats.highScores}
-                  onReset={handleReset}
-                  title="Local Top Scores"
-                  headerBackground={false}
-                  quizConfig={config}
-                />
-              </div>
-            )}
+          {!config.disableLeaderboards && (
+            <div className="mb-4">
+              <HighScoresList
+                scores={stats.highScores}
+                onReset={handleReset}
+                title="Local Top Scores"
+                headerBackground={false}
+                quizConfig={config}
+              />
+            </div>
+          )}
 
-            <button
-              onClick={onStart}
-              className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 text-white rounded-lg transition-colors font-semibold ${colors.button} ${colors.buttonHover}`}
-              style={colors.isHex && colors.hexColor ? { backgroundColor: colors.hexColor } : undefined}
-              onMouseEnter={(e) => colors.isHex && colors.hexColorDark && (e.currentTarget.style.backgroundColor = colors.hexColorDark)}
-              onMouseLeave={(e) => colors.isHex && colors.hexColor && (e.currentTarget.style.backgroundColor = colors.hexColor)}
-            >
-              <Play size={20} />
-              Start Quiz
-            </button>
+          <button
+            onClick={onStart}
+            className={`w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xl font-semibold text-white transition-colors ${colors.button} ${colors.buttonHover}`}
+            style={colors.isHex && colors.hexColor ? { backgroundColor: colors.hexColor } : undefined}
+            onMouseEnter={(e) => colors.isHex && colors.hexColorDark && (e.currentTarget.style.backgroundColor = colors.hexColorDark)}
+            onMouseLeave={(e) => colors.isHex && colors.hexColor && (e.currentTarget.style.backgroundColor = colors.hexColor)}
+          >
+            <Play size={17} />
+            Start Quiz
+          </button>
+        </div>
+
+        <div className="hidden md:flex md:flex-col md:h-full">
+          {/* Quiz Image with transparent background */}
+          {config.startScreenImage && config.startScreenImage.trim() !== '' && (
+            <div className="w-full h-28 relative bg-transparent flex items-center justify-center">
+              {!imageLoaded && !imageError && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-gray-400 text-center">
+                    <div className="text-sm font-medium">Loading Image</div>
+                  </div>
+                </div>
+              )}
+              {imageError ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                  <ImageOff size={32} />
+                  <p className="text-sm mt-2">Preview not available</p>
+                </div>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center p-4 bg-transparent">
+                  <img
+                    src={config.startScreenImage}
+                    alt={config.title}
+                    className="max-w-full max-h-full object-contain cursor-pointer"
+                    onClick={() => {
+                      setModalImageUrl(config.startScreenImage || '');
+                      setIsImageModalOpen(true);
+                    }}
+                    onLoad={() => setImageLoaded(true)}
+                    onError={handleImageError}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Quiz Content - Using flex with flex-grow to push bottom content down */}
+          <div className="px-5 pb-5 pt-1 flex flex-col flex-grow">
+            {/* Top section that can grow/shrink */}
+            <div className="flex-grow">
+              <h3 
+                className={`text-lg font-semibold mb-2 text-center leading-tight ${colors.title}`}
+                style={colors.isHex ? { color: colors.hexColor } : undefined}
+              >
+                {config.title}
+              </h3>
+              <p className="mb-3 text-center text-sm text-gray-600">
+                {config.description}
+              </p>
+
+              {/* Study Guide Button */}
+              {config.studyGuide && config.studyGuide.trim() !== "" && (
+                <div className="mb-4 flex justify-center">
+                  <button
+                    onClick={handleStudyGuideClick}
+                    className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${colors.studyGuideText} ${colors.studyGuideHover}`}
+                    style={colors.isHex && colors.hexColor ? { color: colors.hexColor } : undefined}
+                    onMouseEnter={(e) => colors.isHex && colors.hexColorLight && (e.currentTarget.style.backgroundColor = colors.hexColorLight)}
+                    onMouseLeave={(e) => colors.isHex && (e.currentTarget.style.backgroundColor = 'transparent')}
+                  >
+                    {studyGuideButton.icon}
+                    {studyGuideButton.text}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Bottom section that stays at the bottom */}
+            <div className="mt-auto">
+              {!config.disableLeaderboards && (
+                <div className="mb-6">
+                  <HighScoresList
+                    scores={stats.highScores}
+                    onReset={handleReset}
+                    title="Local Top Scores"
+                    headerBackground={false}
+                    quizConfig={config}
+                  />
+                </div>
+              )}
+
+              <button
+                onClick={onStart}
+                className={`w-full inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-colors ${colors.button} ${colors.buttonHover}`}
+                style={colors.isHex && colors.hexColor ? { backgroundColor: colors.hexColor } : undefined}
+                onMouseEnter={(e) => colors.isHex && colors.hexColorDark && (e.currentTarget.style.backgroundColor = colors.hexColorDark)}
+                onMouseLeave={(e) => colors.isHex && colors.hexColor && (e.currentTarget.style.backgroundColor = colors.hexColor)}
+              >
+                <Play size={17} />
+                Start Quiz
+              </button>
+            </div>
           </div>
         </div>
       </div>

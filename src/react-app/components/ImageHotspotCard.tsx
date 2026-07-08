@@ -58,6 +58,7 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
   const [imageScale, setImageScale] = useState<ImageScale>({ scaleX: 1, scaleY: 1, offsetX: 0, offsetY: 0 });
   const [showInfo, setShowInfo] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
+  const [showEnlargedImage, setShowEnlargedImage] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const infoBoxRef = useRef<HTMLDivElement>(null);
@@ -250,7 +251,8 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
                 ref={imageRef}
                 src={imageUrl}
                 alt="Question"
-                className={`w-full h-auto ${imageLoaded ? 'block' : 'hidden'}`}
+                className={`w-full h-auto ${imageLoaded ? 'block' : 'hidden'} cursor-pointer`}
+                onClick={() => imageLoaded && setShowEnlargedImage(true)}
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
               />
@@ -413,6 +415,28 @@ export function ImageHotspotCard({ imageUrl, hotspots, answerPool, onComplete }:
               </div>
             </div>
           </>
+        )}
+
+        {/* Enlarged Image Modal */}
+        {showEnlargedImage && (
+          <div 
+            className="fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4"
+            onClick={() => setShowEnlargedImage(false)}
+          >
+            <button
+              onClick={() => setShowEnlargedImage(false)}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 p-2 z-10"
+              aria-label="Close"
+            >
+              <X size={32} />
+            </button>
+            <img
+              src={imageUrl}
+              alt="Enlarged Question"
+              className="max-w-full max-h-[85vh] object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
         )}
       </div>
     );

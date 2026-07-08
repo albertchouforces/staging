@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect, useRef, Fragment } from 'react';
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { shuffleArray } from '@/react-app/lib/utils';
 import type { MatchItem } from '@/react-app/types';
 import { AudioPlayer } from '@/react-app/components/AudioPlayer';
@@ -164,6 +164,8 @@ export function MatchingCard({ pairs, sortLeft, sortRight, onComplete }: Matchin
   const [matchedPairs, setMatchedPairs] = useState<Set<string>>(new Set());
   const [incorrectPair, setIncorrectPair] = useState<{ left: string; right: string } | null>(null);
   const [justMatchedPair, setJustMatchedPair] = useState<{ left: string; right: string } | null>(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState('');
   const hasCompletedRef = useRef(false);
 
   // Reset state when pairs change (new question)
@@ -289,7 +291,12 @@ export function MatchingCard({ pairs, sortLeft, sortRight, onComplete }: Matchin
           <img 
             src={item.value as string} 
             alt="Match item" 
-            className="max-w-full max-h-[60px] object-contain"
+            className="max-w-full max-h-[60px] object-contain cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setModalImageUrl(item.value as string);
+              setIsImageModalOpen(true);
+            }}
           />
           {isMatched && (
             <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
@@ -368,7 +375,36 @@ export function MatchingCard({ pairs, sortLeft, sortRight, onComplete }: Matchin
   }, [matchedPairs, selectedLeft, selectedRight, incorrectPair, justMatchedPair, handleLeftClick, handleRightClick]);
 
   return (
-    <div className="w-full max-w-4xl">
+    <>
+      {/* Image Modal */}
+      {isImageModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setIsImageModalOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsImageModalOpen(false)}
+              className="absolute top-4 right-4 z-10 h-10 w-10 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors shadow-lg"
+              aria-label="Close"
+            >
+              <X size={28} className="text-gray-600 hover:text-gray-800" />
+            </button>
+            <div className="p-6 flex items-center justify-center bg-gray-50 min-h-[400px]">
+              <img
+                src={modalImageUrl}
+                alt="Enlarged match item"
+                className="max-w-full max-h-[calc(90vh-3rem)] object-contain rounded-lg shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="w-full max-w-4xl">
       <div className="grid grid-cols-2 gap-x-8 gap-y-3" style={{ gridAutoRows: 'minmax(100px, auto)' }}>
         {/* Interleave left and right items in grid rows */}
         {leftItems.map((leftItem, index) => {
@@ -386,5 +422,6 @@ export function MatchingCard({ pairs, sortLeft, sortRight, onComplete }: Matchin
         })}
       </div>
     </div>
+    </>
   );
 }

@@ -363,7 +363,11 @@ export function FillInTheBlankCard({
                     <img
                       src={question.imageUrl}
                       alt="Question"
-                      className={`w-full h-full object-contain ${imageLoaded ? 'block' : 'hidden'}`}
+                      className={`w-full h-full object-contain cursor-pointer ${imageLoaded ? 'block' : 'hidden'}`}
+                      onClick={() => {
+                        setModalImageUrl(question.imageUrl || '');
+                        setIsImageModalOpen(true);
+                      }}
                       onLoad={() => setImageLoaded(true)}
                       onError={handleImageError}
                     />

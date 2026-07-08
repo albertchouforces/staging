@@ -380,12 +380,12 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className={`${gameState === 'selection' ? 'h-screen overflow-hidden' : 'min-h-screen'} bg-gray-100 flex flex-col`}>
       {gameState !== 'selection' && selectedQuiz && (
       <QuizHeader quizConfig={selectedQuiz.config} onGoHome={handleRestart} />
       )}
-      <div className="flex-1 py-8">
-        <div className="container mx-auto flex flex-col items-center gap-8">
+      <div className={`flex-1 ${gameState === 'selection' ? 'overflow-hidden' : 'py-8'}`}>
+        <div className={gameState === 'selection' ? 'h-full' : 'container mx-auto flex flex-col items-center gap-8'}>
           {gameState === 'selection' ? (
             <StartScreen 
               onSelectQuiz={handleSelectQuiz}
@@ -459,7 +459,7 @@ function App() {
           )}
         </div>
       </div>
-      <Footer />
+      {gameState !== 'selection' && <Footer />}
     </div>
   );
 }
