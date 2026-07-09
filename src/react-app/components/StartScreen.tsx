@@ -440,7 +440,7 @@ export function StartScreen({
         </aside>
 
         <div className="overflow-y-auto bg-[#f7f8fb] px-4 py-4 pb-24 md:px-8 lg:px-10 lg:pb-6">
-          <header className="-mx-4 -mt-4 mb-4 bg-gradient-to-r from-[#00193f] to-[#032b67] px-5 py-4 text-white shadow-sm lg:hidden relative z-50">
+          <header className="-mx-4 -mt-4 mb-4 bg-gradient-to-r from-[#00193f] to-[#032b67] px-5 py-4 text-white shadow-sm md:-mx-8 lg:hidden relative z-50">
             <div className="flex items-center gap-3">
               <button
                 type="button"
