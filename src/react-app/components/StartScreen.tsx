@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Globe, List, House, Layers3, Search, FolderOpen, X, ChevronDown } from 'lucide-react';
+import { Globe, List, House, Layers3, Search, FolderOpen, X, ChevronDown, Loader2 } from 'lucide-react';
 import type { QuizStats } from '@/react-app/types';
 import { QuizCard } from '@/react-app/components/QuizCard';
 import { GlobalLeaderboard } from '@/react-app/components/GlobalLeaderboard';
@@ -14,6 +14,22 @@ interface StartScreenProps {
   onResetScores: (quizName: string) => void;
 }
 
+interface ActiveVideoState {
+  title: string;
+  embedUrl: string;
+  fallbackUrl: string;
+}
+
+interface PendingVideoState extends ActiveVideoState {
+  resourceId: string;
+  probeAttempt: number;
+  probeNonce: number;
+}
+
+const VIMEO_PROBE_TIMEOUT_MS = 2500;
+const VIMEO_RETRY_BUFFER_MS = 750;
+const VIMEO_MAX_PROBE_ATTEMPTS = 2;
+
 export function StartScreen({ 
   onSelectQuiz,
   getStatsForQuiz,
@@ -26,8 +42,8 @@ export function StartScreen({
   const [activeTab, setActiveTab] = useState<'quizzes' | 'resources'>('quizzes');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [pendingVideo, setPendingVideo] = useState<{ title: string; embedUrl: string; fallbackUrl: string } | null>(null);
-  const [activeVideo, setActiveVideo] = useState<{ title: string; embedUrl: string; fallbackUrl: string } | null>(null);
+  const [pendingVideo, setPendingVideo] = useState<PendingVideoState | null>(null);
+  const [activeVideo, setActiveVideo] = useState<ActiveVideoState | null>(null);
 
   const toggleCategory = (category: string) => {
     setCollapsedCategories(prev => {
@@ -87,7 +103,14 @@ export function StartScreen({
   const handleOpenVideo = (resource: ResourceItem) => {
     const embedUrl = getVideoEmbedUrl(resource);
     if (embedUrl) {
-      setPendingVideo({ title: resource.title, embedUrl, fallbackUrl: resource.url });
+      setPendingVideo({
+        resourceId: resource.id,
+        title: resource.title,
+        embedUrl,
+        fallbackUrl: resource.url,
+        probeAttempt: 0,
+        probeNonce: Date.now()
+      });
       return;
     }
 
@@ -106,13 +129,27 @@ export function StartScreen({
     if (!pendingVideo) return;
 
     let resolved = false;
+    const probeTimeout = VIMEO_PROBE_TIMEOUT_MS + pendingVideo.probeAttempt * VIMEO_RETRY_BUFFER_MS;
 
     const fallbackTimer = window.setTimeout(() => {
-      if (!resolved) {
-        resolved = true;
-        openVideoFallback(pendingVideo.fallbackUrl, false);
+      if (resolved) return;
+      resolved = true;
+
+      if (pendingVideo.probeAttempt + 1 < VIMEO_MAX_PROBE_ATTEMPTS) {
+        // Re-mount the probe iframe and allow extra buffer time before failing open.
+        setPendingVideo((current) => {
+          if (!current) return current;
+          return {
+            ...current,
+            probeAttempt: current.probeAttempt + 1,
+            probeNonce: Date.now()
+          };
+        });
+        return;
       }
-    }, 2500);
+
+      openVideoFallback(pendingVideo.fallbackUrl, false);
+    }, probeTimeout);
 
     const handleVimeoMessage = (event: MessageEvent) => {
       if (!event.origin.includes('vimeo.com')) return;
@@ -132,7 +169,11 @@ export function StartScreen({
         if (resolved) return;
         resolved = true;
         window.clearTimeout(fallbackTimer);
-        setActiveVideo(pendingVideo);
+        setActiveVideo({
+          title: pendingVideo.title,
+          embedUrl: pendingVideo.embedUrl,
+          fallbackUrl: pendingVideo.fallbackUrl
+        });
         setPendingVideo(null);
       }
 
@@ -150,6 +191,8 @@ export function StartScreen({
       window.removeEventListener('message', handleVimeoMessage);
     };
   }, [pendingVideo]);
+
+  const isVideoProbeInProgress = pendingVideo !== null;
   
   // Group quizzes by category
   const groupedQuizzes = new Map<string | null, typeof visibleQuizzes>();
@@ -553,9 +596,17 @@ export function StartScreen({
                                 {resource.type === 'video' ? (
                                   <button
                                     onClick={() => handleOpenVideo(resource)}
-                                    className="inline-flex shrink-0 items-center justify-center rounded-lg bg-[#1a365d] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#244a7d]"
+                                    disabled={isVideoProbeInProgress}
+                                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#1a365d] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#244a7d] disabled:cursor-not-allowed disabled:opacity-70"
                                   >
-                                    Watch Video
+                                    {pendingVideo?.resourceId === resource.id ? (
+                                      <>
+                                        <Loader2 size={16} className="animate-spin" />
+                                        Loading...
+                                      </>
+                                    ) : (
+                                      'Watch Video'
+                                    )}
                                   </button>
                                 ) : (
                                   <a
@@ -744,6 +795,7 @@ export function StartScreen({
 
       {pendingVideo && (
         <iframe
+          key={pendingVideo.probeNonce}
           src={pendingVideo.embedUrl}
           title={`${pendingVideo.title} probe`}
           className="hidden"
