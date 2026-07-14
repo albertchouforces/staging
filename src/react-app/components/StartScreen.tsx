@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Globe, List, House, Layers3, Search, FolderOpen, X, ChevronDown, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { Globe, List, House, Layers3, Search, FolderOpen, X, ChevronDown } from 'lucide-react';
 import type { QuizStats } from '@/react-app/types';
 import { QuizCard } from '@/react-app/components/QuizCard';
 import { GlobalLeaderboard } from '@/react-app/components/GlobalLeaderboard';
@@ -20,16 +20,6 @@ interface ActiveVideoState {
   fallbackUrl: string;
 }
 
-interface PendingVideoState extends ActiveVideoState {
-  resourceId: string;
-  probeAttempt: number;
-  probeNonce: number;
-}
-
-const VIMEO_PROBE_TIMEOUT_MS = 2500;
-const VIMEO_RETRY_BUFFER_MS = 750;
-const VIMEO_MAX_PROBE_ATTEMPTS = 2;
-
 export function StartScreen({ 
   onSelectQuiz,
   getStatsForQuiz,
@@ -42,8 +32,8 @@ export function StartScreen({
   const [activeTab, setActiveTab] = useState<'quizzes' | 'resources'>('quizzes');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [pendingVideo, setPendingVideo] = useState<PendingVideoState | null>(null);
   const [activeVideo, setActiveVideo] = useState<ActiveVideoState | null>(null);
+  const [videoLoadError, setVideoLoadError] = useState(false);
 
   const toggleCategory = (category: string) => {
     setCollapsedCategories(prev => {
@@ -84,12 +74,13 @@ export function StartScreen({
       return trimmedUrl;
     }
 
-    const match = trimmedUrl.match(/vimeo\.com\/(?:video\/)?(\d+)/i);
+    const match = trimmedUrl.match(/vimeo\.com\/(?:video\/)?(\d+)(?:\/([a-f0-9]+))?/i);
     if (!match) {
       return null;
     }
 
-    return `https://player.vimeo.com/video/${match[1]}`;
+    const hash = match[2];
+    return `https://player.vimeo.com/video/${match[1]}${hash ? `?h=${hash}` : ''}`;
   };
 
   const getVideoEmbedUrl = (resource: ResourceItem): string | null => {
@@ -103,96 +94,11 @@ export function StartScreen({
   const handleOpenVideo = (resource: ResourceItem) => {
     const embedUrl = getVideoEmbedUrl(resource);
     if (embedUrl) {
-      setPendingVideo({
-        resourceId: resource.id,
-        title: resource.title,
-        embedUrl,
-        fallbackUrl: resource.url,
-        probeAttempt: 0,
-        probeNonce: Date.now()
-      });
-      return;
-    }
-
-    window.open(resource.url, '_blank', 'noopener,noreferrer');
-  };
-
-  const openVideoFallback = (url: string, closeModal: boolean = true) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
-    setPendingVideo(null);
-    if (closeModal) {
-      setActiveVideo(null);
+      const autoplayUrl = embedUrl.includes('?') ? `${embedUrl}&autoplay=1` : `${embedUrl}?autoplay=1`;
+      setActiveVideo({ title: resource.title, embedUrl: autoplayUrl, fallbackUrl: resource.url });
+      setVideoLoadError(false);
     }
   };
-
-  useEffect(() => {
-    if (!pendingVideo) return;
-
-    let resolved = false;
-    const probeTimeout = VIMEO_PROBE_TIMEOUT_MS + pendingVideo.probeAttempt * VIMEO_RETRY_BUFFER_MS;
-
-    const fallbackTimer = window.setTimeout(() => {
-      if (resolved) return;
-      resolved = true;
-
-      if (pendingVideo.probeAttempt + 1 < VIMEO_MAX_PROBE_ATTEMPTS) {
-        // Re-mount the probe iframe and allow extra buffer time before failing open.
-        setPendingVideo((current) => {
-          if (!current) return current;
-          return {
-            ...current,
-            probeAttempt: current.probeAttempt + 1,
-            probeNonce: Date.now()
-          };
-        });
-        return;
-      }
-
-      openVideoFallback(pendingVideo.fallbackUrl, false);
-    }, probeTimeout);
-
-    const handleVimeoMessage = (event: MessageEvent) => {
-      if (!event.origin.includes('vimeo.com')) return;
-
-      let payload: { event?: string } = {};
-      if (typeof event.data === 'string') {
-        try {
-          payload = JSON.parse(event.data) as { event?: string };
-        } catch {
-          payload = {};
-        }
-      } else if (typeof event.data === 'object' && event.data !== null) {
-        payload = event.data as { event?: string };
-      }
-
-      if (payload?.event === 'ready') {
-        if (resolved) return;
-        resolved = true;
-        window.clearTimeout(fallbackTimer);
-        setActiveVideo({
-          title: pendingVideo.title,
-          embedUrl: pendingVideo.embedUrl,
-          fallbackUrl: pendingVideo.fallbackUrl
-        });
-        setPendingVideo(null);
-      }
-
-      if (payload?.event === 'error') {
-        if (resolved) return;
-        resolved = true;
-        window.clearTimeout(fallbackTimer);
-        openVideoFallback(pendingVideo.fallbackUrl, false);
-      }
-    };
-
-    window.addEventListener('message', handleVimeoMessage);
-    return () => {
-      window.clearTimeout(fallbackTimer);
-      window.removeEventListener('message', handleVimeoMessage);
-    };
-  }, [pendingVideo]);
-
-  const isVideoProbeInProgress = pendingVideo !== null;
   
   // Group quizzes by category
   const groupedQuizzes = new Map<string | null, typeof visibleQuizzes>();
@@ -596,17 +502,9 @@ export function StartScreen({
                                 {resource.type === 'video' ? (
                                   <button
                                     onClick={() => handleOpenVideo(resource)}
-                                    disabled={isVideoProbeInProgress}
-                                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#1a365d] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#244a7d] disabled:cursor-not-allowed disabled:opacity-70"
+                                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#1a365d] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#244a7d]"
                                   >
-                                    {pendingVideo?.resourceId === resource.id ? (
-                                      <>
-                                        <Loader2 size={16} className="animate-spin" />
-                                        Loading...
-                                      </>
-                                    ) : (
-                                      'Watch Video'
-                                    )}
+                                    Watch Video
                                   </button>
                                 ) : (
                                   <a
@@ -771,37 +669,42 @@ export function StartScreen({
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-[#1a365d]">{activeVideo.title}</h3>
               <button
-                onClick={() => setActiveVideo(null)}
+                onClick={() => { setActiveVideo(null); setVideoLoadError(false); }}
                 className="h-8 w-8 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 ✕
               </button>
             </div>
             <div className="p-4">
-              <div className="relative pt-[56.25%] w-full rounded-lg overflow-hidden bg-black">
-                <iframe
-                  src={activeVideo.embedUrl}
-                  title={activeVideo.title}
-                  className="absolute top-0 left-0 h-full w-full"
-                  allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-                  allowFullScreen
-                  onError={() => openVideoFallback(activeVideo.fallbackUrl)}
-                />
-              </div>
+              {videoLoadError ? (
+                <div className="flex flex-col items-center justify-center gap-4 rounded-lg border border-gray-200 bg-gray-50 py-12 text-center">
+                  <p className="text-gray-600">The video could not be loaded.</p>
+                  <a
+                    href={activeVideo.fallbackUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-[#1a365d] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#244a7d]"
+                  >
+                    Open in New Tab
+                  </a>
+                </div>
+              ) : (
+                <div className="relative pt-[56.25%] w-full rounded-lg overflow-hidden bg-black">
+                  <iframe
+                    src={activeVideo.embedUrl}
+                    title={activeVideo.title}
+                    className="absolute top-0 left-0 h-full w-full"
+                    allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                    allowFullScreen
+                    onError={() => setVideoLoadError(true)}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
       )}
 
-      {pendingVideo && (
-        <iframe
-          key={pendingVideo.probeNonce}
-          src={pendingVideo.embedUrl}
-          title={`${pendingVideo.title} probe`}
-          className="hidden"
-          allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-        />
-      )}
     </div>
   );
 }
