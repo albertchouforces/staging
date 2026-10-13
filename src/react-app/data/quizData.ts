@@ -242,7 +242,8 @@ export const CATEGORY_ORDER: string[] = [
   'Col Regs Rules 32-34',
   'Col Regs Rule 35',
   'Col Regs Rules 32-35',
-  'Advanced Challenges'
+  'Col Regs Rule 23',
+  'Advanced Challenges',
   // Add more categories here in the desired order
 ];
 
@@ -850,7 +851,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       "Less than 50 m, if it is a vessel engaged in towing (where the length of the overall tow does not exceed 200 m)",
       "May be 50 m or greater, if it is a vessel engaged in towing (where the length of the overall tow does not exceed 200 m)"],
     description: "23(a); 24(a), (d)",
-    fact: "From a head-on aspect, you might not be able to tell whether you’re looking at a <strong>power-driven vessel that may be more than 50 m long</strong> or a <strong>vessel engaged in towing under 50 m</strong>. Their lights can look the same!",
+    fact: "From a head-on aspect, you might not be able to tell whether you’re looking at a <strong>power-driven vessel that may be 50 m or more in length</strong> or a <strong>vessel engaged in towing under 50 m in length</strong>. Their lights can look the same!",
     imageUrl: "/images/23to31vessel/Q1.jpg"  // Place image in public/images/
     },
     {
@@ -1111,6 +1112,191 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
     imageUrl: "/images/23to31vessel/Q22.jpg"  // Place image in public/images/
     }
   ]
+  },
+  {
+    config: {
+      id: "23length",
+      title: "Lights Challenge – Rule 23: Identify the Length",
+      description: "",
+      themeColor: 'green',
+      quizKey: "23length",
+      startScreenImage: "/images/naval-operations-branch-600.png",
+      category: "Col Regs Rule 23",
+      hidden: false
+    },
+    questions: [
+      {
+        id: 1,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 50 m",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(a)(i)",
+        fact: "The number of <strong>masthead lights</strong> help indicate the <strong>length</strong> of a vessel.",
+        imageUrl: "/images/23length/Q1_PDV_Head-on_Less than 50m.jpg"
+      },
+      {
+        id: 2,
+        question: "What is the length of this vessel?",
+        correctAnswer: ["Less than 50 m", "May be 50 m or greater"],
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(a)(i)(ii); 24(a)(i)",
+        fact: "It's important to note that from a head-on aspect you might not be able to tell whether you're looking at a <strong>power-driven vessel 50 m or greater in length</strong> or a <strong>vessel engaged in towing under 50 m in length</strong>. Their lights can appear identical! Rule 24(a)",
+        imageUrl: "/images/23length/Q2_PDV_Head-on_Maybe 50 m or greater.jpg"
+      },
+      {
+        id: 3,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 50 m",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(a)(i)",
+        fact: "",
+        imageUrl: "/images/23length/Q3_PDV_Port_ Less than 50m.jpg"
+      },
+      {
+        id: 4,
+        question: "What is the length of this vessel?",
+        correctAnswer: "May be 50 m or greater",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(a)(i)(ii)",
+        fact: "Two masthead lights on a power-driven vessel may indicate it is 50 m or longer, but not always. Power-driven vessels under 50 m may also display a second masthead light; it’s optional for them. Rule 23(a)",
+        imageUrl: "/images/23length/Q4_PDV_Port_Maybe 50m or greater.jpg"
+      },
+      {
+        id: 5,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 50 m",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(a)(i)",
+        fact: "",
+        imageUrl: "/images/23length/Q5_PDV_Stbd_Less 50m.jpg"
+      },
+      {
+        id: 6,
+        question: "What is the length of this vessel?",
+        correctAnswer: "May be 50 m or greater",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(a)(i)(ii)",
+        fact: "The number and position of <strong>masthead lights</strong> help indicate the <strong>length</strong> of a vessel.",
+        imageUrl: "/images/23length/Q6_PDV_Stbd_Maybe 50m or greater.jpg"
+      },
+      {
+        id: 7,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Unknown",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(a)(iv)",
+        fact: "You cannot tell the length of a vessel from its stern aspect.",
+        imageUrl: "/images/23length/Q7_PDV_Stern.jpg"
+      },
+      {
+        id: 8,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 50 m",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(b), (a)(i)",
+        fact: "",
+        imageUrl: "/images/23length/Q8_AirCushVess_Head-on_Less than 50m.jpg"
+      },
+      {
+        id: 9,
+        question: "What is the length of this vessel?",
+        correctAnswer: "May be 50 m or greater",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(b), (a)(i)(ii)",
+        fact: "The number of <strong>masthead lights</strong> help indicate the <strong>length</strong> of a vessel.",
+        imageUrl: "/images/23length/Q9_AirCushVess_Head-on_May be 50m or more.jpg"
+      },
+      {
+        id: 10,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 50 m",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(b), (a)(i)",
+        fact: "",
+        imageUrl: "/images/23length/Q10_Air Cushion_Port_Less than 50m.jpg"
+      },
+      {
+        id: 11,
+        question: "What is the length of this vessel?",
+        correctAnswer: "May be 50 m or greater",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(b), (a)(i)(ii)",
+        fact: "",
+        imageUrl: "/images/23length/Q11_Air Cushion_Port_50m or more.png"
+      },
+      {
+        id: 12,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 50 m",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(b), (a)(i)",
+        fact: "",
+        imageUrl: "/images/23length/Q12_Air Cushion_Stbd_Less than 50m.jpg"
+      },
+      {
+        id: 13,
+        question: "What is the length of this vessel?",
+        correctAnswer: "May be 50 m or greater",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(b), (a)(i)(ii)",
+        fact: "",
+        imageUrl: "/images/23length/Q13_AirCushVess_Stbd_May be 50m or more.jpg"
+      },
+      {
+        id: 14,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Unknown",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(b), (a)(iv)",
+        fact: "You cannot tell the length of a vessel from its stern aspect.",
+        imageUrl: "/images/23length/Q14_AirCushVess_Stern.jpg"
+      },
+      {
+        id: 15,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 50 m",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(c), (a)",
+        fact: "",
+        imageUrl: "/images/23length/Q15_WIG_Head-on_Less than 50m.jpg"
+      },
+      {
+        id: 16,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 50 m",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(c), (a)",
+        fact: "The number of <strong>masthead lights</strong> help indicate the <strong>length</strong> of a vessel.",
+        imageUrl: "/images/23length/Q16_WIG_Port_Less than 50 m.jpg"
+      },
+      {
+        id: 17,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 50 m",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(c), (a)",
+        fact: "",
+        imageUrl: "/images/23length/Q17_WIG_Stbd_Less than 50 m.jpg"
+      },
+      {
+        id: 18,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Unknown",
+        answerPool: ["Less than 50 m", "May be 50 m or greater", "Greater than 100 m", "Unknown"],
+        description: "23(c), (a)",
+        fact: "You cannot tell the length of a vessel from its stern aspect.",
+        imageUrl: "/images/23length/Q18_WIG_Stern.jpg"
+      },
+      {
+        id: 19,
+        question: "What is the length of this vessel?",
+        correctAnswer: "Less than 12 m",
+        answerPool: ["Less than 12 m", "12 m", "May be 20 m or greater", "Unknown"],
+        description: "23(d)(i)(iii)",
+        fact: "At first glance, the single masthead light tells us this power-driven vessel is less than 50 m in length. Case closed? Not quite.<br><br>Looking closer, we find a second clue: the sidelights are displayed together at the bow rather than being carried separately on each side of the vessel. That arrangement is only permitted for <strong>power-driven vessels less than 12 m in length.</strong><br><br>By combining both clues, we've narrowed the vessel's maximum length from less than 50 m all the way down to less than 12 m. Every light tells part of the story. Rule 23(a), (d)(iii)",
+        imageUrl: "/images/23length/Q19_PDV_Head-on_Less than 12m.jpg"
+      }
+    ]
   },
   {
     config: {
