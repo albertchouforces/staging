@@ -34,7 +34,7 @@ export function FlashCard({
   const [showMatchingInfo, setShowMatchingInfo] = useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState('');
-  const isMultiSelectQuestion = isMultiSelect(question.correctAnswer, question.multiSelect);
+  const isMultiSelectQuestion = isMultiSelect(question.correctAnswer);
   const isMatchQuestion = isMatchingQuestion(question.correctAnswer);
   const isHotspotQuestion = question.hotspots && question.hotspots.length > 0;
   const cardRef = useRef<HTMLDivElement>(null);
