@@ -238,11 +238,11 @@ interface QuizDefinition {
 // Quizzes without a category appear first (before any categorized quizzes)
 export const CATEGORY_ORDER: string[] = [
   'Col Regs Interpretation & Rule 3',
+  'Col Regs Rule 23',
   'Col Regs Rules 23-31',
   'Col Regs Rules 32-34',
-  'Col Regs Rule 35',
   'Col Regs Rules 32-35',
-  'Col Regs Rule 23',
+  'Col Regs Rule 35',
   'Advanced Challenges',
   // Add more categories here in the desired order
 ];
