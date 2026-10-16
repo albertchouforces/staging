@@ -40,7 +40,7 @@ function App() {
     
     return Array.from(new Set(
       selectedQuiz.questions
-        .filter(q => !isMultiSelect(q.correctAnswer) && !hasAnswerPool(q.answerPool))
+        .filter(q => !isMultiSelect(q.correctAnswer, q.multiSelect) && !hasAnswerPool(q.answerPool))
         .map(q => q.correctAnswer as string)
     ));
   }, [selectedQuiz]);

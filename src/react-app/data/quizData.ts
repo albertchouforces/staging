@@ -1300,6 +1300,193 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
   },
   {
     config: {
+      id: "23aspect",
+      title: "Lights Challenge – Rule 23: Identify the Aspect",
+      description: "",
+      themeColor: 'green',
+      quizKey: "23aspect",
+      startScreenImage: "/images/naval-operations-branch-600.png",
+      studyGuide: "",
+      category: "Col Regs Rule 23",
+      hidden: false
+    },
+    questions: [
+      {
+        id: 1,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Head-on",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b)",
+        fact: "",
+        imageUrl: "/images/23length/Q1_PDV_Head-on_Less than 50m.jpg"
+      },
+      {
+        id: 2,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Head-on",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b)",
+        fact: "",
+        imageUrl: "/images/23length/Q2_PDV_Head-on_Maybe 50 m or greater.jpg"
+      },
+      {
+        id: 3,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Port",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b)",
+        fact: "",
+        imageUrl: "/images/23length/Q3_PDV_Port_ Less than 50m.jpg"
+      },
+      {
+        id: 4,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Port",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b)",
+        fact: "",
+        imageUrl: "/images/23length/Q4_PDV_Port_Maybe 50m or greater.jpg"
+      },
+      {
+        id: 5,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Starboard",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b)",
+        fact: "",
+        imageUrl: "/images/23length/Q5_PDV_Stbd_Less 50m.jpg"
+      },
+      {
+        id: 6,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Starboard",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b)",
+        fact: "",
+        imageUrl: "/images/23length/Q6_PDV_Stbd_Maybe 50m or greater.jpg"
+      },
+      {
+        id: 7,
+        question: "What is the aspect of this vessel? Select all that apply.",
+        correctAnswer: ["Unknown"],
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(c), (e)",
+        fact: "This could be the stern aspect of a power-driven vessel. However, if it were a power-driven vessel outside Canadian waters, less than 7 m in length with a maximum speed not exceeding 7 knots, or a vessel at anchor less than 50 m in length, it could legally display a single all-round white light.<br><br><strong>What aspect are you seeing?</strong> As a detective, you might search for clues, but there aren't any. From a single white light alone, you cannot determine whether you're viewing the vessel head-on, from the port or starboard side, or from astern.<br><br><strong>Sometimes the most important clue is recognizing when there isn't enough information to draw a conclusion.</strong> Rule 23(a)(iv); Rule 23(d)(ii); Rule 30(a), (b)",
+        multiSelect: true,
+        imageUrl: "/images/23length/Q7_PDV_Stern.jpg"
+      },
+      {
+        id: 8,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Head-on",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q8_AirCushVess_Head-on_Less than 50m.jpg"
+      },
+      {
+        id: 9,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Head-on",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q9_AirCushVess_Head-on_May be 50m or more.jpg"
+      },
+      {
+        id: 10,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Port",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q10_Air Cushion_Port_Less than 50m.jpg"
+      },
+      {
+        id: 11,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Port",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q11_Air Cushion_Port_50m or more.png"
+      },
+      {
+        id: 12,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Starboard",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q12_Air Cushion_Stbd_Less than 50m.jpg"
+      },
+      {
+        id: 13,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Starboard",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q13_AirCushVess_Stbd_May be 50m or more.jpg"
+      },
+      {
+        id: 14,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Stern",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(c), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q14_AirCushVess_Stern.jpg"
+      },
+      {
+        id: 15,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Head-on",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q15_WIG_Head-on_Less than 50m.jpg"
+      },
+      {
+        id: 16,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Port",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q16_WIG_Port_Less than 50 m.jpg"
+      },
+      {
+        id: 17,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Starboard",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q17_WIG_Stbd_Less than 50 m.jpg"
+      },
+      {
+        id: 18,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Stern",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(c), (e), (f)",
+        fact: "",
+        imageUrl: "/images/23length/Q18_WIG_Stern.jpg"
+      },
+      {
+        id: 19,
+        question: "What is the aspect of this vessel?",
+        correctAnswer: "Head-on",
+        answerPool: ["Head-on", "Port", "Starboard", "Stern", "Unknown"],
+        description: "21(a), (b), (e)",
+        fact: "",
+        imageUrl: "/images/23length/Q19_PDV_Head-on_Less than 12m.jpg"
+      }
+    ]
+  },
+  {
+    config: {
       id: "23to31status",
       title: "Lights Challenge – Rules 23-31: Identify the Status",
       description: "",
