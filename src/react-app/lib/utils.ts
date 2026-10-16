@@ -39,9 +39,9 @@ export const getCorrectAnswers = (correctAnswer: string | string[] | any[]): str
 /**
  * Check if a question is multi-select (requires multiple answers)
  */
-export const isMultiSelect = (correctAnswer: string | string[] | any[]): boolean => {
+export const isMultiSelect = (correctAnswer: string | string[] | any[], forceMultiSelect = false): boolean => {
   if (isMatchingQuestion(correctAnswer)) return false;
-  return Array.isArray(correctAnswer) && correctAnswer.length > 1;
+  return forceMultiSelect || (Array.isArray(correctAnswer) && correctAnswer.length > 1);
 };
 
 /**
