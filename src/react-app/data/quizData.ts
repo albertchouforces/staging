@@ -1308,7 +1308,7 @@ export const QUIZ_COLLECTION: QuizDefinition[] = [
       startScreenImage: "/images/naval-operations-branch-600.png",
       studyGuide: "",
       category: "Col Regs Rule 23",
-      hidden: true
+      hidden: false
     },
     questions: [
       {
